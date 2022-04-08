@@ -2,21 +2,50 @@ package models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 public class Reservation {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
+
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
 	
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "asset_id")
 	private Asset asset;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "client_id")
 	private Client client;
 	
+	@Column(name = "startDate", unique = true, nullable = false)
 	private Date startDate;
+
+	@Column(name = "endDate", unique = true, nullable = false)
 	private Date endDate;
 	
+	@Column(name = "status", unique = true, nullable = false)
 	private ReservationStatus status;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_review_id", unique = true, nullable = false)
 	private Review clientReview;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "asset_review_id", unique = true, nullable = false)
 	private Review assetReview;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "renter_review_id", unique = true, nullable = false)
 	private Review renterReview;
 	
 

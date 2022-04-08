@@ -2,23 +2,61 @@ package models;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User {
 	
+	@Id
+	@SequenceGenerator(name="userSeqGen", sequenceName = "Seq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
 	private Long ID;
+	
+	@Column(name="isDeleted", unique=true, nullable=false)
 	private boolean isDeleted;
 	
+	
+	@Column(name="firstName", unique=true, nullable=false)
 	private String firstName;
+	
+	@Column(name="lastName", unique=true, nullable=false)
 	private String lastName;
 	
+	@Column(name="address", unique=true, nullable=false)
 	private String address;
+	
+	@Column(name="city", unique=true, nullable=false)
 	private String city;
+	
+	@Column(name="state", unique=true, nullable=false)
 	private String state;
 	
+	@Column(name="phoneNum", unique=true, nullable=false)
 	private String phoneNum;
+	
+	@Column(name="userType", unique=true, nullable=false)
 	private UserType userType;
+	
+	@Column(name="loyaltyPoints", unique=true, nullable=false)
 	private int loyaltyPoints;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", referencedColumnName = "ID")
 	private UserAccount userAccount;
+	
+	@OneToOne(mappedBy = "user")
+	private Registration registration;
 	
 	public User() {
 		

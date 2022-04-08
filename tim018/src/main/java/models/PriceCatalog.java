@@ -2,14 +2,29 @@ package models;
 
 import java.util.Date;
 
-public class PriceCatalog {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class PriceCatalog {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
+
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
-	
+
+
+	@Column(name = "price", unique = true, nullable = false)
 	private double price;
 	
+	@Column(name = "startDate", unique = true, nullable = false)
 	private Date startDate;
+	
+	@Column(name = "endDate", unique = true, nullable = false)
 	private Date endDate = null;
 	
 	public PriceCatalog() {

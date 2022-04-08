@@ -2,18 +2,35 @@ package models;
 
 import java.util.Objects;
 
-public class UserAccount {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+@Entity
+public class UserAccount {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
+
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
 	
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
+	
+	@Column(name = "password", unique = true, nullable = false)
 	private String password;
+	
+	
+	@OneToOne(mappedBy = "userAccount")
+	private User user;
 		
 	public UserAccount() {
 	}
 
-	
 	
 	public UserAccount(Long iD, boolean isDeleted, String email, String password) {
 		super();
@@ -23,6 +40,7 @@ public class UserAccount {
 		this.password = password;
 	}
 	
+	
 	public UserAccount(Long iD, String email, String password) {
 		super();
 		ID = iD;
@@ -31,6 +49,14 @@ public class UserAccount {
 		this.isDeleted = false;
 	}
 
+	public UserAccount(Long iD, boolean isDeleted, String email, String password, User user) {
+		super();
+		ID = iD;
+		this.isDeleted = isDeleted;
+		this.email = email;
+		this.password = password;
+		this.user = user;
+	}
 
 
 	public boolean isDeleted() {

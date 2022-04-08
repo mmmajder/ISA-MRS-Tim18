@@ -1,11 +1,23 @@
 package models;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public class DeletationRequest {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
+	
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
+	@Column(name = "status", nullable = false)
 	private RequestStatus status;
+
+	@Column(name = "user", nullable = false)
 	private User user;
 
 	public DeletationRequest() {

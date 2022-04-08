@@ -7,6 +7,7 @@ import java.util.List;
 
 public class FishingInstructor extends User {
 
+	
 	private List<Asset> assets = new ArrayList<Asset>();
 	private HashMap<Date, List<TimeSlot>> availability = new HashMap<Date, List<TimeSlot>>();
 	

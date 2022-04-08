@@ -1,8 +1,26 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Client extends User{
 
+	@Column(name = "penaltyPoints", unique = true, nullable = false)
 	private int penaltyPoints;
+	
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<SpecialOffer> specialOffers = new ArrayList<SpecialOffer>();
+	
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Reservation> reservations = new ArrayList<Reservation>();
+	
 	
 	public Client() {
 	}
