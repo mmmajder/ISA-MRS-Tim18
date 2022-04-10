@@ -16,6 +16,10 @@ body {
   background-color: var(--ligher-grey) !important;
 }
 
+* {
+  font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif; 
+}
+
 img.profile_picture  {
     max-height: 30px;
     width: auto;
