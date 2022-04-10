@@ -1,8 +1,9 @@
+import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
 
 function App() {
   return (
     <div>
-      <h1>Hello from react!</h1>
+      <ResortRenterNavbar/>
     </div>
   );
 }

@@ -1,0 +1,59 @@
+:root {
+  --text: var(--dutch-orange);
+  --background: var(--dutch-orange);
+  
+  --orange-trans: #ff7700;
+  --custom-dark-grey: rgba(0,0,0,.5);
+
+  --dark-blue: #06113C;
+  --dutch-orange: #FF8C32;
+  --darker-light-grey: #DDDDDD;
+  --ligher-grey: #EEEEEE;
+}
+
+img.profile_picture  {
+    max-height: 30px;
+    width: auto;
+    border-radius: 50%;
+  }
+
+
+  /* Orange */
+.search_btn {
+    color: var(--text);
+  }
+  
+.search_btn:hover {
+    background: var(--text) !important; 
+    color: rgb(22, 28, 45) !important;
+  }
+
+  .btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ .navLink:focus{
+    color: var(--text) !important;
+ }
+
+ .searchField:focus{
+    outline: none !important;
+    box-shadow: none !important;
+ }
+
+ .searchBox {
+  background-color: white;
+  border: var(--text);
+  border-style: solid ;
+  border-width: thin;
+  border-radius: 1rem;
+}
+
+#showAllUsersAdminButton:hover{
+  text-decoration: underline;
+}
+
+.bg-darkBlue {
+  background-color: var(--dark-blue);
+}
