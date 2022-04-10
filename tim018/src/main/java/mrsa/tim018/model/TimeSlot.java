@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public class TimeSlot {
 	private String ID;
 	
 	@Column(name = "time", unique = true, nullable = false)
-	private int time;
+	private Integer time;
 	
 	public TimeSlot() {
 	}

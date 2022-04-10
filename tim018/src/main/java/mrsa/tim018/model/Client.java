@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Client extends User{
-
+public class Client extends User {
 	@Column(name = "penaltyPoints", unique = true, nullable = false)
 	private int penaltyPoints;
 	
@@ -25,17 +24,17 @@ public class Client extends User{
 	public Client() {
 	}
 
-	public Client(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
+	public Client(Long id, boolean isDeleted, String firstName, String lastName, String address, String city,
 			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount, int penaltyPoints) {
 		
-		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, userAccount);
+		super(id, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, userAccount);
 		this.penaltyPoints = penaltyPoints;
 	}
 
-	public Client(Long iD, String firstName, String lastName, String address, String city, String state,
+	public Client(Long id, String firstName, String lastName, String address, String city, String state,
 			String phoneNum, UserType userType, UserAccount userAccount, int penaltyPoints) {
 	
-		super(iD, firstName, lastName, address, city, state, phoneNum, userType, userAccount);
+		super(id, firstName, lastName, address, city, state, phoneNum, userType, userAccount);
 		this.penaltyPoints = penaltyPoints;
 	}
 
@@ -47,7 +46,4 @@ public class Client extends User{
 	public void setPenaltyPoints(int penaltyPoints) {
 		this.penaltyPoints = penaltyPoints;
 	}
-
-	
-	
 }

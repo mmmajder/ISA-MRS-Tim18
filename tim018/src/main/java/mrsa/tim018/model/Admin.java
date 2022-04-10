@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,6 @@ public class Admin extends User {
 	public void setDeletationRequests(List<DeletationRequest> deletationRequests) {
 		this.deletationRequests = deletationRequests;
 	}
-
 	
 	
 	

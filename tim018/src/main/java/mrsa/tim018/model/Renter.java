@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +44,4 @@ public class Renter extends User {
 	public void setAssets(List<Asset> assets) {
 		this.assets = assets;
 	}
-	
-	
-	
-	
-	
-	
 }

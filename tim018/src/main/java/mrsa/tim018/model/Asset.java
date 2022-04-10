@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class Asset {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ID;
+	private Long id;
 	
 	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
@@ -40,8 +41,8 @@ public class Asset {
 	@Column(name = "description", unique = true, nullable = false)
 	private String description;
 	
-	@Column(name = "photos", unique = true, nullable = false)
-	private List<String> photos; // TODO: how are we going to save photos
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Photo> photos; // TODO: how are we going to save photos
 	
 	@Column(name = "rules", unique = true, nullable = false)
 	private String rules;
@@ -55,8 +56,9 @@ public class Asset {
 	@Column(name = "averageRating", unique = true, nullable = false)
 	private double averageRating;
 	
-	@ElementCollection
-	private Map<Date, List<TimeSlot>> availability;
+	/*@ElementCollection
+	private Map<Date, TimeSlots> availability = new HashMap<Date, TimeSlots>();
+	*/
 	
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<Reservation>();
@@ -64,13 +66,15 @@ public class Asset {
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<SpecialOffer> specialOffers = new ArrayList<SpecialOffer>();
 	
-	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "instructor_id")
+	private FishingInstructor fishingInstructor;
 	
 	public Asset() {
 		
 	}
 
-	public Asset(Long iD, boolean isDeleted, Renter renter, String name, String address, String description,
+	/*public Asset(Long iD, boolean isDeleted, Renter renter, String name, String address, String description,
 			List<String> photos, String rules, int numOfPeople, int cancelationConditions, double averageRating,
 			HashMap<Date, List<TimeSlot>> availability, List<Reservation> reservations) {
 		super();
@@ -87,25 +91,42 @@ public class Asset {
 		this.averageRating = averageRating;
 		this.availability = availability;
 		this.reservations = reservations;
-	}
+	}*/
+	
+	
 
 	public boolean isDeleted() {
 		return isDeleted;
+	}
+
+/*	public Asset(Long id, boolean isDeleted, String name, String address, String description, List<String> photos,
+			String rules, int numOfPeople, int cancelationConditions, double averageRating) {
+		super();
+		this.id = id;
+		this.isDeleted = isDeleted;
+		this.name = name;
+		this.address = address;
+		this.description = description;
+		this.photos = photos;
+		this.rules = rules;
+		this.numOfPeople = numOfPeople;
+		this.cancelationConditions = cancelationConditions;
+		this.averageRating = averageRating;
 	}
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
-	public Renter getRenter() {
+	/*public Renter getRenter() {
 		return renter;
 	}
 
 	public void setRenter(Renter renter) {
 		this.renter = renter;
-	}
+	}*/
 
-	public String getName() {
+/*	public String getName() {
 		return name;
 	}
 
@@ -167,13 +188,13 @@ public class Asset {
 
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
-	}
+	}*/
 
-	public Map<Date, List<TimeSlot>> getAvailability() {
+	/*public Map<Date, List<TimeSlot>> getAvailability() {
 		return availability;
-	}
+	}*/
 
-	public void setAvailability(HashMap<Date, List<TimeSlot>> availability) {
+	/*public void setAvailability(HashMap<Date, List<TimeSlot>> availability) {
 		this.availability = availability;
 	}
 
@@ -183,10 +204,10 @@ public class Asset {
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
-	}
+	}*/
 
 	public Long getID() {
-		return ID;
+		return id;
 	}
 	
 	

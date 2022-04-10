@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Objects;
 
@@ -9,23 +9,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Table(name = "\"user\"")
 public class User {
-	
 	@Id
 	@SequenceGenerator(name="userSeqGen", sequenceName = "Seq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
-	private Long ID;
+	private Long id;
 	
-	@Column(name="isDeleted", unique=true, nullable=false)
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
-	
 	
 	@Column(name="firstName", unique=true, nullable=false)
 	private String firstName;
@@ -51,12 +52,8 @@ public class User {
 	@Column(name="loyaltyPoints", unique=true, nullable=false)
 	private int loyaltyPoints;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id", referencedColumnName = "ID")
+	@OneToOne
 	private UserAccount userAccount;
-	
-	@OneToOne(mappedBy = "user")
-	private Registration registration;
 	
 	public User() {
 		
@@ -65,7 +62,7 @@ public class User {
 	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
 			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount) {
 		super();
-		ID = iD;
+		this.id = iD;
 		this.isDeleted = isDeleted;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -75,13 +72,13 @@ public class User {
 		this.phoneNum = phoneNum;
 		this.userType = userType;
 		this.loyaltyPoints = loyaltyPoints;
-		this.userAccount = userAccount;
 	}
+	
 
-	public User(Long iD, String firstName, String lastName, String address, String city, String state, String phoneNum,
+	public User(Long id, String firstName, String lastName, String address, String city, String state, String phoneNum,
 			UserType userType, UserAccount userAccount) {
 		super();
-		ID = iD;
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -89,13 +86,14 @@ public class User {
 		this.state = state;
 		this.phoneNum = phoneNum;
 		this.userType = userType;
-		this.userAccount = userAccount;
+	//	this.userAccount = userAccount;
 		
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
-	}
+	}	
+	
 	public Long getID() {
-		return ID;
+		return id;
 	}
 
 	public String getFirstName() {
@@ -175,23 +173,37 @@ public class User {
 		this.loyaltyPoints = loyaltyPoints;
 	}
 
-	public void setUserAccount(UserAccount userAccount) {
+	/*public void setUserAccount(UserAccount userAccount) {
 		this.userAccount = userAccount;
-	}
+	}*/
+
+	/*@Override
+	public String toString() {
+		return "User [ID=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
+				+ ", city=" + city + ", state=" + state + ", phoneNum=" + phoneNum + ", userType=" + userType
+				+ ", loyaltyPoints=" + loyaltyPoints + ", userAccount=" + userAccount + "]";
+	}*/
 
 	@Override
 	public String toString() {
-		return "User [ID=" + ID + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
+		return "User [ID=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
 				+ ", city=" + city + ", state=" + state + ", phoneNum=" + phoneNum + ", userType=" + userType
-				+ ", loyaltyPoints=" + loyaltyPoints + ", userAccount=" + userAccount + "]";
+				+ ", loyaltyPoints=" + loyaltyPoints + ", userAccount=" + "]";
 	}
+
+	
+	/*@Override
+	public int hashCode() {
+		return Objects.hash(id, address, city, firstName, lastName, loyaltyPoints, phoneNum, state, userAccount,
+				userType);
+	}*/
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ID, address, city, firstName, lastName, loyaltyPoints, phoneNum, state, userAccount,
+		return Objects.hash(id, address, city, firstName, lastName, loyaltyPoints, phoneNum, state,
 				userType);
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -201,12 +213,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(ID, other.ID);
+		return Objects.equals(id, other.id);
 	}
-	
-	
-	
-	
-	
 	
 }

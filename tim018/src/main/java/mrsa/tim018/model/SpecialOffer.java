@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Date;
 
@@ -46,7 +46,7 @@ public class SpecialOffer {
 	}
 
 
-	public SpecialOffer(Long iD, boolean isDeleted, Asset asset, Client client, Date startDate, Date endDate,
+	/*public SpecialOffer(Long iD, boolean isDeleted, Asset asset, Client client, Date startDate, Date endDate,
 			String otherServices, double price) {
 		super();
 		ID = iD;
@@ -57,7 +57,7 @@ public class SpecialOffer {
 		this.endDate = endDate;
 		this.otherServices = otherServices;
 		this.price = price;
-	}
+	}*/
 
 
 	public boolean isDeleted() {
@@ -80,9 +80,9 @@ public class SpecialOffer {
 	}
 
 
-	public Client getClient() {
+	/*public Client getClient() {
 		return client;
-	}
+	}*/
 
 
 	public Date getStartDate() {

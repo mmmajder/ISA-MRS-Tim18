@@ -1,4 +1,4 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Date;
 
@@ -12,11 +12,10 @@ import javax.persistence.Id;
 public class PriceCatalog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ID;
+	private Long id;
 
 	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
-
 
 	@Column(name = "price", unique = true, nullable = false)
 	private double price;
@@ -33,7 +32,7 @@ public class PriceCatalog {
 
 	public PriceCatalog(Long iD, boolean isDeleted, double price, Date startDate, Date endDate) {
 		super();
-		ID = iD;
+		id = iD;
 		this.isDeleted = isDeleted;
 		this.price = price;
 		this.startDate = startDate;
@@ -65,13 +64,10 @@ public class PriceCatalog {
 	}
 
 	public Long getID() {
-		return ID;
+		return id;
 	}
 
 	public Date getStartDate() {
 		return startDate;
 	}
-	
-	
-
 }
