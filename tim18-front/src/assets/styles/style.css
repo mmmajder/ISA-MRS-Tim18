@@ -5,10 +5,15 @@
   --orange-trans: #ff7700;
   --custom-dark-grey: rgba(0,0,0,.5);
 
-  --dark-blue: #06113C;
-  --dutch-orange: #FF8C32;
+  --dark-blue: #5da4b4;
+  --hovered-blue: #69bbcd;
+  --dutch-orange: #bd7554;
   --darker-light-grey: #DDDDDD;
   --ligher-grey: #EEEEEE;
+}
+
+body {
+  background-color: var(--ligher-grey) !important;
 }
 
 img.profile_picture  {
@@ -57,3 +62,14 @@ img.profile_picture  {
 .bg-darkBlue {
   background-color: var(--dark-blue);
 }
+
+
+.borderedBlock {
+  background-color: white;
+  border-radius: 1.5rem;
+  border: solid 3px var(--dark-blue);
+  box-shadow: 0 0 5px var(--custom-dark-grey);
+  box-shadow: inset;
+  padding: 25px;
+}
+

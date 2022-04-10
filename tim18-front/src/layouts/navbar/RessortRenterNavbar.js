@@ -7,16 +7,16 @@ import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import ProfileDropdown from './ProfileDropdown.js';
 
 export default function ResortRenterNavbar(){
-    const logo = require('../../assets/images/logo1.png')
+    const logo = require('../../assets/images/island_logo.png')
 
     return <Navbar bg="darkBlue" variant="dark" sticky='top' expand="md" collapseOnSelect> 
         <Navbar.Brand ><img src={logo}  className="brand" alt="logo" /> Hakuna Matata</Navbar.Brand>
         <Navbar.Toggle />
-        <Navbar.Collapse>
+        <Navbar.Collapse className="pl-5">
             <Nav className="ms-auto">
-                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
+                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} className="pl-2"/> Home</Nav.Link>
                 <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
-                <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} /> Resorts</span>}> 
+                <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} className="pl-5"/> Resorts</span>}> 
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faPlus} /> Add new resort</NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faBook} /> Rents history</NavDropdown.Item>
