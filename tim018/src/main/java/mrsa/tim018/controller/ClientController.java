@@ -44,32 +44,32 @@ public class ClientController {
 
 	// GET /api/clients?page=0&size=5&sort=firstName,DESC
 	@GetMapping
-	public ResponseEntity<List<ClientDTO>> getStudentsPage(Pageable page) {
+	public ResponseEntity<List<ClientDTO>> getclientsPage(Pageable page) {
 
 		// page object holds data about pagination and sorting
 		// the object is created based on the url parameters "page", "size" and "sort"
-		Page<Client> students = clientService.findAll(page);
+		Page<Client> clients = clientService.findAll(page);
 
-		// convert students to DTOs
-		List<ClientDTO> studentsDTO = new ArrayList<>();
-		for (Client s : students) {
-			studentsDTO.add(new ClientDTO(s));
+		// convert clients to DTOs
+		List<ClientDTO> clientsDTO = new ArrayList<>();
+		for (Client s : clients) {
+			clientsDTO.add(new ClientDTO(s));
 		}
 
-		return new ResponseEntity<>(studentsDTO, HttpStatus.OK);
+		return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> getStudent(@PathVariable Integer id) {
+	public ResponseEntity<ClientDTO> getclient(@PathVariable Integer id) {
 
-		Client student = clientService.findOne(id);
+		Client client = clientService.findOne(id);
 
 		// studen must exist
-		if (student == null) {
+		if (client == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(new ClientDTO(student), HttpStatus.OK);
+		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
 	}
 
 	@PostMapping(consumes = "application/json")
@@ -91,9 +91,9 @@ public class ClientController {
 	}
 
 	@PutMapping(consumes = "application/json")
-	public ResponseEntity<ClientDTO> updateStudent(@RequestBody ClientDTO clientDTO) {
+	public ResponseEntity<ClientDTO> updateclient(@RequestBody ClientDTO clientDTO) {
 
-		// a student must exist
+		// a client must exist
 		Client client = clientService.findOne(Math.toIntExact(clientDTO.getId()));
 
 		if (client == null) {

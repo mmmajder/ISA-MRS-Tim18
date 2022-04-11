@@ -28,8 +28,8 @@ public class ClientService {
 		return clientRepository.findAll(page);
 	}
 
-	public Client save(Client student) {
-		return clientRepository.save(student);
+	public Client save(Client client) {
+		return clientRepository.save(client);
 	}
 
 	public void remove(Integer id) {
