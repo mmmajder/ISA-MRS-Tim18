@@ -1,4 +1,4 @@
-import { faHome, faChevronCircleRight, faCogs, faUser, faHouseChimney, faPlus, faBook, faChartLine, faSearch} from '@fortawesome/free-solid-svg-icons'
+import { faHome, faHouseChimney, faPlus, faBook, faChartLine, faSearch} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../assets/styles/nav.css';
 import '../../assets/styles/style.css';
