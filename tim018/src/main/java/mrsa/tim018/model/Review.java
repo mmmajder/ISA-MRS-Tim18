@@ -1,19 +1,38 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Review {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
+	
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
 
+	@Column(name = "text", unique = true, nullable = false)
 	private String text;
+	
+	@Column(name = "rating", unique = true, nullable = false)
 	private int rating;
+	
+	@Column(name = "isComplaint", unique = true, nullable = false)
 	private boolean isComplaint;	// TODO: add option in review when client doesn't show up
 	
+	@Column(name = "senderID", unique = true, nullable = false)
 	private Long senderID;
+	
+	@Column(name = "recieverID", unique = true, nullable = false)
 	private Long recieverID;
 	
+	@Column(name = "status", unique = true, nullable = false)
 	private RequestStatus status;
 	
 	public Review() {

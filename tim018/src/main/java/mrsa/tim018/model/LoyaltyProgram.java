@@ -1,4 +1,7 @@
-package models;
+package mrsa.tim018.model;
+
+import javax.persistence.Entity;
+
 
 public class LoyaltyProgram {
 

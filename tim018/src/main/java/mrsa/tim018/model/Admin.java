@@ -1,13 +1,26 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Admin extends User {
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Reservation> pendigReservations = new ArrayList<Reservation>();
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Registration> pendingRegistrations = new ArrayList<Registration>();
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> pendingReviews = new ArrayList<Review>();
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DeletationRequest> deletationRequests = new ArrayList<DeletationRequest>();
 	
 	
@@ -67,7 +80,6 @@ public class Admin extends User {
 	public void setDeletationRequests(List<DeletationRequest> deletationRequests) {
 		this.deletationRequests = deletationRequests;
 	}
-
 	
 	
 	

@@ -1,10 +1,18 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Renter extends User {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
+@Entity
+public class Renter extends User {
+	
+	@OneToMany(mappedBy = "renter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Asset> assets = new ArrayList<Asset>();
 	
 	public Renter() {
@@ -36,10 +44,4 @@ public class Renter extends User {
 	public void setAssets(List<Asset> assets) {
 		this.assets = assets;
 	}
-	
-	
-	
-	
-	
-	
 }

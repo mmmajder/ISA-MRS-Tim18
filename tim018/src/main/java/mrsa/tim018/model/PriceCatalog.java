@@ -1,15 +1,29 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Date;
 
-public class PriceCatalog {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-	private Long ID;
+@Entity
+public class PriceCatalog {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(name = "isDeleted", unique = true, nullable = false)
 	private boolean isDeleted;
-	
+
+	@Column(name = "price", unique = true, nullable = false)
 	private double price;
 	
+	@Column(name = "startDate", unique = true, nullable = false)
 	private Date startDate;
+	
+	@Column(name = "endDate", unique = true, nullable = false)
 	private Date endDate = null;
 	
 	public PriceCatalog() {
@@ -18,7 +32,7 @@ public class PriceCatalog {
 
 	public PriceCatalog(Long iD, boolean isDeleted, double price, Date startDate, Date endDate) {
 		super();
-		ID = iD;
+		id = iD;
 		this.isDeleted = isDeleted;
 		this.price = price;
 		this.startDate = startDate;
@@ -50,13 +64,10 @@ public class PriceCatalog {
 	}
 
 	public Long getID() {
-		return ID;
+		return id;
 	}
 
 	public Date getStartDate() {
 		return startDate;
 	}
-	
-	
-
 }

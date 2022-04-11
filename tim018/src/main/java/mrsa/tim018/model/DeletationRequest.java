@@ -1,11 +1,26 @@
-package models;
+package mrsa.tim018.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class DeletationRequest {
 	
-	private Long ID;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
+	@Column(name = "status", nullable = false)
 	private RequestStatus status;
+
+	@OneToOne
 	private User user;
 
 	public DeletationRequest() {
@@ -14,7 +29,7 @@ public class DeletationRequest {
 
 	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user) {
 		super();
-		ID = iD;
+		id = iD;
 		this.isDeleted = isDeleted;
 		this.status = status;
 		this.user = user;
@@ -37,7 +52,7 @@ public class DeletationRequest {
 	}
 
 	public Long getID() {
-		return ID;
+		return id;
 	}
 
 	public User getUser() {

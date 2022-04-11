@@ -1,11 +1,21 @@
-package models;
+package mrsa.tim018.model;
 
 import java.util.Objects;
 
-public class TimeSlot {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class TimeSlot {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String ID;
-	private int time;
+	
+	@Column(name = "time", unique = true, nullable = false)
+	private Integer time;
 	
 	public TimeSlot() {
 	}
