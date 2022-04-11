@@ -9,11 +9,10 @@ import ResortDetailedView from './components/asset/ResortDetailedView.js';
 function App() {
   const resortForm = <CreateResortForm />
   const profile = <Row className="pt-5">
-                    <Col sm='1'/>
                     <Col sm='3'>
                       <ProfileInfoBlock/>
                     </Col>
-                    <Col sm='8'/>
+                    <Col sm='9'/>
                   </Row>
   const resortView = <ResortDetailedView />
         
