@@ -1,0 +1,33 @@
+.profilePicture {
+    border: solid 4px var(--dark-blue);
+    width: 120px !important;
+    height: 120px  !important;
+    padding: 2px;
+}
+
+@media only screen and (max-width: 767px) {
+    .profilePicture {
+        width: 100px !important;
+        height: 100px  !important;
+    }
+  }
+
+.profileNameLastname{
+    font-size:larger;
+}
+
+.solidDivider{
+    border-top: solid 3px var(--dark-blue);
+    margin-top: -10px;
+    margin-bottom: 2px;
+    margin-left: -25px;
+    margin-right: -25px;
+}
+
+.profileOtherInfo{
+    margin-top: -15px;
+}
+
+.coloredStar {
+    color: var(--dark-blue);
+}
