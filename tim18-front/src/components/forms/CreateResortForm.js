@@ -1,7 +1,7 @@
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import LabeledInput from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';
-import '../assets/styles/form.css';
+import '../../assets/styles/form.css';
 
 
 export default function CreateResortForm(){

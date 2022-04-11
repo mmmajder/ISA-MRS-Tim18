@@ -18,6 +18,7 @@ body {
 
 * {
   font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif; 
+  font-size: large;
 }
 
 img.profile_picture  {
@@ -74,6 +75,13 @@ img.profile_picture  {
   border: solid 3px var(--dark-blue);
   box-shadow: 0 0 5px var(--custom-dark-grey);
   box-shadow: inset;
+  padding: 25px;
+}
+
+.borderedBlockNoShadow {
+  background-color: white;
+  border-radius: 1.5rem;
+  border: solid 3px var(--dark-blue);
   padding: 25px;
 }
 

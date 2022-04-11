@@ -2,6 +2,7 @@
 .formButton {
     background-color: var(--dark-blue) !important;
     color: white !important;
+    font-size: x-large !important;
   }
 
 .formButton:hover {

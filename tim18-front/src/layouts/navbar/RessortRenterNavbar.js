@@ -16,7 +16,7 @@ export default function ResortRenterNavbar(){
                 <Nav.Link href="#"><FontAwesomeIcon icon={faHome} className="pl-2"/> Home</Nav.Link>
                 <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} className="pl-5"/> Resorts</span>}> 
-                    <NavDropdown.Item href="#"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
+                    <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
                     <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new resort</NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faBook} /> Rents history</NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
