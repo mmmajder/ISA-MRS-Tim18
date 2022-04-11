@@ -17,7 +17,7 @@ public class UserAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", unique = false, nullable = false)
 	private boolean isDeleted;
 	
 	@Column(name = "email", unique = true, nullable = false)

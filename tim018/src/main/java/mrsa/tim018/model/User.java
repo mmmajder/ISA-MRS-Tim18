@@ -5,6 +5,8 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,31 +27,32 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", unique = false, nullable = false)
 	private boolean isDeleted;
 	
-	@Column(name="firstName", unique=true, nullable=false)
+	@Column(name="firstName", unique=false, nullable=false)
 	private String firstName;
 	
-	@Column(name="lastName", unique=true, nullable=false)
+	@Column(name="lastName", unique=false, nullable=false)
 	private String lastName;
 	
-	@Column(name="address", unique=true, nullable=false)
+	@Column(name="address", unique=false, nullable=false)
 	private String address;
 	
-	@Column(name="city", unique=true, nullable=false)
+	@Column(name="city", unique=false, nullable=false)
 	private String city;
 	
-	@Column(name="state", unique=true, nullable=false)
+	@Column(name="state", unique=false, nullable=false)
 	private String state;
 	
-	@Column(name="phoneNum", unique=true, nullable=false)
+	@Column(name="phoneNum", unique=false, nullable=false)
 	private String phoneNum;
 	
-	@Column(name="userType", unique=true, nullable=false)
+	@Enumerated(EnumType.STRING)
+	@Column(name="userType", unique=false, nullable=false)
 	private UserType userType;
 	
-	@Column(name="loyaltyPoints", unique=true, nullable=false)
+	@Column(name="loyaltyPoints", unique=false, nullable=false)
 	private int loyaltyPoints;
 	
 	@OneToOne
