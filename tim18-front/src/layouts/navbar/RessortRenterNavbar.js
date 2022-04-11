@@ -11,11 +11,11 @@ export default function ResortRenterNavbar(){
     return <Navbar bg="darkBlue" variant="dark" sticky='top' expand="md" collapseOnSelect> 
         <Navbar.Brand ><img src={logo}  className="brand" alt="logo" /> Hakuna Matata</Navbar.Brand>
         <Navbar.Toggle />
-        <Navbar.Collapse className="pl-5">
+        <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
-                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} className="pl-2"/> Home</Nav.Link>
+                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
-                <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} className="pl-5"/> Resorts</span>}> 
+                <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} /> Resorts</span>}> 
                     <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
                     <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new resort</NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faBook} /> Rents history</NavDropdown.Item>
