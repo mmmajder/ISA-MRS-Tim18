@@ -5,13 +5,29 @@ import {Container} from 'react-bootstrap'
 import { Row, Col  } from 'react-bootstrap';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import ResortDetailedView from './components/asset/ResortDetailedView.js';
+import createUtilityClassName from 'react-bootstrap/esm/createUtilityClasses';
 
 function App() {
+
+  const user1 = {
+    firstName: "Zema",
+    lastName: "Moreplovac",
+    address: "Topolska 18",
+    city: "Backa Topola",
+    state: "Srbija",
+    phoneNumber: "064 1231231",
+    userType: "FISHINGINSTRUCTOR",
+    birthDate:  "23.11.2000.",
+    profilePic: "../assets/images/blue_profile_pic.jpg",
+    mark: 4.2
+  }
+
+
   const resortForm = <CreateResortForm />
   const profile = <Row className="pt-5">
                     <Col sm='1'/>
                     <Col sm='3'>
-                      <ProfileInfoBlock/>
+                      <ProfileInfoBlock user={user1}/>
                     </Col>
                     <Col sm='8'/>
                   </Row>
