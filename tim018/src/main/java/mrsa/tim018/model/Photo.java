@@ -12,10 +12,10 @@ public class Photo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
-	@Column(name = "path", unique = true, nullable = false)
+	@Column(name = "path", nullable = false)
 	private String path;
 
 	public Long getId() {

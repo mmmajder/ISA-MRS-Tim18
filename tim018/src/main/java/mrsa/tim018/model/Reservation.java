@@ -17,7 +17,7 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
 
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
 
@@ -29,25 +29,25 @@ public class Reservation {
 	@JoinColumn(name = "client_id")
 	private Client client;
 	
-	@Column(name = "startDate", unique = true, nullable = false)
+	@Column(name = "startDate", nullable = false)
 	private Date startDate;
 
-	@Column(name = "endDate", unique = true, nullable = false)
+	@Column(name = "endDate", nullable = false)
 	private Date endDate;
 	
-	@Column(name = "status", unique = true, nullable = false)
+	@Column(name = "status", nullable = false)
 	private ReservationStatus status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_review_id", unique = true, nullable = false)
+    @JoinColumn(name = "client_review_id", nullable = false)
 	private Review clientReview;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "asset_review_id", unique = true, nullable = false)
+    @JoinColumn(name = "asset_review_id", nullable = false)
 	private Review assetReview;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "renter_review_id", unique = true, nullable = false)
+    @JoinColumn(name = "renter_review_id", nullable = false)
 	private Review renterReview;
 	
 
