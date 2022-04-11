@@ -43,7 +43,7 @@ export default function CreateResortForm(){
                     <Row className='mt-2'>
                         <Col sm={4}/>
                         <Col sm={4} align='center'>
-                            <Button variant="custom" type="submit" className='formButton' onClick={console.log(name, address, description, rules, numOfPeople, cancelationFee)}>
+                            <Button variant="custom" type="submit" className='formButton' onClick={postReqCreateResort(jsonizeResort(name, address, description, rules, numOfPeople, cancelationFee))}>
                                 Create resort
                             </Button>
                         </Col>
@@ -55,4 +55,25 @@ export default function CreateResortForm(){
         <Col sm={2} />
     </Row>
     </>
+}
+
+function jsonizeResort(name, address, description, rules, numOfPeople, cancelationFee){
+    return {
+        'name': name,
+        'address': address,
+        'description': description,
+        'rules': rules,
+        'numOfPeople': numOfPeople,
+        'cancelationFee': cancelationFee
+    }
+}
+
+function postReqCreateResort(resortJson){
+    const request = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(resortJson)
+    };
+    fetch('/resorts', request)
+        .then(response => response.json())
 }
