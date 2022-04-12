@@ -25,35 +25,35 @@ public class Asset {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "renter_id")
 	private Renter renter;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@Column(name = "address", unique = true, nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@Column(name = "description", unique = true, nullable = false)
+	@Column(name = "description", nullable = false)
 	private String description;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Photo> photos; // TODO: how are we going to save photos
 	
-	@Column(name = "rules", unique = true, nullable = false)
+	@Column(name = "rules", nullable = false)
 	private String rules;
 	
-	@Column(name = "numOfPeople", unique = true, nullable = false)
+	@Column(name = "numOfPeople", nullable = false)
 	private int numOfPeople;
 	
-	@Column(name = "cancelationConditions", unique = true, nullable = false)
+	@Column(name = "cancelationConditions", nullable = false)
 	private int cancelationConditions; //(0-100)
 	
-	@Column(name = "averageRating", unique = true, nullable = false)
+	@Column(name = "averageRating", nullable = false)
 	private double averageRating;
 	
 	/*@ElementCollection
