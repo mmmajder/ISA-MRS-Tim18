@@ -22,7 +22,7 @@ export default function CreateResortForm(){
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(resortJson)
             };
-            fetch('http://localhost:8000/resorts', request) 
+            fetch('http://localhost:8082/resorts', request) 
                 .then(response => response.json())
         }, [name, address, description, rules, numOfPeople, cancelationFee]
     )
