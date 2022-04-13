@@ -17,13 +17,13 @@ public class UserAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "isDeleted", unique = false, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 	
-	@Column(name = "password", unique = true, nullable = false)
+	@Column(name = "password", nullable = false)
 	private String password;
 	
 	//@OneToOne(mappedBy = "userAccount")

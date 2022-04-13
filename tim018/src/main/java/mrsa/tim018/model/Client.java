@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Client extends User {
-	@Column(name = "penaltyPoints", unique = true, nullable = false)
+	@Column(name = "penaltyPoints", nullable = false)
 	private int penaltyPoints;
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
