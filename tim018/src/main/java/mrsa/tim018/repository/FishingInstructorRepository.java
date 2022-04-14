@@ -1,5 +1,6 @@
 package mrsa.tim018.repository;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ public interface FishingInstructorRepository extends JpaRepository<FishingInstru
 	
 	public List<FishingInstructor> findByFirstNameAndLastNameAllIgnoringCase(String firstName, String lastName);
 
-	public FishingInstructor findById(int id);
+	public FishingInstructor findById(long id);
 	
 	public FishingInstructor deleteById(int id);
 	

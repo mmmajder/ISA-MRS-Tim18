@@ -43,7 +43,7 @@ public class FishingInstructorController {
 	}
 
 	// GET /api/clients?page=0&size=5&sort=firstName,DESC
-	@GetMapping
+	/*@GetMapping
 	public ResponseEntity<List<FishingInstructorDTO>> getFishingInstructorsPage(Pageable page) {
 
 		// page object holds data about pagination and sorting
@@ -125,6 +125,6 @@ public class FishingInstructorController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
+	}*/
 	
 }

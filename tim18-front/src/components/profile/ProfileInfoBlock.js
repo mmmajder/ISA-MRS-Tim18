@@ -2,9 +2,27 @@ import '../../assets/styles/profile.css';
 import MarkStars from '../MarkStars';
 import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
+import {useCallback, useEffect} from 'react';
 
-export default function ProfileInfoBlock({user}){
+// const fetchUser = async(id) => {
+//     const res = await fetch()
+//     const data = await res.json()
+
+//     return data
+// }
+
+const fetchUser = async(id) => {
+    // GET request using fetch with async/await
+    const response = await fetch(`http://localhost:8082/users/${id}`);
+    return await response.json();
+}
+
+
+export default async function ProfileInfoBlock({id}){
+
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')
+    console.log(id)
+    const user = await fetchUser(id)
 
     return <div className="borderedBlock" align="center">
                 <img src={profilePic} className="profilePicture rounded-circle" ></img>

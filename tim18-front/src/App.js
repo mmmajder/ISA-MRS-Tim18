@@ -27,7 +27,7 @@ function App() {
   const profile = <Row className="pt-5">
                     <Col sm='1'/>
                     <Col sm='3'>
-                      <ProfileInfoBlock user={user1}/>
+                      <ProfileInfoBlock id={2}/>
                     </Col>
                     <Col sm='8'/>
                   </Row>
