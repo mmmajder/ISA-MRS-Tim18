@@ -1,24 +1,56 @@
+import {api} from "../Configs.js"
 
-const fetchClients = async () => {
-    const res = await fetch('http://localhost:5000/clients')
-
-    const data = await res.json()
-
-    return data
+export async function getClientByID(id){
+  try {
+      const responseData = await api.get(`/clients/${id}`);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
   }
+}
 
-  // Fetch Client 
-  const fetchClient = async (id) => {
-    const res = await fetch(`http://localhost:5000/clients/${id}`)
-
-    const data = await res.json()
-
-    return data
+export async function getAllClients(){
+  try {
+      const responseData = await api.get(`/clients`);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
   }
-  
-// Add Client
-const addClient = async (client) => {
-  const res = await fetch('http://localhost:5000/clients', 
+}
+
+export function addClient(clientData){
+  api.post("/clients", clientData)
+     .then((responseData) => alert(responseData))
+     .catch((err)=> alert(err));
+}
+
+export async function deleteClient(id){
+  try {
+      const responseData = await api.delete(`/clients/${id}`);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
+  }
+}
+
+export async function updateClient(clientData){
+  try {
+      const responseData = await api.put(`/clients`, clientData);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
+  }
+}
+
+
+/* STARE FJE 
+  // Add Client
+const addClientFetch = async (client) => {
+  const res = await fetch('http://localhost:8000/clients', 
                           {method: 'POST',
                           headers: {
                             'Content-type' : 'application/json'
@@ -26,10 +58,7 @@ const addClient = async (client) => {
                           body: JSON.stringify(client)
                           })
   const data =await res.json()
-  return data
-  //setClients([...clients, data])
-      
-}
+  return data     
 
   // Delete client
 const deleteClient = async (id) => {
@@ -40,10 +69,11 @@ const deleteClient = async (id) => {
   //setClients(clients.filter((client) => client.id !== id))
 }
 
+
 //
 const UpdatePassword = async (id, password) => {
 
-  const client = await fetchClient(id)
+  const client = await getClientByID(id)
   const updatedClient = {...client, password: password}//an event
   const res = await fetch(`http://localhost:5000/clients/${id}`, {method: 'PUT',
                                                                 headers: {
@@ -54,9 +84,10 @@ const UpdatePassword = async (id, password) => {
 
   const data = await res.json()
   return data
-  /*setClients(clients.map(
-    (client)=> client.id ===id ? 
-      {...client, reminder: data.reminder} : 
-      client
-    ))*/
-}
+  //setClients(clients.map(
+  //  (client)=> client.id ===id ? 
+  //    {...client, reminder: data.reminder} : 
+  //    client
+  //  ))
+  }
+}*/

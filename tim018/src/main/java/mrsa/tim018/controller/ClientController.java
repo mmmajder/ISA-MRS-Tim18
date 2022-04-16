@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import mrsa.tim018.model.Client;
 import mrsa.tim018.service.ClientService;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(value = "/clients")
 public class ClientController {
 
@@ -60,15 +62,12 @@ public class ClientController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> getclient(@PathVariable Integer id) {
-
+	public ResponseEntity<ClientDTO> getclient(@PathVariable Long id) {
 		Client client = clientService.findOne(id);
 
-		// studen must exist
 		if (client == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-
 		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
 	}
 
@@ -94,7 +93,7 @@ public class ClientController {
 	public ResponseEntity<ClientDTO> updateclient(@RequestBody ClientDTO clientDTO) {
 
 		// a client must exist
-		Client client = clientService.findOne(Math.toIntExact(clientDTO.getId()));
+		Client client = clientService.findOne(clientDTO.getId());
 
 		if (client == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -115,7 +114,7 @@ public class ClientController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteClient(@PathVariable Integer id) {
+	public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
 
 		Client client = clientService.findOne(id);
 

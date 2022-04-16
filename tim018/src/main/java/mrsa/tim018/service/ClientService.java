@@ -16,8 +16,8 @@ public class ClientService {
 	@Autowired
 	private ClientRepository clientRepository;	
 
-	public Client findOne(Integer id) {
-		return clientRepository.findById(id).orElseGet(null);
+	public Client findOne(Long id) {
+		return clientRepository.findById(id).orElse(null);
 	}
 
 	public List<Client> findAll() {
@@ -32,7 +32,7 @@ public class ClientService {
 		return clientRepository.save(client);
 	}
 
-	public void remove(Integer id) {
+	public void remove(Long id) {
 		clientRepository.deleteById(id);
 	}
 }
