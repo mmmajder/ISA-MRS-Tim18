@@ -14,7 +14,7 @@ public class TimeSlot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String ID;
 	
-	@Column(name = "time", unique = true, nullable = false)
+	@Column(name = "time", nullable = false)
 	private Integer time;
 	
 	public TimeSlot() {

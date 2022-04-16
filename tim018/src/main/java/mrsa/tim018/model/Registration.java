@@ -14,10 +14,10 @@ public class Registration {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@Column(name = "status", unique = true, nullable = false)
+	@Column(name = "status", nullable = false)
 	private RequestStatus status;
 	
 	@OneToOne(cascade = CascadeType.ALL)

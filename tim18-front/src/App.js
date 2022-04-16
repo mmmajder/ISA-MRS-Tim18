@@ -8,7 +8,6 @@ import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 
 function App() {
-
   const client = false;
   if(client){
     return <ClientBase />
@@ -38,7 +37,6 @@ function App() {
       </Router>
     );
   }
-  
 }
 
 export default App;

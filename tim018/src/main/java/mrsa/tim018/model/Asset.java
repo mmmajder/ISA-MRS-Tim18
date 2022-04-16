@@ -25,35 +25,35 @@ public class Asset {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "renter_id")
 	private Renter renter;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@Column(name = "address", unique = true, nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@Column(name = "description", unique = true, nullable = false)
+	@Column(name = "description", nullable = false)
 	private String description;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Photo> photos; // TODO: how are we going to save photos
 	
-	@Column(name = "rules", unique = true, nullable = false)
+	@Column(name = "rules", nullable = false)
 	private String rules;
 	
-	@Column(name = "numOfPeople", unique = true, nullable = false)
+	@Column(name = "numOfPeople", nullable = false)
 	private int numOfPeople;
 	
-	@Column(name = "cancelationConditions", unique = true, nullable = false)
+	@Column(name = "cancelationConditions", nullable = false)
 	private int cancelationConditions; //(0-100)
 	
-	@Column(name = "averageRating", unique = true, nullable = false)
+	@Column(name = "averageRating", nullable = false)
 	private double averageRating;
 	
 	/*@ElementCollection
@@ -74,24 +74,24 @@ public class Asset {
 		
 	}
 
-	/*public Asset(Long iD, boolean isDeleted, Renter renter, String name, String address, String description,
+	public Asset(Long id, boolean isDeleted, Renter renter, String name, String address, String description,
 			List<String> photos, String rules, int numOfPeople, int cancelationConditions, double averageRating,
 			HashMap<Date, List<TimeSlot>> availability, List<Reservation> reservations) {
 		super();
-		ID = iD;
+		this.id = id;
 		this.isDeleted = isDeleted;
 		this.renter = renter;
 		this.name = name;
 		this.address = address;
 		this.description = description;
-		this.photos = photos;
+//		this.photos = photos;
 		this.rules = rules;
 		this.numOfPeople = numOfPeople;
 		this.cancelationConditions = cancelationConditions;
 		this.averageRating = averageRating;
-		this.availability = availability;
+//		this.availability = availability;
 		this.reservations = reservations;
-	}*/
+	}
 	
 	
 
@@ -99,7 +99,7 @@ public class Asset {
 		return isDeleted;
 	}
 
-/*	public Asset(Long id, boolean isDeleted, String name, String address, String description, List<String> photos,
+	public Asset(Long id, boolean isDeleted, String name, String address, String description, List<String> photos,
 			String rules, int numOfPeople, int cancelationConditions, double averageRating) {
 		super();
 		this.id = id;
@@ -107,7 +107,7 @@ public class Asset {
 		this.name = name;
 		this.address = address;
 		this.description = description;
-		this.photos = photos;
+//		this.photos = photos;
 		this.rules = rules;
 		this.numOfPeople = numOfPeople;
 		this.cancelationConditions = cancelationConditions;
@@ -118,15 +118,15 @@ public class Asset {
 		this.isDeleted = isDeleted;
 	}
 
-	/*public Renter getRenter() {
+	public Renter getRenter() {
 		return renter;
 	}
 
 	public void setRenter(Renter renter) {
 		this.renter = renter;
-	}*/
+	}
 
-/*	public String getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -150,13 +150,13 @@ public class Asset {
 		this.description = description;
 	}
 
-	public List<String> getPhotos() {
-		return photos;
-	}
+//	public List<String> getPhotos() {
+//		return photos;
+//	}
 
-	public void setPhotos(List<String> photos) {
-		this.photos = photos;
-	}
+//	public void setPhotos(List<String> photos) {
+//		this.photos = photos;
+//	}
 
 	public String getRules() {
 		return rules;
@@ -188,15 +188,15 @@ public class Asset {
 
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
-	}*/
-
-	/*public Map<Date, List<TimeSlot>> getAvailability() {
-		return availability;
-	}*/
-
-	/*public void setAvailability(HashMap<Date, List<TimeSlot>> availability) {
-		this.availability = availability;
 	}
+
+//	public Map<Date, List<TimeSlot>> getAvailability() {
+//		return availability;
+//	}
+//
+//	public void setAvailability(HashMap<Date, List<TimeSlot>> availability) {
+//		this.availability = availability;
+//	}
 
 	public List<Reservation> getReservations() {
 		return reservations;
@@ -204,10 +204,14 @@ public class Asset {
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
-	}*/
+	}
 
 	public Long getID() {
 		return id;
+	}
+	
+	public FishingInstructor getFishingInstructor() {
+		return fishingInstructor;
 	}
 	
 	
