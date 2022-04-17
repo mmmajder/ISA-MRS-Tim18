@@ -7,6 +7,7 @@ import ResortDetailedView from './components/asset/ResortDetailedView.js';
 import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
+import Calendar from './components/calendar/Calendar.js';
 
 function App() {
   const client = false;
@@ -17,6 +18,7 @@ function App() {
     const resortForm = <CreateResortForm />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={2}/>}/>
     const resortView = <ResortDetailedView />
+    const calendar = <Calendar/>
     return (
       <Router>
         <div>
@@ -30,6 +32,7 @@ function App() {
                   {/* For other's Profile page */}
                 <Route path="/profile" element={profile} /> 
                 <Route path="/resorts" element={resortView} /> 
+                <Route path="/calendar" element={calendar}/>
               </Routes>
             </Container>
           </body>
