@@ -3,7 +3,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import LabeledInput from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';
 import '../../assets/styles/form.css';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 
 
 export default function CreateResortForm(){
@@ -14,7 +14,21 @@ export default function CreateResortForm(){
     const [numOfPeople, setNumOfPeople] = useState(1);
     const [cancelationFee, setCancelationFee] = useState(0);
 
-    return <>
+    const postRequest = useCallback(
+        (e) => {
+            e.preventDefault();
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee}
+            const request = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resortJson)
+            };
+            fetch('http://localhost:8082/resorts', request) 
+                .then(response => response.json())
+        }, [name, address, description, rules, numOfPeople, cancelationFee]
+    )
+
+    return (<>
     <Row className='mt-5' >
         <Col sm={2} />
         <div className="borderedBlock">
@@ -44,7 +58,7 @@ export default function CreateResortForm(){
                     <Row className='mt-2'>
                         <Col sm={4}/>
                         <Col sm={4} align='center'>
-                            <Button variant="custom" type="submit" className='formButton' onClick={console.log(name, address, description, rules, numOfPeople, cancelationFee)}>
+                            <Button variant="custom" type="submit" className='formButton' onClick={postRequest}>
                                 Create resort
                             </Button>
                         </Col>
@@ -56,4 +70,5 @@ export default function CreateResortForm(){
         <Col sm={2} />
     </Row>
     </>
+    );
 }
