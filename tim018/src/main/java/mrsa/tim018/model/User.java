@@ -27,32 +27,32 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
 	private Long id;
 	
-	@Column(name = "isDeleted", unique = false, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@Column(name="firstName", unique=false, nullable=false)
+	@Column(name="firstName", nullable=false)
 	private String firstName;
 	
-	@Column(name="lastName", unique=false, nullable=false)
+	@Column(name="lastName", nullable=false)
 	private String lastName;
 	
-	@Column(name="address", unique=false, nullable=false)
+	@Column(name="address", nullable=false)
 	private String address;
 	
-	@Column(name="city", unique=false, nullable=false)
+	@Column(name="city", nullable=false)
 	private String city;
 	
-	@Column(name="state", unique=false, nullable=false)
+	@Column(name="state", nullable=false)
 	private String state;
 	
-	@Column(name="phoneNum", unique=false, nullable=false)
+	@Column(name="phoneNum", nullable=false)
 	private String phoneNum;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="userType", unique=false, nullable=false)
+	@Column(name="userType", nullable=false)
 	private UserType userType;
 	
-	@Column(name="loyaltyPoints", unique=false, nullable=false)
+	@Column(name="loyaltyPoints", nullable=false)
 	private int loyaltyPoints;
 	
 	@OneToOne

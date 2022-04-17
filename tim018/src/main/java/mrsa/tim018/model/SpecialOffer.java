@@ -17,7 +17,7 @@ public class SpecialOffer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
 
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -29,16 +29,16 @@ public class SpecialOffer {
 	private Client client = null;
 	
 	
-	@Column(name = "startDate", unique = true, nullable = false)
+	@Column(name = "startDate", nullable = false)
 	private Date startDate;
 	
-	@Column(name = "endDate", unique = true, nullable = false)
+	@Column(name = "endDate", nullable = false)
 	private Date endDate;
 	
-	@Column(name = "otherServices", unique = true, nullable = false)
+	@Column(name = "otherServices", nullable = false)
 	private String otherServices;
 	
-	@Column(name = "price", unique = true, nullable = false)
+	@Column(name = "price", nullable = false)
 	private double price;
 	
 

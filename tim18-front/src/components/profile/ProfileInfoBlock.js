@@ -1,3 +1,4 @@
+import React from 'react';
 import '../../assets/styles/profile.css';
 import MarkStars from '../MarkStars';
 import ProfileInfo from './ProfileInfo';

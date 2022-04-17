@@ -1,3 +1,4 @@
+import React from 'react';
 import {faChevronCircleRight, faCogs, faUser} from '@fortawesome/free-solid-svg-icons'
 import {NavDropdown} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

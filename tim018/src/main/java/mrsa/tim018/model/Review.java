@@ -14,25 +14,25 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
 	
-	@Column(name = "isDeleted", unique = true, nullable = false)
+	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
-	@Column(name = "text", unique = true, nullable = false)
+	@Column(name = "text", nullable = false)
 	private String text;
 	
-	@Column(name = "rating", unique = true, nullable = false)
+	@Column(name = "rating", nullable = false)
 	private int rating;
 	
-	@Column(name = "isComplaint", unique = true, nullable = false)
+	@Column(name = "isComplaint", nullable = false)
 	private boolean isComplaint;	// TODO: add option in review when client doesn't show up
 	
-	@Column(name = "senderID", unique = true, nullable = false)
+	@Column(name = "senderID", nullable = false)
 	private Long senderID;
 	
-	@Column(name = "recieverID", unique = true, nullable = false)
+	@Column(name = "recieverID", nullable = false)
 	private Long recieverID;
 	
-	@Column(name = "status", unique = true, nullable = false)
+	@Column(name = "status", nullable = false)
 	private RequestStatus status;
 	
 	public Review() {

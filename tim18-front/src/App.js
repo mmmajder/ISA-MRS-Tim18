@@ -1,3 +1,4 @@
+import React from 'react';
 import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
 import CreateResortForm from './components/forms/CreateResortForm.js'
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
@@ -25,11 +26,10 @@ function App() {
 
   const resortForm = <CreateResortForm />
   const profile = <Row className="pt-5">
-                    <Col sm='1'/>
                     <Col sm='3'>
                       <ProfileInfoBlock id={2}/>
                     </Col>
-                    <Col sm='8'/>
+                    <Col sm='9'/>
                   </Row>
   const resortView = <ResortDetailedView />
         

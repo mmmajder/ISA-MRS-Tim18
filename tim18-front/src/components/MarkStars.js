@@ -1,3 +1,4 @@
+import React from 'react';
 import '../assets/styles/form.css';
 import '../assets/styles/profile.css';
 import PropTypes from 'prop-types';

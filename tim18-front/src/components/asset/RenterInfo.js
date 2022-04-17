@@ -1,3 +1,4 @@
+import React from 'react';
 import MarkStars from '../MarkStars';
 
 export default function RenterInfo(){
