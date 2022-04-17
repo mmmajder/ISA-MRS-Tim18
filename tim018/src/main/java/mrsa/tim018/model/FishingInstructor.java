@@ -14,12 +14,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class FishingInstructor extends User {
 
-	@OneToMany(mappedBy = "fishingInstructor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Asset> assets = new ArrayList<Asset>();
-	
-	/*@ElementCollection
-	private HashMap<Date, TimeSlots> availability = new HashMap<Date, TimeSlots>();*/
-	
 	
 	public FishingInstructor() {
 	}

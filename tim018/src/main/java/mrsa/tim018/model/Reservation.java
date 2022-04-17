@@ -1,7 +1,6 @@
 package mrsa.tim018.model;
 
-import java.util.Date;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Reservation {
@@ -29,12 +29,9 @@ public class Reservation {
 	@JoinColumn(name = "client_id")
 	private Client client;
 	
-	@Column(name = "startDate", nullable = false)
-	private Date startDate;
+	@OneToOne(cascade = CascadeType.ALL)
+	private TimeRange timeRange;
 
-	@Column(name = "endDate", nullable = false)
-	private Date endDate;
-	
 	@Column(name = "status", nullable = false)
 	private ReservationStatus status;
 	
@@ -53,23 +50,6 @@ public class Reservation {
 
 	public Reservation() {
 	}
-
-
-	/*public Reservation(Long iD, boolean isDeleted, Asset asset, Client client, Date startDate, Date endDate,
-			ReservationStatus status, Review clientReview, Review assetReview, Review renterReview) {
-		super();
-		ID = iD;
-		this.isDeleted = isDeleted;
-		this.asset = asset;
-		this.client = client;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.status = status;
-		this.clientReview = clientReview;
-		this.assetReview = assetReview;
-		this.renterReview = renterReview;
-	}
-*/
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -90,37 +70,6 @@ public class Reservation {
 		this.status = status;
 	}
 
-
-	/*public Review getClientReview() {
-		return clientReview;
-	}
-
-
-	public void setClientReview(Review clientReview) {
-		this.clientReview = clientReview;
-	}
-
-
-	public Review getAssetReview() {
-		return assetReview;
-	}
-
-
-	public void setAssetReview(Review assetReview) {
-		this.assetReview = assetReview;
-	}
-
-
-	public Review getRenterReview() {
-		return renterReview;
-	}
-
-
-	public void setRenterReview(Review renterReview) {
-		this.renterReview = renterReview;
-	}*/
-
-
 	public Long getID() {
 		return ID;
 	}
@@ -129,30 +78,6 @@ public class Reservation {
 	public Asset getAsset() {
 		return asset;
 	}
-
-
-	/*public Client getClient() {
-		return client;
-	}*/
-
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-
-	/*@Override
-	public String toString() {
-		return "Reservation [ID=" + ID + ", isDeleted=" + isDeleted + ", asset=" + asset + ", client=" + client
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", clientReview="
-				+ clientReview + ", assetReview=" + assetReview + ", renterReview=" + renterReview + "]";
-	}*/
-	
 	
 	
 
