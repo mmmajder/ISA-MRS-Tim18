@@ -16,7 +16,7 @@ export default function ListedAsset({name, address, mark}){
                     <Col sm="6">
                         <Row>
                             <Col sm="6">
-                                <AssetMainInfo name={name} mark={mark}/>
+                                <AssetMainInfo name={name} mark={mark} address={address}/>
                             </Col>
                             <Col sm="4">
                                 

@@ -20,7 +20,7 @@ export async function getAssets(){
   }
 }
 
-export async function getAssetsByRenter(){
+export async function getAssetsByRenter(renterId){
     try {
         const responseData = await api.get(`/assets/renter/${renterId}`);
         return responseData;

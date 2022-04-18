@@ -14,7 +14,7 @@ export default function ResortRenterNavbar(){
         <Navbar.Toggle />
         <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
-                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
+                <Nav.Link href="/home"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} /> Resorts</span>}> 
                     <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
