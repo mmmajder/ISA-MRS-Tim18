@@ -13,6 +13,17 @@ export async function getInstructorByID(id){
   }
 }
 
+export async function updateInstructor(instructorData){
+  try {
+      const responseData = await api.put(`/fishingInstructors`, instructorData);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
+  }
+}
+
+
 /*export async function getAllClients(){
   try {
       const responseData = await api.get(`/clients`);

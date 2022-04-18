@@ -8,9 +8,11 @@ import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
+import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
 
 function App() {
   const client = false;
+  const instructor = true;
   if(client){
     return <ClientBase />
   }
@@ -20,6 +22,10 @@ function App() {
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
     const calendar = <Calendar/>
+    let updateProfile;
+    if (instructor){
+      updateProfile = <UpdateInstructorProfileForm id={localStorage.getItem("userId")}/>
+    }
     return (
       <Router>
         <div>
@@ -34,6 +40,7 @@ function App() {
                 <Route path="/profile" element={profile} /> 
                 <Route path="/resorts" element={resortView} /> 
                 <Route path="/calendar" element={calendar}/>
+                <Route path="/settings" element={updateProfile} />
               </Routes>
             </Container>
           </body>

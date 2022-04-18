@@ -90,13 +90,13 @@ public class FishingInstructorController {
 
 		fishingInstructor = fishingInstructorService.save(fishingInstructor);
 		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.CREATED);
-	}
+	}*/
 
 	@PutMapping(consumes = "application/json")
 	public ResponseEntity<FishingInstructorDTO> updateFishingInstructor(@RequestBody FishingInstructorDTO fishingInstructorDTO) {
 
 		// a student must exist
-		FishingInstructor fishingInstructor = fishingInstructorService.findOne(Math.toIntExact(fishingInstructorDTO.getId()));
+		FishingInstructor fishingInstructor = fishingInstructorService.findOne(fishingInstructorDTO.getId());
 
 		if (fishingInstructor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -104,19 +104,19 @@ public class FishingInstructorController {
 		
 		fishingInstructor.setAddress(fishingInstructorDTO.getAddress());
 		fishingInstructor.setCity(fishingInstructorDTO.getCity());
-		fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
+		//fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
 		fishingInstructor.setFirstName(fishingInstructorDTO.getFirstName());
 		fishingInstructor.setLastName(fishingInstructorDTO.getLastName());
-		fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
+		//fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
 		fishingInstructor.setPhoneNum(fishingInstructorDTO.getPhoneNum());
 		fishingInstructor.setState(fishingInstructorDTO.getState());
-		fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
+	//	fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
 
 		fishingInstructor = fishingInstructorService.save(fishingInstructor);
 		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/{id}")
+	/*@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteFishingInstructor(@PathVariable Integer id) {
 
 		FishingInstructor fishingInstructor = fishingInstructorService.findOne(id);
