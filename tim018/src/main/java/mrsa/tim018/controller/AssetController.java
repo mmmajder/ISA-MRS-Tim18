@@ -38,7 +38,18 @@ public class AssetController {
 		
 		return new ResponseEntity<>(new AssetDTO(asset), HttpStatus.CREATED);
 	}
-
+	
+	@PutMapping(value="/{id}", consumes = "application/json" )
+	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
+		Asset asset = AssetMapper.mapToAsset(assetDto);
+		
+		if (assetService.findOne(id) != null)
+		{
+			asset = assetService.save(asset);
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		} else
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+	}
 	
 	@GetMapping(value = "/renter/{id}")
 	public ResponseEntity<List<AssetDTO>> getAssetsByRenter(@PathVariable Long renterId) {

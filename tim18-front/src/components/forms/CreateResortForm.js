@@ -18,7 +18,7 @@ export default function CreateResortForm(){
     }
 
     return (<>
-        <ResortForm resort={resort} buttonText="Create resort" />
+        <ResortForm resort={resort} buttonText="Create resort" id={-1} />
     </>
     );
 }

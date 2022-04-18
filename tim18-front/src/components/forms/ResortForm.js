@@ -18,16 +18,32 @@ export default function ResortForm({resort, buttonText, id}){
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
-            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, id}
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee}
             const request = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(resortJson)
             };
-            fetch('http://localhost:8000/resorts', request) 
+            fetch('http://localhost:8000/assets', request) 
+                .then(response => response.json())
+        }, [name, address, description, rules, numOfPeople, cancelationFee]
+    )
+
+    const putRequest = useCallback(
+        (e) => {
+            e.preventDefault();
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, id}
+            const request = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resortJson)
+            };
+            fetch('http://localhost:8000/assets/' + id, request) 
                 .then(response => response.json())
         }, [name, address, description, rules, numOfPeople, cancelationFee, id]
     )
+
+    const onClickFunction = id === -1 ? postRequest : putRequest;
 
     return (<>
     <Row className='mt-5' >
@@ -59,7 +75,7 @@ export default function ResortForm({resort, buttonText, id}){
                     <Row className='mt-2'>
                         <Col sm={4}/>
                         <Col sm={4} align='center'>
-                            <Button variant="custom" type="submit" className='formButton' onClick={postRequest}>
+                            <Button variant="custom" type="submit" className='formButton' onClick={onClickFunction}>
                                 {buttonText}
                             </Button>
                         </Col>

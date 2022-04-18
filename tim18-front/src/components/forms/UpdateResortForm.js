@@ -14,11 +14,12 @@ export default function UpdateResortForm(){
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget nulla congue sapien interdum pulvinar. Quisque a nisi in ex sollicitudin eleifend. Aliquam rutrum erat mauris, sed pulvinar sem tempor at. Cras nec auctor mi. Nam nibh leo, imperdiet et dictum nec, vulputate eget felis. Integer eleifend maximus ligula nec.',
         rules: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget nulla congue sapien interdum pulvinar. Quisque a nisi in ex sollicitudin eleifend. Aliquam rutrum erat mauris, sed pulvinar sem tempor at. Cras nec auctor mi. Nam nibh leo, imperdiet et dictum nec, vulputate eget felis. Integer eleifend maximus ligula nec.',
         numOfPeople: 4,
-        cancelationFee: 40
+        cancelationFee: 40,
+        id: 2
     }
 
     return (<>
-        <ResortForm resort={resort} buttonText="Update resort"/>
+        <ResortForm resort={resort} buttonText="Update resort" id={resort.id}/>
     </>
     );
 }
