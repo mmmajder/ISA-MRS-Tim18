@@ -78,6 +78,16 @@ public class Asset {
 		this.cancelationConditions = cancelationConditions;
 		this.averageRating = averageRating;
 	}
+	
+	
+
+	public AssetCalendar getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(AssetCalendar calendar) {
+		this.calendar = calendar;
+	}
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;

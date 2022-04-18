@@ -22,4 +22,12 @@ public class TimeRange {
 	private LocalDateTime fromDateTime;
 	@Column(name = "toDateTime", nullable = false)
 	private LocalDateTime toDateTime;
+
+	public TimeRange(boolean isDeleted, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
+		super();
+		this.isDeleted = isDeleted;
+		this.fromDateTime = fromDateTime;
+		this.toDateTime = toDateTime;
+	}
+
 }

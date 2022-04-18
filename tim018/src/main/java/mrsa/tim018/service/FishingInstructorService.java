@@ -15,8 +15,8 @@ public class FishingInstructorService {
 	@Autowired
 	private FishingInstructorRepository fishingInstructorRepository;	
 
-	public FishingInstructor findOne(Integer id) {
-		return fishingInstructorRepository.findById(id);  // .orElseGet(null)
+	public FishingInstructor findOne(Long id) {
+		return fishingInstructorRepository.findById(id).get();  // .orElseGet(null)
 	}
 
 	public List<FishingInstructor> findAll() {

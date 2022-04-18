@@ -10,13 +10,14 @@ export default function CreateCalendarEventForm(props){
     const [endDateTime, setEndDateTime] = useState(new Date());
     const [type, setType] = useState("Available");
     const userId = localStorage.getItem("userId")
+    const assetId = localStorage.getItem("assetId")
     const addAppointment = useCallback(
         (e) => {
             e.preventDefault();
             console.log(type)
             console.log(startDateTime)
             console.log(endDateTime)
-            const resortJson = {startDateTime, endDateTime, type, userId}
+            const resortJson = {startDateTime, endDateTime, type, userId, assetId}
             props.onChange({
                 title  : 'available',
                 start  : moment(startDateTime).format("YYYY-MM-DD HH:mm:SS"),
@@ -29,7 +30,7 @@ export default function CreateCalendarEventForm(props){
             };
             fetch('http://localhost:8000/calendar', request) 
                 .then(response => response.json())
-        }, [startDateTime, endDateTime, type, userId]*/
+        }, [startDateTime, endDateTime, type, userId, assetId]*/
     })
     return (
         <div>
