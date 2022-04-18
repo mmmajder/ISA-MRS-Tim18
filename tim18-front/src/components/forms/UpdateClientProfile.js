@@ -4,9 +4,11 @@ import '../../assets/styles/form.css';
 import {useState, useEffect, useRef} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import FeedbackPopUp from  './FeedbackPopUp'
-import { updateClient, getClientByID } from '../../services/api/ClientApi';
+import FeedbackPopUp from  './PopUps/FeedbackPopUp'
+import { updateClient, getClientByID, createDeleteRequest} from '../../services/api/ClientApi';
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
+import DeleteRequest from './PopUps/DeleteRequest';
+
 
 
 export default function UpdateClientProfile({id}){
@@ -68,22 +70,37 @@ export default function UpdateClientProfile({id}){
                     </Row>  
                     <Row className='mt-4'>  </Row>
                     
-                     <DeleteRow client={client}/>         
+                     <DeleteRow id={id} feedbackFun={setFeedbackPopup}/>         
                 </Container >
             </>
         );
     }   
 }
 
-function DeleteRow({client}){
-    return <Row className='mt-3'>
-                <Col sm={15} align='center'>
-                <Button variant="custom" type="submit" className='formButton' onClick={() => {createDeletionRequest({client})}} >
-                        <FontAwesomeIcon icon={faTrashCan}/>
-                        Delete My Profile 
-                </Button>
-                </Col>
-            </Row>
+function DeleteRow({id, feedbackFunc}){
+    const [popUp, setPopUp] = useState(false);
+    // adds class to darken background color
+    const duringPopUp = popUp ? " during-popup" : "";
+    const [reason, setReason] = useState('');
+
+    useEffect(() => {
+        console.log(reason);
+        const feedback = null//= createDeleteRequest(client, reason);
+        /*!!feedback ? feedbackFunc(false, 'Successfuly updated profile!') : 
+                 feedbackFunc(true, 'Oops, something went wrong please try again!');*/
+    }, [reason])
+
+    return  <>
+                <Row className='mt-3'>
+                    <Col sm={15} align='center'>
+                    <Button variant="custom" type="submit" className={"formButton" + duringPopUp} onClick={()=>{setPopUp(true);}} >
+                            <FontAwesomeIcon icon={faTrashCan}/>
+                            Delete My Profile 
+                    </Button>
+                    </Col>
+                </Row>
+                {popUp && <DeleteRequest setPopUp={setPopUp} PropFunc={setReason}/>}
+            </>
 }
 
 function prepareForUpdate(client, clientData, feedbackFunc){
@@ -107,10 +124,6 @@ function prepareForUpdate(client, clientData, feedbackFunc){
 
 function refreshPage() {
     window.location.reload(false);
-}
-
-function createDeletionRequest(){
-
 }
 
 
@@ -172,6 +185,8 @@ function InputElems({client, feedbackFun}){
             { setFormValid(false); }
      }
 
+    
+
      // JSX
     return <div>
                 <LabeledInputWithErrMessage isValid={firstNameValid} label="First Name" inputName="firstName" defaultValue={client.firstName} required onChangeFunc={validateFirstName} hoverTitile={onlyLetters}/>
@@ -191,7 +206,7 @@ function InputElems({client, feedbackFun}){
                         </Button>
                     </Col>
                     <Col sm={2} align='right'>
-                        <Button variant="custom" type="reset" className='formButton' onClick={refreshPage}>
+                        <Button variant="custom" type="reset" className="formButton" onClick={refreshPage}>
                             Cancel Changes
                         </Button>
                     </Col>

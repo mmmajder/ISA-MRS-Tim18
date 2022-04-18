@@ -26,7 +26,7 @@ export function addClient(clientData){
      .catch((err)=> alert(err));
 }
 
-export async function deleteClient(id){
+/*export async function deleteClient(id){
   try {
       const responseData = await api.delete(`/clients/${id}`);
       return responseData;
@@ -34,6 +34,11 @@ export async function deleteClient(id){
       console.log(err.message);
       return err.message
   }
+}*/
+export function createDeleteRequest(id, reason){
+  api.post(`/clients/${id}`, reason)
+     .then((responseData) => {return responseData})
+     .catch(()=> {return false});
 }
 
 export async function updateClient(clientData){

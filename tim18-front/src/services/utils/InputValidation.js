@@ -1,5 +1,6 @@
 export const onlyLetters = "This field can only contain letters!";
 export const onlyNumbers = "This field can only contain numbers!";
+export const deletionReason = "Please input reason for your deletion request"
 
 const onlyLettersRegex = new RegExp('^[a-zA-Z]+$');
 const onlyNumbersRegex = new RegExp('^[0-9]+$');
@@ -16,6 +17,13 @@ export function checkLettersInput(input){
 
 export function checkNumInput(input){
     return onlyNumbersRegex.test(input);     
+}
+
+export function isEmpty(input){
+    if(input ===null || input === undefined || input ==='' ){
+        return false;
+    }
+    return true;
 }
 
 export function capitalizeString(string) {

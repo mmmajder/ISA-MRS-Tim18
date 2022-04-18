@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import ProfilePreview from '../components/profile/ProfilePreview.js';
 import ClientProfilePreview from '../components/profile/ClientProfilePreview.js';
 import UpdateClientProfile from '../components/forms/UpdateClientProfile.js'
-import FeedbackPopUp from  '../components/forms/FeedbackPopUp'
 import { Form, Row, Col, Button} from 'react-bootstrap';
 
 export default function ClientBase(){
