@@ -32,10 +32,13 @@ export default function UpdateClientProfile({id}){
             firstUpdate.current = false;
             return;
           }
-        setFeedbackShow(true);
+          if(feedbackMessage!=''){
+            setFeedbackShow(true);
+          }
+        
     }, [feedbackType, feedbackMessage])
 
-    function setFeedbackPopup({isError, message}){
+    function setFeedbackPopup(isError, message){
         setFeedbackMessage(message);
         setFeedbackType(isError);
     }
@@ -83,7 +86,7 @@ function DeleteRow({client}){
             </Row>
 }
 
-function prepareForUpdate({client, clientData, feedbackFunc}){
+function prepareForUpdate(client, clientData, feedbackFunc){
     let clientCopy = {...client};
     
     // capitalizeString ??
@@ -94,26 +97,24 @@ function prepareForUpdate({client, clientData, feedbackFunc}){
     clientCopy.state = clientData.state || client.state;
     clientCopy.phoneNum = clientData.phoneNum || client.phoneNum;
 
-    let feedback = updateClient(clientCopy);
-
-    if(feedback===false){
-        feedbackFunc(true, 'Oops, something went wrong please try again!');
-    }
-    else{
-        feedbackFunc(false, 'Successfuly updated profile!');
-    }
+    const feedback = updateClient(clientCopy);
+    
+    // TODO: USE STATE NEKI NESTO?
+    !!feedback ? feedbackFunc(false, 'Successfuly updated profile!') : 
+                 feedbackFunc(true, 'Oops, something went wrong please try again!');
 };
+
 
 function refreshPage() {
     window.location.reload(false);
-  }
+}
 
 function createDeletionRequest(){
 
 }
 
 
-function InputElems({client, feedbackFunc}){
+function InputElems({client, feedbackFun}){
 
     // Values
     const [firstName, setFirstName] = useState('');
@@ -185,7 +186,7 @@ function InputElems({client, feedbackFunc}){
                 <Row className='mt-2'>
                     <Col sm={4}/>
                     <Col sm={2} align='left'>
-                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={() => {prepareForUpdate({client, clientDataValues, feedbackFunc})}} >
+                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={() => prepareForUpdate(client, clientDataValues, feedbackFun)} >
                             Save Changes
                         </Button>
                     </Col>
