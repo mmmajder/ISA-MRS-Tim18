@@ -1,0 +1,15 @@
+
+.formButton {
+    background-color: var(--dark-blue) !important;
+    color: white !important;
+    font-size: x-large !important;
+  }
+
+.formButton:hover {
+    background-color: var(--hovered-blue) !important;
+    
+  }
+
+.fixedWidthButton {
+    width: 250px !important;
+}

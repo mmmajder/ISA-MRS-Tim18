@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import LabeledInput from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';
-import '../../assets/styles/form.css';
+import '../../assets/styles/buttons.css';
 import {useCallback, useState} from 'react';
 
 
@@ -23,7 +23,7 @@ export default function CreateResortForm(){
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(resortJson)
             };
-            fetch('http://localhost:8082/resorts', request) 
+            fetch('http://localhost:8000/resorts', request) 
                 .then(response => response.json())
         }, [name, address, description, rules, numOfPeople, cancelationFee]
     )

@@ -5,10 +5,10 @@ import MarkStars from '../MarkStars';
 import RenterInfo from './RenterInfo';
 import { Button } from 'react-bootstrap';
 import ResortInfo from './ResortInfo';
+import RegularButton from '../buttons/RegularButton';
 
 export default function ResortDetailedView(){
     const resortImage = require('../../assets/images/Maldives.jpg');
-    
 
     return <>
             <div className="borderedBlock mt-3" align="">
@@ -18,15 +18,13 @@ export default function ResortDetailedView(){
                         <RenterInfo/>
                     </Col>
                     <Col sm="6">
-                        <ResortInfo />
+                        <ResortInfo name={'Maldivian hut on water'} mark={4.7} address={'Orchid Magu 7, Maadhad, 57887, Maldives'}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                        <Button variant="custom" type="submit" className='formButton pe-5 ps-5'>
-                            Rent resort
-                        </Button>
+                        <RegularButton text='Rent resort' onClickFunction={''}/>
                     </Col>
                     <Col sm={4}/>
                 </Row>
