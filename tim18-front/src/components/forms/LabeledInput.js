@@ -1,9 +1,37 @@
 import { Form, Row, Col} from 'react-bootstrap';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import '../../assets/styles/form.css';
 
-export default function LabeledInput({label, inputName, placeholder, onChangeFunc}){
+export function LabeledInput({label, inputName, placeholder, onChangeFunc}){
     return <Row className='mt-2'>
         <Col sm={2} align='right'><Form.Label>{label}</Form.Label></Col>
-        <Col sm={9}><Form.Control name={inputName} placeholder={placeholder}  onChange={(e) => onChangeFunc(e.target.value)}></Form.Control></Col>
+        <Col sm={9}><Form.Control name={inputName} placeholder={placeholder} required onChange={(e) => onChangeFunc(e.target.value)}></Form.Control></Col>
         <Col sm={1}/>
+    </Row>
+}
+
+export function LabeledInputWithErrMessage({isValid, label, inputName, placeholder, onChangeFunc, defaultValue, hoverTitile}){
+    const className = isValid ? '' : 'myFormControl';
+    return <Row className='mt-2'>
+        <Col sm={2} align='right'>
+            <Form.Label className='inputLabel'>{label}</Form.Label>
+        </Col>
+        
+        <Col sm={9}>
+            <Form.Control className={className}
+                          name={inputName} 
+                          defaultValue={defaultValue} 
+                          placeholder={placeholder}  
+                          required onChange={(e) => onChangeFunc(e.target.value)}>
+            </Form.Control>
+        </Col>
+        
+        <Col sm={1} align='left'>
+            <div className='infoDiv' data-title={hoverTitile}>
+                <FontAwesomeIcon icon={faInfoCircle} className='info'/>
+            </div>
+        </Col>
+        
     </Row>
 }

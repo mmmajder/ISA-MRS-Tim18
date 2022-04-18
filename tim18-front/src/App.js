@@ -8,7 +8,7 @@ import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 
 function App() {
-  const client = false;
+  const client = true;
   if(client){
     return <ClientBase />
   }

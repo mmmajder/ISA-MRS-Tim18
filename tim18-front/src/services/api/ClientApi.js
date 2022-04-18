@@ -38,11 +38,12 @@ export async function deleteClient(id){
 
 export async function updateClient(clientData){
   try {
-      const responseData = await api.put(`/clients`, clientData);
+      const clientDataJSON = JSON.stringify(clientData);
+      const responseData = await api.put(`/clients`, clientDataJSON);
       return responseData;
   } catch (err) {
       console.log(err.message);
-      return err.message
+      return false;
   }
 }
 
