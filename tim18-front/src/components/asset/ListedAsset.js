@@ -1,9 +1,8 @@
 import React from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
-import AssetNameAndMark from './AssetNameAndMark';
-import AssetAddress from './AssetAddress';
 import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
+import AssetMainInfo from './AssetMainInfo';
 
 export default function ListedAsset({name, address, mark}){
     const resortImage = require('../../assets/images/Maldives.jpg');
@@ -17,16 +16,15 @@ export default function ListedAsset({name, address, mark}){
                     <Col sm="6">
                         <Row>
                             <Col sm="6">
-                                <AssetNameAndMark name={name} mark={mark} />
-                                <AssetAddress address={address} />
+                                <AssetMainInfo name={name} mark={mark}/>
                             </Col>
                             <Col sm="4">
                                 
                             </Col>
                             <Col sm="2" >
                                 <div className='mt-4'>
-                                    <FixedWidthRegButton href="/resorts/id" text='Preview' onClickFunction={''} className='sameWidthButton'/>
-                                    <FixedWidthRegButton text='Delete' onClickFunction={''} className='sameWidthButton'/>
+                                    <FixedWidthRegButton href="/resorts/id" text='Preview' onClickFunction={''}/>
+                                    <FixedWidthRegButton text='Delete' onClickFunction={''}/>
                                 </div>
                             </Col>
                         </Row>

@@ -13,3 +13,14 @@
 .fixedWidthButton {
     width: 250px !important;
 }
+
+.faButtons {
+  color: var(--dark-blue);
+  font-size:xx-large;
+  margin-right: 5px;
+}
+
+.faButtons:hover {
+  color: var(--hovered-blue);
+  cursor: pointer;
+}
