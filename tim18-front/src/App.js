@@ -16,7 +16,8 @@ function App() {
   }
   else{
     const resortForm = <CreateResortForm />
-    const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={2}/>}/>
+    localStorage.setItem("userId", 2)
+    const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
     const calendar = <Calendar/>
     return (
