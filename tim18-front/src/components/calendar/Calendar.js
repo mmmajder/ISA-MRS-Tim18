@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { createRef } from 'react'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+import interactionPlugin from '@fullcalendar/interaction';
 
 const Calendar = () => {
   const calendarRef = createRef()
@@ -14,12 +15,21 @@ const Calendar = () => {
       <FullCalendar
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-          plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin ]}
+          plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
           initialView="dayGridMonth"
+          editable = {true}
+          selectable = {true}
+          selectHelper = {true}
+          select = {function(start, end, allDays) {
+            console.log(start)
+          }}
           events={[
             {
               title  : 'event1',
-              start  : '2022-04-01'
+              //start  : '2022-04-01',
+              daysOfWeek: [ '1', '4' ],
+              backgroundColor: 'red',
+              borderColor: 'red'
             },
             {
               title  : 'event2',
@@ -42,6 +52,7 @@ const Calendar = () => {
               allDay : false // will make the time show
             }
           ]}
+          
           resources={[
             {
               id: 'a',
