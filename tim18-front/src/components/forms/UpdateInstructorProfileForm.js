@@ -6,7 +6,7 @@ import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackPopUp from  './FeedbackPopUp'
 import { updateClient, getClientByID } from '../../services/api/ClientApi';
-import {getInstructorByID, updateInstructor} from '../../services/api/InstructorApi'
+import {getInstructorByID, updateInstructor, deleteInstructor} from '../../services/api/InstructorApi'
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
 
 
@@ -69,17 +69,17 @@ export default function UpdateClientProfile({id}){
                     </Row>  
                     <Row className='mt-4'>  </Row>
                     
-                     <DeleteRow client={instructor}/>         
+                     <DeleteRow client={instructor} feedbackFun={setFeedbackPopup}/>         
                 </Container >
             </>
         );
     }   
 }
 
-function DeleteRow({client}){
+function DeleteRow({client, feedbackFun}){
     return <Row className='mt-3'>
                 <Col sm={15} align='center'>
-                <Button variant="custom" type="submit" className='formButton' onClick={() => {createDeletionRequest({client})}} >
+                <Button variant="custom" type="submit" className='formButton' onClick={() => {createDeletionRequest({client, feedbackFun})}} >
                         <FontAwesomeIcon icon={faTrashCan}/>
                         Delete My Profile 
                 </Button>
@@ -110,8 +110,12 @@ function refreshPage() {
     window.location.reload(false);
 }
 
-function createDeletionRequest(){
-
+function createDeletionRequest(client, feedbackFunc){
+    const feedback = deleteInstructor(client);
+    
+    // TODO: USE STATE NEKI NESTO?
+    !!feedback ? feedbackFunc(false, 'Successfuly sent request for deletion of profile!') : 
+                 feedbackFunc(true, 'Oops, something went wrong please try again!');
 }
 
 

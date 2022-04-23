@@ -115,6 +115,22 @@ public class FishingInstructorController {
 		fishingInstructor = fishingInstructorService.save(fishingInstructor);
 		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
 	}
+	
+	@PutMapping(value = "/delete", consumes = "application/json")
+	public ResponseEntity<FishingInstructorDTO> deleteFishingInstructor(@RequestBody FishingInstructorDTO fishingInstructorDTO) {
+
+		// a student must exist
+		FishingInstructor fishingInstructor = fishingInstructorService.findOne(fishingInstructorDTO.getId());
+
+		if (fishingInstructor == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
+
+		fishingInstructor = fishingInstructorService.save(fishingInstructor);
+		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
+	}
 
 	/*@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteFishingInstructor(@PathVariable Integer id) {

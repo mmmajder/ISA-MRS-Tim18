@@ -23,6 +23,18 @@ export async function updateInstructor(instructorData){
   }
 }
 
+export async function deleteInstructor(instructorData){
+  try {
+      const responseData = await api.put(`/fishingInstructors/delete`, instructorData);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
+  }
+}
+
+
+
 
 /*export async function getAllClients(){
   try {
