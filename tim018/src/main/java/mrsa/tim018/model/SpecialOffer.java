@@ -1,7 +1,6 @@
 package mrsa.tim018.model;
 
-import java.util.Date;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class SpecialOffer {
@@ -28,12 +28,8 @@ public class SpecialOffer {
 	@JoinColumn(name = "client_id")
 	private Client client = null;
 	
-	
-	@Column(name = "startDate", nullable = false)
-	private Date startDate;
-	
-	@Column(name = "endDate", nullable = false)
-	private Date endDate;
+	@OneToOne(cascade = CascadeType.ALL)
+	private TimeRange timeRange;
 	
 	@Column(name = "otherServices", nullable = false)
 	private String otherServices;
@@ -44,21 +40,6 @@ public class SpecialOffer {
 
 	public SpecialOffer() {
 	}
-
-
-	/*public SpecialOffer(Long iD, boolean isDeleted, Asset asset, Client client, Date startDate, Date endDate,
-			String otherServices, double price) {
-		super();
-		ID = iD;
-		this.isDeleted = isDeleted;
-		this.asset = asset;
-		this.client = client;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.otherServices = otherServices;
-		this.price = price;
-	}*/
-
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -78,22 +59,6 @@ public class SpecialOffer {
 	public Asset getAsset() {
 		return asset;
 	}
-
-
-	/*public Client getClient() {
-		return client;
-	}*/
-
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
 
 	public String getOtherServices() {
 		return otherServices;

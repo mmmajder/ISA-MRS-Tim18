@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, Row, Col} from 'react-bootstrap';
 
 export default function LabeledTextarea({label, inputName, placeholder, onChangeFunc}){

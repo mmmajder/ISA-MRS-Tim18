@@ -1,3 +1,4 @@
+import React from 'react'
 import { faHome, faSearch, faSuitcase, faBorderAll, faSailboat, faHouseChimney, faFishFins, faBell, faCircleQuestion} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../assets/styles/nav.css';

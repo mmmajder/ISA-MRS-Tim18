@@ -1,3 +1,4 @@
+import React from 'react'
 import ClientNavbar from '../layouts/navbar/ClientNavbar.js';
 import {Container} from 'react-bootstrap'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
@@ -17,9 +18,6 @@ export default function ClientBase(){
         <div>
             <body>
             <ClientNavbar/>
-            
-
-            
             <Routes>
                 {/* For other's Profile page */}
             <Route path="/profile" element={profile} /> 

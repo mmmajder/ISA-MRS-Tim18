@@ -2,7 +2,6 @@ package mrsa.tim018.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,13 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import javax.persistence.OneToOne;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 public class Asset {
@@ -31,6 +25,10 @@ public class Asset {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "renter_id")
 	private Renter renter;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fishing_instructor_id")
+	private FishingInstructor fishingInstructor;
 	
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -56,44 +54,12 @@ public class Asset {
 	@Column(name = "averageRating", nullable = false)
 	private double averageRating;
 	
-	/*@ElementCollection
-	private Map<Date, TimeSlots> availability = new HashMap<Date, TimeSlots>();
-	*/
-	
-	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Reservation> reservations = new ArrayList<Reservation>();
-	
-	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<SpecialOffer> specialOffers = new ArrayList<SpecialOffer>();
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "instructor_id")
-	private FishingInstructor fishingInstructor;
+	@OneToOne(cascade = CascadeType.ALL)
+	private AssetCalendar calendar;
 	
 	public Asset() {
 		
 	}
-
-	public Asset(Long id, boolean isDeleted, Renter renter, String name, String address, String description,
-			List<String> photos, String rules, int numOfPeople, int cancelationConditions, double averageRating,
-			HashMap<Date, List<TimeSlot>> availability, List<Reservation> reservations) {
-		super();
-		this.id = id;
-		this.isDeleted = isDeleted;
-		this.renter = renter;
-		this.name = name;
-		this.address = address;
-		this.description = description;
-//		this.photos = photos;
-		this.rules = rules;
-		this.numOfPeople = numOfPeople;
-		this.cancelationConditions = cancelationConditions;
-		this.averageRating = averageRating;
-//		this.availability = availability;
-		this.reservations = reservations;
-	}
-	
-	
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -107,11 +73,20 @@ public class Asset {
 		this.name = name;
 		this.address = address;
 		this.description = description;
-//		this.photos = photos;
 		this.rules = rules;
 		this.numOfPeople = numOfPeople;
 		this.cancelationConditions = cancelationConditions;
 		this.averageRating = averageRating;
+	}
+	
+	
+
+	public AssetCalendar getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(AssetCalendar calendar) {
+		this.calendar = calendar;
 	}
 
 	public void setDeleted(boolean isDeleted) {
@@ -124,6 +99,14 @@ public class Asset {
 
 	public void setRenter(Renter renter) {
 		this.renter = renter;
+	}
+	
+	public FishingInstructor getFishingInstructor() {
+		return fishingInstructor;
+	}
+
+	public void setFishingInstructor(FishingInstructor fishingInstructor) {
+		this.fishingInstructor = fishingInstructor;
 	}
 
 	public String getName() {
@@ -149,14 +132,6 @@ public class Asset {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-//	public List<String> getPhotos() {
-//		return photos;
-//	}
-
-//	public void setPhotos(List<String> photos) {
-//		this.photos = photos;
-//	}
 
 	public String getRules() {
 		return rules;
@@ -190,31 +165,8 @@ public class Asset {
 		this.averageRating = averageRating;
 	}
 
-//	public Map<Date, List<TimeSlot>> getAvailability() {
-//		return availability;
-//	}
-//
-//	public void setAvailability(HashMap<Date, List<TimeSlot>> availability) {
-//		this.availability = availability;
-//	}
-
-	public List<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(List<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
 	public Long getID() {
 		return id;
 	}
-	
-	public FishingInstructor getFishingInstructor() {
-		return fishingInstructor;
-	}
-	
-	
-	
 	
 }

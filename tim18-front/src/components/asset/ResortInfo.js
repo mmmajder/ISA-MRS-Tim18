@@ -1,3 +1,4 @@
+import React from 'react';
 import MarkStars from '../MarkStars';
 import { Row, Col } from 'react-bootstrap';
 

@@ -21,6 +21,7 @@ export function checkNumInput(input){
     return onlyNumbersRegex.test(input);     
 }
 
+
 export function isEmpty(input){
     if(input ===null || input === undefined || input ==='' ){
         return false;

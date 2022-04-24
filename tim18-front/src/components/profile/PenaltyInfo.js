@@ -1,3 +1,4 @@
+import React from 'react'
 import Penalty from './Penalty';
 import PropTypes from 'prop-types';
 

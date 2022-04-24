@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { LabeledInput } from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';

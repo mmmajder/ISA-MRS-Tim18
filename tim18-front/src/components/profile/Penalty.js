@@ -1,3 +1,4 @@
+import React from 'react'
 import { faXmarkCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
