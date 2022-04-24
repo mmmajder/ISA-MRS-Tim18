@@ -11,7 +11,7 @@ export function LabeledInput({label, inputName, placeholder, onChangeFunc}){
     </Row>
 }
 
-export function LabeledInputWithErrMessage({isValid, label, inputName, placeholder, onChangeFunc, defaultValue, hoverTitile}){
+export function LabeledInputWithErrMessage({isValid, label, inputName, placeholder, onChangeFunc, validationFunc, defaultValue, hoverTitile}){
     const className = isValid ? '' : 'myFormControl';
     return <Row className='mt-2'>
         <Col sm={2} align='right'>
@@ -23,7 +23,7 @@ export function LabeledInputWithErrMessage({isValid, label, inputName, placehold
                           name={inputName} 
                           defaultValue={defaultValue} 
                           placeholder={placeholder}  
-                          required onChange={(e) => onChangeFunc(e.target.value)}>
+                          required onChange={(e) => onChangeFunc(e, validationFunc)}>
             </Form.Control>
         </Col>
         

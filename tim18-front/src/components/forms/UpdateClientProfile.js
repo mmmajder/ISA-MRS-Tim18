@@ -6,10 +6,8 @@ import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackPopUp from  './PopUps/FeedbackPopUp'
 import { updateClient, getClientByID, createDeleteRequest} from '../../services/api/ClientApi';
-import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
+import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput } from '../../services/utils/InputValidation';
 import DeleteRequest from './PopUps/DeleteRequest';
-
-
 
 export default function UpdateClientProfile({id}){
     const [client, setClient] = useState();
@@ -34,7 +32,7 @@ export default function UpdateClientProfile({id}){
             firstUpdate.current = false;
             return;
           }
-          if(feedbackMessage!=''){
+          if(feedbackMessage!==''){
             setFeedbackShow(true);
           }
         
@@ -57,7 +55,6 @@ export default function UpdateClientProfile({id}){
                 <Container >  
                     <Row className='mt-5' >  
                         <Col sm={20} >
-                            {/*Popup try was here*/}
                             <div className="borderedBlock">    
                                 <Col sm={true} >
                                     <Form>
@@ -104,11 +101,9 @@ function DeleteRow({id, feedbackFunc}){
             firstUpdate.current = false;
             return;
           }
-        console.log(feedback);
         !!feedback ? feedbackFunc(false, 'Successfuly created delete requeset for your profile!') : 
                      feedbackFunc(true, 'Oops, something went wrong please try again!');
     }, [feedback])
-
 
     return  <>
                 <Row className='mt-3'>
@@ -124,70 +119,41 @@ function DeleteRow({id, feedbackFunc}){
 }
 
 
-function refreshPage() {
-    window.location.reload(false);
-}
-
-
 function InputElems({client, feedbackFun}){
 
-    // Values
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [phoneNum, setPhoneNum] = useState('');
+    const [currentClient, setCurrentClient] = useState(client);
+    const [originalClient, setOriginalClient] = useState(client);
 
-    let clientDataValues = {firstName, lastName, address, city, state, phoneNum};
+    const [inputs, setInputs] = useState({});
+    const [validations, setValidations] = useState({firstName: true, 
+                                                     lastName: true, 
+                                                     address: true, 
+                                                     city: true, 
+                                                     state: true, 
+                                                     phoneNum: true});
 
-    // Validations
-    const [firstNameValid, setFirstNameValid] = useState(true);
-    const [lastNameValid, setLastNameValid] = useState(true);
-    const [addressValid, setAddressValid] = useState(true);
-    const [cityValid, setCityValid] = useState(true);
-    const [stateValid, setStateValid] = useState(true);
-    const [phoneNumValid, setPhoneNumValid] = useState(true);
+    const handleChange = (event, validationFunc) => {
+        const name = event.target.name;
+        var value = event.target.value;
+        const valid = validationFunc(value)
+        setInputs(values => ({...values, [name]: value}))
+        setValidations(values => ({...values, [name]: valid}))
+      }
 
-    const [formValid, setFormValid] = useState(true);
-    
-    const validateFirstName = (value) => {
-        setFirstNameValid(checkLettersInput(value));
-        setFirstName(value);
-     };
-     const validateLastName = (value) => {
-        setLastNameValid(checkLettersInput(value));
-        setLastName(value);
-     };
-     const validateAddress = (value) => {
-        setAddressValid(checkLettersInput(value));
-        setAddress(value);
-     };
-     const validateCity = (value) => {
-        setCityValid(checkLettersInput(value));
-        setCity(value);
-     };
-     const validateState = (value) => {
-        setStateValid(checkLettersInput(value));
-        setState(value);
-     };
-     const validatePhoneNum = (value) => {
-        setPhoneNumValid(checkNumInput(value));
-        setPhoneNum(value);
-     };
-
+     // Form validation for button disable
+     const [formValid, setFormValid] = useState(true);
+     
      useEffect(() => {
-        validateForm()
-      }, [firstNameValid, lastNameValid, addressValid, cityValid, stateValid, phoneNumValid]);
+        setFormValid(validations.firstName && 
+                     validations.lastName && 
+                     validations.address && 
+                     validations.city && 
+                     validations.state && 
+                     validations.phoneNum);
+      }, [validations]);
+      
 
-     const validateForm = () => {
-        if(firstNameValid && lastNameValid && addressValid && cityValid && stateValid && phoneNumValid)
-            { setFormValid(true); }
-        else
-            { setFormValid(false); }
-     }
-
-
+     // Feedback from request to back, to create popUp
      const [feedback, setFeedback] = useState('');
      const firstUpdate = useRef(true);
 
@@ -196,30 +162,33 @@ function InputElems({client, feedbackFun}){
             firstUpdate.current = false;
             return;
           }
-        !!feedback ? feedbackFun(false, 'Successfuly updated profile!') : 
-                     feedbackFun(true, 'Oops, something went wrong please try again!');
+        if(!!feedback){
+            feedbackFun(false, 'Successfuly updated profile!'); 
+            setCurrentClient(feedback);
+            setOriginalClient(feedback);
+        }
+        else{ feedbackFun(true, 'Oops, something went wrong please try again!'); }
+
     }, [feedback])
 
+    function refreshData(){
+        setCurrentClient(originalClient);
+    }
      // JSX
     return <div>
-                <LabeledInputWithErrMessage isValid={firstNameValid} label="First Name" inputName="firstName" defaultValue={client.firstName} required onChangeFunc={validateFirstName} hoverTitile={onlyLetters}/>
-                <LabeledInputWithErrMessage isValid={lastNameValid} label="Last Name" inputName="lastName" defaultValue={client.lastName} required onChangeFunc={validateLastName} hoverTitile={onlyLetters}/>
-                <LabeledInputWithErrMessage isValid={addressValid} label="Address" inputName="address" defaultValue={client.address} required onChangeFunc={validateAddress} hoverTitile={onlyLetters}/>
-                <LabeledInputWithErrMessage isValid={cityValid} label="City" inputName="city" defaultValue={client.city} required onChangeFunc={validateCity} hoverTitile={onlyLetters}/>
-                <LabeledInputWithErrMessage isValid={stateValid} label="State" inputName="state" defaultValue={client.state} required onChangeFunc={validateState} hoverTitile={onlyLetters}/>
-                <LabeledInputWithErrMessage isValid={phoneNumValid} label="Phone number" inputName="phoneNum" defaultValue={client.phoneNum} required onChangeFunc={validatePhoneNum} hoverTitile={onlyNumbers}/>
+               <AllLabeledInputs validations={validations} client={currentClient} handleChange={handleChange}/>
                 
                 <Row className='mt-5'>  </Row>
                 
                 <Row className='mt-2'>
                     <Col sm={4}/>
                     <Col sm={2} align='left'>
-                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(client, clientDataValues, setFeedback, e)} >
+                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(client, inputs, setFeedback, e)} >
                             Save Changes
                         </Button>
                     </Col>
                     <Col sm={2} align='right'>
-                        <Button variant="custom" type="reset" className="formButton" onClick={refreshPage}>
+                        <Button variant="custom" type="reset" className="formButton" onClick={refreshData}>
                             Cancel Changes
                         </Button>
                     </Col>
@@ -231,7 +200,6 @@ function InputElems({client, feedbackFun}){
 const prepareForUpdate = (client, clientData, setFeedback, e) =>{
     let clientCopy = {...client};
     
-    // capitalizeString ??
     clientCopy.firstName = clientData.firstName || client.firstName;
     clientCopy.lastName = clientData.lastName || client.lastName;
     clientCopy.address = clientData.address || client.address;
@@ -241,3 +209,15 @@ const prepareForUpdate = (client, clientData, setFeedback, e) =>{
     updateClient(clientCopy, setFeedback);
     e.preventDefault();
 };
+
+
+function AllLabeledInputs({validations, client, handleChange}){
+    return <>
+    <LabeledInputWithErrMessage isValid={validations.firstName} label="First Name" inputName="firstName" defaultValue={client.firstName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name" inputName="lastName" defaultValue={client.lastName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.address} label="Address" inputName="address" defaultValue={client.address} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.city} label="City" inputName="city" defaultValue={client.city} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.state} label="State" inputName="state" defaultValue={client.state} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.phoneNum} label="Phone number" inputName="phoneNum" defaultValue={client.phoneNum} required onChangeFunc={handleChange} validationFunc={checkNumInput} hoverTitile={onlyNumbers}/>
+    </>
+}

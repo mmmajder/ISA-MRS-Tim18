@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.ClientDTO;
+import mrsa.tim018.mapper.ClientMapper;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.service.ClientService;
+import mrsa.tim018.service.DeletationRequestService;
 
 @RestController
 @CrossOrigin("*")
@@ -29,6 +32,9 @@ public class ClientController {
 
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private DeletationRequestService deleteRequestService;	
 
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<ClientDTO>> getAllClients() {
@@ -75,15 +81,7 @@ public class ClientController {
 	public ResponseEntity<ClientDTO> saveClient(@RequestBody ClientDTO clientDTO) {
 
 		Client client = new Client();
-		client.setFirstName(clientDTO.getFirstName());
-		client.setLastName(clientDTO.getLastName());
-		client.setDeleted(clientDTO.isDeleted());
-		client.setAddress(clientDTO.getAddress());
-		client.setCity(clientDTO.getCity());
-		client.setState(clientDTO.getState());
-		client.setPhoneNum(clientDTO.getPhoneNum());
-		client.setLoyaltyPoints(clientDTO.getLoyaltyPoints());
-		client.setPenaltyPoints(clientDTO.getPenaltyPoints());
+		client = ClientMapper.mapToClient(client, clientDTO);
 
 		client = clientService.save(client);
 		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
@@ -98,17 +96,7 @@ public class ClientController {
 		if (client == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
-		client.setFirstName(clientDTO.getFirstName());
-		client.setLastName(clientDTO.getLastName());
-		client.setDeleted(clientDTO.isDeleted());
-		client.setAddress(clientDTO.getAddress());
-		client.setCity(clientDTO.getCity());
-		client.setState(clientDTO.getState());
-		client.setPhoneNum(clientDTO.getPhoneNum());
-		client.setLoyaltyPoints(clientDTO.getLoyaltyPoints());
-		client.setPenaltyPoints(clientDTO.getPenaltyPoints());
-
+		client = ClientMapper.mapToClient(client, clientDTO);
 		client = clientService.save(client);
 		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
 	}
@@ -125,5 +113,19 @@ public class ClientController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
+		System.out.println(reason);
+		Client client = clientService.findOne(id);
+		System.out.println(client);
+		DeletationRequest deletRequest = deleteRequestService.create(client, reason);
+		System.out.println(deletRequest);
+		if (deletRequest != null) {
+			return new ResponseEntity<DeletationRequest>(deletRequest, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 
 }

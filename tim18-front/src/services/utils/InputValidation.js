@@ -2,7 +2,7 @@ export const onlyLetters = "This field can only contain letters!";
 export const onlyNumbers = "This field can only contain numbers!";
 export const deletionReason = "Please input reason for your deletion request"
 
-const onlyLettersRegex = new RegExp('^[a-zA-Z]+$');
+const onlyLettersRegex = new RegExp('^([a-zA-Z]+\\s)*[a-zA-Z]+$');
 const onlyNumbersRegex = new RegExp('^[0-9]+$');
 
 // Samo sam kopirala od negde, proveriti da li ok
@@ -11,8 +11,10 @@ const validEmail = new RegExp(
  );
 const validPassword = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
 
+// allowed space between words and after
 export function checkLettersInput(input){
-    return onlyLettersRegex.test(input);     
+    input = removeSpaces(input)
+    return onlyLettersRegex.test(input);
 }
 
 export function checkNumInput(input){
@@ -26,6 +28,23 @@ export function isEmpty(input){
     return true;
 }
 
-export function capitalizeString(string) {
+
+function removeSpaces(input){
+    return input.trim().split(/ +/).join(' ');
+}
+
+/*function capitalizeString(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toString().toLowerCase();
-  }
+}
+
+function uniformString(string) {
+    return string.charAt(0) + string.slice(1).toString().toLowerCase();
+}
+
+function capitalizeWords(string) {
+    const words = string.split(/ +/);
+    for (let index = 0; index < words.length; index++) {
+        words[index] = capitalizeString(words[index]);
+    }
+    return words.join(' ')
+}*/
