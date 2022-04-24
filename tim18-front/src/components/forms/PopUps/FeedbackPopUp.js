@@ -5,7 +5,7 @@ import ToastContainer from 'react-bootstrap/ToastContainer'
 import { faCircleExclamation, faCircleCheck} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function FeedbackPopUp({changeToShow, isError, message, resetShow}) {
+export default function FeedbackPopUp({changeToShow, isError, message, resetData}) {
     const [show, setShow] = useState(false);
     
     const colors = isError ? 'red' : 'green';
@@ -18,14 +18,14 @@ export default function FeedbackPopUp({changeToShow, isError, message, resetShow
 
     function reset(){
         setShow(false); 
-        resetShow(false);
+        resetData();
     }
     return (
         <Row className='mt-3'>
             <Col sm={12}>
                 <div aria-live="polite" aria-atomic="true" className="bg-dark position-relative">
                     <ToastContainer position="top-end"  style={{color: colors}}>
-                        <Toast onClose={() => reset()} show={show} delay={3500} autohide>
+                        <Toast onClose={() => reset()} show={show} delay={4500} autohide>
                         <Toast.Header className=''>
                             <strong className="me-auto"><FontAwesomeIcon icon={icon} style={{color: colors}}/>{title}</strong>
                         </Toast.Header>

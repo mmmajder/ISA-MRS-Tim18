@@ -41,15 +41,14 @@ export function createDeleteRequest(id, reason){
      .catch(()=> {return false});
 }
 
-export async function updateClient(clientData){
-  try {
-      const clientDataJSON = JSON.stringify(clientData);
-      const responseData = await api.put(`/clients`, clientDataJSON);
-      return responseData;
-  } catch (err) {
-      console.log(err.message);
-      return false;
-  }
+export async function updateClient(clientData, callback){
+  
+    const clientDataJSON = JSON.stringify(clientData);
+    await api.put(`/clients`, clientDataJSON)
+              .then((responseData) => {callback(responseData.data)})
+              .catch(()=> {callback(false)});
+
+  
 }
 
 

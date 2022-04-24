@@ -44,11 +44,16 @@ export default function UpdateClientProfile({id}){
         setFeedbackMessage(message);
         setFeedbackType(isError);
     }
+
+    function reset(){
+        setFeedbackShow(false);
+        setFeedbackMessage('');
+    }
     
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
     if(!!client){
         return (<>
-                <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetShow={setFeedbackShow}/> 
+                <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
                 <Container >  
                     <Row className='mt-5' >  
                         <Col sm={20} >
@@ -70,7 +75,7 @@ export default function UpdateClientProfile({id}){
                     </Row>  
                     <Row className='mt-4'>  </Row>
                     
-                     <DeleteRow id={id} feedbackFun={setFeedbackPopup}/>         
+                     <DeleteRow id={id} feedbackFunc={setFeedbackPopup}/>         
                 </Container >
             </>
         );
@@ -82,13 +87,28 @@ function DeleteRow({id, feedbackFunc}){
     // adds class to darken background color
     const duringPopUp = popUp ? " during-popup" : "";
     const [reason, setReason] = useState('');
+    const [feedback, setFeedback] = useState('');
+
+    const firstUpdate = useRef(true);
 
     useEffect(() => {
-        console.log(reason);
-        const feedback = null//= createDeleteRequest(client, reason);
-        /*!!feedback ? feedbackFunc(false, 'Successfuly updated profile!') : 
-                 feedbackFunc(true, 'Oops, something went wrong please try again!');*/
+        if (reason==='') {
+            return;
+          }
+        const feedback = createDeleteRequest(id, reason);
+        setFeedback(feedback)
     }, [reason])
+
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+          }
+        console.log(feedback);
+        !!feedback ? feedbackFunc(false, 'Successfuly created delete requeset for your profile!') : 
+                     feedbackFunc(true, 'Oops, something went wrong please try again!');
+    }, [feedback])
+
 
     return  <>
                 <Row className='mt-3'>
@@ -102,24 +122,6 @@ function DeleteRow({id, feedbackFunc}){
                 {popUp && <DeleteRequest setPopUp={setPopUp} PropFunc={setReason}/>}
             </>
 }
-
-function prepareForUpdate(client, clientData, feedbackFunc){
-    let clientCopy = {...client};
-    
-    // capitalizeString ??
-    clientCopy.firstName = clientData.firstName || client.firstName;
-    clientCopy.lastName = clientData.lastName || client.lastName;
-    clientCopy.address = clientData.address || client.address;
-    clientCopy.city = clientData.city || client.city;
-    clientCopy.state = clientData.state || client.state;
-    clientCopy.phoneNum = clientData.phoneNum || client.phoneNum;
-
-    const feedback = updateClient(clientCopy);
-    
-    // TODO: USE STATE NEKI NESTO?
-    !!feedback ? feedbackFunc(false, 'Successfuly updated profile!') : 
-                 feedbackFunc(true, 'Oops, something went wrong please try again!');
-};
 
 
 function refreshPage() {
@@ -185,7 +187,18 @@ function InputElems({client, feedbackFun}){
             { setFormValid(false); }
      }
 
-    
+
+     const [feedback, setFeedback] = useState('');
+     const firstUpdate = useRef(true);
+
+      useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+          }
+        !!feedback ? feedbackFun(false, 'Successfuly updated profile!') : 
+                     feedbackFun(true, 'Oops, something went wrong please try again!');
+    }, [feedback])
 
      // JSX
     return <div>
@@ -201,7 +214,7 @@ function InputElems({client, feedbackFun}){
                 <Row className='mt-2'>
                     <Col sm={4}/>
                     <Col sm={2} align='left'>
-                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={() => prepareForUpdate(client, clientDataValues, feedbackFun)} >
+                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(client, clientDataValues, setFeedback, e)} >
                             Save Changes
                         </Button>
                     </Col>
@@ -214,3 +227,17 @@ function InputElems({client, feedbackFun}){
                 </Row>
             </div>
 }
+
+const prepareForUpdate = (client, clientData, setFeedback, e) =>{
+    let clientCopy = {...client};
+    
+    // capitalizeString ??
+    clientCopy.firstName = clientData.firstName || client.firstName;
+    clientCopy.lastName = clientData.lastName || client.lastName;
+    clientCopy.address = clientData.address || client.address;
+    clientCopy.city = clientData.city || client.city;
+    clientCopy.state = clientData.state || client.state;
+    clientCopy.phoneNum = clientData.phoneNum || client.phoneNum;
+    updateClient(clientCopy, setFeedback);
+    e.preventDefault();
+};
