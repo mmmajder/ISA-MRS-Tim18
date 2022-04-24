@@ -92,8 +92,7 @@ function DeleteRow({id, feedbackFunc}){
         if (reason==='') {
             return;
           }
-        const feedback = createDeleteRequest(id, reason);
-        setFeedback(feedback)
+        createDeleteRequest(id, reason, setFeedback);
     }, [reason])
 
     useEffect(() => {

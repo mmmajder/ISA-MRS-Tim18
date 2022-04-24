@@ -113,7 +113,7 @@ public class ClientController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	@PutMapping(value = "/{id}")
+	@PostMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
 		System.out.println(reason);
 		Client client = clientService.findOne(id);

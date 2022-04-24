@@ -19,6 +19,9 @@ public class DeletationRequest {
 	
 	@Column(name = "status", nullable = false)
 	private RequestStatus status;
+	
+	@Column(name = "reason", nullable = false)
+	private String reason;
 
 	@OneToOne
 	private User user;
@@ -27,13 +30,22 @@ public class DeletationRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user) {
+	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user, String reason) {
 		super();
 		id = iD;
 		this.isDeleted = isDeleted;
 		this.status = status;
 		this.user = user;
+		this.reason = reason;
 	}
+	public DeletationRequest(User user, String reason) {
+		super();
+		this.isDeleted = false;
+		this.status = RequestStatus.Pending;
+		this.user = user;
+		this.reason = reason;
+	}
+	
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -50,13 +62,30 @@ public class DeletationRequest {
 	public void setStatus(RequestStatus status) {
 		this.status = status;
 	}
-
-	public Long getID() {
-		return id;
-	}
-
 	public User getUser() {
 		return user;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 	
 }

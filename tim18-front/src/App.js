@@ -11,7 +11,7 @@ import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
 
 function App() {
-  const client = false;
+  const client = true;
   const instructor = true;
   if(client){
     return <ClientBase />
