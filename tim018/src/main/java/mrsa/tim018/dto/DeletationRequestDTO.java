@@ -1,54 +1,37 @@
-package mrsa.tim018.model;
+package mrsa.tim018.dto;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import mrsa.tim018.model.DeletationRequest;
+import mrsa.tim018.model.RequestStatus;
+import mrsa.tim018.model.User;
 
-@Entity
-public class DeletationRequest {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DeletationRequestDTO {
+
 	private Long id;
-	
-	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
-	
-	@Column(name = "status", nullable = false)
 	private RequestStatus status;
-	
-	@Column(name = "reason", nullable = false)
 	private String reason;
-
-	@OneToOne(fetch = FetchType.LAZY)
-    @MapsId
 	private User user;
-
-	public DeletationRequest() {
-		// TODO Auto-generated constructor stub
+	
+	public DeletationRequestDTO() {
 	}
 
-	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user, String reason) {
+	public DeletationRequestDTO(Long id, boolean isDeleted, RequestStatus status, String reason, User user) {
 		super();
-		id = iD;
+		this.id = id;
 		this.isDeleted = isDeleted;
 		this.status = status;
-		this.user = user;
 		this.reason = reason;
+		this.user = user;
 	}
-	public DeletationRequest(User user, String reason) {
+	public DeletationRequestDTO(DeletationRequest deletationRequest) {
 		super();
-		this.isDeleted = false;
-		this.status = RequestStatus.Pending;
-		this.user = user;
-		this.reason = reason;
+		this.id = deletationRequest.getId();
+		this.isDeleted = deletationRequest.isDeleted();
+		this.status = deletationRequest.getStatus();
+		this.reason = deletationRequest.getReason();
+//		this.user = deletationRequest.getUser();
 	}
 	
 
@@ -67,6 +50,8 @@ public class DeletationRequest {
 	public void setStatus(RequestStatus status) {
 		this.status = status;
 	}
+
+
 	public User getUser() {
 		return user;
 	}
@@ -104,17 +89,12 @@ public class DeletationRequest {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeletationRequest other = (DeletationRequest) obj;
+		DeletationRequestDTO other = (DeletationRequestDTO) obj;
 		return Objects.equals(id, other.id) && isDeleted == other.isDeleted && Objects.equals(reason, other.reason)
 				&& status == other.status && Objects.equals(user, other.user);
-	}
-
-	@Override
-	public String toString() {
-		return "DeletationRequest [id=" + id + ", isDeleted=" + isDeleted + ", status=" + status + ", reason=" + reason
-				+ ", user=" + user + "]";
 	}
 	
 	
 	
 }
+

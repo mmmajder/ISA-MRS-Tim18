@@ -8,9 +8,12 @@ import FeedbackPopUp from  './PopUps/FeedbackPopUp'
 import { updateClient, getClientByID, createDeleteRequest} from '../../services/api/ClientApi';
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput } from '../../services/utils/InputValidation';
 import DeleteRequest from './PopUps/DeleteRequest';
+import {getDeleteRequestByID} from '../../services/api/DeleteRequestApi';
+import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
 
 export default function UpdateClientProfile({id}){
     const [client, setClient] = useState();
+    const [deletionRequestExists, setDeletionRequest] = useState(false);
 
     const [feedbackType, setFeedbackType] = useState(true);
     const [feedbackMessage, setFeedbackMessage] = useState('');
@@ -25,6 +28,12 @@ export default function UpdateClientProfile({id}){
             return requestData;
         }
         fetchClient();
+
+        async function fetchDeleteRequest(){
+            const requestData = await getDeleteRequestByID(id);
+            setDeletionRequest(!!requestData ? true : false);
+        }
+        fetchDeleteRequest();
     }, [])
 
     useEffect(() => {
@@ -49,19 +58,24 @@ export default function UpdateClientProfile({id}){
     }
     
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
+    
+    const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
+    const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
     if(!!client){
         return (<>
                 <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
+                 {pendingRequest}
                 <Container >  
                     <Row className='mt-5' >  
                         <Col sm={20} >
                             <div className="borderedBlock">    
                                 <Col sm={true} >
+                 
+                                    {/* Profile pic row*/}
+                                    <Col sm={15} align='center'>
+                                        <img src={profilePic} className="profilePicture rounded-circle" ></img>
+                                    </Col>
                                     <Form>
-                                        {/* Profile pic row*/}
-                                        <Col sm={15} align='center'>
-                                            <img src={profilePic} className="profilePicture rounded-circle" ></img>
-                                        </Col>
                                         <Row className='mt-3'>  </Row>
                                         <InputElems client={client} feedbackFun={setFeedbackPopup}/>
                                     </Form>
@@ -71,15 +85,15 @@ export default function UpdateClientProfile({id}){
                         </Col>
                     </Row>  
                     <Row className='mt-4'>  </Row>
-                    
-                     <DeleteRow id={id} feedbackFunc={setFeedbackPopup}/>         
+                    {deleteButton}
+                   
                 </Container >
             </>
         );
     }   
 }
 
-function DeleteRow({id, feedbackFunc}){
+function DeleteRow({id, feedbackFunc, deleteNotifFunc}){
     const [popUp, setPopUp] = useState(false);
     // adds class to darken background color
     const duringPopUp = popUp ? " during-popup" : "";
@@ -92,8 +106,7 @@ function DeleteRow({id, feedbackFunc}){
         if (reason==='') {
             return;
           }
-        const feedback = createDeleteRequest(id, reason);
-        setFeedback(feedback)
+        createDeleteRequest(id, reason, setFeedback);
     }, [reason])
 
     useEffect(() => {
@@ -101,8 +114,14 @@ function DeleteRow({id, feedbackFunc}){
             firstUpdate.current = false;
             return;
           }
-        !!feedback ? feedbackFunc(false, 'Successfuly created delete requeset for your profile!') : 
-                     feedbackFunc(true, 'Oops, something went wrong please try again!');
+        if(!!feedback)
+         { feedbackFunc(false, 'Successfuly created delete requeset for your profile!');
+            deleteNotifFunc(true);
+         }
+         else{
+            feedbackFunc(true, 'Oops, something went wrong please try again!');
+         }
+                     
     }, [feedback])
 
     return  <>
@@ -181,7 +200,10 @@ function InputElems({client, feedbackFun}){
                 <Row className='mt-5'>  </Row>
                 
                 <Row className='mt-2'>
-                    <Col sm={4}/>
+                    <Col sm={4} align='left'>
+                    
+                    </Col>
+                    
                     <Col sm={2} align='left'>
                         <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(client, inputs, setFeedback, e)} >
                             Save Changes

@@ -35,10 +35,10 @@ export function addClient(clientData){
       return err.message
   }
 }*/
-export function createDeleteRequest(id, reason){
-  api.post(`/clients/${id}`, reason)
-     .then((responseData) => {return responseData})
-     .catch(()=> {return false});
+export async function createDeleteRequest(id, reason, callback){
+  await api.post(`/clients/${id}`, reason)
+           .then((responseData) => {callback(responseData.data)})
+           .catch(()=> {callback(false)});
 }
 
 export async function updateClient(clientData, callback){

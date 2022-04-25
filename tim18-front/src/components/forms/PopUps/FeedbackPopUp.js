@@ -24,9 +24,9 @@ export default function FeedbackPopUp({changeToShow, isError, message, resetData
         <Row className='mt-3'>
             <Col sm={12}>
                 <div aria-live="polite" aria-atomic="true" className="bg-dark position-relative">
-                    <ToastContainer position="top-end"  style={{color: colors}}>
+                    <ToastContainer position="top-end"  style={{color: colors, background: colors}}>
                         <Toast onClose={() => reset()} show={show} delay={4500} autohide>
-                        <Toast.Header className=''>
+                        <Toast.Header>
                             <strong className="me-auto"><FontAwesomeIcon icon={icon} style={{color: colors}}/>{title}</strong>
                         </Toast.Header>
                         <Toast.Body>{message}</Toast.Body>
