@@ -1,5 +1,7 @@
 package mrsa.tim018.dto;
 
+import java.util.Objects;
+
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.User;
@@ -29,7 +31,7 @@ public class DeletationRequestDTO {
 		this.isDeleted = deletationRequest.isDeleted();
 		this.status = deletationRequest.getStatus();
 		this.reason = deletationRequest.getReason();
-		this.user = deletationRequest.getUser();
+//		this.user = deletationRequest.getUser();
 	}
 	
 
@@ -49,9 +51,6 @@ public class DeletationRequestDTO {
 		this.status = status;
 	}
 
-	public Long getID() {
-		return id;
-	}
 
 	public User getUser() {
 		return user;
@@ -75,6 +74,24 @@ public class DeletationRequestDTO {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, isDeleted, reason, status, user);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeletationRequestDTO other = (DeletationRequestDTO) obj;
+		return Objects.equals(id, other.id) && isDeleted == other.isDeleted && Objects.equals(reason, other.reason)
+				&& status == other.status && Objects.equals(user, other.user);
 	}
 	
 	

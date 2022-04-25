@@ -1,10 +1,14 @@
 package mrsa.tim018.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -23,7 +27,8 @@ public class DeletationRequest {
 	@Column(name = "reason", nullable = false)
 	private String reason;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
+    @MapsId
 	private User user;
 
 	public DeletationRequest() {
@@ -84,6 +89,30 @@ public class DeletationRequest {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, isDeleted, reason, status, user);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeletationRequest other = (DeletationRequest) obj;
+		return Objects.equals(id, other.id) && isDeleted == other.isDeleted && Objects.equals(reason, other.reason)
+				&& status == other.status && Objects.equals(user, other.user);
+	}
+
+	@Override
+	public String toString() {
+		return "DeletationRequest [id=" + id + ", isDeleted=" + isDeleted + ", status=" + status + ", reason=" + reason
+				+ ", user=" + user + "]";
 	}
 	
 	
