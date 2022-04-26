@@ -5,6 +5,9 @@ import LabeledTextarea from './LabeledTextarea';
 import '../../assets/styles/form.css';
 import {useCallback, useState} from 'react';
 import { createAsset } from '../../services/api/AssetApi';
+import { isEmpty, isPercentageNumber, isPositiveNumber } from '../../services/utils/InputValidation';
+
+
 
 
 export default function CreateResortForm({userType}){
@@ -15,9 +18,21 @@ export default function CreateResortForm({userType}){
     const [numOfPeople, setNumOfPeople] = useState(1);
     const [cancelationConditions, setCancelationConditions] = useState(0);
 
+    const isValidData = () => {
+        if (isPercentageNumber(cancelationConditions) && isPositiveNumber(numOfPeople))
+        console.log('prvi kruf')
+        return isEmpty(name) && isEmpty(address)&& isEmpty(description)  && isEmpty(rules)  && isEmpty(numOfPeople) && isEmpty(numOfPeople) && isEmpty(cancelationConditions)
+    }
+    
+
     const postRequest = () => {
-        const adventureJson = {name, address, description, rules, numOfPeople, cancelationConditions}
-        createAsset(JSON.stringify(adventureJson))
+        if (isValidData()){
+            console.log('stigao sam')
+            const adventureJson = {name, address, description, rules, numOfPeople, cancelationConditions}
+            createAsset(JSON.stringify(adventureJson))
+        } else {
+            console.log('nije proslo')
+        }
     }
 
     return (<>
@@ -50,7 +65,7 @@ export default function CreateResortForm({userType}){
                     <Row className='mt-2'>
                         <Col sm={4}/>
                         <Col sm={4} align='center'>
-                            <Button variant="custom" type="submit" className='formButton' onSubmit={postRequest}>
+                            <Button variant="custom" type="submit" className='formButton' onClick={postRequest}>
                                 Create resort
                             </Button>
                         </Col>

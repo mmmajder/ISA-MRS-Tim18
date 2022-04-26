@@ -10,6 +10,7 @@ const validEmail = new RegExp(
     '^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'
  );
 const validPassword = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
+const validPositiveNumber = new RegExp('[1-9][0-9]*');
 
 // allowed space between words and after
 export function checkLettersInput(input){
@@ -32,6 +33,14 @@ export function isEmpty(input){
 
 function removeSpaces(input){
     return input.trim().split(/ +/).join(' ');
+}
+
+export function isPercentageNumber(input) {
+    return isPositiveNumber(input) && (input>0 && input<100)
+}
+
+export function isPositiveNumber(input) {
+    return (typeof input=='number')
 }
 
 /*function capitalizeString(string) {

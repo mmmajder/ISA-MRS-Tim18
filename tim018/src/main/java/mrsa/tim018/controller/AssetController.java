@@ -25,7 +25,7 @@ public class AssetController {
 	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> saveAsset(@RequestBody AssetDTO assetDto) {
-		System.out.println(assetDto.getCancelationConditions());
+		System.out.println("stigao");
 		Asset asset = AssetMapper.mapToAsset(assetDto);
 		asset = assetService.save(asset);
 		
