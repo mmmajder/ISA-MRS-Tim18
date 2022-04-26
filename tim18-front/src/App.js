@@ -9,12 +9,25 @@ import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
+import { AccountBox } from "./components/forms/Login";
+import styled from "styled-components";
+import '../src/assets/styles/login.css'
 
+const AppContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 function App() {
-  const client = true;
+  const client = true;  //<ClientBase />
   const instructor = true;
   if(client){
-    return <ClientBase />
+    return  <AppContainer>
+              <AccountBox />
+          </AppContainer>
   }
   else{
     const resortForm = <CreateResortForm />

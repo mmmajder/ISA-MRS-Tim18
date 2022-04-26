@@ -4,7 +4,7 @@ import '../../assets/styles/form.css';
 import {useState, useEffect, useRef} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import FeedbackPopUp from  './FeedbackPopUp'
+import FeedbackPopUp from  './PopUps/FeedbackPopUp'
 import { updateClient, getClientByID } from '../../services/api/ClientApi';
 import {getInstructorByID, updateInstructor, deleteInstructor} from '../../services/api/InstructorApi'
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
