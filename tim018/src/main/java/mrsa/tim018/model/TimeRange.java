@@ -30,4 +30,9 @@ public class TimeRange {
 		this.toDateTime = toDateTime;
 	}
 
+	public TimeRange() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 }

@@ -12,4 +12,12 @@ insert into client (id, address, city, first_name, is_deleted, last_name, loyalt
 				   (3, 'ClientAdress', 'Novi Sad', 'Katarina', false, 'Komad', 0, 0, '0606611759', 'Serbia', 'Client', 3);
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, user_account_id) values
 				   (4, 'AdminAdress', 'Admingrad', 'Admin', false, 'Admin', 0, '06321654', 'Adminvil', 'Admin', 4);
-				   
+				
+insert into asset_calendar (id) values (10001);
+
+
+insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, fishing_instructor_id, renter_id) values
+					('Asset Address', 0.0, 25, 'Description', false, 'Fishing adventure', 3, 'No rules', 10001, 2, null);
+
+insert into fishing_instructor_assets (fishing_instructor_id, assets_id) values
+					(2, 1)

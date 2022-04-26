@@ -38,6 +38,10 @@ public class AssetCalendar {
 		return id;
 	}
 
+	public AssetCalendar() {
+		super();
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}

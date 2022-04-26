@@ -6,13 +6,13 @@ import mrsa.tim018.model.AppointmentType;
 
 public class AppointmentCreationDTO {
 	private AppointmentType type;
-	private LocalDateTime fromDateTime;
-	private LocalDateTime toDateTime;
+	private String fromDateTime;
+	private String toDateTime;
 	private Long userId;
 	private Long assetId;
 	private boolean isPattern;
 
-	public AppointmentCreationDTO(AppointmentType type, LocalDateTime fromDateTime, LocalDateTime toDateTime,
+	public AppointmentCreationDTO(AppointmentType type, String fromDateTime, String toDateTime,
 			Long userId, Long assetId, boolean isPattern) {
 		super();
 		this.type = type;
@@ -25,6 +25,22 @@ public class AppointmentCreationDTO {
 
 	public boolean isPattern() {
 		return isPattern;
+	}
+
+	public String getFromDateTime() {
+		return fromDateTime;
+	}
+
+	public void setFromDateTime(String fromDateTime) {
+		this.fromDateTime = fromDateTime;
+	}
+
+	public String getToDateTime() {
+		return toDateTime;
+	}
+
+	public void setToDateTime(String toDateTime) {
+		this.toDateTime = toDateTime;
 	}
 
 	public void setPattern(boolean isPattern) {
@@ -45,22 +61,6 @@ public class AppointmentCreationDTO {
 
 	public void setType(AppointmentType type) {
 		this.type = type;
-	}
-
-	public LocalDateTime getFromDateTime() {
-		return fromDateTime;
-	}
-
-	public void setFromDateTime(LocalDateTime fromDateTime) {
-		this.fromDateTime = fromDateTime;
-	}
-
-	public LocalDateTime getToDateTime() {
-		return toDateTime;
-	}
-
-	public void setToDateTime(LocalDateTime toDateTime) {
-		this.toDateTime = toDateTime;
 	}
 
 	public Long getUserId() {

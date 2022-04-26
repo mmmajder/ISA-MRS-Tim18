@@ -9,6 +9,7 @@ import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetCalendarRepository;
+import mrsa.tim018.utils.StringUtils;
 
 @Service
 public class AssetCalendarSevice {
@@ -21,14 +22,14 @@ public class AssetCalendarSevice {
 
 	public AssetCalendar addAppointment(AssetCalendar calendar, AppointmentCreationDTO appointment) {
 		switch (appointment.getType()) {
-		case Availability:
+		case Available:
 			if (appointment.isPattern()) {
 				List<TimeRange> ranges = calendar.getAvailablePattern();
-				ranges.add(new TimeRange(false, appointment.getFromDateTime(), appointment.getToDateTime()));
+				ranges.add(new TimeRange(false, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime())));
 				calendar.setAvailablePattern(ranges);
 			} else {
 				List<TimeRange> ranges = calendar.getAvailableSingle();
-				ranges.add(new TimeRange(false, appointment.getFromDateTime(), appointment.getToDateTime()));
+				ranges.add(new TimeRange(false, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime())));
 				calendar.setAvailableSingle(ranges);
 			}
 			return calendar;
