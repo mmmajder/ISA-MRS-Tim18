@@ -16,7 +16,7 @@ import mrsa.tim018.service.AssetService;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/resorts")
+@RequestMapping(value = "/assets")
 public class AssetController {
 	
 	@Autowired
@@ -25,6 +25,7 @@ public class AssetController {
 	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> saveAsset(@RequestBody AssetDTO assetDto) {
+		System.out.println(assetDto.getCancelationConditions());
 		Asset asset = AssetMapper.mapToAsset(assetDto);
 		asset = assetService.save(asset);
 		
