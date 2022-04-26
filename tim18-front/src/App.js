@@ -1,6 +1,6 @@
 import React from 'react';
 import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
-import CreateResortForm from './components/forms/CreateResortForm.js'
+import CreateAssetForm from './components/forms/CreateAssetForm.js'
 import {Container} from 'react-bootstrap'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import ResortDetailedView from './components/asset/ResortDetailedView.js';
@@ -25,7 +25,7 @@ function App() {
   }
   else{
     localStorage.setItem("userId", 2)
-    const resortForm = <CreateResortForm userType={localStorage.getItem('userType')} />
+    const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
     const calendar = <Calendar/>

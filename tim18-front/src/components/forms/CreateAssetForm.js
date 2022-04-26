@@ -10,7 +10,7 @@ import { isEmpty, isPercentageNumber, isPositiveNumber } from '../../services/ut
 
 
 
-export default function CreateResortForm({userType}){
+export default function CreateAssetForm({userType}){
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
