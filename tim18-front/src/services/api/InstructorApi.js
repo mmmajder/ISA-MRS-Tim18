@@ -33,41 +33,8 @@ export async function deleteInstructor(instructorData){
   }
 }
 
-
-
-
-/*export async function getAllClients(){
-  try {
-      const responseData = await api.get(`/clients`);
-      return responseData;
-  } catch (err) {
-      console.log(err.message);
-      return err.message
-  }
+export async function createDeleteRequest(id, reason, callback){
+  await api.post(`/clients/${id}`, reason)
+           .then((responseData) => {callback(responseData.data)})
+           .catch(()=> {callback(false)});
 }
-
-export function addClient(clientData){
-  api.post("/clients", clientData)
-     .then((responseData) => alert(responseData))
-     .catch((err)=> alert(err));
-}
-
-export async function deleteClient(id){
-  try {
-      const responseData = await api.delete(`/clients/${id}`);
-      return responseData;
-  } catch (err) {
-      console.log(err.message);
-      return err.message
-  }
-}
-
-export async function updateClient(clientData){
-  try {
-      const responseData = await api.put(`/clients`, clientData);
-      return responseData;
-  } catch (err) {
-      console.log(err.message);
-      return err.message
-  }
-}*/

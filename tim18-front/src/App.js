@@ -8,10 +8,10 @@ import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
-import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
+import UpdateInstructorProfileForm from './components/forms/updateUser/UpdateInstructorProfileForm.js';
 
 function App() {
-  const client = true;
+  const client = false;
   const instructor = true;
   if(client){
     return <ClientBase />

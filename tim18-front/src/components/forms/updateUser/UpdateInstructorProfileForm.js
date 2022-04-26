@@ -1,18 +1,18 @@
 import { Form, Row, Col, Button, Container} from 'react-bootstrap';
-import {LabeledInputWithErrMessage} from './LabeledInput';
-import '../../assets/styles/form.css';
+import {LabeledInputWithErrMessage} from '../LabeledInput';
+import '../../../assets/styles/form.css'
 import {useState, useEffect, useRef} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import FeedbackPopUp from  './PopUps/FeedbackPopUp'
-import { updateClient, getClientByID, createDeleteRequest} from '../../services/api/ClientApi';
-import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput } from '../../services/utils/InputValidation';
-import DeleteRequest from './PopUps/DeleteRequest';
-import {getDeleteRequestByID} from '../../services/api/DeleteRequestApi';
-import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
+import FeedbackPopUp from  '../PopUps/FeedbackPopUp'
+import { updateInstructor, getInstructorByID, createDeleteRequest} from '../../../services/api/InstructorApi';
+import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput } from '../../../services/utils/InputValidation';
+import DeleteRequest from '../PopUps/DeleteRequest';
+import {getDeleteRequestByID} from '../../../services/api/DeleteRequestApi';
+import DeletionRequestStatus from '../PopUps/DeletionRequestStatus'
 
-export default function UpdateClientProfile({id}){
-    const [client, setClient] = useState();
+export default function UpdateInstructorProfile({id}){
+    const [instructor, setInstructor] = useState();
     const [deletionRequestExists, setDeletionRequest] = useState(false);
 
     const [feedbackType, setFeedbackType] = useState(true);
@@ -22,12 +22,12 @@ export default function UpdateClientProfile({id}){
     const firstUpdate = useRef(true);
 
     useEffect(() => {
-        async function fetchClient(){
-            const requestData = await getClientByID(id);
-            setClient(!!requestData ? requestData.data : {});
+        async function fetchInstructor(){
+            const requestData = await getInstructorByID(id);
+            setInstructor(!!requestData ? requestData.data : {});
             return requestData;
         }
-        fetchClient();
+        fetchInstructor();
 
         async function fetchDeleteRequest(){
             const requestData = await getDeleteRequestByID(id);
@@ -57,11 +57,11 @@ export default function UpdateClientProfile({id}){
         setFeedbackMessage('');
     }
     
-    const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
+    const profilePic = require('../../../assets/images/blue_profile_pic.jpg')  // TODO: real data
     
     const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
     const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
-    if(!!client){
+    if(!!instructor){
         return (<>
                 <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
                  {pendingRequest}
@@ -77,7 +77,7 @@ export default function UpdateClientProfile({id}){
                                     </Col>
                                     <Form>
                                         <Row className='mt-3'>  </Row>
-                                        <InputElems client={client} feedbackFun={setFeedbackPopup}/>
+                                        <InputElems instructor={instructor} feedbackFun={setFeedbackPopup}/>
                                     </Form>
                                 </Col>
                             </div>
@@ -138,10 +138,10 @@ function DeleteRow({id, feedbackFunc, deleteNotifFunc}){
 }
 
 
-function InputElems({client, feedbackFun}){
+function InputElems({instructor, feedbackFun}){
 
-    const [currentClient, setCurrentClient] = useState(client);
-    const [originalClient, setOriginalClient] = useState(client);
+    const [currentInstructor, setCurrentInstructor] = useState(instructor);
+    const [originalInstructor, setOriginalInstructor] = useState(instructor);
 
     const [inputs, setInputs] = useState({});
     const [validations, setValidations] = useState({firstName: true, 
@@ -181,21 +181,22 @@ function InputElems({client, feedbackFun}){
             firstUpdate.current = false;
             return;
           }
+        console.log("feedback ", feedback)
         if(!!feedback){
             feedbackFun(false, 'Successfuly updated profile!'); 
-            setCurrentClient(feedback);
-            setOriginalClient(feedback);
+            setCurrentInstructor(feedback);
+            setOriginalInstructor(feedback);
         }
         else{ feedbackFun(true, 'Oops, something went wrong please try again!'); }
 
     }, [feedback])
 
     function refreshData(){
-        setCurrentClient(originalClient);
+        setCurrentInstructor(originalInstructor);
     }
      // JSX
     return <div>
-               <AllLabeledInputs validations={validations} client={currentClient} handleChange={handleChange}/>
+               <AllLabeledInputs validations={validations} instructor={currentInstructor} handleChange={handleChange}/>
                 
                 <Row className='mt-5'>  </Row>
                 
@@ -205,7 +206,7 @@ function InputElems({client, feedbackFun}){
                     </Col>
                     
                     <Col sm={2} align='left'>
-                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(client, inputs, setFeedback, e)} >
+                        <Button variant="custom" disabled={!formValid} type="submit" className='formButton' onClick={(e) => prepareForUpdate(instructor, inputs, setFeedback, e)} >
                             Save Changes
                         </Button>
                     </Col>
@@ -219,27 +220,27 @@ function InputElems({client, feedbackFun}){
             </div>
 }
 
-const prepareForUpdate = (client, clientData, setFeedback, e) =>{
-    let clientCopy = {...client};
+const prepareForUpdate = (instructor, instructorData, setFeedback, e) =>{
+    let instructorCopy = {...instructor};
     
-    clientCopy.firstName = clientData.firstName || client.firstName;
-    clientCopy.lastName = clientData.lastName || client.lastName;
-    clientCopy.address = clientData.address || client.address;
-    clientCopy.city = clientData.city || client.city;
-    clientCopy.state = clientData.state || client.state;
-    clientCopy.phoneNum = clientData.phoneNum || client.phoneNum;
-    updateClient(clientCopy, setFeedback);
+    instructorCopy.firstName = instructorData.firstName || instructor.firstName;
+    instructorCopy.lastName = instructorData.lastName || instructor.lastName;
+    instructorCopy.address = instructorData.address || instructor.address;
+    instructorCopy.city = instructorData.city || instructor.city;
+    instructorCopy.state = instructorData.state || instructor.state;
+    instructorCopy.phoneNum = instructorData.phoneNum || instructor.phoneNum;
+    updateInstructor(instructorCopy, setFeedback);
     e.preventDefault();
 };
 
 
-function AllLabeledInputs({validations, client, handleChange}){
+function AllLabeledInputs({validations, instructor, handleChange}){
     return <>
-    <LabeledInputWithErrMessage isValid={validations.firstName} label="First Name" inputName="firstName" defaultValue={client.firstName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-    <LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name" inputName="lastName" defaultValue={client.lastName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-    <LabeledInputWithErrMessage isValid={validations.address} label="Address" inputName="address" defaultValue={client.address} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-    <LabeledInputWithErrMessage isValid={validations.city} label="City" inputName="city" defaultValue={client.city} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-    <LabeledInputWithErrMessage isValid={validations.state} label="State" inputName="state" defaultValue={client.state} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-    <LabeledInputWithErrMessage isValid={validations.phoneNum} label="Phone number" inputName="phoneNum" defaultValue={client.phoneNum} required onChangeFunc={handleChange} validationFunc={checkNumInput} hoverTitile={onlyNumbers}/>
+    <LabeledInputWithErrMessage isValid={validations.firstName} label="First Name" inputName="firstName" defaultValue={instructor.firstName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name" inputName="lastName" defaultValue={instructor.lastName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.address} label="Address" inputName="address" defaultValue={instructor.address} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.city} label="City" inputName="city" defaultValue={instructor.city} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.state} label="State" inputName="state" defaultValue={instructor.state} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.phoneNum} label="Phone number" inputName="phoneNum" defaultValue={instructor.phoneNum} required onChangeFunc={handleChange} validationFunc={checkNumInput} hoverTitile={onlyNumbers}/>
     </>
 }
