@@ -11,14 +11,21 @@ import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
 
 function App() {
-  const client = true;
+  const client = false;
   const instructor = true;
+
+  const user = {
+    id: "1",
+    type: "instructor"
+  }
+
+  localStorage.setItem("userType", user.type)
   if(client){
     return <ClientBase />
   }
   else{
-    const resortForm = <CreateResortForm />
     localStorage.setItem("userId", 2)
+    const resortForm = <CreateResortForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
     const calendar = <Calendar/>
