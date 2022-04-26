@@ -5,12 +5,11 @@ import {useState, useEffect, useRef} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackPopUp from  './FeedbackPopUp'
-import { updateClient, getClientByID } from '../../services/api/ClientApi';
 import {getInstructorByID, updateInstructor, deleteInstructor} from '../../services/api/InstructorApi'
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
 
 
-export default function UpdateClientProfile({id}){
+export default function UpdateInstructorProfile({id}){
     const [instructor, setInstructor] = useState();
 
     const [feedbackType, setFeedbackType] = useState(true);

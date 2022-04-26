@@ -7,6 +7,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import interactionPlugin from '@fullcalendar/interaction';
 import LabeledInput from '../forms/LabeledInput';
 import CreateCalendarEventForm from '../forms/calendar/CreateCalendarEventForm'
+import './../../assets/styles/calendar.css'
 
 
 const Calendar = () => {
@@ -16,8 +17,8 @@ const Calendar = () => {
       title  : 'event1',
       //start  : '2022-04-01',
       daysOfWeek: [ '1', '4' ],
-      backgroundColor: 'red',
-      borderColor: 'red'
+      backgroundColor: '#EC5800',
+      borderColor: '#EC5800'
     },
     {
       title  : 'event2',
@@ -41,7 +42,6 @@ const Calendar = () => {
     }
   ]) 
 
-
   return (
     <div>
       <div>
@@ -50,14 +50,14 @@ const Calendar = () => {
         }
       }/>       
       </div>
-      <FullCalendar
+      <FullCalendar 
+          //dayCellContent = {injectCellCOntent}
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
           plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
           initialView="dayGridMonth"
           editable = {true}
           selectable = {true}
-          selectHelper = {true}
           select = {function(start, end, allDays) {
             console.log(start)
           }}
@@ -134,7 +134,7 @@ const Calendar = () => {
           headerToolbar={{
             left: "prev,next",
             center: "title",
-            right: "today,dayGridDay,dayGridWeek,dayGridMonth,myTimeDayBtn,myTimeWeekBtn,myTimeLineDayBtn,myTimeLineWeekBtn,myTimeLineMonthBtn"
+            right: "today,dayGridDay,dayGridWeek,dayGridMonth,myTimeDayBtn,myTimeWeekBtn,myTimeLineDayBtn,myTimeLineWeekBtn,myTimeLineMonthBtn",
           }}
         />
     </div>

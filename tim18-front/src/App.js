@@ -8,12 +8,12 @@ import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
-import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
+import UpdateInstructorProfile from './components/forms/UpdateInstructorProfileForm.js';
 import { faListSquares } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const client = false;
-  const instructor = false;
+  const instructor = true;
 
   const user = {
     id: "1",
@@ -32,7 +32,7 @@ function App() {
     const calendar = <Calendar/>
     let updateProfile;
     if (instructor){
-      updateProfile = <UpdateInstructorProfileForm id={localStorage.getItem("userId")}/>
+      updateProfile = <UpdateInstructorProfile id={localStorage.getItem("userId")}/>
     }
     return (
       <Router>

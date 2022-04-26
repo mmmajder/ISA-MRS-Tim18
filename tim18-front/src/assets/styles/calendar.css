@@ -14,3 +14,15 @@
     font-size: 30px;
     text-align: center;
   }
+
+  .lbl__create_avbl_period {
+    text-align: right;
+      clear: both;
+      float:left;
+      margin-right:15px;
+  }
+
+  .btn {
+    background-color: var(--dark-blue);
+    border-color: var(--dark-blue);
+  }

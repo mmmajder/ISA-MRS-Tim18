@@ -5,7 +5,6 @@ import { faHome, faHouseChimney, faPlus, faBook, faChartLine, faFishFins, faShip
 
 const UsersOffersDropdown = ({userType}) => {
     let retData = "";
-    userType = "boatOwner"
     switch (userType) {
         case "instructor":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faFishFins} />Adventures </span>}> 
