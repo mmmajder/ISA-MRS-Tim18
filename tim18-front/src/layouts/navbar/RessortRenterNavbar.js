@@ -5,9 +5,11 @@ import '../../assets/styles/nav.css';
 import '../../assets/styles/style.css';
 import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import ProfileDropdown from './ProfileDropdown.js';
+import UsersOffersDropdown from './UsersOffersDropdown';
 
-export default function ResortRenterNavbar(){
+export default function ResortRenterNavbar({userType}){
     const logo = require('../../assets/images/island_logo.png')
+    console.log(userType)
 
     return <Navbar bg="darkBlue" variant="dark" sticky='top' expand="md" collapseOnSelect> 
         <Navbar.Brand ><img src={logo}  className="brand" alt="logo" /> Hakuna Matata</Navbar.Brand>
@@ -16,12 +18,7 @@ export default function ResortRenterNavbar(){
             <Nav className="ms-auto">
                 <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
-                <NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} /> Resorts</span>}> 
-                    <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
-                    <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new resort</NavDropdown.Item>
-                    <NavDropdown.Item href="#"><FontAwesomeIcon icon={faBook} /> Rents history</NavDropdown.Item>
-                    <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
-                </NavDropdown>
+                <UsersOffersDropdown userType={userType}/>
                 <ProfileDropdown />
             </Nav>
         </Navbar.Collapse>

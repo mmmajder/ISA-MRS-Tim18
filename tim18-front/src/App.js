@@ -9,10 +9,11 @@ import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
+import { faListSquares } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const client = false;
-  const instructor = true;
+  const instructor = false;
 
   const user = {
     id: "1",
@@ -38,7 +39,7 @@ function App() {
         <div>
           <body>
             {/* <ResortRenterNavbar/> */}
-            <ResortRenterNavbar/>
+            <ResortRenterNavbar userType={localStorage.getItem('userType')}/>
             <Container>
               <Routes>
                   {/* Creating/Registrating Resorts/Boats */}
