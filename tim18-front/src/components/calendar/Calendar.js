@@ -8,11 +8,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 import LabeledInput from '../forms/LabeledInput';
 import CreateCalendarEventForm from '../forms/calendar/CreateCalendarEventForm'
 import './../../assets/styles/calendar.css'
+import { getCalendarData } from '../../services/api/CalendarApi'
 
 
-const Calendar = () => {
+const Calendar = ({id}) => {
   const calendarRef = createRef()
-  const [events, setEvents] = useState([
+
+  const [events, setEvents] = useState()/*[
     {
       title  : 'event1',
       //start  : '2022-04-01',
@@ -22,11 +24,25 @@ const Calendar = () => {
     },
     {
       title  : 'event2',
+      resourceId: 'a',
       start  : '2022-04-05',
       end    : '2022-04-07'
     },
     {
       title  : 'event3',
+      resourceId: 'a',
+      start  : '2022-04-09T12:30:00',
+      allDay : false // will make the time show
+    },
+    {
+      title  : 'event3',
+      resourceId: 'a',
+      start  : '2022-04-09T12:30:00',
+      allDay : false // will make the time show
+    },
+    {
+      title  : 'event3',
+      resourceId: 'a',
       start  : '2022-04-09T12:30:00',
       allDay : false // will make the time show
     },
@@ -40,13 +56,53 @@ const Calendar = () => {
       start  : '2022-04-09T14:30:00',
       allDay : false // will make the time show
     }
-  ]) 
+  ]) */
+
+
+  useEffect(() => {
+    async function fetchCalendarData(){
+        const requestData = await getCalendarData(id);
+        console.log(requestData.data)
+        const iden = requestData.data[0].id
+        const periods = requestData.data[0].periods
+        console.log(iden)
+        console.log(periods[0])
+
+        const data = requestData.data.map((element) => 
+          element.periods.map(function(range) {
+            var info = {
+              title : element.id,
+              start : range.fromDateTime,
+              end : range.toDateTime
+            }
+            return info;
+          })
+        );
+        console.log(data[0])
+        if (requestData) {
+          setEvents(data[0]);
+          console.log("data")
+          console.log(events)
+        }
+      
+        return requestData;
+    }
+    fetchCalendarData();
+}, [])
+
+
+  
 
   return (
     <div>
       <div>
         <CreateCalendarEventForm onChange={(value)=>{
-          setEvents([...events, value])
+          console.log(events)
+          console.log(value)
+          if (!!events) {
+            setEvents([...events, value])
+          } else { setEvents([value])}
+          
         }
       }/>       
       </div>
@@ -61,18 +117,20 @@ const Calendar = () => {
           select = {function(start, end, allDays) {
             console.log(start)
           }}
-          events={events}
-          
           resources={[
             {
               id: 'a',
-              title: 'Room A'
+              title: 'Room A',
+              
             },
             {
               id: 'b',
-              title: 'Room B'
+              title: 'Room B',
+              occupancy: 220
             }
           ]}
+          events={events}
+          
           customButtons={{
             myTimeDayBtn: {
               text: "Time Day",

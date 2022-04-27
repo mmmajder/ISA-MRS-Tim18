@@ -29,7 +29,7 @@ function App() {
     const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
-    const calendar = <Calendar/>
+    const calendar = <Calendar id={localStorage.getItem("userId")}/>
     let updateProfile;
     if (instructor){
       updateProfile = <UpdateInstructorProfile id={localStorage.getItem("userId")}/>

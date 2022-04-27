@@ -21,11 +21,15 @@ export default function CreateCalendarEventForm(props){
         const title = "Available"
         console.log(type)
 
+        console.log("stigao")
+
         props.onChange({
             title  : 'available',
             start  : fromDateTime,
             end    : toDateTime
           })
+
+          console.log("stigao")
 
         const userId = 2;
         const assetId = 100

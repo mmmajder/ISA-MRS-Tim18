@@ -10,3 +10,13 @@ export async function createAppointment(data) {
      .then((responseData) => alert(responseData))
      .catch((err)=> alert(err));
 }
+
+export async function getCalendarData(id){
+    try {
+        const responseData = await api.get(`/calendar/allAvailableSingleForUser/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }

@@ -4,7 +4,11 @@ export async function getInstructorByID(id){
   try {
       console.log("stigao")
       console.log(id)
-      const responseData = await api.get(`/users/${id}`);
+      const responseData = await api.get(`/users/${id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
       console.log(responseData)
       return responseData;
   } catch (err) {
