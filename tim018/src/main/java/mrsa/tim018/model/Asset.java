@@ -11,8 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.List;
+ 
 @Entity
 public class Asset {
 	@Id
@@ -22,13 +25,9 @@ public class Asset {
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "renter_id")
 	private Renter renter;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fishing_instructor_id")
-	private FishingInstructor fishingInstructor;
 	
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -101,14 +100,6 @@ public class Asset {
 		this.renter = renter;
 	}
 	
-	public FishingInstructor getFishingInstructor() {
-		return fishingInstructor;
-	}
-
-	public void setFishingInstructor(FishingInstructor fishingInstructor) {
-		this.fishingInstructor = fishingInstructor;
-	}
-
 	public String getName() {
 		return name;
 	}
