@@ -42,9 +42,11 @@ public class AssetCalendarController<T> {
 		List<AssetPeriodsDTO> assetPeriodsDTOs = new ArrayList<AssetPeriodsDTO>();
 		
 		for (Asset asset : assets) {
-			assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
+			try {
+				assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
+			} catch (Exception e) {
+			}
 		}
-		System.out.println(assetPeriodsDTOs.get(0).getPeriods().get(0).getFromDateTime());
 		return new ResponseEntity<>(assetPeriodsDTOs, HttpStatus.OK);
 	}
 
