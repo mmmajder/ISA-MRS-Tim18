@@ -18,131 +18,70 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import mrsa.tim018.dto.FishingInstructorDTO;
-import mrsa.tim018.model.FishingInstructor;
-import mrsa.tim018.service.FishingInstructorService;
+import mrsa.tim018.dto.RenterDTO;
+import mrsa.tim018.model.Renter;
+import mrsa.tim018.service.RenterService;
 
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/fishingInstructors")
-public class FishingInstructorController {
+public class RenterController {
 
 	@Autowired
-	private FishingInstructorService fishingInstructorService;
+	private RenterService renterService;
 
 	@GetMapping(value = "/all")
-	public ResponseEntity<List<FishingInstructorDTO>> getAllFishingInstructors() {
+	public ResponseEntity<List<RenterDTO>> getAllRenters() {
 
-		List<FishingInstructor> fishingInstructors = fishingInstructorService.findAll();
+		List<Renter> fishingInstructors = renterService.findAll();
 
 		// convert clients to DTOs
-		List<FishingInstructorDTO> fishingInstructorsDTO = new ArrayList<>();
-		for (FishingInstructor fi : fishingInstructors) {
-			fishingInstructorsDTO.add(new FishingInstructorDTO(fi));
+		List<RenterDTO> rentersDTO = new ArrayList<>();
+		for (Renter fi : fishingInstructors) {
+			rentersDTO.add(new RenterDTO(fi));
 		}
 
-		return new ResponseEntity<>(fishingInstructorsDTO, HttpStatus.OK);
+		return new ResponseEntity<>(rentersDTO, HttpStatus.OK);
 	}
-
-	// GET /api/clients?page=0&size=5&sort=firstName,DESC
-	/*@GetMapping
-	public ResponseEntity<List<FishingInstructorDTO>> getFishingInstructorsPage(Pageable page) {
-
-		// page object holds data about pagination and sorting
-		// the object is created based on the url parameters "page", "size" and "sort"
-		Page<FishingInstructor> fishingInstructors = fishingInstructorService.findAll(page);
-
-		// convert students to DTOs
-		List<FishingInstructorDTO> fishingInstructorsDTO = new ArrayList<>();
-		for (FishingInstructor fi : fishingInstructors) {
-			fishingInstructorsDTO.add(new FishingInstructorDTO(fi));
-		}
-
-		return new ResponseEntity<>(fishingInstructorsDTO, HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<FishingInstructorDTO> getFishingInstructor(@PathVariable Integer id) {
-
-		FishingInstructor fishingInstructor = fishingInstructorService.findOne(id);
-
-		// studen must exist
-		if (fishingInstructor == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
-	}
-
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<FishingInstructorDTO> saveFishingInstructor(@RequestBody FishingInstructorDTO fishingInstructorDTO) {
-
-		FishingInstructor fishingInstructor = new FishingInstructor();
-		fishingInstructor.setAddress(fishingInstructorDTO.getAddress());
-		fishingInstructor.setCity(fishingInstructorDTO.getCity());
-		fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
-		fishingInstructor.setFirstName(fishingInstructorDTO.getFirstName());
-		fishingInstructor.setLastName(fishingInstructorDTO.getLastName());
-		fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
-		fishingInstructor.setPhoneNum(fishingInstructorDTO.getPhoneNum());
-		fishingInstructor.setState(fishingInstructorDTO.getState());
-		fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
-
-		fishingInstructor = fishingInstructorService.save(fishingInstructor);
-		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.CREATED);
-	}*/
 
 	@PutMapping(consumes = "application/json")
-	public ResponseEntity<FishingInstructorDTO> updateFishingInstructor(@RequestBody FishingInstructorDTO fishingInstructorDTO) {
+	public ResponseEntity<RenterDTO> updateFishingInstructor(@RequestBody RenterDTO renterDTO) {
 
 		// a student must exist
-		FishingInstructor fishingInstructor = fishingInstructorService.findOne(fishingInstructorDTO.getId());
+		Renter renter = renterService.findOne(renterDTO.getId());
 
-		if (fishingInstructor == null) {
+		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		fishingInstructor.setAddress(fishingInstructorDTO.getAddress());
-		fishingInstructor.setCity(fishingInstructorDTO.getCity());
+		renter.setAddress(renterDTO.getAddress());
+		renter.setCity(renterDTO.getCity());
 		//fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
-		fishingInstructor.setFirstName(fishingInstructorDTO.getFirstName());
-		fishingInstructor.setLastName(fishingInstructorDTO.getLastName());
+		renter.setFirstName(renterDTO.getFirstName());
+		renter.setLastName(renterDTO.getLastName());
 		//fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
-		fishingInstructor.setPhoneNum(fishingInstructorDTO.getPhoneNum());
-		fishingInstructor.setState(fishingInstructorDTO.getState());
+		renter.setPhoneNum(renterDTO.getPhoneNum());
+		renter.setState(renterDTO.getState());
 	//	fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
 
-		fishingInstructor = fishingInstructorService.save(fishingInstructor);
-		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
+		renter = renterService.save(renter);
+		return new ResponseEntity<>(new RenterDTO(renter), HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/delete", consumes = "application/json")
-	public ResponseEntity<FishingInstructorDTO> deleteFishingInstructor(@RequestBody FishingInstructorDTO fishingInstructorDTO) {
+	public ResponseEntity<RenterDTO> deleteFishingInstructor(@RequestBody RenterDTO renterDTO) {
 
 		// a student must exist
-		FishingInstructor fishingInstructor = fishingInstructorService.findOne(fishingInstructorDTO.getId());
+		Renter renter = renterService.findOne(renterDTO.getId());
 
-		if (fishingInstructor == null) {
+		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
+		renter.setDeleted(renterDTO.isDeleted());
 
-		fishingInstructor = fishingInstructorService.save(fishingInstructor);
-		return new ResponseEntity<>(new FishingInstructorDTO(fishingInstructor), HttpStatus.OK);
+		renter = renterService.save(renter);
+		return new ResponseEntity<>(new RenterDTO(renter), HttpStatus.OK);
 	}
-
-	/*@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteFishingInstructor(@PathVariable Integer id) {
-
-		FishingInstructor fishingInstructor = fishingInstructorService.findOne(id);
-
-		if (fishingInstructor != null) {
-			fishingInstructorService.remove(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}*/
 	
 }

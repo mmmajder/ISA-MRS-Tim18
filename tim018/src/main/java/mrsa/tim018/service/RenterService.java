@@ -7,31 +7,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import mrsa.tim018.model.FishingInstructor;
-import mrsa.tim018.repository.FishingInstructorRepository;
+import mrsa.tim018.model.Renter;
+import mrsa.tim018.repository.RenterRepository;
 
 @Service
-public class FishingInstructorService {
+public class RenterService {
 	@Autowired
-	private FishingInstructorRepository fishingInstructorRepository;	
+	private RenterRepository renterRepo;	
 
-	public FishingInstructor findOne(Long id) {
-		return fishingInstructorRepository.findById(id).get();  // .orElseGet(null)
+	public Renter findOne(Long id) {
+		return renterRepo.findById(id).get();  // .orElseGet(null)
 	}
 
-	public List<FishingInstructor> findAll() {
-		return fishingInstructorRepository.findAll();
+	public List<Renter> findAll() {
+		return renterRepo.findAll();
 	}
 	
-	public Page<FishingInstructor> findAll(Pageable page) {
-		return fishingInstructorRepository.findAll(page);
+	public Page<Renter> findAll(Pageable page) {
+		return renterRepo.findAll(page);
 	}
 
-	public FishingInstructor save(FishingInstructor fishingInstructor) {
-		return fishingInstructorRepository.save(fishingInstructor);
+	public Renter save(Renter fishingInstructor) {
+		return renterRepo.save(fishingInstructor);
 	}
 
 	public void remove(Integer id) {
-		fishingInstructorRepository.deleteById(id);
+		renterRepo.deleteById(id);
 	}
 }

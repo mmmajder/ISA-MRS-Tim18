@@ -6,16 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import mrsa.tim018.model.FishingInstructor;
+import mrsa.tim018.model.Renter;
 
-public interface FishingInstructorRepository extends JpaRepository<FishingInstructor, Long> {
-	public Page<FishingInstructor> findAll(Pageable pageable);
+public interface RenterRepository extends JpaRepository<Renter, Long> {
+	public Page<Renter> findAll(Pageable pageable);
 	
-	public List<FishingInstructor> findByFirstNameAndLastNameAllIgnoringCase(String firstName, String lastName);
+	public List<Renter> findByFirstNameAndLastNameAllIgnoringCase(String firstName, String lastName);
 
-	public FishingInstructor findById(long id);
+	public Renter findById(long id);
 	
-	public FishingInstructor deleteById(int id);
+	public Renter deleteById(int id);
 	
 	
 }
