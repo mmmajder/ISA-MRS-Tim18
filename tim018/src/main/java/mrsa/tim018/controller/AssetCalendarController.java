@@ -33,14 +33,26 @@ public class AssetCalendarController<T> {
 
 	@Autowired
 	private RenterService renterService;
+	
+	@GetMapping(value = "/allCalendarsForUser/{id}") 
+	public ResponseEntity<List<UserCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
+		Renter renter = renterService.findOne(id);
+		List<Asset> assets = renter.getAssets();
+		List<UserCalendarsDTO> data = new ArrayList<UserCalendarsDTO>();
+		for (Asset asset : assets) {
+			try {
+				data.add(new UserCalendarsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
+			} catch (Exception e) {
+			}
+		}
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
 
 	@GetMapping(value = "/allAvailableSingleForUser/{id}")
-	public ResponseEntity<List<AssetPeriodsDTO>> getAvailablePatternsForUser(@PathVariable Long id) {
+	public ResponseEntity<List<AssetPeriodsDTO>> getAvailableSingleForUser(@PathVariable Long id) {
 		Renter renter = renterService.findOne(id);
-		
 		List<Asset> assets = renter.getAssets();
 		List<AssetPeriodsDTO> assetPeriodsDTOs = new ArrayList<AssetPeriodsDTO>();
-		
 		for (Asset asset : assets) {
 			try {
 				assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
@@ -49,6 +61,22 @@ public class AssetCalendarController<T> {
 		}
 		return new ResponseEntity<>(assetPeriodsDTOs, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/allAvailablePatternForUser/{id}")
+	public ResponseEntity<List<AssetPeriodsDTO>> getAvailablePatternsForUser(@PathVariable Long id) {
+		Renter renter = renterService.findOne(id);
+		List<Asset> assets = renter.getAssets();
+		List<AssetPeriodsDTO> assetPeriodsDTOs = new ArrayList<AssetPeriodsDTO>();
+		for (Asset asset : assets) {
+			try {
+				assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailablePattern()));
+			} catch (Exception e) {
+			}
+		}
+		return new ResponseEntity<>(assetPeriodsDTOs, HttpStatus.OK);
+	}
+	
+	
 
 	/*@GetMapping(value = "/allAssets/{id}")
 	public ResponseEntity<AllAssetsCalendarByUserDTO> getCalendars(@PathVariable Long id) {
