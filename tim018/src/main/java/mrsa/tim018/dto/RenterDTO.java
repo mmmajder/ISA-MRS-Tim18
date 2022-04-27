@@ -1,10 +1,10 @@
 package mrsa.tim018.dto;
 
-import mrsa.tim018.model.FishingInstructor;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.UserAccount;
 import mrsa.tim018.model.UserType;
 
-public class FishingInstructorDTO {	
+public class RenterDTO {	
 	private Long id;
 	private boolean isDeleted;
 	private String firstName;
@@ -17,7 +17,7 @@ public class FishingInstructorDTO {
 	private int loyaltyPoints;
 	private UserAccount userAccount;
 	
-	public FishingInstructorDTO(Long id, boolean isDeleted, String firstName, String lastName, String address,
+	public RenterDTO(Long id, boolean isDeleted, String firstName, String lastName, String address,
 			String city, String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount) {
 		super();
 		this.id = id;
@@ -33,12 +33,12 @@ public class FishingInstructorDTO {
 		this.userAccount = userAccount;
 	}
 	
-	public FishingInstructorDTO(FishingInstructor fishingInstructor) {
+	public RenterDTO(Renter fishingInstructor) {
 		this(fishingInstructor.getID(), fishingInstructor.isDeleted(), fishingInstructor.getFirstName(), fishingInstructor.getLastName(), fishingInstructor.getAddress(),
 				fishingInstructor.getCity(), fishingInstructor.getState(), fishingInstructor.getPhoneNum(), fishingInstructor.getUserType(), fishingInstructor.getLoyaltyPoints(), fishingInstructor.getUserAccount());
 	}
 
-	public FishingInstructorDTO() {
+	public RenterDTO() {
 	}
 	
 	public Long getId() {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.model.AssetCalendar;
@@ -12,6 +14,7 @@ import mrsa.tim018.repository.AssetCalendarRepository;
 import mrsa.tim018.utils.StringUtils;
 
 @Service
+@Transactional
 public class AssetCalendarSevice {
 	@Autowired
 	private AssetCalendarRepository assetCalendarRepository;
@@ -19,7 +22,7 @@ public class AssetCalendarSevice {
 	public AssetCalendar save(AssetCalendar calendar) {
 		return assetCalendarRepository.save(calendar);
 	}
-
+	
 	public AssetCalendar addAppointment(AssetCalendar calendar, AppointmentCreationDTO appointment) {
 		switch (appointment.getType()) {
 		case Available:
