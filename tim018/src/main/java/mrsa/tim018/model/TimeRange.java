@@ -35,4 +35,36 @@ public class TimeRange {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public LocalDateTime getFromDateTime() {
+		return fromDateTime;
+	}
+
+	public void setFromDateTime(LocalDateTime fromDateTime) {
+		this.fromDateTime = fromDateTime;
+	}
+
+	public LocalDateTime getToDateTime() {
+		return toDateTime;
+	}
+
+	public void setToDateTime(LocalDateTime toDateTime) {
+		this.toDateTime = toDateTime;
+	}
+
 }
