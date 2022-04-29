@@ -12,6 +12,13 @@ insert into client (id, address, city, first_name, is_deleted, last_name, loyalt
 				   (3, 'ClientAdress', 'Novi Sad', 'Katarina', false, 'Komad', 0, 0, '0606611759', 'Serbia', 'Client', 3);
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, user_account_id) values
 				   (4, 'AdminAdress', 'Admingrad', 'Admin', false, 'Admin', 0, '06321654', 'Adminvil', 'Admin', 4);
+
 insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
-				  (1, 'Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', 2, 1);
+				  (1, 'Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', null, 1);
+insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  (2, 'Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', null, 1);
+insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  (3, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', null, 1);
+insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  (4, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', null, 1);
 				   

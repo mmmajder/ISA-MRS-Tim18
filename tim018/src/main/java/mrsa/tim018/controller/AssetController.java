@@ -78,8 +78,15 @@ public class AssetController {
 			assetsDTO.add(new AssetDTO(a));
 		}
 		
-		AssetsListDTO assetsList = new AssetsListDTO(assetsDTO);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<AssetDTO> getAsset(@PathVariable Long id) {
+		Asset asset = assetService.findOne(id);
+		AssetDTO assetDTO = new AssetDTO(asset);
+		
+		return new ResponseEntity<>(assetDTO, HttpStatus.OK);
 	}
 }
 

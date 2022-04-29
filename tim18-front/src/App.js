@@ -36,8 +36,8 @@ function App() {
                 <Route path="/createResort" element={resortForm} /> 
                   {/* For other's Profile page */}
                 <Route path="/profile" element={profile} /> 
-                <Route path="/resorts" element={assetList} /> 
-                <Route path="/resorts/id" element={resortView} /> 
+                <Route exact path="/resorts" element={assetList} /> 
+                <Route path="/resorts/:id" element={resortView} /> 
                 <Route path="/resorts/update/id" element={resortUpdate} />
                 <Route path="/calendar" element={calendar}/>
               </Routes>
