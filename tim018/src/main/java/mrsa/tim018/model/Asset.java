@@ -22,11 +22,11 @@ public class Asset {
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "renter_id")
 	private Renter renter;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fishing_instructor_id")
 	private FishingInstructor fishingInstructor;
 	

@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AssetDTO;
+import mrsa.tim018.dto.AssetsListDTO;
 import mrsa.tim018.mapper.AssetMapper;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.service.AssetService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins="*")
 @RequestMapping(value = "/assets")
 public class AssetController {
 	
@@ -65,6 +66,19 @@ public class AssetController {
 				.filter(a -> a.getRenter().getID().equals(renterId))
 				.collect(Collectors.toList());
 
+		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<AssetDTO>> getAssets() {
+		List<Asset> assets = assetService.findAll();
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		
+		for (Asset a : assets) {
+			assetsDTO.add(new AssetDTO(a));
+		}
+		
+		AssetsListDTO assetsList = new AssetsListDTO(assetsDTO);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 }

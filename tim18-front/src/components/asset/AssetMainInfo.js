@@ -1,12 +1,12 @@
 import React from 'react';
 import '../../assets/styles/asset.css';
-import AssetNameAndMark from './AssetNameAndMark';
+import AssetNameMarkPrice from './AssetNameMarkPrice';
 import AssetAddress from './AssetAddress';
 
-export default function AssetMainInfo({name, address, mark}){
+export default function AssetMainInfo({name, address, mark, price}){
 
     return <>
-            <AssetNameAndMark name={name} mark={mark} />
+            <AssetNameMarkPrice name={name} mark={mark} price={price}/>
             <AssetAddress address={address} />
     </>
 }

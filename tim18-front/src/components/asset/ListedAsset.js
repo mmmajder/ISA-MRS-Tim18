@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from './AssetMainInfo';
 
-export default function ListedAsset({name, address, mark}){
+export default function ListedAsset({name, address, mark, price}){
     const resortImage = require('../../assets/images/Maldives.jpg');
     
 
@@ -16,7 +16,7 @@ export default function ListedAsset({name, address, mark}){
                     <Col sm="6">
                         <Row>
                             <Col sm="6">
-                                <AssetMainInfo name={name} mark={mark} address={address}/>
+                                <AssetMainInfo name={name} mark={mark} address={address} price={price}/>
                             </Col>
                             <Col sm="4">
                                 

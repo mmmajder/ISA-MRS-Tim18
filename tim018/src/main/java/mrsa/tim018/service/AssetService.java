@@ -2,6 +2,8 @@ package mrsa.tim018.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import mrsa.tim018.model.Asset;
 import mrsa.tim018.repository.AssetRepository;
 
 @Service
+@Transactional
 public class AssetService {
 	
 	@Autowired

@@ -12,4 +12,6 @@ insert into client (id, address, city, first_name, is_deleted, last_name, loyalt
 				   (3, 'ClientAdress', 'Novi Sad', 'Katarina', false, 'Komad', 0, 0, '0606611759', 'Serbia', 'Client', 3);
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, user_account_id) values
 				   (4, 'AdminAdress', 'Admingrad', 'Admin', false, 'Admin', 0, '06321654', 'Adminvil', 'Admin', 4);
+insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  (1, 'Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', 2, 1);
 				   
