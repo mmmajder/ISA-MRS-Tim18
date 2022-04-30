@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LoginForm } from "./LoginForm";
+import { LoginForm} from "./LoginForm";
 import { motion } from "framer-motion";
 import { AccountContext } from "./AccountContext";
 import { SignupForm } from "./SignupForm";
 
 const BoxContainer = styled.div`
-  width: 280px;
-  min-height: 550px;
+  width: 50%;
+  min-height: 90%;
   display: flex;
   flex-direction: column;
   border-radius: 19px;
@@ -18,28 +18,24 @@ const BoxContainer = styled.div`
 `;
 
 const TopContainer = styled.div`
-  width: 100%;
-  height: 250px;
+  height: 300px;
   display: flex;
   flex-direction: column;
+  align: center;
   justify-content: flex-end;
   padding: 0 1.8em;
   padding-bottom: 5em;
 `;
 
 const BackDrop = styled(motion.div)`
-  width: 160%;
-  height: 550px;
+  
   position: absolute;
   display: flex;
-  flex-direction: column;
-  border-radius: 50%;
-  transform: rotate(60deg);
-  top: -290px;
-  left: -70px;
+  flex-direction: column;  
+  top: -75%;  
+  left: -90%;  
   background: rgb(241, 196, 15);
   background: linear-gradient(
-    58deg,
     rgba(241, 196, 15, 1) 20%,
     rgba(243, 172, 18, 1) 100%
   );
@@ -52,9 +48,9 @@ const HeaderContainer = styled.div`
 `;
 
 const HeaderText = styled.h2`
-  font-size: 30px;
+  font-size: 55px;
   font-weight: 600;
-  line-height: 1.24;
+  line-height: 1;
   color: #fff;
   z-index: 10;
   margin: 0;
@@ -63,7 +59,7 @@ const HeaderText = styled.h2`
 const SmallText = styled.h5`
   color: #fff;
   font-weight: 500;
-  font-size: 11px;
+  font-size: 20px;
   z-index: 10;
   margin: 0;
   margin-top: 7px;
@@ -73,7 +69,7 @@ const InnerContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 1.8em;
+  padding: 3em 4.8em;
 `;
 
 const backdropVariants = {

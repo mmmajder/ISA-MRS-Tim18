@@ -22,13 +22,13 @@ export function SignupForm(props) {
         <Input type="password" placeholder="Password" />
         <Input type="password" placeholder="Confirm Password" />
       </FormContainer>
-      <Marginer direction="vertical" margin={10} />
-      <SubmitButton type="submit">Signup</SubmitButton>
-      <Marginer direction="vertical" margin="1em" />
+      <Marginer direction="vertical" margin="5em" />
+      <SubmitButton type="submit">Sign up</SubmitButton>
+      <Marginer direction="vertical" margin="2em" />
       <MutedLink href="#">
         Already have an account?
         <BoldLink href="#" onClick={switchToSignin}>
-          Signin
+          Sign in
         </BoldLink>
       </MutedLink>
     </BoxContainer>
