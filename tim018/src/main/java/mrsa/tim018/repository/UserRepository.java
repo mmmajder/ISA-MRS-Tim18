@@ -8,4 +8,6 @@ import mrsa.tim018.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	public Optional<User> findById(Long id);
+	
+	public User findByEmail(String email);
 }

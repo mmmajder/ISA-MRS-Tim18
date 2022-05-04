@@ -1,5 +1,8 @@
 package mrsa.tim018.model;
 
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -15,13 +18,24 @@ import javax.persistence.Inheritance;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "\"user\"")
-public class User {
+@Table(name = "Users")
+public class User implements UserDetails{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@SequenceGenerator(name="userSeqGen", sequenceName = "Seq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
@@ -54,9 +68,27 @@ public class User {
 	
 	@Column(name="loyaltyPoints", nullable=false)
 	private int loyaltyPoints;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
 	
-	@OneToOne
-	private UserAccount userAccount;
+	/*@OneToOne
+	private UserAccount userAccount;*/
+    @Column(name = "email", unique = true, nullable = false)
+	private String email;
+	
+	@Column(name = "password", nullable = false)
+	private String password;
+	
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private DeletationRequest deletationRequest;
@@ -65,7 +97,7 @@ public class User {
 		
 	}
 
-	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
+	/*public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
 			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount) {
 		super();
 		this.id = iD;
@@ -92,12 +124,48 @@ public class User {
 		this.state = state;
 		this.phoneNum = phoneNum;
 		this.userType = userType;
-	//	this.userAccount = userAccount;
+		//this.userAccount = userAccount;
 		
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
-	}	
+		this.enabled = true;
+	}*/
+	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password) {
+		super();
+		this.id = iD;
+		this.isDeleted = isDeleted;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNum = phoneNum;
+		this.userType = userType;
+		this.loyaltyPoints = loyaltyPoints;
+		this.email = email;
+		this.password = password;
+	}
 	
+
+	public User(Long id, String firstName, String lastName, String address, String city, String state, String phoneNum,
+			UserType userType, String email, String password) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNum = phoneNum;
+		this.userType = userType;
+		this.email = email;
+		this.password = password;
+		
+		this.loyaltyPoints = 0;
+		this.isDeleted = false;
+		this.enabled = true;
+	}
 	public Long getID() {
 		return id;
 	}
@@ -134,9 +202,9 @@ public class User {
 		return loyaltyPoints;
 	}
 
-	public UserAccount getUserAccount() {
+	/*public UserAccount getUserAccount() {
 		return userAccount;
-	}
+	}*/
 
 	
 	public boolean isDeleted() {
@@ -178,31 +246,63 @@ public class User {
 	public void setLoyaltyPoints(int loyaltyPoints) {
 		this.loyaltyPoints = loyaltyPoints;
 	}
+	
+	@JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
 
-	/*public void setUserAccount(UserAccount userAccount) {
-		this.userAccount = userAccount;
-	}*/
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+    
+    public List<Role> getRoles() {
+       return roles;
+    }
+    
 
-	/*@Override
-	public String toString() {
-		return "User [ID=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
-				+ ", city=" + city + ", state=" + state + ", phoneNum=" + phoneNum + ", userType=" + userType
-				+ ", loyaltyPoints=" + loyaltyPoints + ", userAccount=" + userAccount + "]";
-	}*/
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+	
 	@Override
 	public String toString() {
 		return "User [ID=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
 				+ ", city=" + city + ", state=" + state + ", phoneNum=" + phoneNum + ", userType=" + userType
 				+ ", loyaltyPoints=" + loyaltyPoints + ", userAccount=" + "]";
 	}
-
-	
-	/*@Override
-	public int hashCode() {
-		return Objects.hash(id, address, city, firstName, lastName, loyaltyPoints, phoneNum, state, userAccount,
-				userType);
-	}*/
 
 	@Override
 	public int hashCode() {
@@ -221,5 +321,50 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+
+/*	@Override
+	public String getPassword() {
+		return userAccount.getPassword();
+	}
+
+	@Override
+	public String getUsername() {
+		return userAccount.getEmail();
+	}
+
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
+	}*/
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public DeletationRequest getDeletationRequest() {
+		return deletationRequest;
+	}
+
+	public void setDeletationRequest(DeletationRequest deletationRequest) {
+		this.deletationRequest = deletationRequest;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
 	
 }
