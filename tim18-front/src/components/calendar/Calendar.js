@@ -13,7 +13,7 @@ import { getCalendarData } from '../../services/api/CalendarApi'
 
 const Calendar = ({id}) => {
   const calendarRef = createRef()
-
+  const [resources, setResources] = useState()
   const [events, setEvents] = useState()/*[
     {
       title  : 'event1',
@@ -62,29 +62,29 @@ const Calendar = ({id}) => {
   useEffect(() => {
     async function fetchCalendarData(){
         const requestData = await getCalendarData(id);
-        console.log(requestData.data)
-        const iden = requestData.data[0].id
-        const periods = requestData.data[0].periods
-        console.log(iden)
-        console.log(periods[0])
-
-        const data = requestData.data.map((element) => 
-          element.periods.map(function(range) {
+        const data = requestData.data.map((element) => {
+          const res = {
+            id : element.id,
+            title : element.name
+          }
+          if (resources==undefined) {
+            setResources([res])
+          } else { setResources([...resources, res]) }
+          
+          return element.calendar.availableSingle.map(function(range) {
             var info = {
-              title : element.id,
+              title : "Available",
+              resourceId : element.id,
               start : range.fromDateTime,
               end : range.toDateTime
             }
             return info;
           })
+        }
         );
-        console.log(data[0])
         if (requestData) {
           setEvents(data[0]);
-          console.log("data")
-          console.log(events)
         }
-      
         return requestData;
     }
     fetchCalendarData();
@@ -97,8 +97,6 @@ const Calendar = ({id}) => {
     <div>
       <div>
         <CreateCalendarEventForm onChange={(value)=>{
-          console.log(events)
-          console.log(value)
           if (!!events) {
             setEvents([...events, value])
           } else { setEvents([value])}
@@ -117,7 +115,7 @@ const Calendar = ({id}) => {
           select = {function(start, end, allDays) {
             console.log(start)
           }}
-          resources={[
+          resources={resources/*[
             {
               id: 'a',
               title: 'Room A',
@@ -128,7 +126,7 @@ const Calendar = ({id}) => {
               title: 'Room B',
               occupancy: 220
             }
-          ]}
+          ]*/}
           events={events}
           
           customButtons={{
@@ -193,6 +191,7 @@ const Calendar = ({id}) => {
             left: "prev,next",
             center: "title",
             right: "today,dayGridDay,dayGridWeek,dayGridMonth,myTimeDayBtn,myTimeWeekBtn,myTimeLineDayBtn,myTimeLineWeekBtn,myTimeLineMonthBtn",
+            backgroundColor: "#5da4b4"
           }}
         />
     </div>

@@ -7,22 +7,41 @@
     grid-template-columns: auto auto;
     padding: 10px;
   }
-  .grid-item {
-    --background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    font-size: 30px;
-    text-align: center;
-  }
+.grid-item {
+  --background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
 
-  .lbl__create_avbl_period {
-    text-align: right;
-      clear: both;
-      float:left;
-      margin-right:15px;
-  }
+.lbl__create_avbl_period {
+  text-align: right;
+    clear: both;
+    float:left;
+    margin-right:15px;
+}
 
-  .btn {
-    background-color: var(--dark-blue);
-    border-color: var(--dark-blue);
-  }
+.fc .fc-button {
+  background-color: var(--dark-blue);
+  border-color: black;
+} 
+.fc .fc-button:hover {
+  background-color: var(--dark-blue);
+  border-color: black;
+} 
+
+.fc .fc-button-primary {
+  background-color: var(--dark-blue);
+  border-color: black;
+} 
+.fc .fc-button-primary:hover {
+  background-color: var(--dark-blue);
+  border-color: black;
+} 
+
+.btn {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+

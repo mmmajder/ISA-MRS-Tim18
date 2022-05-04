@@ -3,7 +3,8 @@ package mrsa.tim018.dto.calendar;
 import mrsa.tim018.model.AssetCalendar;
 
 public class UserCalendarsDTO {
-	private Long id;
+	private long id;
+	private String name;
 	private AssetCalendar calendar;
 
 	public UserCalendarsDTO() {
@@ -11,18 +12,27 @@ public class UserCalendarsDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserCalendarsDTO(Long id, AssetCalendar calendar) {
+	public UserCalendarsDTO(long id, String name, AssetCalendar calendar) {
 		super();
 		this.id = id;
+		this.name = name;
 		this.calendar = calendar;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public AssetCalendar getCalendar() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker'
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import './../../../assets/styles/calendar.css'
 import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
@@ -19,23 +19,17 @@ export default function CreateCalendarEventForm(props){
         const fromDateTime = moment(startDateTime).format("YYYY-MM-DDTHH:mm:SS")
         const toDateTime = moment(endDateTime).format("YYYY-MM-DDTHH:mm:SS")
         const title = "Available"
-        console.log(type)
-
-        console.log("stigao")
 
         props.onChange({
-            title  : 'available',
+            title  : 'Available',
             start  : fromDateTime,
             end    : toDateTime
           })
-
-          console.log("stigao")
 
         const userId = 2;
         const assetId = 100
 
         const appointmentJson = {fromDateTime, toDateTime, title, type, userId, assetId}
-        console.log(appointmentJson)
         createAppointment(JSON.stringify(appointmentJson))
     }
 
@@ -59,7 +53,7 @@ export default function CreateCalendarEventForm(props){
                         <option value="specialOffer">Special offer</option>
                     </select>
                 </div>
-                <Button className='btn mb-2 mt-2' onClick={addAppointment}>Add appointment</Button>
+                <Button className='mb-2 mt-2' style={{backgroundColor: "#5da4b4", borderColor: "#5da4b4"}} onClick={addAppointment}>Add appointment</Button>
             </Card.Body>
         </Card>
         </div>

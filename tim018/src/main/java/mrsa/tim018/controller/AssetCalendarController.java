@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
-import mrsa.tim018.dto.calendar.AllAssetsCalendarByUserDTO;
 import mrsa.tim018.dto.calendar.AssetPeriodsDTO;
+import mrsa.tim018.dto.calendar.UserCalendarsDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Renter;
@@ -41,41 +41,12 @@ public class AssetCalendarController<T> {
 		List<UserCalendarsDTO> data = new ArrayList<UserCalendarsDTO>();
 		for (Asset asset : assets) {
 			try {
-				data.add(new UserCalendarsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
-			} catch (Exception e) {
+				data.add(new UserCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
+			} catch (Exception e) { 
 			}
 		}
 		return new ResponseEntity<>(data, HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/allAvailableSingleForUser/{id}")
-	public ResponseEntity<List<AssetPeriodsDTO>> getAvailableSingleForUser(@PathVariable Long id) {
-		Renter renter = renterService.findOne(id);
-		List<Asset> assets = renter.getAssets();
-		List<AssetPeriodsDTO> assetPeriodsDTOs = new ArrayList<AssetPeriodsDTO>();
-		for (Asset asset : assets) {
-			try {
-				assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailableSingle()));
-			} catch (Exception e) {
-			}
-		}
-		return new ResponseEntity<>(assetPeriodsDTOs, HttpStatus.OK);
-	}
-	
-	@GetMapping(value = "/allAvailablePatternForUser/{id}")
-	public ResponseEntity<List<AssetPeriodsDTO>> getAvailablePatternsForUser(@PathVariable Long id) {
-		Renter renter = renterService.findOne(id);
-		List<Asset> assets = renter.getAssets();
-		List<AssetPeriodsDTO> assetPeriodsDTOs = new ArrayList<AssetPeriodsDTO>();
-		for (Asset asset : assets) {
-			try {
-				assetPeriodsDTOs.add(new AssetPeriodsDTO(asset.getID(), asset.getCalendar().getAvailablePattern()));
-			} catch (Exception e) {
-			}
-		}
-		return new ResponseEntity<>(assetPeriodsDTOs, HttpStatus.OK);
-	}
-	
+	}	
 	
 
 	/*@GetMapping(value = "/allAssets/{id}")
@@ -86,8 +57,7 @@ public class AssetCalendarController<T> {
 	}*/
 
 	@PostMapping(consumes = "application/json")
-	public ResponseEntity<AppointmentCreationDTO> updateCalendar(@RequestBody AppointmentCreationDTO appointment) {
-		System.out.println("Stigli smo");
+	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
 		Renter renter = renterService.findOne(appointment.getUserId());
 		System.out.println(renter.getFirstName());
