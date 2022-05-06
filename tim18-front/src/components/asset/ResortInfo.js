@@ -16,6 +16,11 @@ export default function ResortInfo({name, mark, address, price}){
                 <p>Cancelation fee: 40%</p>
             </Col>    
         </Row>
+        <Container>
+            <Routes>
+                <Route path="/calendarAsset" element={assetCalendar}/>
+            </Routes>
+        </Container>
     </>
 }
 

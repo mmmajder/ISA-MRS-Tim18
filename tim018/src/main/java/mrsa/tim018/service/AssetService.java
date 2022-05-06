@@ -3,7 +3,6 @@ package mrsa.tim018.service;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +26,13 @@ public class AssetService {
 
 	public List<Asset> findAll() {
 		return assetRepository.findAll();
+	}
+	
+	public Asset findById(long id) {
+		return assetRepository.findById(id);
+	}
+	
+	public List<Asset> findAllByRenterId(long id) {
+		return assetRepository.findAllByRenterId(id);
 	}
 }

@@ -11,7 +11,7 @@ public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
@@ -59,6 +59,11 @@ public class Photo {
 		return result;
 	}
 
+	public Photo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -82,5 +87,5 @@ public class Photo {
 			return false;
 		return true;
 	}
-	
+
 }

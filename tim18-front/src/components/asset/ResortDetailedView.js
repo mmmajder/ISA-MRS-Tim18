@@ -5,7 +5,7 @@ import RenterInfo from './RenterInfo';
 import RegularButton from '../buttons/RegularButton';
 import AssetMainInfo from './AssetMainInfo';
 import AssetOtherInfo from './AssetOtherInfo';
-import { faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrash, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom";
 import { getAssetById } from '../../services/api/AssetApi';
@@ -38,10 +38,11 @@ export default function ResortDetailedView(){
                     </Col>
                     <Col sm="6">
                         <Row>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address}/>
                             </Col> 
-                            <Col sm="2">
+                            <Col sm="3">
+                                <a href="/calendarAsset" style={{color:"grey"}}><FontAwesomeIcon icon={faCalendarDays} className="fa-lg" /></a>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
                                 <FontAwesomeIcon icon={faTrash} className='faButtons'/>
                             </Col>

@@ -7,6 +7,26 @@ export async function createAppointment(data) {
             'Content-Type': 'application/json',
         }
     })
-     .then((responseData) => alert(responseData))
+     .then((responseData) => console.log(responseData))
      .catch((err)=> alert(err));
+}
+
+export async function getCalendarData(id){
+    try {
+        const responseData = await api.get(`/calendar/allCalendarsForUser/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
+export async function getAssetCalendarData(idAsset){
+try {
+    const responseData = await api.get(`/calendar/assetCalendar/${idAsset}`);
+    return responseData;
+} catch (err) {
+    console.log(err.message);
+    return err.message
+}
 }
