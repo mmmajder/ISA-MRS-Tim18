@@ -22,3 +22,10 @@
     height: 60px  !important;
     padding: 1px;
 }
+
+.listedAssetImage {
+    width: 200px !important;
+    height: 200px  !important;
+    border-radius: 1rem;
+    border: solid 2px var(--dark-blue);
+}

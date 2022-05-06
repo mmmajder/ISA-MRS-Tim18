@@ -3,10 +3,10 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../assets/styles/form.css';
 
-export function LabeledInput({label, inputName, placeholder, onChangeFunc}){
+export default function LabeledInput({label, inputName, placeholder, onChangeFunc, value}){
     return <Row className='mt-2'>
-        <Col sm={2} align='right'><Form.Label>{label}</Form.Label></Col>
-        <Col sm={9}><Form.Control name={inputName} placeholder={placeholder} required onChange={(e) => onChangeFunc(e.target.value)}></Form.Control></Col>
+        <Col sm={2} align='right'><Form.Label >{label}</Form.Label></Col>
+        <Col sm={9}><Form.Control value={value} name={inputName} placeholder={placeholder}  onChange={(e) => onChangeFunc(e.target.value)}></Form.Control></Col>
         <Col sm={1}/>
     </Row>
 }

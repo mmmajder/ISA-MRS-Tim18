@@ -15,9 +15,12 @@ insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty
 				
 insert into asset_calendar (id) values (10001);
 
-
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, fishing_instructor_id, renter_id) values
-					('Asset Address', 0.0, 25, 'Description', false, 'Fishing adventure', 3, 'No rules', 10001, 2, null);
-
-insert into fishing_instructor_assets (fishing_instructor_id, assets_id) values
-					(2, 1)
+insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  ('Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', null, 1);
+insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  ('Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', null, 1);
+insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  ('Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', null, 1);
+insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, fishing_instructor_id, renter_id) values
+				  ('Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', null, 1);
+				   
