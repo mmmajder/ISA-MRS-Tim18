@@ -38,7 +38,7 @@ function App() {
                 <Route path="/profile" element={profile} /> 
                 <Route exact path="/resorts" element={assetList} /> 
                 <Route path="/resorts/:id" element={resortView} /> 
-                <Route path="/resorts/update/id" element={resortUpdate} />
+                <Route path="/resorts/update/:id" element={resortUpdate} />
                 <Route path="/calendar" element={calendar}/>
               </Routes>
             </Container>

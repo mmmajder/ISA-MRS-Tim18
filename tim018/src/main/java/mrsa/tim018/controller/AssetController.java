@@ -35,6 +35,7 @@ public class AssetController {
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> saveAsset(@RequestBody AssetDTO assetDto) {
 		Asset asset = AssetMapper.mapToAsset(assetDto);
+		
 		asset = assetService.save(asset);
 		
 		return new ResponseEntity<>(new AssetDTO(asset), HttpStatus.CREATED);
@@ -42,11 +43,20 @@ public class AssetController {
 	
 	@PutMapping(value="/{id}", consumes = "application/json" )
 	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
-		Asset asset = AssetMapper.mapToAsset(assetDto);
+		Asset updatedAsset = AssetMapper.mapToAsset(assetDto);
+		Asset assetToUpdate = assetService.findOne(id);
 		
-		if (assetService.findOne(id) != null)
+		if (assetToUpdate != null)
 		{
-			asset = assetService.save(asset);
+			// ne sacuvavati sve ovo vec samo one promenljive vrednosti koje
+			// se ustvari i menjaju
+			assetToUpdate.setAddress(updatedAsset.getAddress());
+			assetToUpdate.setCancelationConditions(updatedAsset.getCancelationConditions());
+			assetToUpdate.setDescription(updatedAsset.getDescription());
+			assetToUpdate.setName(updatedAsset.getName());
+			assetToUpdate.setNumOfPeople(updatedAsset.getNumOfPeople());
+			assetToUpdate.setRules(updatedAsset.getRules());
+			assetService.save(assetToUpdate);
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

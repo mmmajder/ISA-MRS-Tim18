@@ -5,7 +5,9 @@ import { Row, Col } from 'react-bootstrap';
 export default function AssetNameMarkPrice({name, mark, price}){
 
     return <>
-        <Row className="importantInfo mt-4">{name}</Row>
+        <Row className="importantInfo mt-4">
+            {name}
+        </Row>
         <Row className="mt-2">
             <Col sm="6" >
                 <MarkStars mark={mark}/>

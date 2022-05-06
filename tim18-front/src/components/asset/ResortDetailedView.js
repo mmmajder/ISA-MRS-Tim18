@@ -2,7 +2,6 @@ import React from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 import RenterInfo from './RenterInfo';
-import ResortInfo from './ResortInfo';
 import RegularButton from '../buttons/RegularButton';
 import AssetMainInfo from './AssetMainInfo';
 import AssetOtherInfo from './AssetOtherInfo';
@@ -26,7 +25,9 @@ export default function ResortDetailedView(){
             return requestData;
         }
         fetchAsset();
-    }, [])
+    }, [id])
+
+    const linkToEditPage = "/resorts/update/" + id;
 
     return <>
             <div className="borderedBlock mt-3" align="">
@@ -41,7 +42,7 @@ export default function ResortDetailedView(){
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address}/>
                             </Col> 
                             <Col sm="2">
-                                <Link to="/resorts/update/id"><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
+                                <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
                                 <FontAwesomeIcon icon={faTrash} className='faButtons'/>
                             </Col>
                         </Row>

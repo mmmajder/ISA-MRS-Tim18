@@ -30,6 +30,17 @@ export async function getAssetsByRenter(renterId){
     }
   }
 
+export async function updateAsset(id, asset){
+    try {
+        console.log("updateAsset id " + id);
+        const responseData = await api.put(`/assets/${id}`, asset);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
 // export function addAsset(asset){
 //   api.post("/assets", asset)
 //      .then((responseData) => alert(responseData))
