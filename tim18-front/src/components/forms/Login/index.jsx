@@ -4,6 +4,9 @@ import { LoginForm} from "./LoginForm";
 import { motion } from "framer-motion";
 import { AccountContext } from "./AccountContext";
 import { SignupForm } from "./SignupForm";
+import { Router, Routes, Route } from "react-router-dom";
+import ClientBase from "../../../layouts/ClientBase"
+import RenterBase from "../../../layouts/RenterBase"
 
 const BoxContainer = styled.div`
   width: 50%;
@@ -93,7 +96,7 @@ const expandingTransition = {
   stiffness: 30,
 };
 
-export function AccountBox(props) {
+export function AccountBox({handleLogin}) {
   const [isExpanded, setExpanded] = useState(false);
   const [active, setActive] = useState("signin");
 
@@ -121,6 +124,7 @@ export function AccountBox(props) {
   const contextValue = { switchToSignup, switchToSignin };
 
   return (
+   <> 
     <AccountContext.Provider value={contextValue}>
       <BoxContainer>
         <TopContainer>
@@ -146,10 +150,11 @@ export function AccountBox(props) {
           )}
         </TopContainer>
         <InnerContainer>
-          {active === "signin" && <LoginForm />}
+          {active === "signin" && <LoginForm handleLogin={handleLogin}/>}
           {active === "signup" && <SignupForm />}
         </InnerContainer>
       </BoxContainer>
-    </AccountContext.Provider>
+      </AccountContext.Provider>
+    </>
   );
 }

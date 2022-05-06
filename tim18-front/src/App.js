@@ -1,17 +1,15 @@
-import React from 'react';
-import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
-import CreateResortForm from './components/forms/CreateResortForm.js'
-import {Container} from 'react-bootstrap'
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import ResortDetailedView from './components/asset/ResortDetailedView.js';
-import ProfilePreview from './components/profile/ProfilePreview.js';
-import ClientBase from './layouts/ClientBase.js';
-import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
-import Calendar from './components/calendar/Calendar.js';
-import UpdateInstructorProfileForm from './components/forms/UpdateInstructorProfileForm.js';
+import React, { useState, useEffect, useRef } from 'react';
 import { AccountBox } from "./components/forms/Login";
 import styled from "styled-components";
 import '../src/assets/styles/login.css'
+import {BrowserRouter as Router, Route, Routes, Navigate, Outlet} from 'react-router-dom';
+import RenterBase from './layouts/RenterBase';
+import { getRole, getToken } from './services/AuthService/AuthService';
+import ClientNavbar from "./layouts/navbar/ClientNavbar"
+import ProfilePreview from './components/profile/ProfilePreview';
+import ClientProfilePreview from './components/profile/ClientProfilePreview';
+import UpdateClientProfile from './components/forms/UpdateClientProfile';
+import ClientBase from './layouts/ClientBase';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -22,45 +20,51 @@ const AppContainer = styled.div`
   justify-content: center;
 `;
 function App() {
-  const client = true;  //<ClientBase />
-  const instructor = true;
-  if(client){
-    return  <AppContainer>
-              <AccountBox />
-          </AppContainer>
+  const [user, setUser] = React.useState(getRole());
+
+  const handleLogout = () => setUser(null);
+  const handleLogin = (user) => {setUser(user); };  
+  const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
+
+  const profile = <ProfilePreview profileComponent={<ClientProfilePreview />}/>
+  const updateProfile = <UpdateClientProfile/> 
+  return  (<Router>
+            <Routes>
+              <Route path='welcome/' element={<ProtectedRoute isAllowed={user==="ResortRenter" || user==='Client'}>  
+                                                      {user==="ResortRenter" && <RenterBase handleLogout={handleLogout}/> } 
+                                                      {user==="Client" && <ClientBase handleLogout={handleLogout}/> } 
+                                                </ProtectedRoute>}>
+                                        
+                  <Route path="/welcome/profile" element={profile} /> 
+                  <Route path="/welcome/settings" element={updateProfile} />
+              </Route>
+              
+              <Route path="login" element={login} />
+              <Route index element={login} />
+              <Route path="*" element={<h1>Sorry, this page is not available :( </h1>} />
+            </Routes>
+          
+          </Router>);
+        
+}
+const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children}) => {
+  if (!isAllowed) {
+    return <Navigate to={redirectPath} replace />;
   }
-  else{
-    const resortForm = <CreateResortForm />
-    localStorage.setItem("userId", 2)
-    const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
-    const resortView = <ResortDetailedView />
-    const calendar = <Calendar/>
-    let updateProfile;
-    if (instructor){
-      updateProfile = <UpdateInstructorProfileForm id={localStorage.getItem("userId")}/>
-    }
-    return (
-      <Router>
-        <div>
-          <body>
-            {/* <ResortRenterNavbar/> */}
-            <ResortRenterNavbar/>
-            <Container>
-              <Routes>
-                  {/* Creating/Registrating Resorts/Boats */}
-                <Route path="/createResort" element={resortForm} /> 
-                  {/* For other's Profile page */}
-                <Route path="/profile" element={profile} /> 
-                <Route path="/resorts" element={resortView} /> 
-                <Route path="/calendar" element={calendar}/>
-                <Route path="/settings" element={updateProfile} />
-              </Routes>
-            </Container>
-          </body>
-        </div>
-      </Router>
-    );
-  }
+
+  return children// ? children : <Outlet />;
+};
+
+
+function LayoutsWithNavbar() {
+  return (
+    <>
+      <ClientNavbar />
+
+      {/* This Outlet is the place in which react-router will render your components that you need with the navbar */}
+      <Outlet /> 
+    </>
+  );
 }
 
 export default App;

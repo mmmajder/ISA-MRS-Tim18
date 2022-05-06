@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { AccountContext } from "../AccountContext";
-import { SignupForm } from "../SignupForm";
 import '../../../assets/styles/login.css'
 
 const backdropVariants = {
@@ -71,36 +70,37 @@ const backdropVariants = {
     const contextValue = { switchToSignup, switchToSignin };
   
     return (
-      <AccountContext.Provider value={contextValue}>
-        <div className="BoxContainer">
-          <div className="TopContainer">
-            <BackDrop
-              initial={false}
-              animate={isExpanded ? "expanded" : "collapsed"}
-              variants={backdropVariants}
-              transition={expandingTransition}
-            />
-            {active === "signin" && (
-                <div className="HeaderContainer">
-                    <h2 className="HeaderText">Welcome</h2>
-                    <h2 className="HeaderText">Back</h2>
-                    <h5 className="SmallText">Please sign-in to continue!</h5>
-                </div>
-            )}
-            {active === "signup" && (
-                <div className="HeaderContainer">
-                    <h2 className="HeaderText">Create</h2>
-                    <h2 className="HeaderText">Account</h2>
-                    <h5 className="SmallText">Please sign-up to continue!</h5>
-                </div>
-            )}
+        <AccountContext.Provider value={contextValue}>
+          <div className="BoxContainer">
+            <div className="TopContainer">
+              <BackDrop
+                initial={false}
+                animate={isExpanded ? "expanded" : "collapsed"}
+                variants={backdropVariants}
+                transition={expandingTransition}
+              />
+              {active === "signin" && (
+                  <div className="HeaderContainer">
+                      <h2 className="HeaderText">Welcome</h2>
+                      <h2 className="HeaderText">Back</h2>
+                      <h5 className="SmallText">Please sign-in to continue!</h5>
+                  </div>
+              )}
+              {active === "signup" && (
+                  <div className="HeaderContainer">
+                      <h2 className="HeaderText">Create</h2>
+                      <h2 className="HeaderText">Account</h2>
+                      <h5 className="SmallText">Please sign-up to continue!</h5>
+                  </div>
+              )}
+            </div>
+            <div className="InnerContainer">
+              {active === "signin" && <LoginForm props={this} />}
+              {/*active === "signup" && <SignupForm />*/}
+            </div>
           </div>
-          <div className="InnerContainer">
-            {/*active === "signin" && <LoginForm />*/}
-            {active === "signup" && <SignupForm />}
-          </div>
-        </div>
-      </AccountContext.Provider>
+        </AccountContext.Provider>
+
     );
   }
   
