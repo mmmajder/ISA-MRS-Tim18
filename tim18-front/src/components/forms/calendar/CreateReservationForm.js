@@ -31,7 +31,7 @@ const CreateReservationForm = (props) => {
         return (
             <Card className='mb-5 mt-3' style={{color: "#123", borderRadius: "25px"}}>
                     <Card.Body>
-                        <Card.Title>Add period of availablity</Card.Title>
+                        <Card.Title >Add period of availablity</Card.Title>
                         <div className='mb-2'>
                             <label className='lbl__create_avbl_period'>From: </label>
                             <DateTimePicker id="from" onChange={setStartDateTime} value={startDateTime}/>

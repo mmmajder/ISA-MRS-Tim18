@@ -73,6 +73,7 @@ const Calendar = ({id}) => {
         }
       }/>       
       </div>
+      <div style={{marginTop: "15px"}}>
       <FullCalendar 
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
@@ -126,6 +127,7 @@ const Calendar = ({id}) => {
             backgroundColor: "#5da4b4",
           }}
         />
+        </div>
     </div>
     
   )

@@ -20,6 +20,45 @@
   clear: both;
   float:left;
   margin-right:15px;
+
+  
+}
+
+.react-datetime-picker__inputGroup__input .react-datetime-picker__inputGroup__amPm {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  -moz-padding-start: calc(0.75rem - 3px);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s
+}
+
+.react-datetime-picker__wrapper {
+  
+  display: block;
+  width: 100%;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  -moz-padding-start: calc(0.75rem - 3px);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s
 }
 
 .fc .fc-button {
@@ -34,7 +73,7 @@
 .fc .fc-button-primary {
   background-color: var(--dark-blue);
   border: none;
-  
+
 } 
 .fc .fc-button-primary:hover {
   background-color: var(--dark-blue);
@@ -67,3 +106,48 @@
   border-color: var(--dark-blue);
 }
 
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+.react-datetime-picker__calendar  {
+  z-index: 9999 !important;
+
+}
+
+.react-datetime-picker__calendar--open {
+  z-index: 9999 !important;
+
+}
+
+.react-calendar {
+  z-index: 9999 !important;
+
+}
+
+.react-calendar__viewContainer {
+  z-index: 9999 !important;
+
+}
+
+.datePicker {
+  border-radius: 0.25rem;
+}
+/* 
+display: block;
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    -moz-padding-start: calc(0.75rem - 3px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-image: url(data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3e%3cpath fill=%27none%27 stroke=%27%23343a40%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M2 5l6 6 6-6%27/%3e%3c/svg%3e);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s */

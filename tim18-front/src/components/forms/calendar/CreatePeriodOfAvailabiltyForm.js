@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker'
 import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
@@ -44,31 +44,52 @@ const CreatePeriodOfAvailabiltyForm = (props) => {
         return (
             <Card className='mb-5 mt-3' style={{color: "#123", borderRadius: "25px"}}>
                     <Card.Body>
-                        <Card.Title>Add period of availablity</Card.Title>
-                        <div className='mb-2'>
-                            <label className='lbl__create_avbl_period'>From: </label>
+                        <Card.Title className='mb-2'>Add period of availablity</Card.Title>
+                        <div className='mb-2 mt-2'>
+                            <Row>
+                            <Col sm='1'>
+                                <label className='lbl__create_avbl_period'>From: </label>
+                            </Col>
+                            <Col sm='5'>
                             <DateTimePicker id="from" onChange={setStartDateTime} value={startDateTime}/>
+                            </Col>
+                            <Col sm='1'>
+                                <label className='lbl__create_avbl_period'>Recurring: </label>
+                            </Col>
+                            <Col sm='5'>
+                                <div className='mb-2'>
+                                    <Form>
+                                    <Form.Check 
+                                        type="switch"
+                                        id="custom-switch"
+                                    />
+                                    </Form>
+                                </div>
+                            </Col>
+                            </Row>
                         </div>
-                        <div className='mb-2'> 
-                            <label className='lbl__create_avbl_period'>To: </label>
-                            <DateTimePicker id="to" onChange={setEndDateTime} value={endDateTime}/>
-                        </div>
-                        {props.scope=="global" ? (<div className='mb-2'>
-                            <label className='lbl__create_avbl_period'>Asset:</label>
-                            <select name="assets" id="assets" value={assetId} onChange={(e)=>{setAssetId(e.target.value);}} >
-                                <option></option>
+                        <div className='mb-2 mt-2'>
+                            <Row>
+                            <Col sm='1'>
+                                <label className='lbl__create_avbl_period'>To: </label>
+                            </Col>
+                            <Col sm='5'>
+                                <DateTimePicker id="to" onChange={setEndDateTime} value={endDateTime}/>
+                            </Col>
+                            
+                            <Col sm='1'>
+                                {props.scope=="global" ? (<label className='lbl__create_avbl_period'>Asset:</label>) : []}
+                            </Col>
+                            <Col sm='5'>
+                                {props.scope=="global" ? (
+                                    <Form.Select aria-label="Default select example" name="assets" id="assets" value={assetId} onChange={(e)=>{setAssetId(e.target.value);}}>
+                                    <option></option>
                                 { assets.map((asset) => <option value={asset.id}>{asset.name}</option>) }
-                            </select>
-                        </div>) : []}
-                        <div className='mb-2'>
-                            <Form>
-                            <Form.Check 
-                                type="switch"
-                                id="custom-switch"
-                                label="Is recurring event?"
-                            />
-                            </Form>
+                                </Form.Select>) : []}
+                            </Col>
+                            </Row>
                         </div>
+                        
                         <Button className='mb-2 mt-2' style={{backgroundColor: "#5da4b4", borderColor: "#5da4b4"}} onClick={addAppointment}>Add appointment</Button>
                     </Card.Body>
                 </Card>
