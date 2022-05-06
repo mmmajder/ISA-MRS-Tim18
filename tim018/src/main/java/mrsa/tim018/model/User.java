@@ -131,7 +131,7 @@ public class User implements UserDetails{
 		this.enabled = true;
 	}*/
 	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled) {
 		super();
 		this.id = iD;
 		this.isDeleted = isDeleted;
@@ -145,6 +145,7 @@ public class User implements UserDetails{
 		this.loyaltyPoints = loyaltyPoints;
 		this.email = email;
 		this.password = password;
+		this.enabled = enabled;
 	}
 	
 

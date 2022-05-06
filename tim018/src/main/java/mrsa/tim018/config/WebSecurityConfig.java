@@ -27,13 +27,13 @@ import mrsa.tim018.utils.auth.TokenAuthenticationFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	// Servis koji se koristi za citanje podataka o korisnicima aplikacije
 	@Autowired
-	private UserService userService;
+	private UserService customUserDetailsService;
 
 	// Handler za vracanje 401 kada klijent sa neodogovarajucim korisnickim imenom i lozinkom pokusa da pristupi resursu
 	@Autowired
@@ -54,11 +54,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 			// 1. koji servis da koristi da izvuce podatke o korisniku koji zeli da se autentifikuje
 			// prilikom autentifikacije, AuthenticationManager ce sam pozivati loadUserByUsername() metodu ovog servisa
-			.userDetailsService(userService) ;
+			.userDetailsService(customUserDetailsService)
 			
 			// 2. kroz koji enkoder da provuce lozinku koju je dobio od klijenta u zahtevu 
 			// da bi adekvatan hash koji dobije kao rezultat hash algoritma uporedio sa onim koji se nalazi u bazi (posto se u bazi ne cuva plain lozinka)
-			//.passwordEncoder(passwordEncoder());
+			.passwordEncoder(passwordEncoder());
 	}
 
 	// Injektujemo implementaciju iz TokenUtils klase kako bismo mogli da koristimo njene metode za rad sa JWT u TokenAuthenticationFilteru
@@ -94,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.cors().and()
 
 			// umetni custom filter TokenAuthenticationFilter kako bi se vrsila provera JWT tokena umesto cistih korisnickog imena i lozinke (koje radi BasicAuthenticationFilter)
-			.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class);
+			.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);
 		
 		// zbog jednostavnosti primera ne koristimo Anti-CSRF token (https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
 		http.csrf().disable();

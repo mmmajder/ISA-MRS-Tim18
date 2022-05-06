@@ -26,8 +26,8 @@ public class Renter extends User {
 
 	// DTO
 	public Renter(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, List<Asset> assets) {
-		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password);
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, List<Asset> assets) {
+		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
 		this.assets = assets;
 	}
 

@@ -28,9 +28,9 @@ public class Client extends User {
 	}
 
 	public Client(Long id, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, int penaltyPoints) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, int penaltyPoints) {
 		
-		super(id, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password);
+		super(id, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
 		this.penaltyPoints = penaltyPoints;
 	}
 
