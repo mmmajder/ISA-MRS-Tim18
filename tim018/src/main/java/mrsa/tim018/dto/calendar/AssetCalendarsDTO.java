@@ -2,17 +2,17 @@ package mrsa.tim018.dto.calendar;
 
 import mrsa.tim018.model.AssetCalendar;
 
-public class UserCalendarsDTO {
+public class AssetCalendarsDTO {
 	private long id;
 	private String name;
 	private AssetCalendar calendar;
 
-	public UserCalendarsDTO() {
+	public AssetCalendarsDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserCalendarsDTO(long id, String name, AssetCalendar calendar) {
+	public AssetCalendarsDTO(long id, String name, AssetCalendar calendar) {
 		super();
 		this.id = id;
 		this.name = name;

@@ -14,50 +14,7 @@ import { getCalendarData } from '../../services/api/CalendarApi'
 const Calendar = ({id}) => {
   const calendarRef = createRef()
   const [resources, setResources] = useState()
-  const [events, setEvents] = useState()/*[
-    {
-      title  : 'event1',
-      //start  : '2022-04-01',
-      daysOfWeek: [ '1', '4' ],
-      backgroundColor: '#EC5800',
-      borderColor: '#EC5800'
-    },
-    {
-      title  : 'event2',
-      resourceId: 'a',
-      start  : '2022-04-05',
-      end    : '2022-04-07'
-    },
-    {
-      title  : 'event3',
-      resourceId: 'a',
-      start  : '2022-04-09T12:30:00',
-      allDay : false // will make the time show
-    },
-    {
-      title  : 'event3',
-      resourceId: 'a',
-      start  : '2022-04-09T12:30:00',
-      allDay : false // will make the time show
-    },
-    {
-      title  : 'event3',
-      resourceId: 'a',
-      start  : '2022-04-09T12:30:00',
-      allDay : false // will make the time show
-    },
-    {
-      title  : 'event4',
-      start  : '2022-04-09T11:30:00',
-      allDay : false // will make the time show
-    },
-    {
-      title  : 'event5',
-      start  : '2022-04-09T14:30:00',
-      allDay : false // will make the time show
-    }
-  ]) */
-
+  const [events, setEvents] = useState()
 
   useEffect(() => {
     async function fetchCalendarData(){
@@ -71,7 +28,7 @@ const Calendar = ({id}) => {
             setResources([res])
           } else { setResources([...resources, res]) }
           
-          return element.calendar.availableSingle.map(function(range) {
+          let retData = element.calendar.availableSingle.map(function(range) {
             var info = {
               title : "Available",
               resourceId : element.id,
@@ -80,6 +37,18 @@ const Calendar = ({id}) => {
             }
             return info;
           })
+          retData = [...retData, ...element.calendar.specialPriceSingle.map(function(range) {
+            var info = {
+              title : "Special offer",
+              resourceId : element.id,
+              start : range.timeRange.fromDateTime,
+              end : range.timeRange.toDateTime,
+              backgroundColor : "orange",
+              borderColor : "orange"
+            }
+            return info;
+          })]
+          return retData
         }
         );
         if (requestData) {
@@ -96,7 +65,7 @@ const Calendar = ({id}) => {
   return (
     <div>
       <div>
-        <CreateCalendarEventForm onChange={(value)=>{
+        <CreateCalendarEventForm scope={"global"} onChange={(value)=>{
           if (!!events) {
             setEvents([...events, value])
           } else { setEvents([value])}
@@ -105,7 +74,6 @@ const Calendar = ({id}) => {
       }/>       
       </div>
       <FullCalendar 
-          //dayCellContent = {injectCellCOntent}
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
           plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
@@ -115,43 +83,10 @@ const Calendar = ({id}) => {
           select = {function(start, end, allDays) {
             console.log(start)
           }}
-          resources={resources/*[
-            {
-              id: 'a',
-              title: 'Room A',
-              
-            },
-            {
-              id: 'b',
-              title: 'Room B',
-              occupancy: 220
-            }
-          ]*/}
+          resources={resources}
           events={events}
           
           customButtons={{
-            myTimeDayBtn: {
-              text: "Time Day",
-              click() {
-                const calendar = calendarRef.current
-                if (calendar) {
-                  const calendarApi = calendar.getApi();
-                  calendarApi.changeView("timeGridDay")
-                }
-                // alert("Clicked")
-              }
-            },
-            myTimeWeekBtn: {
-              text: "Time Week",
-              click() {
-                const calendar = calendarRef.current
-                if (calendar) {
-                  const calendarApi = calendar.getApi();
-                  calendarApi.changeView("timeGridWeek")
-                }
-                // alert("Clicked")
-              }
-            },
             myTimeLineDayBtn: {
               text: "Timeline Day",
               click() {
@@ -160,7 +95,6 @@ const Calendar = ({id}) => {
                   const calendarApi = calendar.getApi();
                   calendarApi.changeView("resourceTimelineDay")
                 }
-                // alert("Clicked")
               }
             },
             myTimeLineWeekBtn: {
@@ -171,7 +105,6 @@ const Calendar = ({id}) => {
                   const calendarApi = calendar.getApi();
                   calendarApi.changeView("resourceTimelineWeek")
                 }
-                // alert("Clicked")
               }
             },
             myTimeLineMonthBtn: {
@@ -182,7 +115,6 @@ const Calendar = ({id}) => {
                   const calendarApi = calendar.getApi();
                   calendarApi.changeView("resourceTimelineMonth")
                 }
-                // alert("Clicked")
               }
             }
           }}
@@ -190,8 +122,8 @@ const Calendar = ({id}) => {
           headerToolbar={{
             left: "prev,next",
             center: "title",
-            right: "today,dayGridDay,dayGridWeek,dayGridMonth,myTimeDayBtn,myTimeWeekBtn,myTimeLineDayBtn,myTimeLineWeekBtn,myTimeLineMonthBtn",
-            backgroundColor: "#5da4b4"
+            right: "today,myTimeLineDayBtn,myTimeLineWeekBtn,myTimeLineMonthBtn",
+            backgroundColor: "#5da4b4",
           }}
         />
     </div>

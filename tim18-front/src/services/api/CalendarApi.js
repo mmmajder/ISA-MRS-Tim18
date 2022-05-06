@@ -20,3 +20,13 @@ export async function getCalendarData(id){
         return err.message
     }
   }
+
+export async function getAssetCalendarData(idAsset){
+try {
+    const responseData = await api.get(`/calendar/assetCalendar/${idAsset}`);
+    return responseData;
+} catch (err) {
+    console.log(err.message);
+    return err.message
+}
+}

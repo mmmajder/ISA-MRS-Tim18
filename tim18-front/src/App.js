@@ -10,6 +10,8 @@ import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
 import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfile from './components/forms/UpdateInstructorProfileForm.js';
 import { faListSquares } from '@fortawesome/free-solid-svg-icons';
+import { CalendarContent } from '@fullcalendar/react';
+import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
 
 function App() {
   const client = false;
@@ -30,6 +32,7 @@ function App() {
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />
     const calendar = <Calendar id={localStorage.getItem("userId")}/>
+    const assetCalendar = <CalendarAsset/>
     let updateProfile;
     if (instructor){
       updateProfile = <UpdateInstructorProfile id={localStorage.getItem("userId")}/>
@@ -49,6 +52,7 @@ function App() {
                 <Route path="/resorts" element={resortView} /> 
                 <Route path="/calendar" element={calendar}/>
                 <Route path="/settings" element={updateProfile} />
+                <Route path="/calendarAsset" element={assetCalendar}/>
               </Routes>
             </Container>
           </body>

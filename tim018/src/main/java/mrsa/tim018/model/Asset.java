@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class Asset {
 
 	@ManyToOne
 	@JoinColumn(name = "renter_id")
+	@JsonBackReference
 	private Renter renter;
 	
 	@Column(name = "name", nullable = false)

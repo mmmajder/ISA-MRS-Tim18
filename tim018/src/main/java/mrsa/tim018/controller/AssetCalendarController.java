@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.calendar.AssetPeriodsDTO;
-import mrsa.tim018.dto.calendar.UserCalendarsDTO;
+import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.service.AssetCalendarSevice;
+import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.RenterService;
 
 @RestController
@@ -30,23 +31,37 @@ import mrsa.tim018.service.RenterService;
 public class AssetCalendarController<T> {
 	@Autowired
 	private AssetCalendarSevice calendarService;
+	
+	@Autowired
+	private AssetService assetService;
 
 	@Autowired
 	private RenterService renterService;
 	
 	@GetMapping(value = "/allCalendarsForUser/{id}") 
-	public ResponseEntity<List<UserCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
+	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
 		Renter renter = renterService.findOne(id);
 		List<Asset> assets = renter.getAssets();
-		List<UserCalendarsDTO> data = new ArrayList<UserCalendarsDTO>();
+		List<AssetCalendarsDTO> data = new ArrayList<AssetCalendarsDTO>();
 		for (Asset asset : assets) {
 			try {
-				data.add(new UserCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
+				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
 			} catch (Exception e) { 
 			}
 		}
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}	
+	
+	@GetMapping(value = "/assetCalendar/{idAsset}") 
+	public ResponseEntity<AssetCalendarsDTO> getAssetsCalendar(@PathVariable Long idAsset) {
+		Asset asset = assetService.findById(idAsset);
+		try {
+			AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar());
+			return new ResponseEntity<>(data, HttpStatus.OK);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	
 
 	/*@GetMapping(value = "/allAssets/{id}")

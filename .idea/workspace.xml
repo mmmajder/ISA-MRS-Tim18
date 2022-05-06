@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="db11ec79-1f58-4721-9fb5-57f24c9a0a37" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/controller/AssetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/controller/AssetController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/dto/AppointmentCreationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/dto/AppointmentCreationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Asset.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Asset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/AssetCalendar.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/AssetCalendar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Renter.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Renter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/Reservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/SpecialOffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/model/SpecialOffer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/repository/AssetRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/repository/AssetRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/service/AssetCalendarSevice.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/service/AssetCalendarSevice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/service/AssetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/tim018/src/main/java/mrsa/tim018/service/AssetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim18-front/src/assets/styles/calendar.css" beforeDir="false" afterPath="$PROJECT_DIR$/tim18-front/src/assets/styles/calendar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim18-front/src/components/calendar/Calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/tim18-front/src/components/calendar/Calendar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim18-front/src/components/forms/calendar/CreateCalendarEventForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/tim18-front/src/components/forms/calendar/CreateCalendarEventForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tim18-front/src/services/api/AssetApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/tim18-front/src/services/api/AssetApi.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="28kvXQHZQT7y3SdDVBXARHjmjZa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../ORI/Vezbe/PripremaZaPrviKlk/k1-priprema/src-python3" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="db11ec79-1f58-4721-9fb5-57f24c9a0a37" name="Default Changelist" comment="" />
+      <created>1651773437658</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651773437658</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1651773467714">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.1080.1536.832/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1651773467714" />
+  </component>
+</project>
