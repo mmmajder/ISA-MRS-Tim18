@@ -10,8 +10,9 @@ import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput
 import DeleteRequest from './PopUps/DeleteRequest';
 import {getDeleteRequestByID} from '../../services/api/DeleteRequestApi';
 import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
+import { getLogged } from '../../services/api/LoginApi';
 
-export default function UpdateClientProfile({id}){
+export default function UpdateClientProfile(){
     const [client, setClient] = useState();
     const [deletionRequestExists, setDeletionRequest] = useState(false);
 
@@ -23,18 +24,17 @@ export default function UpdateClientProfile({id}){
 
     useEffect(() => {
         async function fetchClient(){
-            const requestData = await getClientByID(id);
-            setClient(!!requestData ? requestData.data : {});
-            return requestData;
+            await getLogged(setClient);
         }
         fetchClient();
 
-        async function fetchDeleteRequest(){
-            const requestData = await getDeleteRequestByID(id);
-            setDeletionRequest(!!requestData ? true : false);
-        }
-        fetchDeleteRequest();
-    }, [])
+       
+    }, []) 
+    async function fetchDeleteRequest(){
+        const requestData = await getDeleteRequestByID(client.id);
+        setDeletionRequest(!!requestData ? true : false);
+    }
+    
 
     useEffect(() => {
         if (firstUpdate.current) {
@@ -59,9 +59,10 @@ export default function UpdateClientProfile({id}){
     
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
     
-    const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
-    const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
     if(!!client){
+        const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
+        const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={client.id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
+        fetchDeleteRequest();
         return (<>
                 <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
                  {pendingRequest}

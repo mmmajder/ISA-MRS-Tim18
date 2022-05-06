@@ -6,9 +6,10 @@ import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
 import {useEffect, useState} from 'react';
 import { getClientByID } from '../../services/api/ClientApi';
+import { getLogged } from '../../services/api/LoginApi';
 
 
-export default function ClientProfilePreview({id}){
+export default function ClientProfilePreview(){
     const [client, setClient]  = useState();
     const [mark, setMark]  = useState(4.1);                 // TODO: real data
     const [penaltyCount, setPenaltyCount]  = useState(2);   // TODO: real data
@@ -18,9 +19,7 @@ export default function ClientProfilePreview({id}){
 
     useEffect(() => {
         async function fetchClient(){
-            const requestData = await getClientByID(id);
-            setClient(!!requestData ? requestData.data : {});
-            return requestData;
+            await getLogged(setClient);
         }
         fetchClient();
     }, [])
