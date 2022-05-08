@@ -21,5 +21,7 @@ insert into asset (id, address, average_rating, cancelation_conditions, descript
 				  (3, 'Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', 10003, 1),
 				  (4, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10004, 1),
 				  (5, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10005, 1);
-				   
+insert into time_range (is_deleted, from_date_time, to_date_time) values
+				  (false, '2022-05-08T17:37:15', '2022-05-10T17:37:15');
+insert into asset_calendar_available_single (asset_calendar_id, available_single_id)
 
