@@ -27,10 +27,10 @@ export default function ListedAsset({asset}){
                     </Col>
                     <Col sm="6">
                         <Row>
-                            <Col sm="6">
+                            <Col sm="7">
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
                             </Col>
-                            <Col sm="4">
+                            <Col sm="3">
                                 
                             </Col>
                             <Col sm="2" >

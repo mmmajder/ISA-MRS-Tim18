@@ -14,7 +14,7 @@ const UsersOffersDropdown = ({userType}) => {
                 <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
             </NavDropdown>)
             break;
-        case "resortOwner":
+        case "resortRenter":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} />Resorts </span>}> 
                 <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
                 <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new resorts</NavDropdown.Item>
@@ -22,7 +22,7 @@ const UsersOffersDropdown = ({userType}) => {
                 <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
             </NavDropdown>)
             break;
-        case "boatOwner":
+        case "boatRenter":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faAnchor} />Boats </span>}> 
                 <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faShip} /> My boats</NavDropdown.Item> 
                 <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new boats</NavDropdown.Item>
