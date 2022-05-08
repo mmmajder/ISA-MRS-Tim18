@@ -13,24 +13,44 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Resort extends Asset {
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Room> rooms;
-
+	@Column(name = "numberOfBeds")
+	private int numberOfBeds;
+	
+	@Column(name = "numberOfRooms")
+	private int numberOfRooms;
+	
 	public Resort() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Resort(Long id, boolean isDeleted, String name, String address, String description, List<String> photos,
+	public Resort(Long id, boolean isDeleted,  AssetType assetType, String name, String address, String description, List<String> photos,
 			String rules, int numOfPeople, int cancelationConditions, double averageRating) {
-		super(id, isDeleted, name, address, description, photos, rules, numOfPeople, cancelationConditions,
+		super(id, isDeleted, assetType, name, address, description, photos, rules, numOfPeople, cancelationConditions,
 				averageRating);
 		// TODO Auto-generated constructor stub
 	}
 
-	public Resort(List<Room> rooms) {
-		super();
-		this.rooms = rooms;
+	public Resort(Long id, boolean isDeleted,  AssetType assetType, String name, String address, String description, List<String> photos,
+			String rules, int numOfPeople, int cancelationConditions, double averageRating, int numberOfRooms, int numberOfBeds) {
+		super(id, isDeleted, assetType, name, address, description, photos, rules, numOfPeople, cancelationConditions,
+				averageRating);
+		this.numberOfRooms = numberOfRooms;
+		this.numberOfBeds = numberOfBeds;
 	}
 
+	public int getNumberOfBeds() {
+		return numberOfBeds;
+	}
+
+	public void setNumberOfBeds(int numberOfBeds) {
+		this.numberOfBeds = numberOfBeds;
+	}
+
+	public int getNumberOfRooms() {
+		return numberOfRooms;
+	}
+
+	public void setNumberOfRooms(int numberOfRooms) {
+		this.numberOfRooms = numberOfRooms;
+	}
 }

@@ -20,6 +20,7 @@ import mrsa.tim018.dto.AssetDTO;
 import mrsa.tim018.mapper.AssetMapper;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.service.AssetService;
+import mrsa.tim018.service.ResortService;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -28,6 +29,9 @@ public class AssetController {
 	
 	@Autowired
 	private AssetService assetService;
+	
+	@Autowired
+	private ResortService resortService;
 	
 	
 	@PostMapping(consumes = "application/json")
@@ -47,8 +51,7 @@ public class AssetController {
 		
 		if (assetToUpdate != null)
 		{
-			// ne sacuvavati sve ovo vec samo one promenljive vrednosti koje
-			// se ustvari i menjaju
+			// changes only user-changable attributes
 			assetToUpdate.setAddress(updatedAsset.getAddress());
 			assetToUpdate.setCancelationConditions(updatedAsset.getCancelationConditions());
 			assetToUpdate.setDescription(updatedAsset.getDescription());

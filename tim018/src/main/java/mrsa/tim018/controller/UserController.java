@@ -23,15 +23,12 @@ public class UserController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<User> getUser(@PathVariable Long id) {
-		System.out.println("STIGAO");
 		User user = userService.findOne(id);
 
 		// studen must exist
 		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}

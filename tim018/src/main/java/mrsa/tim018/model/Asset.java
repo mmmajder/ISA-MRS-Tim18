@@ -39,6 +39,9 @@ public class Asset {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
+	@Column(name = "assetType", nullable = false)
+	private AssetType assetType;
+	
 	@Column(name = "address", nullable = false)
 	private String address;
 	
@@ -60,6 +63,9 @@ public class Asset {
 	@Column(name = "averageRating", nullable = false)
 	private double averageRating;
 	
+	@Column(name = "price")
+	private double price;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	private AssetCalendar calendar;
 	
@@ -74,11 +80,12 @@ public class Asset {
 		return isDeleted;
 	}
 
-	public Asset(Long id, boolean isDeleted, String name, String address, String description, List<String> photos,
+	public Asset(Long id, boolean isDeleted, AssetType assetType, String name, String address, String description, List<String> photos,
 			String rules, int numOfPeople, int cancelationConditions, double averageRating) {
 		super();
 		this.id = id;
 		this.isDeleted = isDeleted;
+		this.assetType = assetType;
 		this.name = name;
 		this.address = address;
 		this.description = description;
@@ -168,6 +175,22 @@ public class Asset {
 
 	public Long getID() {
 		return id;
+	}
+
+	public AssetType getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	
 }
