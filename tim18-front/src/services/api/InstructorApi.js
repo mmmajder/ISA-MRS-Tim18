@@ -17,6 +17,16 @@ export async function getInstructorByID(id){
   }
 }
 
+export async function getRenter(id){
+  try {
+      const responseData = await api.get(`/users/${id}`);
+      return responseData;
+  } catch (err) {
+      console.log(err.message);
+      return err.message
+  }
+}
+
 export async function updateInstructor(instructorData){
   try {
       const responseData = await api.put(`/fishingInstructors`, instructorData);

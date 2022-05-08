@@ -3,7 +3,6 @@ import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
 import CreateAssetForm from './components/forms/CreateAssetForm.js'
 import {Container} from 'react-bootstrap'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import ResortDetailedView from './components/asset/ResortDetailedView.js';
 import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
@@ -14,6 +13,7 @@ import AssetList from './components/asset/AssetsList.js';
 import UpdateResortForm from './components/forms/UpdateResortForm.js';
 import { CalendarContent } from '@fullcalendar/react';
 import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
+import AssetDetailedView from './components/asset/AssetDetailedView.js';
 
 function App() {
   const client = false;
@@ -34,7 +34,7 @@ function App() {
   else{
     const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
-    const resortView = <ResortDetailedView />
+    const resortView = <AssetDetailedView />
     const assetList = <AssetList />
     const resortUpdate = <UpdateResortForm />
     const calendar = <Calendar id={localStorage.getItem("userId")}/>

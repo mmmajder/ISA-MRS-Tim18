@@ -8,18 +8,14 @@ import AssetOtherInfo from './AssetOtherInfo';
 import { faPenToSquare, faTrash, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom";
+import ResortSpecificInfo from './ResortSpecificInfo';
+import BoatSpecificInfo from './BoatSpecificInfo';
+import FishingSpecificInfo from './FishingSpecificInfo';
 import { getAssetById } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
-export default function ResortDetailedView(){
-    let resortImage; 
-    if (localStorage.getItem("userType")=="instructor") {
-        resortImage = require('../../assets/images/FishingAdventure3.png')
-    } else {
-        resortImage = require('../../assets/images/Maldives.jpg')
-    }
-    
+export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
 
@@ -33,20 +29,35 @@ export default function ResortDetailedView(){
         fetchAsset();
     }, [id])
 
+    console.log(asset);
+
+    // let assetType = "RESORT";
+    let assetType = asset.assetType;
+    // let assetType = "FISHING";
+
+    let assetImage; 
+    if (assetType === "FISHING_ADVENTURE") {
+        assetImage = require('../../assets/images/FishingAdventure3.png')
+    } else if (assetType === "RESORT") {
+        assetImage = require('../../assets/images/Maldives.jpg')
+    } else {
+        assetImage = require('../../assets/images/boat.jpg')
+    }
+
     const linkToEditPage = "/resorts/update/" + id;
     const linkToCalendar = "/calendarAsset";
-    //<a href="/calendarAsset" style={{color:"grey"}}><FontAwesomeIcon icon={faCalendarDays} className="fa-lg" /></a>
+
     return <>
             <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="6">
-                        <img src={resortImage} className="assetImage"/>
-                        <RenterInfo/>
+                        <img src={assetImage} className="assetImage"/>
+                        {asset !== {} && <RenterInfo/>}
                     </Col>
                     <Col sm="6">
                         <Row>
                             <Col sm="9">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address}/>
+                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
                             </Col> 
                             <Col sm="3">
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
@@ -55,6 +66,9 @@ export default function ResortDetailedView(){
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.maxNumOfPeope} cancelationFee={asset.cancelationConditions}/>
+                        {assetType === "RESORT" && <ResortSpecificInfo resort={asset}/>}
+                        {assetType === "BOAT" && <BoatSpecificInfo boat={asset}/>}
+                        {assetType === "FISHING_ADVENTURE" && <FishingSpecificInfo fishingAdventure={asset}/>}
                     </Col>
                 </Row>
                 <Row>
@@ -64,11 +78,12 @@ export default function ResortDetailedView(){
                     </Col>
                     <Col sm={4}/>
                 </Row>
+                
                 <Row>
                     {/* Reviews will go under */}
                 </Row>
-                
             </div>
+                
         </>
 }
 

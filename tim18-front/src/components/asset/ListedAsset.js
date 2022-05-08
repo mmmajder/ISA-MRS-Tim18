@@ -5,11 +5,17 @@ import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from './AssetMainInfo';
 
 export default function ListedAsset({asset}){
-    let resortImage; 
-    if (localStorage.getItem("userType")=="instructor") {
-        resortImage = require('../../assets/images/FishingAdventure3.png')
+    // let assetType = "RESORT";
+    let assetType = asset.assetType;
+    // let assetType = "FISHING";
+
+    let assetImage; 
+    if (assetType === "FISHING_ADVENTURE") {
+        assetImage = require('../../assets/images/FishingAdventure3.png')
+    } else if (assetType === "RESORT") {
+        assetImage = require('../../assets/images/Maldives.jpg')
     } else {
-        resortImage = require('../../assets/images/Maldives.jpg')
+        assetImage = require('../../assets/images/boat.jpg')
     }
     
     const detViewUrl = "resorts/" + asset.id;
@@ -17,7 +23,7 @@ export default function ListedAsset({asset}){
     return <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="3">
-                        <img src={resortImage} className="listedAssetImage"/>
+                        <img src={assetImage} className="listedAssetImage"/>
                     </Col>
                     <Col sm="6">
                         <Row>

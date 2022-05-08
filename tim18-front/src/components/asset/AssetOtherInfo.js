@@ -4,8 +4,8 @@ import { Row, Col } from 'react-bootstrap';
 export default function AssetOtherInfo({maxNumOfPeope, cancelationFee, description, rules}){
 
     return <>
-        <Row className="mt-2"><div className="borderedBlockNoShadow" align="">{description}</div></Row>
-        <Row className="mt-2"><div className="borderedBlockNoShadow" align="">{rules}</div></Row>
+        <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Description:    {description}</div></Row>
+        <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Rules:    {rules}</div></Row>
         <Row className="mt-2">
             <Col sm='6'>
                 <p>Maximum number of people: {maxNumOfPeope}</p>
