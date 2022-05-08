@@ -6,7 +6,7 @@ import { faHome, faHouseChimney, faPlus, faBook, faChartLine, faFishFins, faShip
 const UsersOffersDropdown = ({userType}) => {
     let retData = "";
     switch (userType) {
-        case "instructor":
+        case "FISHERMAN":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faFishFins} />Adventures </span>}> 
                 <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faFishFins} /> My adventures</NavDropdown.Item> 
                 <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new adventures</NavDropdown.Item>
@@ -14,7 +14,7 @@ const UsersOffersDropdown = ({userType}) => {
                 <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
             </NavDropdown>)
             break;
-        case "resortRenter":
+        case "RESORT_RENTER":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faHouseChimney} />Resorts </span>}> 
                 <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faHouseChimney} /> My resorts</NavDropdown.Item> 
                 <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new resorts</NavDropdown.Item>
@@ -22,7 +22,7 @@ const UsersOffersDropdown = ({userType}) => {
                 <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
             </NavDropdown>)
             break;
-        case "boatRenter":
+        case "BOAT_RENTER":
             retData=(<NavDropdown title={<span><FontAwesomeIcon icon={faAnchor} />Boats </span>}> 
                 <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={faShip} /> My boats</NavDropdown.Item> 
                 <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new boats</NavDropdown.Item>

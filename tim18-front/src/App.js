@@ -21,9 +21,13 @@ function App() {
 
   const user = {
     id: "1",
-    type: "resortRenter"
+    type: "RESORT_RENTER"
     // type: "renter"
   }
+
+// "BOAT_RENTER":
+// "FISHERMAN":
+// "RESORT_RENTER":
 
   localStorage.setItem("userType", user.type)
   localStorage.setItem("userId", user.id)

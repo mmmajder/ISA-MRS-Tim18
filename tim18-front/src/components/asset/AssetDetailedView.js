@@ -65,7 +65,7 @@ export default function AssetDetailedView(){
                                 <FontAwesomeIcon icon={faTrash} className='faButtons'/>
                             </Col>
                         </Row>
-                        <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.maxNumOfPeope} cancelationFee={asset.cancelationConditions}/>
+                        <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>
                         {assetType === "RESORT" && <ResortSpecificInfo resort={asset}/>}
                         {assetType === "BOAT" && <BoatSpecificInfo boat={asset}/>}
                         {assetType === "FISHING_ADVENTURE" && <FishingSpecificInfo fishingAdventure={asset}/>}

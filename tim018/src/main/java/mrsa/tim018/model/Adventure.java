@@ -22,4 +22,14 @@ public class Adventure extends Asset {
 				averageRating);
 		this.fishingEquipment = fishingEquipment;
 	}
+
+	public String getFishingEquipment() {
+		return fishingEquipment;
+	}
+
+	public void setFishingEquipment(String fishingEquipment) {
+		this.fishingEquipment = fishingEquipment;
+	}
+	
+	
 }

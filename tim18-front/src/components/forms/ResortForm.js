@@ -17,6 +17,10 @@ export default function ResortForm({resort, buttonText, id}){
     const [rules, setRules] = useState();
     const [numOfPeople, setNumOfPeople] = useState();
     const [cancelationFee, setCancelationFee] = useState();
+    const [numberOfRooms, setNumOfRooms] = useState();
+    const [numberOfBeds, setNumOfBeds] = useState();
+
+    const assetType = "RESORT";
     
     // sets resort's values if it's updateResortForm
     useEffect(() => {
@@ -27,13 +31,15 @@ export default function ResortForm({resort, buttonText, id}){
             setRules(resort.rules);
             setNumOfPeople(resort.numOfPeople);
             setCancelationFee(resort.cancelationConditions);
+            setNumOfRooms(resort.numberOfRooms);
+            setNumOfBeds(resort.numberOfBeds);
         }
     }, [resort])
 
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
-            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee}
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, assetType}
             const request = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -41,11 +47,10 @@ export default function ResortForm({resort, buttonText, id}){
             };
             fetch('http://localhost:8000/assets', request) 
                 .then(response => response.json())
-        }, [name, address, description, rules, numOfPeople, cancelationFee]
+        }, [name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds]
     )
 
     const putRequest = useCallback(() => {
-            console.log("evo me tu "+ id + " " + resort.id);
             let updatedResort = {
                 id : id,
                 name : name,
@@ -53,13 +58,16 @@ export default function ResortForm({resort, buttonText, id}){
                 description : description,
                 rules : rules,
                 numOfPeople : numOfPeople,
-                cancelationConditions : cancelationFee
+                cancelationConditions : cancelationFee,
+                numberOfRooms: numberOfRooms,
+                numberOfBeds: numberOfBeds,
+                assetType : assetType
             };
             console.log(updatedResort);
             const response = updateAsset(updatedResort.id, updatedResort);
             console.log(response.data);
             navigate('/resorts/' + id);
-    }, [id, name, address, description, rules, numOfPeople, cancelationFee]);
+    }, [id, name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds]);
 
     const onClickFunction = id === -1 ? postRequest : putRequest;
 
@@ -86,6 +94,23 @@ export default function ResortForm({resort, buttonText, id}){
                             <Form.Control name="cancelationFee"  type="number" min="0" max="100" required
                                 value={cancelationFee} 
                                 onChange={(e) => setCancelationFee(e.target.value)}>
+                            </Form.Control>
+                        </Col>
+                        <Col sm={2}/>
+                    </Row>
+                    <Row className='mt-2'>
+                        <Col sm={3} align='right'><Form.Label>Number of rooms</Form.Label></Col>
+                        <Col sm={2}>
+                            <Form.Control name="numberOfRooms"  type="number" min="1" required
+                                value={numberOfRooms} 
+                                onChange={(e) => setNumOfRooms(e.target.value)}>
+                            </Form.Control>
+                        </Col>
+                        <Col sm={3} align='right'><Form.Label>Number of beds per room </Form.Label></Col>
+                        <Col sm={2}>
+                            <Form.Control name="numberOfBeds"  type="number" min="1" max="100" required
+                                value={numberOfBeds} 
+                                onChange={(e) => setNumOfBeds(e.target.value)}>
                             </Form.Control>
                         </Col>
                         <Col sm={2}/>

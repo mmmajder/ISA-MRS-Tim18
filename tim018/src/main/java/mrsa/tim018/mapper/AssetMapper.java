@@ -3,6 +3,7 @@ package mrsa.tim018.mapper;
 import mrsa.tim018.dto.AssetDTO;
 import mrsa.tim018.dto.BoatDTO;
 import mrsa.tim018.dto.ResortDTO;
+import mrsa.tim018.model.Adventure;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Boat;
 import mrsa.tim018.model.Resort;
@@ -20,6 +21,7 @@ public class AssetMapper {
 		asset.setNumOfPeople(assetDto.getNumOfPeople());
 		asset.setCancelationConditions(assetDto.getCancelationConditions());
 		asset.setAverageRating(assetDto.getAverageRating());
+		asset.setAssetType(assetDto.getAssetType());
 		
 		return asset;
 	}
@@ -37,6 +39,7 @@ public class AssetMapper {
 		resort.setAverageRating(resortDto.getAverageRating());
 		resort.setNumberOfBeds(resortDto.getNumberOfBeds());
 		resort.setNumberOfRooms(resortDto.getNumberOfRooms());
+		resort.setAssetType(resortDto.getAssetType());
 		
 		return resort;
 	}
@@ -59,7 +62,26 @@ public class AssetMapper {
 		boat.setMaxSpeed(boatDto.getMaxSpeed());
 		boat.setNavigationEquipment(boatDto.getNavigationEquipment());
 		boat.setFishingEquipment(boatDto.getFishingEquipment());
+		boat.setAssetType(boatDto.getAssetType());
+		
 
 		return boat;
+	}
+
+	public static Adventure mapToAdventure(AssetDTO adventureDto) {
+		Adventure adventure = new Adventure();
+		adventure.setDeleted(adventureDto.isDeleted());
+		adventure.setName(adventureDto.getName());
+		adventure.setRenter(adventureDto.getRenter());
+		adventure.setAddress(adventureDto.getAddress());
+		adventure.setDescription(adventureDto.getDescription());
+		adventure.setRules(adventureDto.getRules());
+		adventure.setNumOfPeople(adventureDto.getNumOfPeople());
+		adventure.setCancelationConditions(adventureDto.getCancelationConditions());
+		adventure.setAverageRating(adventureDto.getAverageRating());
+		adventure.setFishingEquipment(adventureDto.getFishingEquipment());
+		adventure.setAssetType(adventureDto.getAssetType());
+
+		return adventure;
 	}
 }
