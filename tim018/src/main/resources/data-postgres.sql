@@ -15,6 +15,7 @@ insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty
 				
 insert into asset_calendar (id) values (10001), (10002), (10003), (10004), (10005), (10006), (10007);
 
+
 insert into adventure (id, asset_type, price, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id) values
 			      (1, 2, 50, 'Asset Address', 3.5, 25, 'Description', false, 'Fishing adventure', 3, 'No rules', 10001, 2);
 
