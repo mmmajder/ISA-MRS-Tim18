@@ -5,7 +5,12 @@ import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from './AssetMainInfo';
 
 export default function ListedAsset({asset}){
-    const resortImage = require('../../assets/images/Maldives.jpg');
+    let resortImage; 
+    if (localStorage.getItem("userType")=="instructor") {
+        resortImage = require('../../assets/images/FishingAdventure3.png')
+    } else {
+        resortImage = require('../../assets/images/Maldives.jpg')
+    }
     
     const detViewUrl = "resorts/" + asset.id;
 

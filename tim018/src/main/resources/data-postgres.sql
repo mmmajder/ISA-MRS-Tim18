@@ -13,16 +13,13 @@ insert into client (id, address, city, first_name, is_deleted, last_name, loyalt
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, user_account_id) values
 				   (4, 'AdminAdress', 'Admingrad', 'Admin', false, 'Admin', 0, '06321654', 'Adminvil', 'Admin', 4);
 				
-insert into asset_calendar (id) values (10001);
+insert into asset_calendar (id) values (10001), (10002), (10003), (10004), (10005);
 
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, renter_id) values
-				  ('Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', 1);
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, renter_id) values
-				  ('Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', 1);
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, renter_id) values
-				  ('Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 1);
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, renter_id) values
-				  ('Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 1);
+insert into asset (id, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id) values
+			      (1, 'Asset Address', 3.5, 25, 'Description', false, 'Fishing adventure', 3, 'No rules', 10001, 2),
+				  (2, 'Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', 10002, 1),
+				  (3, 'Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', 10003, 1),
+				  (4, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10004, 1),
+				  (5, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10005, 1);
 				   
-insert into asset (address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id) values
-					('Asset Address', 0.0, 25, 'Description', false, 'Fishing adventure', 3, 'No rules', 10001, 2);
+

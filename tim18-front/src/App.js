@@ -22,14 +22,16 @@ function App() {
   const user = {
     id: "1",
     type: "instructor"
+    // type: "renter"
   }
 
   localStorage.setItem("userType", user.type)
+  localStorage.setItem("userId", user.id)
+
   if(client){
     return <ClientBase />
   }
   else{
-    localStorage.setItem("userId", 2)
     const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
     const resortView = <ResortDetailedView />

@@ -16,6 +16,17 @@ export async function getAssetById(id){
   }
 }
 
+export async function getAssetsByUserId(userId){
+    try {
+        const responseData = await api.get(`/assets/all/${userId}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
+
 export async function getAssets(){
   try {
       const responseData = await api.get(`/assets`);

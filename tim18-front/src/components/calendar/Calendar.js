@@ -19,14 +19,13 @@ const Calendar = ({id}) => {
   useEffect(() => {
     async function fetchCalendarData(){
         const requestData = await getCalendarData(id);
+        let resourceList = []
         const data = requestData.data.map((element) => {
           const res = {
             id : element.id,
             title : element.name
           }
-          if (resources==undefined) {
-            setResources([res])
-          } else { setResources([...resources, res]) }
+          resourceList = [...resourceList, res]
           
           let retData = element.calendar.availableSingle.map(function(range) {
             var info = {
@@ -48,6 +47,7 @@ const Calendar = ({id}) => {
             }
             return info;
           })]
+          setResources(resourceList)
           return retData
         }
         );

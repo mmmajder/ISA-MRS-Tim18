@@ -61,6 +61,9 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private DeletationRequest deletationRequest;
 	
+	@Column(name="biography")
+	private String biography;
+	
 	public User() {
 		
 	}

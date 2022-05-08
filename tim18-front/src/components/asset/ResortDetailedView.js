@@ -13,7 +13,13 @@ import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 export default function ResortDetailedView(){
-    const resortImage = require('../../assets/images/Maldives.jpg');
+    let resortImage; 
+    if (localStorage.getItem("userType")=="instructor") {
+        resortImage = require('../../assets/images/FishingAdventure3.png')
+    } else {
+        resortImage = require('../../assets/images/Maldives.jpg')
+    }
+    
     const [asset, setAsset] = useState({});
     const {id} = useParams();
 
@@ -28,7 +34,8 @@ export default function ResortDetailedView(){
     }, [id])
 
     const linkToEditPage = "/resorts/update/" + id;
-
+    const linkToCalendar = "/calendarAsset";
+    //<a href="/calendarAsset" style={{color:"grey"}}><FontAwesomeIcon icon={faCalendarDays} className="fa-lg" /></a>
     return <>
             <div className="borderedBlock mt-3" align="">
                 <Row>
@@ -42,7 +49,7 @@ export default function ResortDetailedView(){
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address}/>
                             </Col> 
                             <Col sm="3">
-                                <a href="/calendarAsset" style={{color:"grey"}}><FontAwesomeIcon icon={faCalendarDays} className="fa-lg" /></a>
+                                <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
                                 <FontAwesomeIcon icon={faTrash} className='faButtons'/>
                             </Col>

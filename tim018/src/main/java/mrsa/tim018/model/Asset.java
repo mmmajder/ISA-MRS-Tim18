@@ -6,19 +6,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.List;
  
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Asset {
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name="assetSeqGen", sequenceName = "SeqenceAsset", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assetSeqGen")
 	private Long id;
 	
 	@Column(name = "isDeleted", nullable = false)
@@ -55,6 +62,9 @@ public class Asset {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private AssetCalendar calendar;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PriceCatalog> prices;
 	
 	public Asset() {
 		

@@ -15,7 +15,6 @@ const CalendarAsset = () => {
     const [events, setEvents] = useState()
 
     const userId = localStorage.getItem("userId");
-    localStorage.setItem("assetId", 1)
     const assetId = localStorage.getItem("assetId");
 
     useEffect(() => {

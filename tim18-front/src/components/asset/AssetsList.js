@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../assets/styles/asset.css';
 import ListedAsset from './ListedAsset';
-import { getAssets } from '../../services/api/AssetApi';
+import { getAssetsByUserId } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 
 export default function AssetList(){
@@ -10,7 +10,7 @@ export default function AssetList(){
 
     useEffect(() => {
         async function fetchAssets(){
-            const requestData = await getAssets();
+            const requestData = await getAssetsByUserId(localStorage.getItem('userId'));
             console.log(requestData.data);
             setAssets(!!requestData ? requestData.data : []);
             return requestData;
