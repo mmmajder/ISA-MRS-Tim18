@@ -5,7 +5,7 @@ import {Container} from 'react-bootstrap'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
-import ProfileInfoBlock from './components/profile/ProfileInfoBlock.js';
+
 import Calendar from './components/calendar/Calendar.js';
 import UpdateInstructorProfile from './components/forms/UpdateInstructorProfileForm.js';
 import { faListSquares } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +21,7 @@ function App() {
 
   const user = {
     id: "1",
-    type: "instructor"
+    type: "resortRenter"
     // type: "renter"
   }
 
@@ -33,7 +33,7 @@ function App() {
   }
   else{
     const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
-    const profile = <ProfilePreview profileComponent={<ProfileInfoBlock id={localStorage.getItem("userId")}/>}/>
+    const profile = <ProfilePreview userId={localStorage.getItem("userId")}/>
     const resortView = <AssetDetailedView />
     const assetList = <AssetList />
     const resortUpdate = <UpdateResortForm />

@@ -3,25 +3,14 @@ import '../../assets/styles/profile.css';
 import MarkStars from '../MarkStars';
 import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
-import {useState, useEffect, useCallback} from 'react';
-import axios from 'axios';
-import {getInstructorByID} from '../../services/api/InstructorApi'
 
-export default function ProfileInfoBlock({id}){
-    const [user, setUser] = useState();
 
-    useEffect(() => {
-        async function fetchUser(){
-            const requestData = await getInstructorByID(id);
-            setUser(!!requestData ? requestData.data : {});
-            return requestData;
-        }
-        fetchUser();
-    }, [])
+export default function ProfileInfoBlock(user){
+
 
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')
-    console.log(id)
-    console.log(user)
+    console.log("id "+ user)
+    console.log("user " + user)
     if(!!user) {
         return <div className="borderedBlock" align="center">
                 <img src={profilePic} className="profilePicture rounded-circle" ></img>
@@ -33,17 +22,20 @@ export default function ProfileInfoBlock({id}){
                 <ProfileBusinessInfo assetsName={ getAssetName(user.userType)} assetsNum="5" rentsName="RENTS" rentsNum="7" reviewsNum="3"/>
             </div>
     }
+    else 
+        return null;
     
 }
 
 const getAssetName = (userType) => {
     console.log(userType)
+    userType =  "RESORT_RENTER";
     switch (userType) {
-        case "BOATOWNER":
+        case "BOAT_RENTER":
             return "BOATS";
-        case "FishingInstructor":
+        case "FISHERMAN":
             return "TRIPS";
-        case "RESORTOWNER":
+        case "RESORT_RENTER":
             return "RESORTS";
         default:
             break;
