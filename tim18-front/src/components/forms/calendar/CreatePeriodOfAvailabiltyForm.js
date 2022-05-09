@@ -23,7 +23,8 @@ const CreatePeriodOfAvailabiltyForm = (props) => {
         props.props.onChange({
             title  : 'Available',
             start  : fromDateTime,
-            end    : toDateTime
+            end    : toDateTime,
+            resourceId : assetId
           })
         
         const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId}

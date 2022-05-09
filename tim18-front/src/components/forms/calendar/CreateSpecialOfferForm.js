@@ -5,6 +5,8 @@ import DateTimePicker from 'react-datetime-picker'
 import { getAllAssetsByUser } from '../../../services/api/AssetApi.js';
 import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
+import { Row, Col } from 'react-bootstrap';
+
 
 const CreateSpecialOfferForm = (props) => {
     const [startDateTime, setStartDateTime] = useState(new Date());
@@ -26,7 +28,8 @@ const CreateSpecialOfferForm = (props) => {
             start  : fromDateTime,
             end    : toDateTime,
             backgroundColor : "orange",
-            borderColor : "orange"
+            borderColor : "orange",
+            resourceId : assetId
           })
         const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId, offerUntil, discount}
 
@@ -47,29 +50,47 @@ const CreateSpecialOfferForm = (props) => {
             <Card className='mb-5 mt-3' style={{color: "#123", borderRadius: "25px"}}>
                     <Card.Body>
                         <Card.Title>Add special offer</Card.Title>
-                        <div className='mb-2'>
+                        <Row className='mb-2'>
+                        <Col sm='1'>
                             <label className='lbl__create_avbl_period'>From: </label>
+                        </Col>
+                        <Col sm='5'>
                             <DateTimePicker id="from" onChange={setStartDateTime} value={startDateTime}/>
-                        </div>
-                        <div className='mb-2'> 
+                        </Col>
+                        <Col sm='1'>
+                            <label className='lbl__create_avbl_period'>Discount (in %): </label>
+                        </Col>
+                        <Col sm='5'>
+                            <input className='col-sm-5' onChange={event => setDiscount(event.target.value)}></input>
+                        </Col>
+                        
+                        </Row>
+                        <Row className='mb-2'>
+                        <Col sm='1'>
                             <label className='lbl__create_avbl_period'>To: </label>
+                        </Col>
+                        <Col sm='5'>
                             <DateTimePicker id="to" onChange={setEndDateTime} value={endDateTime}/>
-                        </div>
-                        <div className='mb-2'> 
-                            <label className='lbl__create_avbl_period'>Offer expires at: </label>
-                            <DateTimePicker id="to" onChange={setOfferUntilTime} value={offerUntilTime}/>
-                        </div>
-                        {props.scope=="global" ? (<div className='mb-2'>
-                            <label className='lbl__create_avbl_period'>Asset:</label>
-                            <select name="assets" id="assets" value={assetId} onChange={(e)=>{setAssetId(e.target.value);}} >
+                        </Col>
+                        <Col sm='1'>
+                            {props.scope=="global" ? (<label className='lbl__create_avbl_period'>Asset:</label>) : []}
+                        </Col>
+                        <Col sm='5'>
+                            {props.scope=="global" ? (<Form.Select aria-label="Default select example" name="assets" id="assets" value={assetId} onChange={(e)=>{setAssetId(e.target.value);}}>
                                 <option></option>
                                 { assets.map((asset) => <option value={asset.id}>{asset.name}</option>) }
-                            </select>
-                        </div>) : []}
-                        <div className='mb-2'> 
-                            <label className='lbl__create_avbl_period'>Discount (in %): </label>
-                            <input onChange={event => setDiscount(event.target.value)}></input>
-                        </div>
+                            </Form.Select>) : []}
+                        </Col>
+                        </Row>
+                        <Row className='mb-2'>
+                        <Col sm='1'>
+                            <label className='lbl__create_avbl_period'>Expiration: </label>
+                        </Col>
+                        <Col sm='5'>
+                            <DateTimePicker id="to" onChange={setOfferUntilTime} value={offerUntilTime}/>
+                        </Col>
+                        
+                        </Row>
                         <Button className='mb-2 mt-2' style={{backgroundColor: "#5da4b4", borderColor: "#5da4b4"}} onClick={addAppointment}>Add appointment</Button>
                     </Card.Body>
                 </Card>

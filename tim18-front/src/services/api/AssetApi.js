@@ -8,7 +8,7 @@ export async function createAsset(data) {
 
 export async function deleteAsset(id) {
     console.log(id)
-    api.put(`/assets/delete/${id}`)
+    api.delete(`/assets/${id}`)
      .then((responseData) => {})
      .catch((err)=> alert(err));
 }

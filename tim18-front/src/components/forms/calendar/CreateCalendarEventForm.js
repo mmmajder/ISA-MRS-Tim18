@@ -13,7 +13,7 @@ export default function CreateCalendarEventForm(props){
         setActiveForm(<CreatePeriodOfAvailabiltyForm props={props} scope = {props.scope}/>)
     }
     const specialOfferForm = () => {
-        setActiveForm(<CreateSpecialOfferForm props={props}/>)
+        setActiveForm(<CreateSpecialOfferForm props={props} scope = {props.scope}/>)
     }
 
     const reservationForm = () => {

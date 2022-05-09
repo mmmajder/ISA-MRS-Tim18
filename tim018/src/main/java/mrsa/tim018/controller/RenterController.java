@@ -19,16 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RenterDTO;
+import mrsa.tim018.model.Client;
+import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.service.DeletationRequestService;
 import mrsa.tim018.service.RenterService;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/fishingInstructors")
+@RequestMapping(value = "/renters")
 public class RenterController {
 
 	@Autowired
 	private RenterService renterService;
+	
+	@Autowired
+	private DeletationRequestService deleteRequestService;	
 
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<RenterDTO>> getAllRenters() {
@@ -82,6 +88,18 @@ public class RenterController {
 
 		renter = renterService.save(renter);
 		return new ResponseEntity<>(new RenterDTO(renter), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/deleteionRequest/{id}")
+	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
+		Renter renter = renterService.findOne(id);
+		DeletationRequest deletRequest = deleteRequestService.create(renter, reason);
+		System.out.println(deletRequest);
+		if (deletRequest != null) {
+			return new ResponseEntity<DeletationRequest>(deletRequest, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 }
