@@ -1,5 +1,6 @@
 package mrsa.tim018.dto;
 
+import mrsa.tim018.model.Adventure;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Boat;
@@ -60,6 +61,13 @@ public class AssetDTO {
 		this.maxSpeed =  boat.getMaxSpeed();
 		this.navigationEquipment =  boat.getNavigationEquipment();
 		this.fishingEquipment =  boat.getFishingEquipment();
+	}
+	
+	public AssetDTO(Adventure a) {
+		this(a.getID(), a.getAssetType(), a.isDeleted(), a.getRenter(), a.getName(),
+				a.getAddress(), a.getDescription(), a.getRules(), a.getNumOfPeople(),
+				a.getCancelationConditions(), a.getAverageRating(), a.getPrice());
+		this.fishingEquipment =  a.getFishingEquipment();
 	}
 	
 	public AssetDTO(Long id, AssetType assetType, boolean isDeleted, 
