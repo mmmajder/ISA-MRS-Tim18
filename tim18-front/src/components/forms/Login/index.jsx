@@ -5,8 +5,6 @@ import { motion } from "framer-motion";
 import { AccountContext } from "./AccountContext";
 import { SignupForm } from "./SignupForm";
 import { Router, Routes, Route } from "react-router-dom";
-import ClientBase from "../../../layouts/ClientBase"
-import RenterBase from "../../../layouts/RenterBase"
 
 const BoxContainer = styled.div`
   width: 50%;

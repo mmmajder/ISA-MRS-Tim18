@@ -6,21 +6,19 @@ import ProfileBusinessInfo from './ProfileBusinessInfo';
 import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import {getInstructorByID} from '../../services/api/InstructorApi'
+import { getLogged } from '../../services/api/LoginApi';
 
-export default function ProfileInfoBlock({id}){
+export default function ProfileInfoBlock(){
     const [user, setUser] = useState();
 
     useEffect(() => {
         async function fetchUser(){
-            const requestData = await getInstructorByID(id);
-            setUser(!!requestData ? requestData.data : {});
-            return requestData;
+            await getLogged(setUser);
         }
         fetchUser();
     }, [])
 
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')
-    console.log(id)
     console.log(user)
     if(!!user) {
         return <div className="borderedBlock" align="center">

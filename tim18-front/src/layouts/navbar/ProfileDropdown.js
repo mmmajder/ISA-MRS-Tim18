@@ -9,7 +9,7 @@ export default function ProfileDropdown(){
     return <NavDropdown title={profileTitle}> 
                 <NavDropdown.Item href="/welcome/profile"><FontAwesomeIcon icon={faUser} /> My profile</NavDropdown.Item> 
                 <NavDropdown.Item href="/welcome/settings"><FontAwesomeIcon icon={faCogs} /> Settings</NavDropdown.Item>
-                <NavDropdown.Item href="/calendar"><FontAwesomeIcon icon={faCalendarDays} /> Calendar</NavDropdown.Item>
-                <NavDropdown.Item href="#"><FontAwesomeIcon icon={faChevronCircleRight} /> Logout</NavDropdown.Item>
+                <NavDropdown.Item href="/welcome/calendar"><FontAwesomeIcon icon={faCalendarDays} /> Calendar</NavDropdown.Item>
+                <NavDropdown.Item href="/welcome/logout"><FontAwesomeIcon icon={faChevronCircleRight} /> Logout</NavDropdown.Item>
             </NavDropdown>
 }

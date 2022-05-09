@@ -8,9 +8,10 @@ import FeedbackPopUp from  './PopUps/FeedbackPopUp'
 import { updateClient, getClientByID } from '../../services/api/ClientApi';
 import {getInstructorByID, updateInstructor, deleteInstructor} from '../../services/api/InstructorApi'
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
+import { getLogged } from '../../services/api/LoginApi';
 
 
-export default function UpdateClientProfile({id}){
+export default function UpdateClientProfile(){
     const [instructor, setInstructor] = useState();
 
     const [feedbackType, setFeedbackType] = useState(true);
@@ -21,9 +22,7 @@ export default function UpdateClientProfile({id}){
 
     useEffect(() => {
         async function fetchInstructor(){
-            const requestData = await getInstructorByID(id);
-            setInstructor(!!requestData ? requestData.data : {});
-            return requestData;
+            await getLogged(setInstructor);
         }
         fetchInstructor();
     }, [])

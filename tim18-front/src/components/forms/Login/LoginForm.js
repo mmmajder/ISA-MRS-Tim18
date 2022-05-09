@@ -27,7 +27,6 @@ export function LoginForm({handleLogin}) {
     }
     else
     {
-      console.log(user);
       setRole(user.userType);
       handleLogin(user.userType);
       navigate('/welcome/', { replace: false })
@@ -41,12 +40,8 @@ export function LoginForm({handleLogin}) {
     {
       setToken(returnData);
       getLogged(getUserCallback);
-
     }
   }
-  
-/*<LabeledInputWithErrMessage isValid={validations.firstName} label="First Name" inputName="firstName" defaultValue={client.firstName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-<LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name" inputName="lastName" defaultValue={client.lastName} required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>*/
   
   return(
       <BoxContainer>

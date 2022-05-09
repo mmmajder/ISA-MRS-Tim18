@@ -6,7 +6,7 @@ import '../../assets/styles/style.css';
 import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import ProfileDropdown from './ProfileDropdown.js';
 
-export default function ResortRenterNavbar(){
+export default function ClientNavbar(){
     const logo = require('../../assets/images/island_logo.png')
     // myReservations (all, boats, resorts, adventures)-- history, current
     // mySubscriptions -- na profilu(samo ja vidim)? bell
