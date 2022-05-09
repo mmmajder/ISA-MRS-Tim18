@@ -56,6 +56,7 @@ public class AssetController {
 			resort = resortService.save(resort);
 			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
 		case BOAT: 
+			
 			Boat boat = AssetMapper.mapToBoat(assetDto);
 			boat = boatService.save(boat);
 			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
