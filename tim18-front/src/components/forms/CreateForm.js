@@ -1,14 +1,15 @@
 import React from 'react';
 import ResortForm from './ResortForm';
+import BoatForm from './BoatForm';
 
 
-export default function CreateResortForm({userType}){
+export default function CreateForm({userType}){
     // const resort = {
     //     name: 'Maldivian hut on water',
     //     address: 'Orchid Magu 7, Maadhad, 57887, Maldives',
     // }
 
-    const resort = {
+    const asset = {
         name: '',
         address: '',
         description: '',
@@ -20,11 +21,11 @@ export default function CreateResortForm({userType}){
     let form;
 
     if (userType === "RESORT_RENTER")
-        form = <ResortForm resort={resort} buttonText="Create resort" id={-1} />
+        form = <ResortForm resort={asset} buttonText="Create resort" id={-1} />
     else if (userType === "BOAT_RENTER")
-        form = <ResortForm resort={resort} buttonText="Create resort" id={-1} />
+        form = <BoatForm boat={asset} buttonText="Create boat" id={-1} />
     else
-        form = <ResortForm resort={resort} buttonText="Create resort" id={-1} />
+        form = <ResortForm resort={asset} buttonText="Create resort" id={-1} />
 
     return (<>
         {form}

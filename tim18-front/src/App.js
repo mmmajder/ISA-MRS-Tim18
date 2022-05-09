@@ -14,6 +14,7 @@ import UpdateResortForm from './components/forms/UpdateResortForm.js';
 import { CalendarContent } from '@fullcalendar/react';
 import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
 import AssetDetailedView from './components/asset/AssetDetailedView.js';
+import CreateForm from './components/forms/CreateForm.js';
 
 function App() {
   const client = false;
@@ -21,7 +22,7 @@ function App() {
 
   const user = {
     id: "1",
-    type: "RESORT_RENTER"
+    type: "BOAT_RENTER"
     // type: "renter"
   }
 
@@ -36,7 +37,7 @@ function App() {
     return <ClientBase />
   }
   else{
-    const resortForm = <CreateAssetForm userType={localStorage.getItem('userType')} />
+    const resortForm = <CreateForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview userId={localStorage.getItem("userId")}/>
     const resortView = <AssetDetailedView />
     const assetList = <AssetList />
