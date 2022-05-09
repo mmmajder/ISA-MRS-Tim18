@@ -19,7 +19,7 @@ export default function ProfilePreview({userId}){
         fetchUser();
     }, [userId])
 
-    console.log("user " + user)
+    console.log(user)
 
     if(!!user) {
         return <Row className="pt-5">

@@ -5,7 +5,7 @@ import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
 
 
-export default function ProfileInfoBlock(user){
+export default function ProfileInfoBlock({user}){
 
 
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')

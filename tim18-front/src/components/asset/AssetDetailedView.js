@@ -67,7 +67,7 @@ export default function AssetDetailedView(){
                             <Col sm="3">
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
-                                { localStorage.getItem('userType') !== "CLIENT" && <FontAwesomeIcon icon={faTrash} className='faButtons'/>}
+                                { localStorage.getItem('userType') !== "CLIENT" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>
