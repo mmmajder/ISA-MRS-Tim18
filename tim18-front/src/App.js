@@ -22,7 +22,7 @@ function App() {
   const instructor = true;
 
   const user = {
-    id: "2",
+    id: "1",
     type: "RESORT_RENTER"
     // type: "renter"
   }

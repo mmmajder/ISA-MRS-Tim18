@@ -23,10 +23,10 @@ insert into resort (id, asset_type, price, address, average_rating, cancelation_
 				  
 insert into boat (id, asset_type, price, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id,
 				  boat_type, length, num_of_motor, motor_power, max_speed, navigation_equipment, fishing_equipment) values
-				  (1000000, 1, 35, 'Dubrovnik', 4, 40, 'Best ship to cruise around Adriatic sea', false, 'Dubrovnik Pirate', 15, 'No parties allowed', 10006, 1,
+				  (1000004, 1, 35, 'Dubrovnik', 4, 40, 'Best ship to cruise around Adriatic sea', false, 'Dubrovnik Pirate', 15, 'No parties allowed', 10006, 1,
 				  'Frigate', 15, 6, 50, 60, 'GPS, Sonar', 'Harpoon');	
 				  
 insert into adventure (id, asset_type, price, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id,
 				  fishing_equipment) values
-				  (1000000, 2, 5, 'Backa Palanka', 4, 10, 'I will teach you how to fish som', false, 'SOM Fishing in Backa', 3, 'No smoking on board allowed', 10007, 1,
+				  (1000005, 2, 5, 'Backa Palanka', 4, 10, 'I will teach you how to fish som', false, 'SOM Fishing in Backa', 3, 'No smoking on board allowed', 10007, 1,
 				  'Harpoon');	

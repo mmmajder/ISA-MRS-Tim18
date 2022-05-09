@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import ResortSpecificInfo from './ResortSpecificInfo';
 import BoatSpecificInfo from './BoatSpecificInfo';
 import FishingSpecificInfo from './FishingSpecificInfo';
-import { getAssetById } from '../../services/api/AssetApi';
+import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
@@ -46,6 +46,10 @@ export default function AssetDetailedView(){
 
     const linkToEditPage = "/resorts/update/" + id;
     const linkToCalendar = "/calendarAsset";
+    const linkToMyAssetsPage = "/resorts"
+    const assetDeletion = () => {
+        deleteAsset(id)
+    }
 
     return <>
             <div className="borderedBlock mt-3" align="">
@@ -62,7 +66,7 @@ export default function AssetDetailedView(){
                             <Col sm="3">
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
-                                <FontAwesomeIcon icon={faTrash} className='faButtons'/>
+                                <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>

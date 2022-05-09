@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -121,6 +122,19 @@ public class AssetController {
 //			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+	
+	@PutMapping(value="/delete/{id}" )
+	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id) {
+		Asset asset = assetService.findById(id);
+		if (asset==null) {
+			return null;
+		}
+		asset.setDeleted(true);
+		assetService.save(asset);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
+	
 	public ResponseEntity<AssetDTO> updateResort(Long id,AssetDTO assetDto) {
 		Resort updatedResort = AssetMapper.mapToResort(assetDto);
 		Resort resortToUpdate = resortService.findOne(id);
@@ -189,22 +203,7 @@ public class AssetController {
 	}
 	
 	
-	@GetMapping(value = "/renter/{id}")
-	public ResponseEntity<List<AssetDTO>> getAssetsByRenter(@PathVariable Long renterId) {
-			
-		List<Asset> assets = assetService.findAll();
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		
-		for (Asset a : assets) {
-			assetsDTO.add(new AssetDTO(a));
-		}
-		
-		assetsDTO = assetsDTO.stream()
-				.filter(a -> a.getRenter().getID().equals(renterId))
-				.collect(Collectors.toList());
-
-		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
-	}
+	
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {
@@ -245,14 +244,26 @@ public class AssetController {
 	
 	@GetMapping(value = "/all/{id}")
 	public ResponseEntity<List<AssetDTO>> getAllAssetsByUser(@PathVariable Long id) {
-
-		List<Asset> assets = assetService.findAllByRenterId(id);
-		List<AssetDTO> assetDTOs = new ArrayList<AssetDTO>();
-		for (Asset asset : assets) {
-			assetDTOs.add(new AssetDTO(asset));
+		Renter renter = renterService.findOne(id);
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		for (Asset asset: renter.getAssets()) {
+			if (!asset.isDeleted()) {
+				assetsDTO.add(new AssetDTO(asset));
+			}
 		}
-
-		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
+		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
+	}
+	@GetMapping(value = "/renter/{id}")
+	public ResponseEntity<List<AssetDTO>> getAssetsByRenter(@PathVariable Long id) {
+		
+		Renter renter = renterService.findOne(id);
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		for (Asset asset: renter.getAssets()) {
+			if (!asset.isDeleted()) {
+				assetsDTO.add(new AssetDTO(asset));
+			}
+		}
+		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 }
 

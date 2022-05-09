@@ -6,6 +6,13 @@ export async function createAsset(data) {
      .catch((err)=> alert(err));
 }
 
+export async function deleteAsset(id) {
+    console.log(id)
+    api.put(`/assets/delete/${id}`)
+     .then((responseData) => {})
+     .catch((err)=> alert(err));
+}
+
 export async function getAssetById(id){
   try {
       const responseData = await api.get(`/assets/${id}`);
