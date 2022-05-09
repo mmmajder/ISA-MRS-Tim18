@@ -20,7 +20,9 @@ export const getToken = () => {
     let text = localStorage.getItem("jwt");
     if(!!text){
       let obj = JSON.parse(text);
-      return obj.accessToken;
+      if(!!obj){
+        return obj.accessToken;
+      }
     }
     return '';
 }
