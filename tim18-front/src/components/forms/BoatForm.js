@@ -145,7 +145,7 @@ export default function BoatForm({boat, buttonText, id}){
                                 onChange={(e) => setNumOfMotor(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        <Col sm={3} align='right'><Form.Label>Engine strength </Form.Label></Col>
+                        <Col sm={3} align='right'><Form.Label>Engine power </Form.Label></Col>
                         <Col sm={2}>
                             <Form.Control name="motorPower"  type="number" min="0" required
                                 value={motorPower} 

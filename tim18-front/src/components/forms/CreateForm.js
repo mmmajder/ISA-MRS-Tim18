@@ -1,6 +1,7 @@
 import React from 'react';
 import ResortForm from './ResortForm';
 import BoatForm from './BoatForm';
+import AdventureForm from './AdventureForm';
 
 
 export default function CreateForm({userType}){
@@ -25,7 +26,7 @@ export default function CreateForm({userType}){
     else if (userType === "BOAT_RENTER")
         form = <BoatForm boat={asset} buttonText="Create boat" id={-1} />
     else
-        form = <ResortForm resort={asset} buttonText="Create resort" id={-1} />
+        form = <AdventureForm adventure={asset} buttonText="Create adventure" id={-1} />
 
     return (<>
         {form}

@@ -15,6 +15,7 @@ import { CalendarContent } from '@fullcalendar/react';
 import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
 import AssetDetailedView from './components/asset/AssetDetailedView.js';
 import CreateForm from './components/forms/CreateForm.js';
+import UpdateForm from './components/forms/UpdateForm.js';
 
 function App() {
   const client = false;
@@ -22,7 +23,7 @@ function App() {
 
   const user = {
     id: "1",
-    type: "BOAT_RENTER"
+    type: "FISHERMAN"
     // type: "renter"
   }
 
@@ -41,7 +42,7 @@ function App() {
     const profile = <ProfilePreview userId={localStorage.getItem("userId")}/>
     const resortView = <AssetDetailedView />
     const assetList = <AssetList />
-    const resortUpdate = <UpdateResortForm />
+    const assetUpdate = <UpdateForm />
     const calendar = <Calendar id={localStorage.getItem("userId")}/>
     const assetCalendar = <CalendarAsset/>
     let updateProfile;
@@ -62,7 +63,7 @@ function App() {
                 <Route path="/profile" element={profile} /> 
                 <Route exact path="/resorts" element={assetList} /> 
                 <Route path="/resorts/:id" element={resortView} /> 
-                <Route path="/resorts/update/:id" element={resortUpdate} />
+                <Route path="/resorts/update/:id" element={assetUpdate} />
                 <Route path="/calendar" element={calendar}/>
                 <Route path="/settings" element={updateProfile} />
                 <Route path="/calendarAsset" element={assetCalendar}/>

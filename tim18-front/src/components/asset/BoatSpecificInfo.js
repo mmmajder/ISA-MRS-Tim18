@@ -2,7 +2,7 @@ import React from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 
-export default function BoatSpecificInfo(boat){
+export default function BoatSpecificInfo({boat}){
     let boatType = "Frigate";
     let length = 15;
     let maxSpeed = 50;
@@ -14,25 +14,25 @@ export default function BoatSpecificInfo(boat){
     return <>
             <Row className="mt-2">
                 <Col sm='4'>
-                    <p>Type: {boatType}</p>
+                    <p>Type: {boat.boatType}</p>
                 </Col>  
                 <Col sm='4'>
-                    <p>Length: {length}</p>
+                    <p>Length: {boat.length}</p>
                 </Col>  
                 <Col sm='4'>
-                    <p>Max speed: {maxSpeed}</p>
+                    <p>Max speed: {boat.maxSpeed}</p>
                 </Col>   
             </Row>
             <Row className="mt-2">
                 <Col sm='6'>
-                    <p>Number of engines: {numberOfEngines}</p>
+                    <p>Number of engines: {boat.numOfMotor}</p>
                 </Col>  
                 <Col sm='6'>
-                    <p>Engine strength: {engineStrength}</p>
+                    <p>Engine power: {boat.motorPower}</p>
                 </Col>    
             </Row>
-            <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Navigation gear:    {navigationGear}</div></Row>
-            <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Fishing gear:    {fishingGear}</div></Row>
+            <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Navigation gear:    {boat.navigationEquipment}</div></Row>
+            <Row className="mt-2"><div className="borderedBlockNoShadow" align="">Fishing gear:    {boat.fishingEquipment}</div></Row>
         </>
 }
 
