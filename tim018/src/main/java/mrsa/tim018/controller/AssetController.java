@@ -2,6 +2,7 @@ package mrsa.tim018.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AssetDTO;
@@ -217,6 +219,51 @@ public class AssetController {
 		
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/search")
+	public ResponseEntity<List<AssetDTO>> searchAssets(@RequestParam String address,
+			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
+		List<Asset> assets = assetService.findAll();
+		assets = filterAssets(assets, address, numOfPeople,  price,  mark);
+		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
+		
+		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/search/{renterId}")
+	public ResponseEntity<List<AssetDTO>> searchRenterAssets(@PathVariable Long renterId, @RequestParam String address,
+			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
+		List<Asset> assets = assetService.findAllByRenterId(renterId);
+		assets = filterAssets(assets, address, numOfPeople,  price,  mark);
+		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
+		
+		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
+	}
+	
+	private List<Asset> filterAssets(List<Asset> assets, String address, int numOfPeople, double price, double mark) {
+		if (price != 0)
+			assets = assets.stream().filter(a -> a.getPrice() <= price).collect(Collectors.toList());
+		if (mark != 0)
+			assets = assets.stream().filter(a -> a.getAverageRating() >= mark).collect(Collectors.toList());
+		if (numOfPeople != 0)
+			assets = assets.stream().filter(a -> a.getNumOfPeople() >= numOfPeople).collect(Collectors.toList());
+		if (!address.isEmpty())
+			assets = assets.stream().filter(a -> a.getAddress().toLowerCase().contains(address.toLowerCase())).collect(Collectors.toList());
+		
+		return assets;
+	} 
+	
+	private List<AssetDTO> mapAssetsToDto(List<Asset> assets){
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		
+		for (Asset a : assets) {
+			assetsDTO.add(new AssetDTO(a));
+		}
+		
+		return assetsDTO;
+	}
+	
+	
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<AssetDTO> getAsset(@PathVariable Long id) {
