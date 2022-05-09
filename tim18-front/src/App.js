@@ -16,17 +16,19 @@ import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
 import AssetDetailedView from './components/asset/AssetDetailedView.js';
 import CreateForm from './components/forms/CreateForm.js';
 import UpdateForm from './components/forms/UpdateForm.js';
+import AssetsPreview from './components/asset/AssetsPreview.js';
 
 function App() {
   const client = false;
   const instructor = true;
 
   const user = {
-    id: "2",
+    id: "1",
     type: "RESORT_RENTER"
     // type: "renter"
   }
 
+// "CLIENT"
 // "BOAT_RENTER":
 // "FISHERMAN":
 // "RESORT_RENTER":
@@ -41,7 +43,7 @@ function App() {
     const resortForm = <CreateForm userType={localStorage.getItem('userType')} />
     const profile = <ProfilePreview userId={localStorage.getItem("userId")}/>
     const resortView = <AssetDetailedView />
-    const assetList = <AssetList />
+    const assetList = <AssetsPreview userType={localStorage.getItem('userType')}/>
     const assetUpdate = <UpdateForm />
     const calendar = <Calendar id={localStorage.getItem("userId")}/>
     const assetCalendar = <CalendarAsset/>

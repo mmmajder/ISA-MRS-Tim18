@@ -37,6 +37,42 @@ export async function getAssets(){
   }
 }
 
+export async function getFilteredAssets(address, numOfPeople, price, mark){
+    try {
+        console.log(address, numOfPeople, price, mark);
+        const responseData = await api.get(`/assets/search`,  {
+            params: {
+                "address" : address,
+                "numOfPeople":  numOfPeople, 
+                "price" : price, 
+                "mark" : mark
+            }
+          });
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
+  export async function getFilteredAssetsForRenter(renterId, address, numOfPeople, price, mark){
+    try {
+        console.log(address, numOfPeople, price, mark);
+        const responseData = await api.get(`/assets/search/${renterId}`,  {
+            params: {
+                "address" : address,
+                "numOfPeople":  numOfPeople, 
+                "price" : price, 
+                "mark" : mark
+            }
+          });
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
 export async function getAssetsByRenter(renterId){
     try {
         const responseData = await api.get(`/assets/renter/${renterId}`);

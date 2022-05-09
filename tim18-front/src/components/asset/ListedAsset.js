@@ -36,7 +36,7 @@ export default function ListedAsset({asset}){
                             <Col sm="2" >
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
-                                    <FixedWidthRegButton text='Delete' onClickFunction={''}/>
+                                    { localStorage.getItem('userType') !== "CLIENT" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
                                 </div>
                             </Col>
                         </Row>
