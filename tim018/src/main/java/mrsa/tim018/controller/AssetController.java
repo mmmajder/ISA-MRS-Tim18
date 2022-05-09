@@ -125,7 +125,7 @@ public class AssetController {
 	}
 	
 	
-	@PutMapping(value="/delete/{id}" )
+	@DeleteMapping(value="/{id}" )
 	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id) {
 		Asset asset = assetService.findById(id);
 		if (asset==null) {

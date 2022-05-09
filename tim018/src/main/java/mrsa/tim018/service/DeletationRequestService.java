@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.repository.DeletationRequestRepository;
 
@@ -44,6 +45,12 @@ public class DeletationRequestService {
 	
 	public DeletationRequest create(Client client, String reason) {
 		DeletationRequest deleteRequest = new DeletationRequest(client, reason);
+		save(deleteRequest);
+		return deleteRequest;
+	}
+	
+	public DeletationRequest create(Renter renter, String reason) {
+		DeletationRequest deleteRequest = new DeletationRequest(renter, reason);
 		save(deleteRequest);
 		return deleteRequest;
 	}

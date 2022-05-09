@@ -27,9 +27,6 @@ public class AssetCalendar {
 	private List<TimeRange> availableSingle = new ArrayList<TimeRange>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<TimeRange> specialPricePattern = new ArrayList<TimeRange>();
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<SpecialOffer> specialPriceSingle = new ArrayList<SpecialOffer>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -61,14 +58,6 @@ public class AssetCalendar {
 
 	public void setAvailableSingle(List<TimeRange> availableSingle) {
 		this.availableSingle = availableSingle;
-	}
-
-	public List<TimeRange> getSpecialPricePattern() {
-		return specialPricePattern;
-	}
-
-	public void setSpecialPricePattern(List<TimeRange> specialPricePattern) {
-		this.specialPricePattern = specialPricePattern;
 	}
 
 	public List<SpecialOffer> getSpecialPriceSingle() {

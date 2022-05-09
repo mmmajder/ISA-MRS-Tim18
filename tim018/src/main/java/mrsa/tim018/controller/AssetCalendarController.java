@@ -62,14 +62,6 @@ public class AssetCalendarController<T> {
 			return null;
 		}
 	}
-	
-
-	/*@GetMapping(value = "/allAssets/{id}")
-	public ResponseEntity<AllAssetsCalendarByUserDTO> getCalendars(@PathVariable Long id) {
-		
-		return null;
-
-	}*/
 
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
@@ -80,8 +72,8 @@ public class AssetCalendarController<T> {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		try {
-			System.out.println(renter.getAssets());
-			AssetCalendar calendar = renter.getAssets().get(0).getCalendar();
+			Asset asset = assetService.findById(appointment.getAssetId());
+			AssetCalendar calendar = asset.getCalendar();
 			AssetCalendar newCalendar = calendarService.addAppointment(calendar, appointment);
 			calendarService.save(newCalendar);
 		} catch (Exception e) {

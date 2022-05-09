@@ -7,7 +7,7 @@ import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
 
 import Calendar from './components/calendar/Calendar.js';
-import UpdateInstructorProfile from './components/forms/UpdateInstructorProfileForm.js';
+import UpdateRenter from './components/forms/UpdateInstructorProfileForm.js';
 import { faListSquares } from '@fortawesome/free-solid-svg-icons';
 import AssetList from './components/asset/AssetsList.js';
 import UpdateResortForm from './components/forms/UpdateResortForm.js';
@@ -20,7 +20,7 @@ import AssetsPreview from './components/asset/AssetsPreview.js';
 
 function App() {
   const client = false;
-  const instructor = true;
+   const instructor = true;
 
   const user = {
     id: "1",
@@ -47,10 +47,7 @@ function App() {
     const assetUpdate = <UpdateForm />
     const calendar = <Calendar id={localStorage.getItem("userId")}/>
     const assetCalendar = <CalendarAsset/>
-    let updateProfile;
-    if (instructor){
-      updateProfile = <UpdateInstructorProfile id={localStorage.getItem("userId")}/>
-    }
+    let updateProfile = <UpdateRenter id={localStorage.getItem("userId")}/>
     return (
       <Router>
         <div>

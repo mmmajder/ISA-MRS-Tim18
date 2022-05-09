@@ -25,7 +25,7 @@ const Calendar = ({id}) => {
             id : element.id,
             title : element.name
           }
-          resourceList = [...resourceList, res]
+          resourceList = resourceList.concat(res)
           
           let retData = element.calendar.availableSingle.map(function(range) {
             var info = {
@@ -36,7 +36,7 @@ const Calendar = ({id}) => {
             }
             return info;
           })
-          retData = [...retData, ...element.calendar.specialPriceSingle.map(function(range) {
+          retData = retData.concat(element.calendar.specialPriceSingle.map(function(range) {
             var info = {
               title : "Special offer",
               resourceId : element.id,
@@ -46,19 +46,36 @@ const Calendar = ({id}) => {
               borderColor : "orange"
             }
             return info;
-          })]
+          }))
           setResources(resourceList)
           return retData
         }
         );
         if (requestData) {
-          setEvents(data[0]);
+          console.log(data)
+          setEvents( makeEventList(data));
         }
         return requestData;
     }
     fetchCalendarData();
 }, [])
 
+const makeEventList = (data) => {
+  let retData = []
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].length; j++) {
+      retData = [...retData, data[i][j]]
+    }
+  }
+  return retData
+}
+
+//TODO
+const displayEvents = () => {
+  for (let i=0; i<events.length; i++) {
+
+  }
+}
 
   
 
@@ -67,7 +84,8 @@ const Calendar = ({id}) => {
       <div>
         <CreateCalendarEventForm scope={"global"} onChange={(value)=>{
           if (!!events) {
-            setEvents([...events, value])
+            let newVal = [...events, value] 
+            setEvents(newVal)
           } else { setEvents([value])}
           
         }
@@ -78,8 +96,8 @@ const Calendar = ({id}) => {
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
           plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
-          initialView="dayGridMonth"
-          editable = {true}
+          initialView="resourceTimelineMonth"
+          editable = {false}
           selectable = {true}
           select = {function(start, end, allDays) {
             console.log(start)
