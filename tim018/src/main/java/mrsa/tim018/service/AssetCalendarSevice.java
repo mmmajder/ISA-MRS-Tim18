@@ -34,6 +34,11 @@ public class AssetCalendarSevice {
 		return assetCalendarRepository.save(calendar);
 	}
 	
+	public AssetCalendar createNewCalendar() {
+		AssetCalendar assetCalendar = new AssetCalendar();
+		return assetCalendarRepository.save(assetCalendar);
+	}
+	
 	public AssetCalendar addAppointment(AssetCalendar calendar, AppointmentCreationDTO appointment) {
 		switch (appointment.getType()) {
 		case Available:

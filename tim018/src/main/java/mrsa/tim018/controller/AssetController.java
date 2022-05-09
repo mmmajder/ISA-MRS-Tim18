@@ -20,12 +20,16 @@ import mrsa.tim018.dto.AssetDTO;
 import mrsa.tim018.mapper.AssetMapper;
 import mrsa.tim018.model.Adventure;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Boat;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Resort;
 import mrsa.tim018.service.AdventureService;
+import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.BoatService;
+import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ResortService;
 
 @RestController
@@ -45,23 +49,38 @@ public class AssetController {
 	@Autowired
 	private AdventureService adventureService;
 	
+	@Autowired
+	private AssetCalendarSevice assetCalendarSevice;
+	
+	@Autowired 
+	private RenterService renterService;
+	
 	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> saveAsset(@RequestBody AssetDTO assetDto) {
 		AssetType type = assetDto.getAssetType();
-		
+		AssetCalendar assetCalendar;
+		Renter renter = renterService.findOne(assetDto.getRenterId());
 		switch (type) {
 		case RESORT: 
 			Resort resort = AssetMapper.mapToResort(assetDto);
+			assetCalendar = assetCalendarSevice.createNewCalendar();
+			resort.setCalendar(assetCalendar);
+			resort.setRenter(renter);
 			resort = resortService.save(resort);
 			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
 		case BOAT: 
-			
 			Boat boat = AssetMapper.mapToBoat(assetDto);
+			assetCalendar = assetCalendarSevice.createNewCalendar();
+			boat.setCalendar(assetCalendar);
+			boat.setRenter(renter);
 			boat = boatService.save(boat);
 			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
 		case FISHING_ADVENTURE: 
 			Adventure adventure = AssetMapper.mapToAdventure(assetDto);
+			assetCalendar = assetCalendarSevice.createNewCalendar();
+			adventure.setCalendar(assetCalendar);
+			adventure.setRenter(renter);
 			adventure = adventureService.save(adventure);
 			return new ResponseEntity<>(new AssetDTO(adventure), HttpStatus.CREATED);
 		default: 

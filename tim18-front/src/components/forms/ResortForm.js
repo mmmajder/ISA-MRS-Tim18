@@ -21,7 +21,8 @@ export default function ResortForm({resort, buttonText, id}){
     const [numberOfBeds, setNumOfBeds] = useState();
 
     const assetType = "RESORT";
-    
+    const renterId = localStorage.getItem("userId")
+
     // sets resort's values if it's updateResortForm
     useEffect(() => {
         if (id !== -1){
@@ -39,7 +40,7 @@ export default function ResortForm({resort, buttonText, id}){
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
-            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, assetType}
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, assetType, renterId}
             const request = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
