@@ -51,7 +51,7 @@ const CalendarAsset = () => {
 
     return (
         <div>
-        <Col sm='12'  className="mt-2 importantInfo">Maldivian hut on water</Col>
+        <Col sm='12'  className="mt-2 importantInfo">Dubrovnik Pirate</Col>
           <div>
               <CreateCalendarEventForm scope={"asset"} onChange={(value)=>{
               if (!!events) {

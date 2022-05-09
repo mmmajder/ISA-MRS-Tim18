@@ -18,6 +18,7 @@ import {useParams} from 'react-router-dom';
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
+    localStorage.setItem("assetId", id);
 
     useEffect(() => {
         async function fetchAsset(){
