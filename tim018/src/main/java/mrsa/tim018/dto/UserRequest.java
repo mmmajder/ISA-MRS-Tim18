@@ -10,12 +10,13 @@ public class UserRequest {
 	private String city;
 	private String state;
 	private String phoneNum;
+	private String userType;
 
 	public UserRequest() {
 	}
 
 	public UserRequest(String firstName, String lastName, String address, String city, String state, String phoneNum, 
-					   String email, String password) {
+					   String email, String password, String userType) {
 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -25,6 +26,7 @@ public class UserRequest {
 		this.phoneNum = phoneNum;
 		this.email = email;
 		this.password = password;
+		this.userType = userType;
 	}
 
 
@@ -106,6 +108,14 @@ public class UserRequest {
 
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 	
 	

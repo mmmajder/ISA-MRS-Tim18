@@ -165,7 +165,24 @@ public class User implements UserDetails{
 		
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
-		this.enabled = true;
+		this.enabled = false;
+	}
+	
+	public User(User user) {
+		super();
+		this.firstName = user.firstName;
+		this.lastName = user.lastName;
+		this.address = user.address;
+		this.city = user.city;
+		this.state = user.state;
+		this.phoneNum = user.phoneNum;
+		this.userType = user.userType;
+		this.email = user.email;
+		this.password = user.password;
+		
+		this.loyaltyPoints = 0;
+		this.isDeleted = false;
+		this.enabled = false;
 	}
 	public Long getID() {
 		return id;
@@ -365,7 +382,10 @@ public class User implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	
 }

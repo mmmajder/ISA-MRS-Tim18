@@ -27,6 +27,10 @@ public class FishingInstructor extends User {
 	public void setAssets(List<Asset> assets) {
 		this.assets = assets;
 	}
+
+	public FishingInstructor(User user) {
+		super(user);
+	}
 	
 	
 

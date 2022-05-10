@@ -118,11 +118,8 @@ public class ClientController {
 	@PostMapping(value = "/{id}")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
-		System.out.println(reason);
 		Client client = clientService.findOne(id);
-		System.out.println(client);
 		DeletationRequest deletRequest = deleteRequestService.create(client, reason);
-		System.out.println(deletRequest);
 		if (deletRequest != null) {
 			return new ResponseEntity<DeletationRequest>(deletRequest, HttpStatus.OK);
 		} else {

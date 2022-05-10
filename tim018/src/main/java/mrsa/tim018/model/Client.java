@@ -40,6 +40,16 @@ public class Client extends User {
 		super(id, firstName, lastName, address, city, state, phoneNum, userType, email, password);
 		this.penaltyPoints = penaltyPoints;
 	}
+	public Client(User user, int penaltyPoints) {
+	
+		super(user);
+		this.penaltyPoints = penaltyPoints;
+	}
+	public Client(User user) {
+		
+		super(user);
+		this.penaltyPoints = 0;
+	}
 
 	
 	public int getPenaltyPoints() {

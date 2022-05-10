@@ -7,22 +7,27 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import mrsa.tim018.model.Client;
+import mrsa.tim018.model.FishingInstructor;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.User;
+import mrsa.tim018.model.UserType;
+import mrsa.tim018.repository.ClientRepository;
 import mrsa.tim018.repository.FishingInstructorRepository;
+import mrsa.tim018.repository.RenterRepository;
 import mrsa.tim018.repository.UserRepository;
 
 @Service
 public class UserService<T> implements UserDetailsService{
-//	@Autowired
-//	private ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 	
-//	@Autowired
-//	private RenterRepository renterRepository;
+	@Autowired
+	private RenterRepository renterRepository;
 	
-//	@Autowired
-//	private AdminRepository adminRepository;
 	
 	@Autowired
 	private FishingInstructorRepository fishingInstructorRepository;
@@ -30,8 +35,8 @@ public class UserService<T> implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	/*@Autowired
-	private PasswordEncoder passwordEncoder;*/
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	
 	private User userExist(Long id, JpaRepository<T, Long> repo) {
@@ -65,8 +70,25 @@ public class UserService<T> implements UserDetailsService{
 	}
 
 	public User save(User user) {
-		//user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+		user.setId(userRepository.getNextSeriesId());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if(user.getUserType() == UserType.Client) {
+			User bClass = new Client(user);
+			Client childClass = (Client) bClass;
+			return clientRepository.save(childClass);
+		}
+		if(user.getUserType() == UserType.ResortRenter || user.getUserType() == UserType.BoatRenter) {
+			User bClass = new Renter(user);
+			Renter childClass = (Renter) bClass;
+			return renterRepository.save(childClass);
+		}
+		if(user.getUserType()== UserType.FishingInstructor) {
+			User bClass = new FishingInstructor(user);
+			FishingInstructor childClass = (FishingInstructor) bClass;
+			return fishingInstructorRepository.save(childClass);
+		}
+		return null;
+		
 	}
 
 }

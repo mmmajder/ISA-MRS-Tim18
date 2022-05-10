@@ -32,6 +32,10 @@ public class Renter extends User {
 	}
 
 	
+	public Renter(User user) {
+		super(user);
+	}
+	
 	public Renter(Long iD, String firstName, String lastName, String address, String city, String state,
 			String phoneNum, UserType userType, String email, String password,  List<Asset> assets) {
 		super(iD, firstName, lastName, address, city, state, phoneNum, userType, email, password);
