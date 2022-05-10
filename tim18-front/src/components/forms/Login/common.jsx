@@ -5,7 +5,6 @@ export const BoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
 `;
 
 export const FormContainer = styled.form`
@@ -73,5 +72,8 @@ export const SubmitButton = styled.button`
 
   &:hover {
     filter: brightness(1.03);
+  }
+  &:disabled{
+
   }
 `;

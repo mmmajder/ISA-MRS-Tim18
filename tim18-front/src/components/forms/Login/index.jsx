@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import { AccountContext } from "./AccountContext";
 import { SignupForm } from "./SignupForm";
 import { Router, Routes, Route } from "react-router-dom";
+import FeedbackPopUp from "../PopUps/FeedbackPopUp";
 
 const BoxContainer = styled.div`
-  width: 50%;
-  min-height: 90%;
+  width: 60%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 19px;
@@ -19,22 +20,22 @@ const BoxContainer = styled.div`
 `;
 
 const TopContainer = styled.div`
-  height: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   align: center;
-  justify-content: flex-end;
-  padding: 0 1.8em;
-  padding-bottom: 5em;
+  justify-content: flex-start;
+  padding: 0 2em;
+  
 `;
 
 const BackDrop = styled(motion.div)`
   
   position: absolute;
   display: flex;
-  flex-direction: column;  
-  top: -75%;  
-  left: -90%;  
+  
+  top: -90%;  
+  left: -100%;  
   background: rgb(241, 196, 15);
   background: linear-gradient(
     rgba(241, 196, 15, 1) 20%,
@@ -123,7 +124,9 @@ export function AccountBox({handleLogin}) {
 
   return (
    <> 
+   
     <AccountContext.Provider value={contextValue}>
+    <FeedbackPopUp  isError={true} message={"sorry"} /> 
       <BoxContainer>
         <TopContainer>
           <BackDrop

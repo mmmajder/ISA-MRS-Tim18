@@ -13,4 +13,11 @@ export async function getLogged(callback){
               .catch(()=> {callback(false)});
 
 }
-  
+
+export async function sendRegistrationRequest(callback, request){
+    console.log(request)
+    const userDataJSON = JSON.stringify(request);
+    await api.post(`/auth/signup`, userDataJSON)
+              .then((responseData) => {callback(responseData.data)})    // user
+              .catch(()=> {callback(false)});
+}
