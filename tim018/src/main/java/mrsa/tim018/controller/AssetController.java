@@ -72,14 +72,14 @@ public class AssetController {
 			resort.setRenter(renter);
 			resort = resortService.save(resort);
 			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
-		case BOAT: 
+		case BOAT:  
 			Boat boat = AssetMapper.mapToBoat(assetDto);
 			assetCalendar = assetCalendarSevice.createNewCalendar();
 			boat.setCalendar(assetCalendar);
 			boat.setRenter(renter);
 			boat = boatService.save(boat);
 			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
-		case FISHING_ADVENTURE: 
+		case FISHING_ADVENTURE:  
 			Adventure adventure = AssetMapper.mapToAdventure(assetDto);
 			assetCalendar = assetCalendarSevice.createNewCalendar();
 			adventure.setCalendar(assetCalendar);

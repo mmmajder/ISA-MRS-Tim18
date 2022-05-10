@@ -23,8 +23,8 @@ function App() {
    const instructor = true;
 
   const user = {
-    id: "1",
-    type: "RESORT_RENTER"
+    id: "2",
+    type: "BOAT_RENTER"
     // type: "renter"
   }
 

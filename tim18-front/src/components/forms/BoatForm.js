@@ -47,11 +47,13 @@ export default function BoatForm({boat, buttonText, id}){
         }
     }, [boat])
 
+    let renterId = localStorage.getItem("userId")
+
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
             const boatJson = {name, address, description, rules, numOfPeople, cancelationFee, assetType,
-                boatType, length, numOfMotor, motorPower, maxSpeed, navigationEquipment, fishingEquipment}
+                boatType, length, numOfMotor, motorPower, maxSpeed, navigationEquipment, fishingEquipment, renterId}
             const request = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

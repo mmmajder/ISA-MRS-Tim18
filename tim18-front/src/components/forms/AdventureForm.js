@@ -35,11 +35,13 @@ export default function AdventureForm({adventure, buttonText, id}){
         }
     }, [adventure])
 
+    let renterId = localStorage.getItem("userId")
+
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
             const adventureJson = {name, address, description, rules, numOfPeople, cancelationFee, assetType,
-                fishingEquipment}
+                fishingEquipment, renterId}
             const request = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
