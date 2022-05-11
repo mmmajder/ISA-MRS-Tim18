@@ -108,11 +108,11 @@ function App() {
   const handleLogin = (user) => {setUser(user); };  
   const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
   
-  const resortForm = <CreateForm userType={localStorage.getItem('userType')} />
+  const resortForm = <CreateForm  />
   const resortView = <AssetDetailedView />
-  const assetList = <AssetsPreview userType={localStorage.getItem('userType')}/>
+  const assetList = <AssetsPreview />
   const assetUpdate = <UpdateForm />
-  const calendar = <Calendar id={localStorage.getItem("userId")}/>
+  const calendar = <Calendar />
   const assetCalendar = <CalendarAsset/>
 
   return  (<Router>
@@ -125,7 +125,6 @@ function App() {
 
                    {/* Creating/Registrating Resorts/Boats */}
                   <Route path="/welcome/createResort" element={resortForm} /> 
-                  <Route path="/welcome/resorts" element={resortView} /> 
                   <Route path="/welcome/calendar" element={calendar}/>
                   <Route path="/welcome/logout" element={<Logout handleLogout={handleLogout}/>} />
                   <Route exact path="/welcome/resorts" element={assetList} /> 
@@ -163,7 +162,7 @@ function ChooseSettings(userType){
     return <UpdateClientProfile/> 
   }
   if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter'){
-    return <UpdateRenter id={localStorage.getItem("userId")}/>
+    return <UpdateRenter />
   }
 }
 
@@ -173,7 +172,7 @@ function chooseNavbar(userType){
     navBar =  <ClientNavbar />
   }
   else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor'){
-    navBar =  <ResortRenterNavbar/>
+    navBar =  <ResortRenterNavbar userType={userType}/>
   }
   return (
     <div>

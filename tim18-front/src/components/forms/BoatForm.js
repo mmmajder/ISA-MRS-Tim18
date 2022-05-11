@@ -6,6 +6,7 @@ import '../../assets/styles/buttons.css';
 import {useCallback, useState, useEffect} from 'react';
 import { updateAsset } from '../../services/api/AssetApi';
 import { useNavigate  } from "react-router-dom";
+import { getLogged } from '../../services/api/LoginApi';
 
 export default function BoatForm({boat, buttonText, id}){
 
@@ -47,7 +48,14 @@ export default function BoatForm({boat, buttonText, id}){
         }
     }, [boat])
 
-    let renterId = localStorage.getItem("userId")
+    const [user, setUser] = useState([]);
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
+    let renterId = user.id;
 
     const postRequest = useCallback(
         (e) => {

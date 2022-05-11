@@ -4,8 +4,10 @@ import ListedAsset from './ListedAsset';
 import { getAssetsByUserId, getAssets, getFilteredAssets, getFilteredAssetsForRenter} from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import { getRole } from '../../services/AuthService/AuthService';
+import { getLogged } from '../../services/api/LoginApi';
 
-export default function AssetsPreview({userType}){
+export default function AssetsPreview({}){
 
     const [assets, setAssets] = useState([]);
     
@@ -13,17 +15,26 @@ export default function AssetsPreview({userType}){
     const [address, setAddress] = useState("");
     const [numOfPeople, setNumOfPeople] = useState(0);
     const [mark, setMark] = useState(0);
+    const userType = getRole();
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        async function fetchClient(){
+            await getLogged(setUser);
+        }
+        fetchClient();
+    }, [])
 
     const onClickSearchFunction = () => {
         let searchParams = {address, numOfPeople, price, mark}
         console.log(JSON.stringify(searchParams));
 
-        if (userType === "CLIENT")
+        if (userType === "Client")
             getFilteredAssets(address, numOfPeople, price, mark).then(
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
         else
-            getFilteredAssetsForRenter(localStorage.getItem("userId"), address, numOfPeople, price, mark).then(
+            getFilteredAssetsForRenter(user.id, address, numOfPeople, price, mark).then(
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
     }
@@ -31,10 +42,10 @@ export default function AssetsPreview({userType}){
     useEffect(() => {
         async function fetchAssets(){
             let requestData;
-            if (userType === "CLIENT")
+            if (userType === "Client")
                 requestData = await getAssets();
             else
-                requestData = await getAssetsByUserId(localStorage.getItem('userId'));
+                requestData = await getAssetsByUserId(user.id);
             console.log(requestData.data);
             setAssets(!!requestData ? requestData.data : []);
             return requestData;

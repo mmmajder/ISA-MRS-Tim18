@@ -5,6 +5,7 @@ import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
 import {useState, useEffect} from 'react';
 import { getAllAssetsByUser } from '../../../services/api/AssetApi.js';
+import { getLogged } from '../../../services/api/LoginApi.js';
 
 const CreateReservationForm = (props) => {
     const [startDateTime, setStartDateTime] = useState(new Date());
@@ -12,7 +13,16 @@ const CreateReservationForm = (props) => {
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
 
-    const userId = localStorage.getItem("userId")
+    const [user, setUser] = useState([]);
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
+
+    const userId = user.id;
+
     
     const addAppointment = (e) => {
     }

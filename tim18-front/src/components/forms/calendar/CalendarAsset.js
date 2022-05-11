@@ -14,7 +14,6 @@ const CalendarAsset = () => {
     const calendarRef = createRef()
     const [events, setEvents] = useState()
 
-    const userId = localStorage.getItem("userId");
     const assetId = localStorage.getItem("assetId");
 
     useEffect(() => {

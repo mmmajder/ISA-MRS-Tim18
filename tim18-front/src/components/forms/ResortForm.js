@@ -6,6 +6,7 @@ import '../../assets/styles/buttons.css';
 import {useCallback, useState, useEffect} from 'react';
 import { updateAsset } from '../../services/api/AssetApi';
 import { useNavigate  } from "react-router-dom";
+import { getLogged } from "../../services/api/LoginApi"
 
 export default function ResortForm({resort, buttonText, id}){
 
@@ -21,7 +22,15 @@ export default function ResortForm({resort, buttonText, id}){
     const [numberOfBeds, setNumOfBeds] = useState();
 
     const assetType = "RESORT";
-    const renterId = localStorage.getItem("userId")
+    const [user, setUser] = useState([]);
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
+
+    const renterId = user.id
 
     // sets resort's values if it's updateResortForm
     useEffect(() => {

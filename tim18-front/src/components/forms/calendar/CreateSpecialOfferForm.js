@@ -6,6 +6,7 @@ import { getAllAssetsByUser } from '../../../services/api/AssetApi.js';
 import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
 import { Row, Col } from 'react-bootstrap';
+import { getLogged } from '../../../services/api/LoginApi.js';
 
 
 const CreateSpecialOfferForm = (props) => {
@@ -16,7 +17,15 @@ const CreateSpecialOfferForm = (props) => {
     const [assets, setAssets] = useState([])
     const [discount, setDiscount] = useState(0)
 
-    const userId = localStorage.getItem("userId")
+    const [user, setUser] = useState([]);
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
+
+    const userId = user.id;
 
     const addAppointment = (e) => {
         const fromDateTime = moment(startDateTime).format("YYYY-MM-DDTHH:mm:SS")

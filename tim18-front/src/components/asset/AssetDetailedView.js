@@ -14,10 +14,12 @@ import FishingSpecificInfo from './FishingSpecificInfo';
 import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
+import { getRole } from '../../services/AuthService/AuthService';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
+    const userType = getRole()
     localStorage.setItem("assetId", id);
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export default function AssetDetailedView(){
                             <Col sm="3">
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
-                                { localStorage.getItem('userType') !== "CLIENT" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
+                                { userType !== "Client" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>

@@ -3,10 +3,12 @@ import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from './AssetMainInfo';
+import { getRole }  from '../../services/AuthService/AuthService'
 
 export default function ListedAsset({asset}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
+    const userType = getRole();
     // let assetType = "FISHING";
 
     let assetImage; 
@@ -36,7 +38,7 @@ export default function ListedAsset({asset}){
                             <Col sm="2" >
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
-                                    { localStorage.getItem('userType') !== "CLIENT" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
+                                    { userType !== "Client" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
                                 </div>
                             </Col>
                         </Row>
