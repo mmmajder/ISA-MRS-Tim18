@@ -24,6 +24,7 @@ export function LabeledInputWithErrMessage({isValid, label, inputName, placehold
                           name={inputName} 
                           defaultValue={defaultValue} 
                           placeholder={placeholder}  
+                          type={inputName==='password' || inputName==='retypedPassword'? "password" : ""}
                           required onChange={(e) => onChangeFunc(e, validationFunc)}>
             </Form.Control>
         </Col>

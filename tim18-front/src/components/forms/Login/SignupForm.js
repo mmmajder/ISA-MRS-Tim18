@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput } from '../../../services/utils/InputValidation';
+import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput, checkEmailInput, checkPasswordInput } from '../../../services/utils/InputValidation';
 import React, { useContext } from "react";
 import {
   BoldLink,
@@ -17,7 +17,7 @@ import { sendRegistrationRequest } from '../../../services/api/LoginApi';
 import { useNavigate } from 'react-router';
 import FeedbackPopUp from '../PopUps/FeedbackPopUp';
 
-export function SignupForm(props) {
+export function SignupForm({feedbackFunc}) {
   const navigate = useNavigate();
   const { switchToSignin } = useContext(AccountContext);
   const [inputs, setInputs] = useState({});
@@ -34,8 +34,6 @@ export function SignupForm(props) {
   const handleChange = (event, validationFunc) => {
       const name = event.target.name;
       var value = event.target.value;
-      console.log(name)
-      console.log(value)
       const valid = validationFunc(value)
       setInputs(values => ({...values, [name]: value}))
       setValidations(values => ({...values, [name]: valid}))
@@ -43,6 +41,7 @@ export function SignupForm(props) {
 
     // Form validation for button disable
   const [formValid, setFormValid] = useState(true);
+  const firstUpdate = useRef(true);
   
   useEffect(() => {
     setFormValid(validations.firstName && 
@@ -58,45 +57,22 @@ export function SignupForm(props) {
 
   // Feedback from request to back, to create popUp
   const [feedback, setFeedback] = useState('');
-  const [feedbackType, setFeedbackType] = useState(true);
-  const [feedbackMessage, setFeedbackMessage] = useState('');
-  const [feedbackShow, setFeedbackShow] = useState(false);
-
-  const firstUpdate = useRef(true);
-
-  useEffect(() => {
-    if (firstUpdate.current) {
-        firstUpdate.current = false;
-        return;
-      }
-      if(feedbackMessage!==''){
-        setFeedbackShow(true);
-      }
-    
-  }, [feedbackType, feedbackMessage])
-
-  function setFeedbackPopup(isError, message){
-      setFeedbackMessage(message);
-      setFeedbackType(isError);
-  }
-
-  function reset(){
-      setFeedbackShow(false);
-      setFeedbackMessage('');
-  }
-
+  
+  
   useEffect(() => {
     if (firstUpdate.current) {
         firstUpdate.current = false;
         return;
       }
     if(!!feedback){
-        navigate('/welcome/', { replace: false })
-        setFeedbackPopup(false, 'Successfuly created request for profile, Please check your email!'); 
+        //navigate('/welcome/', { replace: false })
+        feedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
         /*setCurrentClient(feedback);
         setOriginalClient(feedback);*/
     }
-    else{ setFeedbackPopup(true, 'Oops, something went wrong please try again!'); }
+    else{ 
+      feedbackFunc(true, 'Oops, something went wrong please try again!');
+     }
 
   }, [feedback])
 
@@ -106,7 +82,7 @@ export function SignupForm(props) {
     { id: 'ResortRenter', name: 'Resort Renter' },
     { id: 'FishingInstructor', name: 'Fishing Instructor' },
   ];
-
+  /* <SubmitButton type="submit" disabled={!formValid}  onClick={(e) => prepareForUpdate(inputs, setFeedback, e)}>Sign up</SubmitButton> */
 
   return (
     <>
@@ -117,8 +93,8 @@ export function SignupForm(props) {
         <Form.Select style={{'text-align': "center"}}aria-label="Default select example" name="userType" id="assets"  onChange={(e)=>{handleChange(e, checkLettersInput);}}>
           { userTypes.map((userType) => <option key={userType.id} value={userType.id}>{userType.name}</option>) }
         </Form.Select>
-        <LabeledInputWithErrMessage isValid={validations.email} label="Email*" inputName="email" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
-        <LabeledInputWithErrMessage isValid={validations.password} label="Password*" inputName="password" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+        <LabeledInputWithErrMessage isValid={validations.email} label="Email*" inputName="email" required onChangeFunc={handleChange} validationFunc={checkEmailInput} hoverTitile={onlyLetters}/>
+        <LabeledInputWithErrMessage isValid={validations.password} label="Password*" inputName="password" required onChangeFunc={handleChange} validationFunc={checkPasswordInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={true} label="Retype password*" inputName="retypedPassword" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.firstName} label="First Name*" inputName="firstName" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name*" inputName="lastName"required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
@@ -129,7 +105,7 @@ export function SignupForm(props) {
             
       </FormContainer>
       <Marginer direction="vertical" margin="2em" />
-      <SubmitButton type="submit" disabled={!formValid}  onClick={(e) => prepareForUpdate(inputs, setFeedback, e)}>Sign up</SubmitButton>
+      <Button variant="custom" type="submit" className="formButton" onClick={(e) => sendRegistrationRequest(setFeedback, inputs)} > Sign up  </Button>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Already have an account?
@@ -142,6 +118,3 @@ export function SignupForm(props) {
     </>
   );
 }
-const prepareForUpdate = (data, setFeedback, e) =>{
-  sendRegistrationRequest(setFeedback, data);
-};

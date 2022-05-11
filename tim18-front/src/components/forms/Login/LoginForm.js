@@ -5,12 +5,14 @@ import { AccountContext } from "./AccountContext";
 import { loginRequest, getLogged } from "../../../services/api/LoginApi"
 import {setToken,setRole} from "../../../services/AuthService/AuthService"
 import { useNavigate } from 'react-router';
-
-
+import { Button } from 'react-bootstrap';
+import { checkLettersInput, onlyLetters } from '../../../services/utils/InputValidation';
+import { LabeledInputWithErrMessage } from '../LabeledInput';
 
 export function LoginForm({handleLogin}) {
   const { switchToSignup } = useContext(AccountContext);
   const [inputs, setInputs] = useState({});
+  const [validations, setValidations] = useState({email: true, password: true});
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -42,19 +44,26 @@ export function LoginForm({handleLogin}) {
       getLogged(getUserCallback);
     }
   }
+  /*
+    <LabeledInputWithErrMessage isValid={validations.email} label="Email*" inputName="email" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    <LabeledInputWithErrMessage isValid={validations.password}label="Password*" inputName="password" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+    
+    */
   
   return(
       <BoxContainer>
         <FormContainer>
+          <Marginer direction="vertical" margin="5em" />
           <Input type="email" name="username" placeholder="Email" onChange={(e) => handleChange(e)} />
           <Input type="password" name="password" placeholder="Password" onChange={(e) => handleChange(e)}/>
+
         </FormContainer>
         <Marginer direction="vertical" margin={10} />
         <MutedLink href="#">Forgot your password?</MutedLink>
         <Marginer direction="vertical" margin="7.5em" />
-        <SubmitButton type="submit" onClick={() => {loginRequest(inputs, loginCallback);}}>
-          Sign in
-        </SubmitButton>
+        
+        <Button variant="custom" type="submit" className="formButton" onClick={() => {loginRequest(inputs, loginCallback);}} > Sign in  </Button>
+
         <Marginer direction="vertical" margin="2em" />
         <MutedLink href="#">
           Don't have an account?{" "}

@@ -57,7 +57,7 @@ export default function UpdateClientProfile(){
         setFeedbackMessage('');
     }
     
-    const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
+    const profilePic = require('../../assets/images/Katarina_Komad.jpg')  // TODO: real data
     
     if(!!client){
         const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { LoginForm} from "./LoginForm";
 import { motion } from "framer-motion";
 import { AccountContext } from "./AccountContext";
 import { SignupForm } from "./SignupForm";
 import { Router, Routes, Route } from "react-router-dom";
-import FeedbackPopUp from "../PopUps/FeedbackPopUp";
+import FeedbackPopUpFixed from "../PopUps/FeedbackPopUp-fixed";
+import { Row, Col } from "react-bootstrap";
 
 const BoxContainer = styled.div`
   width: 60%;
@@ -14,9 +15,11 @@ const BoxContainer = styled.div`
   flex-direction: column;
   border-radius: 19px;
   background-color: #fff;
-  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
+  
   position: relative;
   overflow: hidden;
+  border: solid 3px var(--dark-blue);
+  box-shadow: 0 0 5px var(--custom-dark-grey);
 `;
 
 const TopContainer = styled.div`
@@ -33,17 +36,17 @@ const BackDrop = styled(motion.div)`
   
   position: absolute;
   display: flex;
+  flex-basis:100%;
   
-  top: -90%;  
-  left: -100%;  
-  background: rgb(241, 196, 15);
-  background: linear-gradient(
-    rgba(241, 196, 15, 1) 20%,
-    rgba(243, 172, 18, 1) 100%
-  );
+  top: -92%;  
+  left: -101%; 
+  
+  background:  var(--dark-blue);
+  
 `;
 
 const HeaderContainer = styled.div`
+
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -54,6 +57,15 @@ const HeaderText = styled.h2`
   font-weight: 600;
   line-height: 1;
   color: #fff;
+  z-index: 10;
+  margin: 0;
+`;
+
+const TitleText = styled.h2`
+  font-size: 55px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--dark-blue);
   z-index: 10;
   margin: 0;
 `;
@@ -72,6 +84,17 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 3em 4.8em;
+`;
+
+const ImageConatiner = styled.div`
+  position: absolute;
+  width: 150%;
+  height: 200px;
+  display: flex;
+  flex-basis:50%;
+  padding: 3em 30em;  
+  overflow: hidden;
+
 `;
 
 const backdropVariants = {
@@ -120,13 +143,41 @@ export function AccountBox({handleLogin}) {
     }, 400);
   };
 
+
   const contextValue = { switchToSignup, switchToSignin };
+  const logo = require('../../../assets/images/island_logo.png')
+  const message = "Successfully created request! Please check your email to confirm your identity";
+  const firstUpdate = useRef(true);
+
+  const [feedbackType, setFeedbackType] = useState(true);
+  const [feedbackShow, setFeedbackShow] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+        firstUpdate.current = false;
+        return;
+      }
+      if(feedbackMessage!==''){
+        setFeedbackShow(true);
+      }
+    
+}, [feedbackType, feedbackMessage])
+
+function setFeedbackPopup(isError, message){
+    setFeedbackMessage(message);
+    setFeedbackType(isError);
+}
+
+function reset(){
+    setFeedbackShow(false);
+    setFeedbackMessage('');
+}
 
   return (
    <> 
-   
+    <FeedbackPopUpFixed changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
     <AccountContext.Provider value={contextValue}>
-    <FeedbackPopUp  isError={true} message={"sorry"} /> 
       <BoxContainer>
         <TopContainer>
           <BackDrop
@@ -135,6 +186,10 @@ export function AccountBox({handleLogin}) {
             variants={backdropVariants}
             transition={expandingTransition}
           />
+          <ImageConatiner>
+            <TitleText>Hakuna Matata</TitleText>
+            <img src={logo} alt="logo" /> 
+          </ImageConatiner>
           {active === "signin" && (
             <HeaderContainer>
               <HeaderText>Welcome</HeaderText>
@@ -149,10 +204,11 @@ export function AccountBox({handleLogin}) {
               <SmallText>Please sign-up to continue!</SmallText>
             </HeaderContainer>
           )}
+          
         </TopContainer>
         <InnerContainer>
           {active === "signin" && <LoginForm handleLogin={handleLogin}/>}
-          {active === "signup" && <SignupForm />}
+          {active === "signup" && <SignupForm feedbackFunc={setFeedbackPopup}/>}
         </InnerContainer>
       </BoxContainer>
       </AccountContext.Provider>

@@ -74,7 +74,6 @@ public class AuthenticationController {
 		User user = UserMapper.mapRequestToUser(userRequest);
 		
 		user = this.userService.save(user);
-		
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 }
