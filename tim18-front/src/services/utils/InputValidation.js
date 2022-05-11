@@ -18,6 +18,15 @@ export function checkLettersInput(input){
     return onlyLettersRegex.test(input);
 }
 
+export function checkEmailInput(input){
+    return validEmail.test(input);
+}
+
+export function checkPasswordInput(input){
+    return validPassword.test(input);
+}
+
+
 export function checkNumInput(input){
     return onlyNumbersRegex.test(input);     
 }

@@ -4,13 +4,24 @@ import MarkStars from '../MarkStars';
 import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
 
+import {useState, useEffect, useCallback} from 'react';
+import axios from 'axios';
+import {getInstructorByID} from '../../services/api/InstructorApi'
+import { getLogged } from '../../services/api/LoginApi';
 
-export default function ProfileInfoBlock({user}){
+export default function ProfileInfoBlock(){
+    const [user, setUser] = useState();
 
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
 
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')
-    console.log("id "+ user)
-    console.log("user " + user)
+    console.log(user)
+
     if(!!user) {
         return <div className="borderedBlock" align="center">
                 <img src={profilePic} className="profilePicture rounded-circle" ></img>

@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Admin extends User {
+
+	private static final long serialVersionUID = 1L;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Reservation> pendigReservations = new ArrayList<Reservation>();
@@ -29,16 +30,16 @@ public class Admin extends User {
 
 
 	public Admin(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled) {
 		
-		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, userAccount);
+		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
 	}
 
 
 	public Admin(Long iD, String firstName, String lastName, String address, String city, String state, String phoneNum,
-			UserType userType, UserAccount userAccount) {
+			UserType userType, String email, String password) {
 		
-		super(iD, firstName, lastName, address, city, state, phoneNum, userType, userAccount);
+		super(iD, firstName, lastName, address, city, state, phoneNum, userType, email, password);
 	}
 
 

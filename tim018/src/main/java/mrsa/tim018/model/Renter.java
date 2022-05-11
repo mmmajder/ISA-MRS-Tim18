@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @JsonIgnoreProperties(value= {"assets"})
 public class Renter extends User {
 	
+	private static final long serialVersionUID = 1L;
+	
 	@OneToMany(mappedBy = "renter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Asset> assets = new ArrayList<Asset>();
@@ -29,15 +31,19 @@ public class Renter extends User {
 
 	// DTO
 	public Renter(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount, List<Asset> assets) {
-		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, userAccount);
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, List<Asset> assets) {
+		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
 		this.assets = assets;
 	}
 
 	
+	public Renter(User user) {
+		super(user);
+	}
+	
 	public Renter(Long iD, String firstName, String lastName, String address, String city, String state,
-			String phoneNum, UserType userType, UserAccount userAccount,  List<Asset> assets) {
-		super(iD, firstName, lastName, address, city, state, phoneNum, userType, userAccount);
+			String phoneNum, UserType userType, String email, String password,  List<Asset> assets) {
+		super(iD, firstName, lastName, address, city, state, phoneNum, userType, email, password);
 		this.assets = assets;
 	}
 

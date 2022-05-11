@@ -4,12 +4,13 @@ import '../../assets/styles/form.css';
 import {useState, useEffect, useRef} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import FeedbackPopUp from  './FeedbackPopUp'
+import FeedbackPopUp from './PopUps/FeedbackPopUp';
 import {getRenterByID, createDeleteRequest, updateRenter} from '../../services/api/RenterApi'
 import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, capitalizeString } from '../../services/utils/InputValidation';
 import {getDeleteRequestByID} from '../../services/api/DeleteRequestApi';
 import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
 import DeleteRequest from './PopUps/DeleteRequest';
+import { getLogged } from '../../services/api/LoginApi';
 
 export default function UpdateRenter({id}){
     const [renter, setRenter] = useState();
@@ -23,9 +24,7 @@ export default function UpdateRenter({id}){
 
     useEffect(() => {
         async function fetchRenter(){
-            const requestData = await getRenterByID(id);
-            setRenter(!!requestData ? requestData.data : {});
-            return requestData;
+            await getLogged(setRenter);
         }
         fetchRenter();
 
