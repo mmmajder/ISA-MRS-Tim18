@@ -114,24 +114,25 @@ function App() {
   const assetUpdate = <UpdateForm />
   const calendar = <Calendar />
   const assetCalendar = <CalendarAsset/>
+  const home = <></>
 
   return  (<Router>
             <Routes>
-              <Route path='welcome/' element={<ProtectedRoute isAllowedUser={user}> {chooseNavbar(user)} </ProtectedRoute>}>
-                                        
-                  {/* For other's Profile page */}
-                  <Route path="/welcome/profile" element={ChooseProfile(user)} /> 
-                  <Route path="/welcome/settings" element={ChooseSettings(user)} />
+              <Route path='' element={<ProtectedRoute isAllowedUser={user}> {chooseNavbar(user)} </ProtectedRoute>}>
+                <Route path="/home" element={home} /> 
+                {/* For other's Profile page */}
+                <Route path="/profile" element={ChooseProfile(user)} /> 
+                <Route path="/settings" element={ChooseSettings(user)} />
 
-                   {/* Creating/Registrating Resorts/Boats */}
-                  <Route path="/welcome/createResort" element={resortForm} /> 
-                  <Route path="/welcome/calendar" element={calendar}/>
-                  <Route path="/welcome/logout" element={<Logout handleLogout={handleLogout}/>} />
-                  <Route exact path="/welcome/resorts" element={assetList} /> 
-                  <Route path="/welcome/resorts/:id" element={resortView} /> 
-                  <Route path="/welcome/resorts/update/:id" element={assetUpdate} />
-                  <Route path="/welcome/calendar" element={calendar}/>
-                  <Route path="/welcome/calendarAsset" element={assetCalendar}/>
+                  {/* Creating/Registrating Resorts/Boats */}
+                <Route path="createResort" element={resortForm} /> 
+                <Route path="/calendar" element={calendar}/>
+                <Route path="/logout" element={<Logout handleLogout={handleLogout}/>} />
+                <Route exact path="/resorts" element={assetList} /> 
+                <Route path="/resorts/:id" element={resortView} /> 
+                <Route path="/resorts/update/:id" element={assetUpdate} />
+                <Route path="/calendar" element={calendar}/>
+                <Route path="/calendarAsset" element={assetCalendar}/>
               </Route>
               
               <Route path="login" element={login} />

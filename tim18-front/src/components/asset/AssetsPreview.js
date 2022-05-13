@@ -50,8 +50,10 @@ export default function AssetsPreview({}){
             setAssets(!!requestData ? requestData.data : []);
             return requestData;
         }
-        fetchAssets();
-    }, [])
+        if (user != undefined){
+            fetchAssets();
+        }
+    }, [user])
 
     let listedAssets;
     if (assets != undefined){

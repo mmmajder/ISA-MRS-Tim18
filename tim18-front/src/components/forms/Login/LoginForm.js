@@ -31,7 +31,7 @@ export function LoginForm({handleLogin}) {
     {
       setRole(user.userType);
       handleLogin(user.userType);
-      navigate('/welcome/', { replace: false })
+      navigate('/home')
     }
   }
   const loginCallback = (returnData) => {
