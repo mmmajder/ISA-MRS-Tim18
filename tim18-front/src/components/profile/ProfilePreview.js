@@ -8,6 +8,7 @@ import AssetList from '../asset/AssetsList';
 import { getRole } from '../../services/AuthService/AuthService';
 import ClientProfilePreview from './ClientProfilePreview';
 import { getLogged } from '../../services/api/LoginApi';
+import '../../assets/styles/style.css';
 
 export default function ProfilePreview(){
     // const [user, setUser] = useState();

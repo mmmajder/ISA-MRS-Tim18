@@ -8,6 +8,7 @@ import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import {getInstructorByID} from '../../services/api/InstructorApi'
 import { getLogged } from '../../services/api/LoginApi';
+import '../../assets/styles/style.css';
 
 export default function ProfileInfoBlock(){
     const [user, setUser] = useState();

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { checkLettersInput, onlyLetters } from '../../../services/utils/InputValidation';
 import { LabeledInputWithErrMessage } from '../LabeledInput';
+import '../../../assets/styles/login.css'
 
 export function LoginForm({handleLogin}) {
   const { switchToSignup } = useContext(AccountContext);
@@ -79,7 +80,7 @@ export function LoginForm({handleLogin}) {
 /*import React, { useContext } from "react";
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
-import '../../../assets/styles/login.css'
+
 import { Form, Button} from 'react-bootstrap';
 
 export default function LoginForm() {

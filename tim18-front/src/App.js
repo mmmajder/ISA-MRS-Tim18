@@ -2,7 +2,7 @@
 /*import React from 'react';
 import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
 import CreateAssetForm from './components/forms/CreateAssetForm.js'
-import {Container} from 'react-bootstrap'
+
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import ProfilePreview from './components/profile/ProfilePreview.js';
 import ClientBase from './layouts/ClientBase.js';
@@ -37,6 +37,9 @@ import UpdateClientProfile from './components/forms/UpdateClientProfile';
 import Calendar from './components/calendar/Calendar';
 import ProfileInfoBlock from './components/profile/ProfileInfo';
 import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar';
+import './assets/styles/style.css';
+import {Container} from 'react-bootstrap'
+import { getLogged } from './services/api/LoginApi.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -104,42 +107,41 @@ function App() {
 
   const [user, setUser] = React.useState(getRole());
 
-  const handleLogout = () => {setUser(null); };  
+  const handleLogout = () => {setUser(null); localStorage.clear();};  
   const handleLogin = (user) => {setUser(user); };  
   const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
   
-  const resortForm = <CreateForm  />
-  const resortView = <AssetDetailedView />
-  const assetList = <AssetsPreview />
-  const assetUpdate = <UpdateForm />
-  const calendar = <Calendar />
-  const assetCalendar = <CalendarAsset/>
-  const home = <></>
+  const resortForm = <Container><CreateForm  /></Container>
+  const resortView = <Container><AssetDetailedView /></Container>
+  const assetList = <Container><AssetsPreview /></Container>
+  const assetUpdate = <Container><UpdateForm /></Container>
+  const calendar = <Container><Calendar /></Container>
+  const assetCalendar = <Container><CalendarAsset/></Container>
+  const home = <Container></Container>
 
   return  (<Router>
-            <Routes>
-              <Route path='' element={<ProtectedRoute isAllowedUser={user}> {chooseNavbar(user)} </ProtectedRoute>}>
-                <Route path="/home" element={home} /> 
-                {/* For other's Profile page */}
-                <Route path="/profile" element={ChooseProfile(user)} /> 
-                <Route path="/settings" element={ChooseSettings(user)} />
+            {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
+              <Routes>
+                <Route path='' element={<ProtectedRoute isAllowedUser={user}>{chooseNavbar(user)} </ProtectedRoute>}>
+                  <Route path="/home" element={home} /> 
+                  {/* For other's Profile page */}
+                  <Route path="/profile" element={<Container>{ChooseProfile(user)}</Container>} /> 
+                  <Route path="/settings" element={<Container>{ChooseSettings(user)}</Container>} />
 
-                  {/* Creating/Registrating Resorts/Boats */}
-                <Route path="createResort" element={resortForm} /> 
-                <Route path="/calendar" element={calendar}/>
-                <Route path="/logout" element={<Logout handleLogout={handleLogout}/>} />
-                <Route exact path="/resorts" element={assetList} /> 
-                <Route path="/resorts/:id" element={resortView} /> 
-                <Route path="/resorts/update/:id" element={assetUpdate} />
-                <Route path="/calendar" element={calendar}/>
-                <Route path="/calendarAsset" element={assetCalendar}/>
-              </Route>
-              
-              <Route path="login" element={login} />
-              <Route index element={login} />
-              <Route path="*" element={<h1>Sorry, this page is not available :( </h1>} />
-            </Routes>
-          
+                    {/* Creating/Registrating Resorts/Boats */}
+                  <Route path="createResort" element={resortForm} /> 
+                  <Route path="/calendar" element={calendar}/>
+                  <Route path="/logout" element={<Container><Logout handleLogout={handleLogout}/></Container>} />
+                  <Route exact path="/resorts" element={assetList} /> 
+                  <Route path="/resorts/:id" element={resortView} /> 
+                  <Route path="/resorts/update/:id" element={assetUpdate} />
+                  <Route path="/calendar" element={calendar}/>
+                  <Route path="/calendarAsset" element={assetCalendar}/>
+                </Route>
+                <Route path="login" element={login} />
+                <Route index element={login} />
+                <Route path="*" element={<h1>Sorry, this page is not available :( </h1>} />
+              </Routes>
           </Router>);
         
 }
@@ -168,12 +170,15 @@ function ChooseSettings(userType){
 }
 
 function chooseNavbar(userType){
-  let navBar = null
+  let navBar = <></>
   if(userType === "Client"){
     navBar =  <ClientNavbar />
   }
   else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor'){
     navBar =  <ResortRenterNavbar userType={userType}/>
+  }
+  else{
+    navBar = <></>
   }
   return (
     <div>

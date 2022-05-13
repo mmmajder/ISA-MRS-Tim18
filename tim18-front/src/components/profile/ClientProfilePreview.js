@@ -7,7 +7,7 @@ import ProfileBusinessInfo from './ProfileBusinessInfo';
 import {useEffect, useState} from 'react';
 import { getClientByID } from '../../services/api/ClientApi';
 import { getLogged } from '../../services/api/LoginApi';
-
+import '../../assets/styles/style.css';
 
 export default function ClientProfilePreview(){
     const [client, setClient]  = useState();
