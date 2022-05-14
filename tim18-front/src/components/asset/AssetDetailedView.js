@@ -15,6 +15,7 @@ import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
+import MapContainer from './MapContainer';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -60,6 +61,9 @@ export default function AssetDetailedView(){
                     <Col sm="6">
                         <img src={assetImage} className="assetImage"/>
                         {asset !== {} && <RenterInfo/>}
+                        <div className="borderedBlock mt-3" align="">
+                            <MapContainer />
+                        </div>
                     </Col>
                     <Col sm="6">
                         <Row>
