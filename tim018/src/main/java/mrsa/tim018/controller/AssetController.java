@@ -60,35 +60,35 @@ public class AssetController {
 	
 	
 	@PostMapping(consumes = "application/json")
-	public ResponseEntity<AssetDTO> saveAsset(@RequestBody AssetDTO assetDto) {
+	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
 		AssetType type = assetDto.getAssetType();
-		AssetCalendar assetCalendar;
-		Renter renter = renterService.findOne(assetDto.getRenterId());
+		
 		switch (type) {
 		case RESORT: 
 			Resort resort = AssetMapper.mapToResort(assetDto);
-			assetCalendar = assetCalendarSevice.createNewCalendar();
-			resort.setCalendar(assetCalendar);
-			resort.setRenter(renter);
+			setCalendarAndRenter(resort);
 			resort = resortService.save(resort);
 			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
 		case BOAT:  
 			Boat boat = AssetMapper.mapToBoat(assetDto);
-			assetCalendar = assetCalendarSevice.createNewCalendar();
-			boat.setCalendar(assetCalendar);
-			boat.setRenter(renter);
+			setCalendarAndRenter(boat);
 			boat = boatService.save(boat);
 			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
 		case FISHING_ADVENTURE:  
 			Adventure adventure = AssetMapper.mapToAdventure(assetDto);
-			assetCalendar = assetCalendarSevice.createNewCalendar();
-			adventure.setCalendar(assetCalendar);
-			adventure.setRenter(renter);
+			setCalendarAndRenter(adventure);
 			adventure = adventureService.save(adventure);
 			return new ResponseEntity<>(new AssetDTO(adventure), HttpStatus.CREATED);
 		default: 
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
+	}
+	
+	private void setCalendarAndRenter(Asset asset) {
+		AssetCalendar assetCalendar = assetCalendarSevice.createNewCalendar();
+		asset.setCalendar(assetCalendar);
+		Renter renter = renterService.findOne(asset.getRenter().getID());
+		asset.setRenter(renter);
 	}
 	
 	@PutMapping(value="/{id}", consumes = "application/json" )
@@ -105,25 +105,7 @@ public class AssetController {
 		default: 
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		
-//		Asset updatedAsset = AssetMapper.mapToAsset(assetDto);
-//		Asset assetToUpdate = assetService.findOne(id);
-//		
-//		if (assetToUpdate != null)
-//		{
-//			// changes only user-changable attributes
-//			assetToUpdate.setAddress(updatedAsset.getAddress());
-//			assetToUpdate.setCancelationConditions(updatedAsset.getCancelationConditions());
-//			assetToUpdate.setDescription(updatedAsset.getDescription());
-//			assetToUpdate.setName(updatedAsset.getName());
-//			assetToUpdate.setNumOfPeople(updatedAsset.getNumOfPeople());
-//			assetToUpdate.setRules(updatedAsset.getRules());
-//			assetService.save(assetToUpdate);
-//			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//		} else
-//			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
-	
 	
 	@DeleteMapping(value="/{id}" )
 	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id) {
@@ -137,75 +119,69 @@ public class AssetController {
 	}
 	
 	
-	public ResponseEntity<AssetDTO> updateResort(Long id,AssetDTO assetDto) {
-		Resort updatedResort = AssetMapper.mapToResort(assetDto);
+	private ResponseEntity<AssetDTO> updateResort(Long id,AssetDTO assetDto) {
+		Resort updatedData = AssetMapper.mapToResort(assetDto);
 		Resort resortToUpdate = resortService.findOne(id);
 		
 		if (resortToUpdate != null)
 		{
 			// changes only user-changable attributes
-			resortToUpdate.setAddress(updatedResort.getAddress());
-			resortToUpdate.setCancelationConditions(updatedResort.getCancelationConditions());
-			resortToUpdate.setDescription(updatedResort.getDescription());
-			resortToUpdate.setName(updatedResort.getName());
-			resortToUpdate.setNumOfPeople(updatedResort.getNumOfPeople());
-			resortToUpdate.setRules(updatedResort.getRules());
-			resortToUpdate.setNumberOfRooms(updatedResort.getNumberOfRooms());
-			resortToUpdate.setNumberOfBeds(updatedResort.getNumberOfBeds());
+			updateAsset(resortToUpdate, updatedData);
+			resortToUpdate.setNumberOfRooms(updatedData.getNumberOfRooms());
+			resortToUpdate.setNumberOfBeds(updatedData.getNumberOfBeds());
 			resortService.save(resortToUpdate);
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
-	public ResponseEntity<AssetDTO> updateBoat(Long id, AssetDTO assetDto) {
-		Boat updatedBoat = AssetMapper.mapToBoat(assetDto);
+	private ResponseEntity<AssetDTO> updateBoat(Long id, AssetDTO assetDto) {
+		Boat updatedData = AssetMapper.mapToBoat(assetDto);
 		Boat boatToUpdate = boatService.findOne(id);
 		
 		if (boatToUpdate != null)
 		{
 			// changes only user-changable attributes
-			boatToUpdate.setAddress(updatedBoat.getAddress());
-			boatToUpdate.setCancelationConditions(updatedBoat.getCancelationConditions());
-			boatToUpdate.setDescription(updatedBoat.getDescription());
-			boatToUpdate.setName(updatedBoat.getName());
-			boatToUpdate.setNumOfPeople(updatedBoat.getNumOfPeople());
-			boatToUpdate.setRules(updatedBoat.getRules());
-			boatToUpdate.setBoatType(updatedBoat.getBoatType());
-			boatToUpdate.setLength(updatedBoat.getLength());
-			boatToUpdate.setNumOfMotor(updatedBoat.getNumOfMotor());
-			boatToUpdate.setMotorPower(updatedBoat.getMotorPower());
-			boatToUpdate.setMaxSpeed(updatedBoat.getMaxSpeed());
-			boatToUpdate.setNavigationEquipment(updatedBoat.getNavigationEquipment());
-			boatToUpdate.setFishingEquipment(updatedBoat.getFishingEquipment());
-			boatService.save(updatedBoat);
+			updateAsset(boatToUpdate, updatedData);
+			updateBoatSpecificAttributes(boatToUpdate, updatedData);
+			boatService.save(boatToUpdate);
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
-	public ResponseEntity<AssetDTO> updateAdventure(Long id, AssetDTO assetDto) {
-		Adventure updatedAdventure = AssetMapper.mapToAdventure(assetDto);
+	private ResponseEntity<AssetDTO> updateAdventure(Long id, AssetDTO assetDto) {
+		Adventure updatedData = AssetMapper.mapToAdventure(assetDto);
 		Adventure adventureToUpdate = adventureService.findOne(id);
 		
 		if (adventureToUpdate != null)
 		{
-			// changes only user-changable attributes
-			adventureToUpdate.setAddress(updatedAdventure.getAddress());
-			adventureToUpdate.setCancelationConditions(updatedAdventure.getCancelationConditions());
-			adventureToUpdate.setDescription(updatedAdventure.getDescription());
-			adventureToUpdate.setName(updatedAdventure.getName());
-			adventureToUpdate.setNumOfPeople(updatedAdventure.getNumOfPeople());
-			adventureToUpdate.setRules(updatedAdventure.getRules());
-			adventureToUpdate.setFishingEquipment(updatedAdventure.getFishingEquipment());
-			adventureService.save(updatedAdventure);
+			updateAsset(adventureToUpdate, updatedData);
+			adventureToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
+			adventureService.save(adventureToUpdate);
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+	private void updateBoatSpecificAttributes(Boat boatToUpdate, Boat updatedData) {
+		boatToUpdate.setBoatType(updatedData.getBoatType());
+		boatToUpdate.setLength(updatedData.getLength());
+		boatToUpdate.setNumOfMotor(updatedData.getNumOfMotor());
+		boatToUpdate.setMotorPower(updatedData.getMotorPower());
+		boatToUpdate.setMaxSpeed(updatedData.getMaxSpeed());
+		boatToUpdate.setNavigationEquipment(updatedData.getNavigationEquipment());
+		boatToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
+	}
 	
-	
+	private void updateAsset(Asset assetToUpdate, Asset updatedData) {
+		assetToUpdate.setAddress(updatedData.getAddress());
+		assetToUpdate.setCancelationConditions(updatedData.getCancelationConditions());
+		assetToUpdate.setDescription(updatedData.getDescription());
+		assetToUpdate.setName(updatedData.getName());
+		assetToUpdate.setNumOfPeople(updatedData.getNumOfPeople());
+		assetToUpdate.setRules(updatedData.getRules());
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {
@@ -261,8 +237,6 @@ public class AssetController {
 		
 		return assetsDTO;
 	}
-	
-	
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<AssetDTO> getAsset(@PathVariable Long id) {

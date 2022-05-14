@@ -23,37 +23,4 @@ export default function ResortRenterNavbar({userType}){
             </Nav>
         </Navbar.Collapse>
     </Navbar>
-    
-    
-    
-    // <nav className="navbar">
-    //     <a className="navbar-brand navbar-expand-lg navbar-dark bg-dark" href="">
-    //         <img src={logo}  className="brand" alt="logo" />
-    //     </a>
-    //     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    //         <span className="navbar-toggler-icon"></span>
-    //     </button>
-    //     <div className="collapse navbar-collapse navbar-nav" id="navbar-nav">  
-    //         <ul className="navbar-nav ml-auto">
-    //             <li className="nav-item">
-    //                 <a id="homeButton" className="nav-link navLink" href="" target="_top"><FontAwesomeIcon icon={faHome} /> Home</a>
-    //             </li>
-    //             <li className="nav-item">
-    //                 <a id="inboxButton" className="nav-link navLink" href="" target="_top"><FontAwesomeIcon icon={faComment} /> Inbox</a>
-    //             </li>
-    //             <li className="nav-item">
-    //                 <a id="friendsButton" className="nav-link navLink" href="" target="_top"><FontAwesomeIcon icon={faUserFriends} /> O'nect Requests</a>
-    //             </li>
-    //             <li className="nav-item">
-    //                 <a id="notificationButton" className="nav-link navLink" href="" target="_top"><FontAwesomeIcon icon={faCogs} /> Settings</a>
-    //             </li>
-    //             <li className="nav-item">
-    //                 <a id="profileButton" className="nav-link navLink" href="" target="_top"><img src={logo} alt="profile_picture" className="profile_picture" id="navProfilePic"/> Profile</a>
-    //             </li>
-    //             <li className="nav-item">
-    //                 <a id="logoutButton" className="nav-link navLink" href="" target="_top"><FontAwesomeIcon icon={faChevronCircleRight} /> Logout</a>
-    //             </li>
-    //         </ul>
-    //     </div>
-    // </nav>
 }
