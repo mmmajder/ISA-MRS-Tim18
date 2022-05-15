@@ -22,8 +22,10 @@ import mrsa.tim018.dto.UserRequest;
 import mrsa.tim018.dto.UserTokenState;
 import mrsa.tim018.mapper.UserMapper;
 import mrsa.tim018.model.User;
+import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.UserService;
 import mrsa.tim018.utils.TokenUtils;
+import net.bytebuddy.utility.RandomString;
 
 
 @RestController
@@ -38,6 +40,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserService<User> userService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserTokenState> createAuthenticationToken(
@@ -59,7 +64,7 @@ public class AuthenticationController {
 		User user = (User) authentication.getPrincipal();
 		String jwt = tokenUtils.generateToken(user);
 		int expiresIn = tokenUtils.getExpiredIn();
-
+	
 		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
 	}
 
@@ -73,7 +78,18 @@ public class AuthenticationController {
 		}
 		User user = UserMapper.mapRequestToUser(userRequest);
 		
+		String randomCode = RandomString.make(64);
+		
+		user.setVerificationCode(randomCode);
+		user.setEnabled(false);
+		
 		user = this.userService.save(user);
+		//slanje emaila
+		try {
+			emailService.sendNotificaitionAsync(user);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}	
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 }

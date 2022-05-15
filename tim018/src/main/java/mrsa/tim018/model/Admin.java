@@ -30,9 +30,9 @@ public class Admin extends User {
 
 
 	public Admin(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, String verificationCode) {
 		
-		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
+		super(iD, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled, verificationCode);
 	}
 
 

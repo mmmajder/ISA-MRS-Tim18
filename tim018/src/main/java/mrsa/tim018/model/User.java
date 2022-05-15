@@ -96,6 +96,9 @@ public class User implements UserDetails{
 	@Column(name="biography")
 	private String biography;
 	
+	@Column(name = "verification_code", length = 64)
+    private String verificationCode;
+	
 	public User() {
 		
 	}
@@ -134,7 +137,7 @@ public class User implements UserDetails{
 		this.enabled = true;
 	}*/
 	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, String verificationCode) {
 		super();
 		this.id = iD;
 		this.isDeleted = isDeleted;
@@ -149,6 +152,7 @@ public class User implements UserDetails{
 		this.email = email;
 		this.password = password;
 		this.enabled = enabled;
+		this.verificationCode = verificationCode;
 	}
 	
 
@@ -182,6 +186,7 @@ public class User implements UserDetails{
 		this.userType = user.userType;
 		this.email = user.email;
 		this.password = user.password;
+		this.verificationCode = user.verificationCode;
 		
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
@@ -388,6 +393,26 @@ public class User implements UserDetails{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getBiography() {
+		return biography;
+	}
+
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+	
+	public String getFullName() {
+		return this.firstName + " " + this.lastName;
 	}
 	
 	
