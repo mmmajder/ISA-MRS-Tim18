@@ -52,7 +52,7 @@ const CreateSpecialOfferForm = (props) => {
             return requestData;
         }
         fetchAssets();
-    }, [])
+    }, [user])
 
     if (!!assets) {
         return (

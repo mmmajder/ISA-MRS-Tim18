@@ -48,7 +48,7 @@ const CreatePeriodOfAvailabiltyForm = (props) => {
             return requestData;
         }
         fetchAssets();
-    }, [])
+    }, [user])
 
     if (!!assets) {
         return (

@@ -4,20 +4,22 @@ import './../../../assets/styles/calendar.css'
 import CreateSpecialOfferForm from './CreateSpecialOfferForm'
 import CreateReservationForm from './CreateReservationForm'
 import CreatePeriodOfAvailabiltyForm from './CreatePeriodOfAvailabiltyForm.js'
-
+import CreatePeriodOfAvailabilityModal from './../../modal/CreatePeriodOfAvailabilityModal'
+import CreateSpecialOfferFormModal from '../../modal/CreateSpecialOfferFormModal';
+import CreateReservationFormModal from '../../modal/CreateReservationFormModal';
 
 export default function CreateCalendarEventForm(props){
     const [activeForm, setActiveForm] = useState(null);
 
     const availableForm = () => {
-        setActiveForm(<CreatePeriodOfAvailabiltyForm props={props} scope = {props.scope}/>)
+        setActiveForm(<CreatePeriodOfAvailabilityModal props={props} scope = {props.scope}/>)
     }
     const specialOfferForm = () => {
-        setActiveForm(<CreateSpecialOfferForm props={props} scope = {props.scope}/>)
+        setActiveForm(<CreateSpecialOfferFormModal props={props} scope = {props.scope}/>)
     }
 
     const reservationForm = () => {
-        setActiveForm(<CreateReservationForm props={props}/>)
+        setActiveForm(<CreateReservationFormModal props={props} scope = {props.scope}/>)
     }
 
     return (

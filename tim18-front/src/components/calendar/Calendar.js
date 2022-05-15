@@ -9,16 +9,25 @@ import LabeledInput from '../forms/LabeledInput';
 import CreateCalendarEventForm from '../forms/calendar/CreateCalendarEventForm'
 import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
+import { getLogged } from '../../services/api/LoginApi';
 
 
-const Calendar = ({id}) => {
+const Calendar = () => {
   const calendarRef = createRef()
   const [resources, setResources] = useState()
   const [events, setEvents] = useState()
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    async function fetchUser(){
+        await getLogged(setUser);
+    }
+    fetchUser();
+}, [])
 
   useEffect(() => {
     async function fetchCalendarData(){
-        const requestData = await getCalendarData(id);
+        const requestData = await getCalendarData(user.id);
         let resourceList = []
         const data = requestData.data.map((element) => {
           const res = {
@@ -58,7 +67,7 @@ const Calendar = ({id}) => {
         return requestData;
     }
     fetchCalendarData();
-}, [])
+}, [user])
 
 const makeEventList = (data) => {
   let retData = []

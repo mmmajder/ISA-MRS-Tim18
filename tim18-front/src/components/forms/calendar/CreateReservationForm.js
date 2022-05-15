@@ -34,7 +34,7 @@ const CreateReservationForm = (props) => {
             return requestData;
         }
         fetchAssets();
-    }, [])
+    }, [user])
 
 
     if (!!assets) {
