@@ -62,7 +62,7 @@ export default function AssetDetailedView(){
                         <img src={assetImage} className="assetImage"/>
                         {asset !== {} && <RenterInfo/>}
                         <div className="borderedBlock mt-3" align="">
-                            <MapContainer />
+                            <MapContainer address={asset.address}/>
                         </div>
                     </Col>
                     <Col sm="6">
