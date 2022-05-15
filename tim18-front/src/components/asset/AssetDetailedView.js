@@ -15,6 +15,7 @@ import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
+import { Marginer } from '../forms/Login/marginer';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -80,10 +81,11 @@ export default function AssetDetailedView(){
                         {assetType === "FISHING_ADVENTURE" && <FishingSpecificInfo fishingAdventure={asset}/>}
                     </Col>
                 </Row>
+                <Marginer direction="vertical" margin="3em" />
                 <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                        <RegularButton text='Rent resort' onClickFunction={''}/>
+                       <RegularButton text='Rent resort' disabled={userType === "Guest"} onClickFunction={''}/>
                     </Col>
                     <Col sm={4}/>
                 </Row>

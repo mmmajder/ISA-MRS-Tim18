@@ -1,23 +1,3 @@
-
-/*import React from 'react';
-import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar.js';
-import CreateAssetForm from './components/forms/CreateAssetForm.js'
-
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import ProfilePreview from './components/profile/ProfilePreview.js';
-import ClientBase from './layouts/ClientBase.js';
-
-import Calendar from './components/calendar/Calendar.js';
-import UpdateRenter from './components/forms/UpdateInstructorProfileForm.js';
-import { faListSquares } from '@fortawesome/free-solid-svg-icons';
-import AssetList from './components/asset/AssetsList.js';
-import UpdateResortForm from './components/forms/UpdateResortForm.js';
-import { CalendarContent } from '@fullcalendar/react';
-import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
-import AssetDetailedView from './components/asset/AssetDetailedView.js';
-import CreateForm from './components/forms/CreateForm.js';
-import UpdateForm from './components/forms/UpdateForm.js';
-import AssetsPreview from './components/asset/AssetsPreview.js';*/
 import AssetDetailedView from './components/asset/AssetDetailedView.js';
 import CreateForm from './components/forms/CreateForm.js';
 import UpdateForm from './components/forms/UpdateForm.js';
@@ -40,6 +20,7 @@ import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar';
 import './assets/styles/style.css';
 import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
+import GuestNavbar from './layouts/navbar/GuestNavbar';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -53,7 +34,7 @@ function App() {
   const [user, setUser] = React.useState(getRole());
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
-  const handleLogin = (user) => {setUser(user); };  
+  const handleLogin = (user) => {setUser(user);};  
   const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
   
   const resortForm = <Container><CreateForm  /></Container>
@@ -93,11 +74,12 @@ function App() {
         
 }
 const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => {
-  if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' || isAllowedUser==='Guest' ||
+  if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' ||isAllowedUser==='Guest' ||
       isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor') {
         
     return children;
   }
+
   return <Navigate to={redirectPath} replace />;
   
 };
@@ -114,6 +96,7 @@ function ChooseSettings(userType){
   if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter'){
     return <UpdateRenter />
   }
+  return <></>;
 }
 
 function chooseNavbar(userType){
@@ -123,6 +106,9 @@ function chooseNavbar(userType){
   }
   else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor'){
     navBar =  <ResortRenterNavbar userType={userType}/>
+  }
+  else if(userType === 'Guest'){
+    navBar = <GuestNavbar />
   }
   else{
     navBar = <></>
