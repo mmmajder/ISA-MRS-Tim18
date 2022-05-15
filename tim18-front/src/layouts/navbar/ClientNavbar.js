@@ -19,7 +19,7 @@ export default function ClientNavbar(){
         <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
                 <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
-                <Nav.Link href="#"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
+                <Nav.Link href="/resorts"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
 
                 
                 <NavDropdown title={<span><FontAwesomeIcon icon={faSuitcase} /> Reservations</span>}> 

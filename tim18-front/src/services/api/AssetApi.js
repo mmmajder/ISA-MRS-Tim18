@@ -44,11 +44,12 @@ export async function getAssets(){
   }
 }
 
-export async function getFilteredAssets(address, numOfPeople, price, mark){
+export async function getFilteredAssets(assetType, address, numOfPeople, price, mark){
     try {
-        console.log(address, numOfPeople, price, mark);
+        console.log(assetType, address, numOfPeople, price, mark);
         const responseData = await api.get(`/assets/search`,  {
             params: {
+                "assetType": assetType,
                 "address" : address,
                 "numOfPeople":  numOfPeople, 
                 "price" : price, 

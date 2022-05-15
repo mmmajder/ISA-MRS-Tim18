@@ -24,3 +24,21 @@
   color: var(--hovered-blue);
   cursor: pointer;
 }
+
+
+.faRadio + i {
+  position:relative;
+  color: #B1B1B1;
+}
+.faRadio:hover {
+  color: var(--hovered-blue);
+  cursor: pointer;
+}
+
+.faRadio:checked{
+  color: var(--dark-blue);
+}
+
+input[type='radio']:checked + i{
+  color: var(--dark-blue);
+}
