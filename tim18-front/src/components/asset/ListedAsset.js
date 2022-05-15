@@ -5,7 +5,7 @@ import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from './AssetMainInfo';
 import { getRole }  from '../../services/AuthService/AuthService'
 
-export default function ListedAsset({asset}){
+export default function ListedAsset({asset, isSearch}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
     const userType = getRole();
@@ -20,7 +20,7 @@ export default function ListedAsset({asset}){
         assetImage = require('../../assets/images/boat.jpg')
     }
     
-    const detViewUrl = "resorts/" + asset.id;
+    const detViewUrl = "/resorts/" + asset.id;
 
     return <div className="borderedBlock mt-3" align="">
                 <Row>
@@ -38,7 +38,7 @@ export default function ListedAsset({asset}){
                             <Col sm="2" >
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
-                                    { userType !== "Client" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
+                                    { !isSearch && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
                                 </div>
                             </Col>
                         </Row>

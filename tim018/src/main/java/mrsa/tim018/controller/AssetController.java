@@ -196,10 +196,10 @@ public class AssetController {
 	}
 	
 	@GetMapping(value = "/search")
-	public ResponseEntity<List<AssetDTO>> searchAssets(@RequestParam String address,
+	public ResponseEntity<List<AssetDTO>> searchAssets(@RequestParam AssetType assetType, @RequestParam String address,
 			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
 		List<Asset> assets = assetService.findAll();
-		assets = filterAssets(assets, address, numOfPeople,  price,  mark);
+		assets = filterAssets(assets, assetType, address, numOfPeople,  price,  mark);
 		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
 		
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
@@ -209,13 +209,13 @@ public class AssetController {
 	public ResponseEntity<List<AssetDTO>> searchRenterAssets(@PathVariable Long renterId, @RequestParam String address,
 			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
 		List<Asset> assets = assetService.findAllByRenterId(renterId);
-		assets = filterAssets(assets, address, numOfPeople,  price,  mark);
+		assets = filterAssets(assets, AssetType.ALL, address, numOfPeople,  price,  mark);
 		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
 		
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
 	}
 	
-	private List<Asset> filterAssets(List<Asset> assets, String address, int numOfPeople, double price, double mark) {
+	private List<Asset> filterAssets(List<Asset> assets, AssetType assetType, String address, int numOfPeople, double price, double mark) {
 		if (price != 0)
 			assets = assets.stream().filter(a -> a.getPrice() <= price).collect(Collectors.toList());
 		if (mark != 0)
@@ -224,7 +224,8 @@ public class AssetController {
 			assets = assets.stream().filter(a -> a.getNumOfPeople() >= numOfPeople).collect(Collectors.toList());
 		if (!address.isEmpty())
 			assets = assets.stream().filter(a -> a.getAddress().toLowerCase().contains(address.toLowerCase())).collect(Collectors.toList());
-		
+		if(assetType!=AssetType.ALL)
+			assets = assets.stream().filter(a -> a.getAssetType() == assetType).collect(Collectors.toList());
 		return assets;
 	} 
 	

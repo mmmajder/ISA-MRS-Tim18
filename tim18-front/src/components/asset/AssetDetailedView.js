@@ -15,6 +15,7 @@ import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
+import { Marginer } from '../forms/Login/marginer';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -68,8 +69,10 @@ export default function AssetDetailedView(){
                             </Col> 
                             <Col sm="3">
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
-                                <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
-                                { userType !== "Client" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
+                                { userType !== "Client" && userType !== "Guest" &&
+                                  <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>}
+                                { userType !== "Client"  && userType !== "Guest" &&
+                                 <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>
@@ -78,10 +81,11 @@ export default function AssetDetailedView(){
                         {assetType === "FISHING_ADVENTURE" && <FishingSpecificInfo fishingAdventure={asset}/>}
                     </Col>
                 </Row>
+                <Marginer direction="vertical" margin="3em" />
                 <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                        <RegularButton text='Rent resort' onClickFunction={''}/>
+                       <RegularButton text='Rent resort' disabled={userType === "Guest"} onClickFunction={''}/>
                     </Col>
                     <Col sm={4}/>
                 </Row>

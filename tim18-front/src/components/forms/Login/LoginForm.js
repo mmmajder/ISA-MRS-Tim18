@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { checkLettersInput, onlyLetters } from '../../../services/utils/InputValidation';
 import { LabeledInputWithErrMessage } from '../LabeledInput';
-import '../../../assets/styles/login.css'
+import '../../../assets/styles/login.css';
+import { Form, Row, Col} from 'react-bootstrap';
 
 export function LoginForm({handleLogin}) {
   const { switchToSignup } = useContext(AccountContext);
@@ -52,6 +53,7 @@ export function LoginForm({handleLogin}) {
     */
   
   return(
+    <>
       <BoxContainer>
         <FormContainer>
           <Marginer direction="vertical" margin="5em" />
@@ -62,9 +64,9 @@ export function LoginForm({handleLogin}) {
         <Marginer direction="vertical" margin={10} />
         <MutedLink href="#">Forgot your password?</MutedLink>
         <Marginer direction="vertical" margin="7.5em" />
-        
-        <Button variant="custom" type="submit" className="formButton" onClick={() => {loginRequest(inputs, loginCallback);}} > Sign in  </Button>
 
+        <Button variant="custom" type="submit" className="formButton" onClick={() => {loginRequest(inputs, loginCallback);}} > Sign in  </Button>
+      
         <Marginer direction="vertical" margin="2em" />
         <MutedLink href="#">
           Don't have an account?{" "}
@@ -74,37 +76,8 @@ export function LoginForm({handleLogin}) {
         </MutedLink>
         
       </BoxContainer>
+      <Marginer direction="vertical" margin="3em" />
+      <Button variant="custom" type="submit" className="formButton" onClick={() => {setToken(null); handleLogin('Guest'); setRole('Guest'); navigate('/home')}} >Continue as a guest  </Button>
+    </>
   );
 }
-
-/*import React, { useContext } from "react";
-import { Marginer } from "../marginer";
-import { AccountContext } from "./accountContext";
-
-import { Form, Button} from 'react-bootstrap';
-
-export default function LoginForm() {
-  const { switchToSignup } = useContext(AccountContext);
-
-  return (
-    <div className="BoxContainer">
-        <Form className="FormContainer">
-            <Form.Control className="InputStyle" type="email" placeholder="Email" />
-            <Form.Control className="InputStyle" type="password" placeholder="Password" />
-        </Form>
-
-        <Marginer direction="vertical" margin={10} />
-        <a className="MutedLink" href="#">Forget your password?</a>
-        <Marginer direction="vertical" margin="1.6em" />
-        <Button className="SubmitButton" type="submit">Signin</Button>
-        <Marginer direction="vertical" margin="1em" />
-        
-        <a className="MutedLink" href="#">
-            Don't have an accoun?{" "}
-            <a className="BoldLink" href="#" onClick={switchToSignup}>
-                Sign up
-            </a>
-        </a>
-    </div>
-  );
-}*/
