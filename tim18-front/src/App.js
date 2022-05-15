@@ -50,61 +50,6 @@ const AppContainer = styled.div`
   justify-content: center;
 `;
 function App() {
-
-  // const client = false;
-  //  const instructor = true;
-
-  // const user = {
-  //   id: "2",
-  //   type: "BOAT_RENTER"
-  //   // type: "renter"
-  // }
-
-// "CLIENT"
-// "BOAT_RENTER":
-// "FISHERMAN":
-// "RESORT_RENTER":
-
-  // localStorage.setItem("userType", user.type)
-  // localStorage.setItem("userId", user.id)
-
-  // if(client){
-  //   return <ClientBase />
-  // }
-  // else{
-    //const resortForm = <CreateForm userType={localStorage.getItem('userType')} />
-    /*const profile = <ProfilePreview userId={localStorage.getItem("userId")}/>
-    const resortView = <AssetDetailedView />
-    const assetList = <AssetsPreview userType={localStorage.getItem('userType')}/>
-    const assetUpdate = <UpdateForm />
-    const calendar = <Calendar id={localStorage.getItem("userId")}/>
-    const assetCalendar = <CalendarAsset/>
-    let updateProfile = <UpdateRenter id={localStorage.getItem("userId")}/>*/
-    // return (
-    //   <Router>
-    //     <div>
-    //       <body>
-    //         {/* <ResortRenterNavbar/> */}
-    //         <ResortRenterNavbar userType={localStorage.getItem('userType')}/>
-    //         <Container>
-    //           <Routes>
-    //               {/* Creating/Registrating Resorts/Boats */}
-    //             <Route path="/createResort" element={resortForm} /> 
-    //               {/* For other's Profile page */}
-    //             <Route path="/profile" element={profile} /> 
-    //             <Route exact path="/resorts" element={assetList} /> 
-    //             <Route path="/resorts/:id" element={resortView} /> 
-    //             <Route path="/resorts/update/:id" element={assetUpdate} />
-    //             <Route path="/calendar" element={calendar}/>
-    //             <Route path="/settings" element={updateProfile} />
-    //             <Route path="/calendarAsset" element={assetCalendar}/>
-    //           </Routes>
-    //         </Container>
-    //       </body>
-    //     </div>
-    //   </Router>
-    // );
-
   const [user, setUser] = React.useState(getRole());
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
@@ -113,7 +58,8 @@ function App() {
   
   const resortForm = <Container><CreateForm  /></Container>
   const resortView = <Container><AssetDetailedView /></Container>
-  const assetList = <Container><AssetsPreview /></Container>
+  const assetList = <Container><AssetsPreview isSearch={false}/></Container>
+  const assetListAll = <Container><AssetsPreview isSearch={true}/></Container>
   const assetUpdate = <Container><UpdateForm /></Container>
   const calendar = <Container><Calendar /></Container>
   const assetCalendar = <Container><CalendarAsset/></Container>
@@ -133,6 +79,7 @@ function App() {
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/logout" element={<Container><Logout handleLogout={handleLogout}/></Container>} />
                   <Route exact path="/resorts" element={assetList} /> 
+                  <Route path="/resorts/all" element={assetListAll} /> 
                   <Route path="/resorts/:id" element={resortView} /> 
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
@@ -146,7 +93,7 @@ function App() {
         
 }
 const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => {
-  if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' ||
+  if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' || isAllowedUser==='Guest' ||
       isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor') {
         
     return children;

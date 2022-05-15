@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../assets/styles/buttons.css';
 import { Input, Radio, RadioGroup } from '@mui/material';
 
-export default function AssetsPreview({}){
+export default function AssetsPreview({isSearch}){
 
     const [assets, setAssets] = useState([]);
     const [assetType, setAssetType] = useState("ALL");
@@ -30,7 +30,7 @@ export default function AssetsPreview({}){
     }, [])
 
     const onClickSearchFunction = () => {
-        if (userType === "Client")
+        if (isSearch || userType==='Client' || userType==='Guest')
             getFilteredAssets(assetType, address, numOfPeople, price, mark).then(
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
@@ -43,7 +43,7 @@ export default function AssetsPreview({}){
     useEffect(() => {
         async function fetchAssets(){
             let requestData;
-            if (userType === "Client")
+            if (isSearch || userType==='Client' || userType==='Guest')
                 requestData = await getAssets();
             else
                 requestData = await getAssetsByUserId(user.id);
@@ -58,11 +58,11 @@ export default function AssetsPreview({}){
 
     let listedAssets;
     if (assets != undefined){
-        listedAssets = assets.map((asset) => <ListedAsset asset={asset} key={asset.id} />)
+        listedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} />)
     }
 
     let assetTypeOptions;
-    if(userType==='Client' || userType==='Guest'){
+    if(isSearch){
         assetTypeOptions = < AssetTypeOption setAssetType={setAssetType}/>
     }
 
