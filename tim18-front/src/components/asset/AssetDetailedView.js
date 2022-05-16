@@ -17,6 +17,9 @@ import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
 import MapContainer from './MapContainer';
 
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
+
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
@@ -59,8 +62,24 @@ export default function AssetDetailedView(){
             <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="6">
-                        <img src={assetImage} className="assetImage"/>
-                        {asset !== {} && <RenterInfo/>}
+                        <Carousel  className="assetCarousle">
+                        <div>
+                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
+                        </div>
+                        <div>
+                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
+                        </div>
+                        <div>
+                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
+                        </div>
+                        <div>
+                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
+                        </div>
+
+                        </Carousel>
+
+                        
+                        <RenterInfo renter={asset.renter}/>
                         <div className="borderedBlock mt-3" align="">
                             <MapContainer address={asset.address}/>
                         </div>

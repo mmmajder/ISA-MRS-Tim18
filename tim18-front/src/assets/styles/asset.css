@@ -1,8 +1,9 @@
-.assetImage {
-    width: 500px;
-    height: 400px;
+.assetCarousle {
+    max-width: 600px;
+    max-height: 500px;
     border-radius: 1.5rem;
     border: solid 3px var(--dark-blue);
+    padding: 10px;
 }
 
 @media only screen and (max-width: 767px) {

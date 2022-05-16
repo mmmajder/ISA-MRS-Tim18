@@ -40,6 +40,7 @@ import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar';
 import './assets/styles/style.css';
 import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
+import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -118,6 +119,7 @@ function App() {
   const calendar = <Container><Calendar /></Container>
   const assetCalendar = <Container><CalendarAsset/></Container>
   const home = <Container></Container>
+  const updateProfilePhoto = <Container><UpdateProfilePhoto /></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -127,6 +129,7 @@ function App() {
                   {/* For other's Profile page */}
                   <Route path="/profile" element={<Container>{ChooseProfile(user)}</Container>} /> 
                   <Route path="/settings" element={<Container>{ChooseSettings(user)}</Container>} />
+                  <Route path="/updateProfilePhoto" element={updateProfilePhoto} />
 
                     {/* Creating/Registrating Resorts/Boats */}
                   <Route path="createResort" element={resortForm} /> 
