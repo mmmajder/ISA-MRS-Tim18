@@ -56,7 +56,7 @@ public class EmailService {
 		String siteURL = "http://localhost:3000";
 		
 		String content = EmailContentUtils.getVerificationContent(); 
-		String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+		String verifyURL = siteURL + "/verify/" + user.getVerificationCode();
 		content = content.replace("[[URL]]", verifyURL);
 		
 		helper.setText(content, true);

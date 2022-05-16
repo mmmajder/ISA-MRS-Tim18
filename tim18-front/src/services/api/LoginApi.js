@@ -22,3 +22,11 @@ export async function sendRegistrationRequest(callback, request){
               .then((responseData) => {console.log("loginApi");console.log(responseData.data); callback(responseData.data); })    // user
               .catch(()=> {console.log("loginApi");console.log("NOPE"); callback(false);});
 }
+
+
+export async function getVerificationCode(callback, code){
+    await api.get(`/users/verify/${code}`)
+              .then((responseData) => {callback(responseData.data)})    // user
+              .catch((responseData)=> {callback(responseData.data)});
+
+}

@@ -54,4 +54,14 @@ public class UserController {
 		
 		return new ResponseEntity<>(uuser, HttpStatus.OK);
 	}
+	
+	@GetMapping("/verify/{code}")
+	public ResponseEntity<User> verifyUser(@PathVariable String code) {
+		User user = userService.verify(code);
+	    if (user == null) {
+	    	return new ResponseEntity<User>(user, HttpStatus.EXPECTATION_FAILED);
+	    } 
+	    
+    	return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
 }

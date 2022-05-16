@@ -81,7 +81,20 @@ public class UserService<T> implements UserDetailsService{
 			return fishingInstructorRepository.save(childClass);
 		}
 		return null;
-		
 	}
+	
+	public User verify(String verificationCode) {
+		User user = userRepository.findByVerificationCode(verificationCode);
+		
+		if (user == null || user.isEnabled()) {
+			return null;
+		}
+		
+		user.setVerificationCode(null);
+		user.setEnabled(true);
+		user = userRepository.save(user);
+		return user;
+	}
+	
 
 }

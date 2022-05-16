@@ -30,10 +30,16 @@ export default function UpdateClientProfile(){
 
        
     }, []) 
-    async function fetchDeleteRequest(){
-        const requestData = await getDeleteRequestByID(client.id);
-        setDeletionRequest(!!requestData ? true : false);
-    }
+    useEffect(() => {
+        async function fetchDeleteRequest(){
+            const requestData = await getDeleteRequestByID(client.id);
+            setDeletionRequest(!!requestData ? true : false);
+        }
+        if(!!client){
+            fetchDeleteRequest()
+        }
+    }, [client]) 
+    
     
 
     useEffect(() => {
@@ -62,7 +68,7 @@ export default function UpdateClientProfile(){
     if(!!client){
         const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
         const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={client.id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
-        fetchDeleteRequest();
+        //fetchDeleteRequest();
         return (<>
                 <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
                  {pendingRequest}

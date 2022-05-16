@@ -66,7 +66,8 @@ export function SignupForm({feedbackFunc}) {
       }
     if(!!feedback){
         //navigate('/welcome/', { replace: false })
-        feedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
+        alert('Successfuly created request for profile, Please check your email!');
+        //afeedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
         /*setCurrentClient(feedback);
         setOriginalClient(feedback);*/
     }
