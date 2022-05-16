@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.User;
 import mrsa.tim018.repository.RenterRepository;
 
 @Service
@@ -27,8 +28,12 @@ public class RenterService {
 		return renterRepo.findAll(page);
 	}
 
-	public Renter save(Renter fishingInstructor) {
-		return renterRepo.save(fishingInstructor);
+	public Renter save(Renter renter) {
+		return renterRepo.save(renter);
+	}
+	
+	public User save(User renter) {
+		return renterRepo.save(renter);
 	}
 
 	public void remove(Integer id) {

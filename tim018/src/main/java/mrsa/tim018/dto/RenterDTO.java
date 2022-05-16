@@ -1,6 +1,7 @@
 package mrsa.tim018.dto;
 
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
 
 public class RenterDTO {	
@@ -39,6 +40,13 @@ public class RenterDTO {
 		this(fishingInstructor.getID(), fishingInstructor.isDeleted(), fishingInstructor.getFirstName(), fishingInstructor.getLastName(), fishingInstructor.getAddress(),
 				fishingInstructor.getCity(), fishingInstructor.getState(), fishingInstructor.getPhoneNum(), fishingInstructor.getUserType(), fishingInstructor.getLoyaltyPoints(), 
 				fishingInstructor.getEmail(),  fishingInstructor.getPassword());
+
+	}
+	
+	public RenterDTO(User user) {
+		this(user.getID(), user.isDeleted(), user.getFirstName(), user.getLastName(), user.getAddress(),
+				user.getCity(), user.getState(), user.getPhoneNum(), user.getUserType(), user.getLoyaltyPoints(), 
+				user.getEmail(),  user.getPassword());
 
 	}
 

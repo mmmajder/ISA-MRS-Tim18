@@ -22,6 +22,9 @@ import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.User;
+import mrsa.tim018.model.UserType;
+import mrsa.tim018.service.AdminService;
 import mrsa.tim018.service.DeletationRequestService;
 import mrsa.tim018.service.RenterService;
 
@@ -32,6 +35,9 @@ public class RenterController {
 
 	@Autowired
 	private RenterService renterService;
+	
+	@Autowired
+	private AdminService adminService;
 	
 	@Autowired
 	private DeletationRequestService deleteRequestService;	
@@ -54,24 +60,33 @@ public class RenterController {
 	public ResponseEntity<RenterDTO> updateFishingInstructor(@RequestBody RenterDTO renterDTO) {
 
 		// a student must exist
-		Renter renter = renterService.findOne(renterDTO.getId());
-
-		if (renter == null) {
+		User user;
+		if (renterDTO.getUserType().equals(UserType.Admin)) {
+			user = adminService.findOne(renterDTO.getId());
+		}else {
+			user = renterService.findOne(renterDTO.getId());
+		}
+		
+		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		renter.setAddress(renterDTO.getAddress());
-		renter.setCity(renterDTO.getCity());
+		user.setAddress(renterDTO.getAddress());
+		user.setCity(renterDTO.getCity());
 		//fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
-		renter.setFirstName(renterDTO.getFirstName());
-		renter.setLastName(renterDTO.getLastName());
+		user.setFirstName(renterDTO.getFirstName());
+		user.setLastName(renterDTO.getLastName());
 		//fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
-		renter.setPhoneNum(renterDTO.getPhoneNum());
-		renter.setState(renterDTO.getState());
+		user.setPhoneNum(renterDTO.getPhoneNum());
+		user.setState(renterDTO.getState());
 	//	fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
-
-		renter = renterService.save(renter);
-		return new ResponseEntity<>(new RenterDTO(renter), HttpStatus.OK);
+		if (renterDTO.getUserType().equals(UserType.Admin)) {
+			user = adminService.save(user);
+		}else {
+			user = renterService.save(user);
+		}
+		
+		return new ResponseEntity<>(new RenterDTO(user), HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/delete", consumes = "application/json")
@@ -101,5 +116,5 @@ public class RenterController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 }

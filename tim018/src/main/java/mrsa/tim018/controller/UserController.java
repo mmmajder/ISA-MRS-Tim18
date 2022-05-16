@@ -42,7 +42,7 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
+	} 
 
 	@GetMapping("/whoami")
 	@PreAuthorize("hasRole('USER')")
