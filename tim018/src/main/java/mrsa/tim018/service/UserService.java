@@ -65,6 +65,11 @@ public class UserService<T> implements UserDetailsService{
 	public User save(User user) {
 		user.setId(userRepository.getNextSeriesId());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return updateUser(user);
+		
+	}
+	
+	public User updateUser(User user) {
 		if(user.getUserType() == UserType.Client) {
 			User bClass = new Client(user);
 			Client childClass = (Client) bClass;
@@ -81,7 +86,6 @@ public class UserService<T> implements UserDetailsService{
 			return fishingInstructorRepository.save(childClass);
 		}
 		return null;
-		
 	}
 
 }

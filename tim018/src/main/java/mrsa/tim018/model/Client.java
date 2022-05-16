@@ -28,16 +28,16 @@ public class Client extends User {
 	}
 
 	public Client(Long id, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, int penaltyPoints) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, int penaltyPoints, String profilePhotoId) {
 		
-		super(id, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled);
+		super(id, isDeleted, firstName, lastName, address, city, state, phoneNum, userType, loyaltyPoints, email, password, enabled, profilePhotoId);
 		this.penaltyPoints = penaltyPoints;
 	}
 
 	public Client(Long id, String firstName, String lastName, String address, String city, String state,
-			String phoneNum, UserType userType, String email, String password, int penaltyPoints) {
+			String phoneNum, UserType userType, String email, String password, int penaltyPoints, String profilePhotoId) {
 	
-		super(id, firstName, lastName, address, city, state, phoneNum, userType, email, password);
+		super(id, firstName, lastName, address, city, state, phoneNum, userType, email, password, profilePhotoId);
 		this.penaltyPoints = penaltyPoints;
 	}
 	public Client(User user, int penaltyPoints) {
