@@ -5,14 +5,17 @@ import {useState, useEffect} from 'react';
 import { getAllAssetsByUser } from '../../services/api/AssetApi';
 import { getLogged } from '../../services/api/LoginApi.js';
 import Time from '../forms/calendar/Time';
+import { toHHMMSS } from '../../services/utils/TimeUtils';
 
 const CreateReservationFormModal = (props) => {
     const [show, setShow] = useState(true);
   
     const handleClose = () => setShow(false);
 
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [startTime, setStartTime] = useState(new Date());
+    const [endTime, setEndTime] = useState(new Date());
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
     

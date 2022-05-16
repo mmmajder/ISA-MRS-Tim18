@@ -22,6 +22,8 @@ export function LoginForm({handleLogin}) {
 
   const navigate = useNavigate();
   const getUserCallback = (user) => {
+    console.log("user")
+    console.log(user)
     if(!user){
       // error message popup
       handleLogin({});

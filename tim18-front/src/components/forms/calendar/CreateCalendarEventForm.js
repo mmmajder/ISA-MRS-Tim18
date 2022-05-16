@@ -1,9 +1,7 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import './../../../assets/styles/calendar.css'
-import CreateSpecialOfferForm from './CreateSpecialOfferForm'
 import CreateReservationForm from './CreateReservationForm'
-import CreatePeriodOfAvailabiltyForm from './CreatePeriodOfAvailabiltyForm.js'
 import CreatePeriodOfAvailabilityModal from './../../modal/CreatePeriodOfAvailabilityModal'
 import CreateSpecialOfferFormModal from '../../modal/CreateSpecialOfferFormModal';
 import CreateReservationFormModal from '../../modal/CreateReservationFormModal';

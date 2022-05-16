@@ -9,6 +9,7 @@ import CreateCalendarEventForm from './CreateCalendarEventForm'
 import './../../../assets/styles/calendar.css'
 import { getAssetCalendarData } from '../../../services/api/CalendarApi'
 import { Row, Col, Container } from 'react-bootstrap';
+import {makeDateString} from './../../../services/utils/TimeUtils'
 
 const CalendarAsset = () => {
     const calendarRef = createRef()
@@ -22,16 +23,16 @@ const CalendarAsset = () => {
         let retData = requestData.data.calendar.availableSingle.map(function(range) {
           var info = {
             title : "Available",
-            start : range.fromDateTime,
-            end : range.toDateTime
+            start : makeDateString(range.fromDateTime),
+            end : makeDateString(range.toDateTime)
           }
           return info;
         })
         let specialOffers = requestData.data.calendar.specialPriceSingle.map(function(range) {
           var info = {
             title : "Special offer",
-            start : range.timeRange.fromDateTime,
-            end : range.timeRange.toDateTime,
+            start : makeDateString(range.timeRange.fromDateTime),
+            end : makeDateString(range.timeRange.toDateTime),
             backgroundColor : "orange",
             borderColor : "orange"
           }

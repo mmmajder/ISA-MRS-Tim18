@@ -10,7 +10,7 @@ import CreateCalendarEventForm from '../forms/calendar/CreateCalendarEventForm'
 import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
 import { getLogged } from '../../services/api/LoginApi';
-
+import {makeDateString} from './../../services/utils/TimeUtils'
 
 const Calendar = () => {
   const calendarRef = createRef()
@@ -40,8 +40,10 @@ const Calendar = () => {
             var info = {
               title : "Available",
               resourceId : element.id,
-              start : range.fromDateTime,
-              end : range.toDateTime
+              start : makeDateString(range.fromDateTime),
+              end : makeDateString(range.toDateTime)
+              // start : "2022-05-15T11:30:00",
+              // end : "2022-05-16T11:30:00"
             }
             return info;
           })
@@ -49,8 +51,8 @@ const Calendar = () => {
             var info = {
               title : "Special offer",
               resourceId : element.id,
-              start : range.timeRange.fromDateTime,
-              end : range.timeRange.toDateTime,
+              start : makeDateString(range.timeRange.fromDateTime),
+              end : makeDateString(range.timeRange.toDateTime),
               backgroundColor : "orange",
               borderColor : "orange"
             }
@@ -61,13 +63,17 @@ const Calendar = () => {
         }
         );
         if (requestData) {
-          console.log(data)
+          console.log(data[0])
           setEvents( makeEventList(data));
         }
         return requestData;
     }
     fetchCalendarData();
 }, [user])
+
+
+
+
 
 const makeEventList = (data) => {
   let retData = []
@@ -85,6 +91,7 @@ const displayEvents = () => {
 
   }
 }
+
 
   
 

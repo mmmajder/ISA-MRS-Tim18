@@ -8,7 +8,7 @@ import TimePicker from 'react-bootstrap-time-picker';
 import Time from '../forms/calendar/Time';
 import moment from 'moment';
 import { createAppointment } from '../../services/api/CalendarApi';
-
+import { toHHMMSS } from '../../services/utils/TimeUtils';
 
 const CreateSpecialOfferFormModal = (props) => {
 
@@ -16,8 +16,13 @@ const CreateSpecialOfferFormModal = (props) => {
   
     const handleClose = () => setShow(false);
 
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [expirationDate, setExpirationDate] = useState()
+    const [startTime, setStartTime] = useState(new Date());
+    const [endTime, setEndTime] = useState(new Date());
+    const [expirationTime, setExpirationTime] = useState()
+
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
 
@@ -32,19 +37,21 @@ const CreateSpecialOfferFormModal = (props) => {
     const userId = user.id;
 
     const addAppointment = (e) => {
-        
-        const fromDateTime = moment(startDateTime).format("YYYY-MM-DDTHH:mm:SS")
-        const toDateTime = moment(endDateTime).format("YYYY-MM-DDTHH:mm:SS")
-        const type = "Available"
+        const fromDateTime = startDate + "T" + toHHMMSS(startTime)
+        const toDateTime = endDate + "T" + toHHMMSS(endTime)
+        const offerUntil = expirationDate + "T" + toHHMMSS(expirationTime)
+        const type = 'SpecialOffer'
 
         props.props.onChange({
-            title  : 'Available',
+            title  : 'Special offer',
             start  : fromDateTime,
             end    : toDateTime,
-            resourceId : assetId
+            resourceId : assetId,
+            backgroundColor: "orange",
+            borderColor: "orange"
           })
         
-        const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId}
+        const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId, offerUntil}
         createAppointment(JSON.stringify(appointmentJson))
     }
 
@@ -89,18 +96,21 @@ const CreateSpecialOfferFormModal = (props) => {
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label className="mb-1">From: </Form.Label>
-                <Form.Control className="mb-1" type="date" name="dob" placeholder="Start date" />
-                <Time></Time>
+                <Form.Control className="mb-1" type="date" name="dob" placeholder="Start date" value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}/>
+                <Time setTime={setStartTime} time={startTime}></Time>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label className="mb-1">To: </Form.Label>
-                <Form.Control className="mb-1" type="date" name="dob" placeholder="End date" />
-                <Time></Time>
+                <Form.Control className="mb-1" type="date" name="dob" placeholder="End date" value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}/>
+                <Time setTime={setEndTime} time={endTime}></Time>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label className="mb-1">Expiration: </Form.Label>
-                <Form.Control className="mb-1" type="date" name="dob" placeholder="Expiration" />
-                <Time></Time>
+                <Form.Control className="mb-1" type="date" name="dob" placeholder="Expiration" value={expirationDate}
+                onChange={(e) => setExpirationDate(e.target.value)}/>
+                <Time setTime={setExpirationTime} time={expirationTime}></Time>
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label className="mb-1">Discount: </Form.Label>
@@ -113,7 +123,7 @@ const CreateSpecialOfferFormModal = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={addAppointment}>
             Save Changes
           </Button>
         </Modal.Footer>

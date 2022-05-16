@@ -37,6 +37,7 @@ import UpdateClientProfile from './components/forms/UpdateClientProfile';
 import Calendar from './components/calendar/Calendar';
 import ProfileInfoBlock from './components/profile/ProfileInfo';
 import ResortRenterNavbar from './layouts/navbar/RessortRenterNavbar';
+import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -114,6 +115,7 @@ function App() {
   const assetUpdate = <UpdateForm />
   const calendar = <Calendar />
   const assetCalendar = <CalendarAsset/>
+  const adminRegistrationReq = <AdminRegistrationReq/>
   const home = <></>
 
   return  (<Router>
@@ -133,6 +135,7 @@ function App() {
                 <Route path="/resorts/update/:id" element={assetUpdate} />
                 <Route path="/calendar" element={calendar}/>
                 <Route path="/calendarAsset" element={assetCalendar}/>
+                <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
               </Route>
               
               <Route path="login" element={login} />
@@ -145,7 +148,7 @@ function App() {
 }
 const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => {
   if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' ||
-      isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor') {
+      isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor' || isAllowedUser==="Admin") {
         
     return children;
   }
@@ -162,7 +165,7 @@ function ChooseSettings(userType){
   if (userType === 'Client'){
     return <UpdateClientProfile/> 
   }
-  if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter'){
+  if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter' || userType === 'Admin'){
     return <UpdateRenter />
   }
 }
@@ -172,7 +175,7 @@ function chooseNavbar(userType){
   if(userType === "Client"){
     navBar =  <ClientNavbar />
   }
-  else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor'){
+  else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor' || userType === 'Admin'){
     navBar =  <ResortRenterNavbar userType={userType}/>
   }
   return (

@@ -17,22 +17,21 @@ const CreatePeriodOfAvailabilityModal = (props) => {
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
 
-    const addAppointment = () => {
-
-      console.log(startDate)
-      console.log(startTime)
-      
+    const addAppointment = () => {     
       const fromDateTime = startDate + "T" + toHHMMSS(startTime)
       const toDateTime = endDate + "T" + toHHMMSS(endTime)
 
       const type = "Available"
+
+      console.log(fromDateTime)
+      console.log(startDate)
+      console.log(startTime)
+      console.log(endTime)
 
       props.props.onChange({
           title  : 'Available',
