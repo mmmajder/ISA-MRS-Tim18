@@ -17,13 +17,7 @@ export default function GuestNavbar(){
             <Nav className="ms-auto">
                 <Nav.Link href="/home"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
-
-                <NavDropdown title={profileTitle}> 
-                    <NavDropdown.Item href="/profile"><FontAwesomeIcon icon={faUser} /> My profile</NavDropdown.Item> 
-                    <NavDropdown.Item href="/settings"><FontAwesomeIcon icon={faCogs} /> Settings</NavDropdown.Item>
-                    <NavDropdown.Item href="/calendar"><FontAwesomeIcon icon={faCalendarDays} /> Calendar</NavDropdown.Item>
-                    <NavDropdown.Item href="/logout"><FontAwesomeIcon icon={faChevronCircleRight} /> Login/Register</NavDropdown.Item>
-                </NavDropdown>
+                <Nav.Link href="/logout"><FontAwesomeIcon icon={faChevronCircleRight} /> Login/Register</Nav.Link>
                 
                 <Nav.Link href="#"><FontAwesomeIcon icon={faCircleQuestion} /> Help </Nav.Link>
             </Nav>

@@ -1,6 +1,8 @@
 export const onlyLetters = "This field can only contain letters!";
 export const onlyNumbers = "This field can only contain numbers!";
-export const deletionReason = "Please input reason for your deletion request"
+export const deletionReason = "Please input reason for your deletion request";
+export const passwordText = "";
+export const phoneNum = "";
 
 const onlyLettersRegex = new RegExp('^([a-zA-Z]+\\s)*[a-zA-Z]+$');
 const onlyNumbersRegex = new RegExp('^[0-9]+$');
@@ -23,7 +25,11 @@ export function checkEmailInput(input){
 }
 
 export function checkPasswordInput(input){
-    return validPassword.test(input);
+    return validPassword.test(input)
+}
+
+export function checkSecondPasswordInput(input, password){
+    return input === password
 }
 
 
