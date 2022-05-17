@@ -19,8 +19,8 @@ const CreateSpecialOfferFormModal = (props) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [expirationDate, setExpirationDate] = useState()
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
     const [expirationTime, setExpirationTime] = useState()
 
     const [assetId, setAssetId] = useState({});
@@ -41,7 +41,7 @@ const CreateSpecialOfferFormModal = (props) => {
         const toDateTime = endDate + "T" + toHHMMSS(endTime)
         const offerUntil = expirationDate + "T" + toHHMMSS(expirationTime)
         const type = 'SpecialOffer'
-
+        console.log("staigao")
         props.props.onChange({
             title  : 'Special offer',
             start  : fromDateTime,

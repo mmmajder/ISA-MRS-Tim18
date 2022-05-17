@@ -17,7 +17,7 @@ const Calendar = () => {
   const [resources, setResources] = useState()
   const [events, setEvents] = useState()
   const [user, setUser] = useState()
-  const [update, setUpdate] = useState(0)
+  const [update, setUpdate] = useState(false)
 
   useEffect(() => {
     async function fetchUser(){
@@ -65,12 +65,21 @@ const Calendar = () => {
         );
         if (requestData) {
           console.log(data[0])
+          // setEvents(() => {
+          //   if (update){
+          //     // setEvents(displayEvents(update))
+          //     setEvents(update)
+          //   }
+          //   else {
+          //     setEvents(makeEventList(data));
+          //   }
+          // })
           setEvents(makeEventList(data))
         }
         return requestData;
     }
     fetchCalendarData();
-}, [user])
+}, [user, update, events])
 
 
 
@@ -87,11 +96,15 @@ const makeEventList = (data) => {
 }
 
 //TODO
-const displayEvents = () => {
-  for (let i=0; i<events.length; i++) {
-
-  }
-}
+// const displayEvents = () => {
+//   for (let i=0; i<events.length; i++) {
+//     if (events[i].title!="Available") continue
+//     for (let j=0; j<events.length; j++) {
+//       if (i==j) continue
+//         if ()
+//     }
+//   }
+// }
 
 
   
@@ -103,8 +116,10 @@ const displayEvents = () => {
           if (!!events) {
             let newVal = [...events, value] 
             setEvents(newVal)
+            setUpdate(newVal)
           } else { 
             setEvents([value])
+            setUpdate([value])
           }
           
         }

@@ -14,8 +14,8 @@ const CreateReservationFormModal = (props) => {
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
     
