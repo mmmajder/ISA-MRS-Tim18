@@ -82,4 +82,24 @@ public class AssetCalendarController<T> {
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 
 	}
+	
+	@PostMapping(value="/remove", consumes = "application/json")
+	public ResponseEntity<AppointmentCreationDTO> removeAppointment(@RequestBody AppointmentCreationDTO appointment) {
+		// a course must exist
+		Renter renter = renterService.findOne(appointment.getUserId());
+		System.out.println(renter.getFirstName());
+		if (renter == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		try {
+			Asset asset = assetService.findById(appointment.getAssetId());
+			AssetCalendar calendar = asset.getCalendar();
+			AssetCalendar newCalendar = calendarService.removeAppointment(calendar, appointment);
+			calendarService.save(newCalendar);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
+
+	}
 }

@@ -69,6 +69,56 @@ public class AssetCalendarSevice {
 		}
 	}
 	
+	public List<Asset> availableInRange(List<Asset> assets, LocalDate startDate, LocalDate endDate) {
+		List<Asset> availableAssets = new ArrayList<Asset>();
+		for (Asset asset : assets) {
+			for (TimeRange timeRange : asset.getCalendar().getAvailable()) {
+				if (timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) && timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))) {
+					availableAssets.add(asset);
+					break;
+				}
+			}
+		}
+		return availableAssets;
+	}
+
+	public AssetCalendar removeAppointment(AssetCalendar calendar, AppointmentCreationDTO appointment) {
+		List<TimeRange> ranges = calendar.getAvailable();
+		ranges = removeAvailable(ranges, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime()));
+		calendar.setAvailable(ranges);
+		return calendar;
+	}
+	
+	private List<TimeRange> removeAvailable(List<TimeRange> ranges, LocalDateTime fromDateTime,
+			LocalDateTime toDateTime) {
+		List<TimeRange> retData = new ArrayList<TimeRange>();
+		for (TimeRange timeRange : ranges) {
+			if (fromDateTime.isBefore(timeRange.getFromDateTime())) {
+				if (toDateTime.isBefore(timeRange.getFromDateTime())) {
+					retData.add(timeRange);
+					continue;
+				}
+				else if (toDateTime.isBefore(timeRange.getToDateTime())) {
+					timeRange.setFromDateTime(toDateTime);
+					retData.add(timeRange);
+				} //else whole range is deleted
+			}
+			else if (fromDateTime.isBefore(timeRange.getToDateTime())) {
+				if (toDateTime.isAfter(timeRange.getToDateTime())) {
+					timeRange.setToDateTime(fromDateTime);
+					retData.add(timeRange);
+				}
+				else if (toDateTime.isBefore(timeRange.getToDateTime())) {
+					retData.add(new TimeRange(false, timeRange.getFromDateTime(), fromDateTime));
+					retData.add(new TimeRange(false, toDateTime, timeRange.getToDateTime()));
+				}
+			}
+		}
+		return retData;
+	}
+
+	
+
 	private List<TimeRange> addAvailable(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
 		for (TimeRange timeRange : ranges) {
@@ -77,7 +127,7 @@ public class AssetCalendarSevice {
 		elems.add(new TimeRangeMergeElement(new TimeRange(false, startDateTime, endDateTime), false));
 		return getNewListAvailable(elems);
 	}
-	
+
 	private List<TimeRange> getNewListAvailable(List<TimeRangeMergeElement> elems) {
 		for (TimeRangeMergeElement elem1 : elems) {
 			if (elem1.isReduced()) {
@@ -112,8 +162,8 @@ public class AssetCalendarSevice {
 			if (!timeRangeMergeElement.isReduced()) {
 				retData.add(timeRangeMergeElement.getTimeRange());
 			}
-		}
-		return retData;
+		}  
+		return retData; 
 	}
 	
 	private List<TimeRange> addAvailablePattern(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
@@ -131,16 +181,5 @@ public class AssetCalendarSevice {
 		return getNewListAvailable(elems);
 	}
 
-	public List<Asset> availableInRange(List<Asset> assets, LocalDate startDate, LocalDate endDate) {
-		List<Asset> availableAssets = new ArrayList<Asset>();
-		for (Asset asset : assets) {
-			for (TimeRange timeRange : asset.getCalendar().getAvailable()) {
-				if (timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) && timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))) {
-					availableAssets.add(asset);
-					break;
-				}
-			}
-		}
-		return availableAssets;
-	}
+	
 }

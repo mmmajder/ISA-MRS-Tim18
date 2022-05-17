@@ -17,6 +17,7 @@ const Calendar = () => {
   const [resources, setResources] = useState()
   const [events, setEvents] = useState()
   const [user, setUser] = useState()
+  const [update, setUpdate] = useState(0)
 
   useEffect(() => {
     async function fetchUser(){
@@ -64,7 +65,7 @@ const Calendar = () => {
         );
         if (requestData) {
           console.log(data[0])
-          setEvents( makeEventList(data));
+          setEvents(makeEventList(data))
         }
         return requestData;
     }
@@ -102,7 +103,9 @@ const displayEvents = () => {
           if (!!events) {
             let newVal = [...events, value] 
             setEvents(newVal)
-          } else { setEvents([value])}
+          } else { 
+            setEvents([value])
+          }
           
         }
       }/>       

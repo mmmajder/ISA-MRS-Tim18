@@ -5,6 +5,7 @@ import CreateReservationForm from './CreateReservationForm'
 import CreatePeriodOfAvailabilityModal from './../../modal/CreatePeriodOfAvailabilityModal'
 import CreateSpecialOfferFormModal from '../../modal/CreateSpecialOfferFormModal';
 import CreateReservationFormModal from '../../modal/CreateReservationFormModal';
+import RemovePeriodOfAvailabilityModal from '../../modal/RemovePeriodOfAvailabilityModal';
 
 export default function CreateCalendarEventForm(props){
     const [activeForm, setActiveForm] = useState(null);
@@ -20,9 +21,14 @@ export default function CreateCalendarEventForm(props){
         setActiveForm(<CreateReservationFormModal props={props} scope = {props.scope}/>)
     }
 
+    const removePeriodOfAvailability = () => {
+        setActiveForm(<RemovePeriodOfAvailabilityModal props={props} scope = {props.scope}/>)
+    }
+
     return (
         <div>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={availableForm}>Add period of availablity</button>
+            <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={removePeriodOfAvailability}>Remove period of availablity</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={specialOfferForm}>Add special offer</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={reservationForm}>Add reservation</button>
             {activeForm}

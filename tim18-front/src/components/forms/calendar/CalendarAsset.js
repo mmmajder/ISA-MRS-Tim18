@@ -16,11 +16,12 @@ const CalendarAsset = () => {
     const [events, setEvents] = useState()
 
     const assetId = localStorage.getItem("assetId");
+    
 
     useEffect(() => {
       async function fetchCalendarData() {
         const requestData = await getAssetCalendarData(assetId);
-        let retData = requestData.data.calendar.availableSingle.map(function(range) {
+        let retData = requestData.data.calendar.available.map(function(range) {
           var info = {
             title : "Available",
             start : makeDateString(range.fromDateTime),
@@ -28,7 +29,7 @@ const CalendarAsset = () => {
           }
           return info;
         })
-        let specialOffers = requestData.data.calendar.specialPriceSingle.map(function(range) {
+        let specialOffers = requestData.data.calendar.specialPrice.map(function(range) {
           var info = {
             title : "Special offer",
             start : makeDateString(range.timeRange.fromDateTime),
@@ -41,13 +42,15 @@ const CalendarAsset = () => {
         if (specialOffers.length!=0){
           retData = [...retData, ...specialOffers] 
         }
+        console.log("retData")
+        console.log(retData)
         if (requestData) {
           setEvents(retData);
         }
         return requestData;
       }
       fetchCalendarData()
-    })
+    }, [events])
 
     return (
         <div>

@@ -28,11 +28,6 @@ const CreatePeriodOfAvailabilityModal = (props) => {
 
       const type = "Available"
 
-      console.log(fromDateTime)
-      console.log(startDate)
-      console.log(startTime)
-      console.log(endTime)
-
       props.props.onChange({
           title  : 'Available',
           start  : fromDateTime,
