@@ -9,16 +9,26 @@ import LabeledInput from '../forms/LabeledInput';
 import CreateCalendarEventForm from '../forms/calendar/CreateCalendarEventForm'
 import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
+import { getLogged } from '../../services/api/LoginApi';
+import {makeDateString} from './../../services/utils/TimeUtils'
 
-
-const Calendar = ({id}) => {
+const Calendar = () => {
   const calendarRef = createRef()
   const [resources, setResources] = useState()
   const [events, setEvents] = useState()
+  const [user, setUser] = useState()
+  const [update, setUpdate] = useState(false)
+
+  useEffect(() => {
+    async function fetchUser(){
+        await getLogged(setUser);
+    }
+    fetchUser();
+}, [])
 
   useEffect(() => {
     async function fetchCalendarData(){
-        const requestData = await getCalendarData(id);
+        const requestData = await getCalendarData(user.id);
         let resourceList = []
         const data = requestData.data.map((element) => {
           const res = {
@@ -27,21 +37,23 @@ const Calendar = ({id}) => {
           }
           resourceList = resourceList.concat(res)
           
-          let retData = element.calendar.availableSingle.map(function(range) {
+          let retData = element.calendar.available.map(function(range) {
             var info = {
               title : "Available",
               resourceId : element.id,
-              start : range.fromDateTime,
-              end : range.toDateTime
+              start : makeDateString(range.fromDateTime),
+              end : makeDateString(range.toDateTime)
+              // start : "2022-05-15T11:30:00",
+              // end : "2022-05-16T11:30:00"
             }
             return info;
           })
-          retData = retData.concat(element.calendar.specialPriceSingle.map(function(range) {
+          retData = retData.concat(element.calendar.specialPrice.map(function(range) {
             var info = {
               title : "Special offer",
               resourceId : element.id,
-              start : range.timeRange.fromDateTime,
-              end : range.timeRange.toDateTime,
+              start : makeDateString(range.timeRange.fromDateTime),
+              end : makeDateString(range.timeRange.toDateTime),
               backgroundColor : "orange",
               borderColor : "orange"
             }
@@ -52,13 +64,26 @@ const Calendar = ({id}) => {
         }
         );
         if (requestData) {
-          console.log(data)
-          setEvents( makeEventList(data));
+          console.log(data[0])
+          // setEvents(() => {
+          //   if (update){
+          //     // setEvents(displayEvents(update))
+          //     setEvents(update)
+          //   }
+          //   else {
+          //     setEvents(makeEventList(data));
+          //   }
+          // })
+          setEvents(makeEventList(data))
         }
         return requestData;
     }
     fetchCalendarData();
-}, [])
+}, [user, update, events])
+
+
+
+
 
 const makeEventList = (data) => {
   let retData = []
@@ -71,11 +96,16 @@ const makeEventList = (data) => {
 }
 
 //TODO
-const displayEvents = () => {
-  for (let i=0; i<events.length; i++) {
+// const displayEvents = () => {
+//   for (let i=0; i<events.length; i++) {
+//     if (events[i].title!="Available") continue
+//     for (let j=0; j<events.length; j++) {
+//       if (i==j) continue
+//         if ()
+//     }
+//   }
+// }
 
-  }
-}
 
   
 
@@ -86,7 +116,11 @@ const displayEvents = () => {
           if (!!events) {
             let newVal = [...events, value] 
             setEvents(newVal)
-          } else { setEvents([value])}
+            setUpdate(newVal)
+          } else { 
+            setEvents([value])
+            setUpdate([value])
+          }
           
         }
       }/>       

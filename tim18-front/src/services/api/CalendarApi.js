@@ -11,6 +11,18 @@ export async function createAppointment(data) {
      .catch((err)=> alert(err));
 }
 
+export async function removePeriodOfAvailability(data){
+    console.log(data)
+    api.post("/calendar/remove", data, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+     .then((responseData) => console.log(responseData))
+     .catch((err)=> alert(err));
+}
+
+
 export async function getCalendarData(id){
     try {
         const responseData = await api.get(`/calendar/allCalendarsForUser/${id}`);

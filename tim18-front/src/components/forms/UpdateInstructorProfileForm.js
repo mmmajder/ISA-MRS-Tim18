@@ -12,7 +12,7 @@ import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
 import DeleteRequest from './PopUps/DeleteRequest';
 import { getLogged } from '../../services/api/LoginApi';
 
-export default function UpdateRenter({id}){
+export default function UpdateRenter(){
     const [renter, setRenter] = useState();
     const [deletionRequestExists, setDeletionRequest] = useState(false);
 
@@ -27,10 +27,14 @@ export default function UpdateRenter({id}){
             await getLogged(setRenter);
         }
         fetchRenter();
+    })
 
+    useEffect(() => {
         async function fetchDeleteRequest(){
-            const requestData = await getDeleteRequestByID(id);
-            setDeletionRequest(!!requestData ? true : false);
+            if (renter) {
+                const requestData = await getDeleteRequestByID(renter.id);
+                setDeletionRequest(!!requestData ? true : false);
+            }
         }
         fetchDeleteRequest();
     }, [])
@@ -58,9 +62,10 @@ export default function UpdateRenter({id}){
     
     const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
     
-    const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
-    const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
     if(!!renter){
+        const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
+        const deleteButton = deletionRequestExists ? <></> :  <DeleteRow id={renter.id} feedbackFunc={setFeedbackPopup} deleteNotifFunc={setDeletionRequest}/>
+    
         return (<>
                 <FeedbackPopUp changeToShow={feedbackShow} isError={feedbackType} message={feedbackMessage} resetData={reset}/> 
                  {pendingRequest}
@@ -227,7 +232,9 @@ const prepareForUpdate = (client, clientData, setFeedback, e) =>{
     clientCopy.city = clientData.city || client.city;
     clientCopy.state = clientData.state || client.state;
     clientCopy.phoneNum = clientData.phoneNum || client.phoneNum;
+    console.log(clientCopy)
     updateRenter(clientCopy, setFeedback);
+    
     e.preventDefault();
 };
 

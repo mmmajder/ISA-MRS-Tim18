@@ -11,11 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import mrsa.tim018.model.Client;
-import mrsa.tim018.model.FishingInstructor;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.repository.ClientRepository;
-import mrsa.tim018.repository.FishingInstructorRepository;
 import mrsa.tim018.repository.RenterRepository;
 import mrsa.tim018.repository.UserRepository;
 
@@ -27,9 +25,6 @@ public class UserService<T> implements UserDetailsService{
 	@Autowired
 	private RenterRepository renterRepository;
 	
-	
-	@Autowired
-	private FishingInstructorRepository fishingInstructorRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -70,15 +65,10 @@ public class UserService<T> implements UserDetailsService{
 			Client childClass = (Client) bClass;
 			return clientRepository.save(childClass);
 		}
-		if(user.getUserType() == UserType.ResortRenter || user.getUserType() == UserType.BoatRenter) {
+		if(user.getUserType() == UserType.ResortRenter || user.getUserType() == UserType.BoatRenter || user.getUserType()== UserType.FishingInstructor) {
 			User bClass = new Renter(user);
 			Renter childClass = (Renter) bClass;
 			return renterRepository.save(childClass);
-		}
-		if(user.getUserType()== UserType.FishingInstructor) {
-			User bClass = new FishingInstructor(user);
-			FishingInstructor childClass = (FishingInstructor) bClass;
-			return fishingInstructorRepository.save(childClass);
 		}
 		return null;
 	}

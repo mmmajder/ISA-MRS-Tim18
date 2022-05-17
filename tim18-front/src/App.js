@@ -22,6 +22,7 @@ import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
 import GuestNavbar from './layouts/navbar/GuestNavbar';
 import { Confirmation } from './components/forms/Login/Confirmation';
+import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -47,6 +48,7 @@ function App() {
   const assetCalendar = <Container><CalendarAsset/></Container>
   const home = <Container></Container>
   const confirmation = <Container><Confirmation/></Container>
+  const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -67,6 +69,7 @@ function App() {
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/calendarAsset" element={assetCalendar}/>
+                  <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
@@ -78,8 +81,8 @@ function App() {
 }
 const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => {
   if (isAllowedUser==="ResortRenter" || isAllowedUser==='Client' ||isAllowedUser==='Guest' ||
-      isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor') {
-        
+      isAllowedUser==="BoatRenter" || isAllowedUser==='FishingInstructor' || isAllowedUser==="Admin") {
+
     return children;
   }
 
@@ -96,7 +99,7 @@ function ChooseSettings(userType){
   if (userType === 'Client'){
     return <UpdateClientProfile/> 
   }
-  if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter'){
+  if (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter' || userType === 'Admin'){
     return <UpdateRenter />
   }
   return <></>;
@@ -107,7 +110,7 @@ function chooseNavbar(userType){
   if(userType === "Client"){
     navBar =  <ClientNavbar />
   }
-  else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor'){
+  else if(userType==="BoatRenter" || userType === "ResortRenter" || userType === 'FishingInstructor' || userType === 'Admin'){
     navBar =  <ResortRenterNavbar userType={userType}/>
   }
   else if(userType === 'Guest'){

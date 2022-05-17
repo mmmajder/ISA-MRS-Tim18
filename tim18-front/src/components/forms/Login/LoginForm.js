@@ -23,6 +23,22 @@ export function LoginForm({handleLogin}) {
   }
 
   const navigate = useNavigate();
+  // const getUserCallback = (user) => {
+  //   console.log("user")
+  //   console.log(user)
+  //   if(!user){
+  //     // error message popup
+  //     handleLogin({});
+  //     setRole();
+  //   }
+  //   else
+  //   {
+  //     setRole(user.userType);
+  //     handleLogin(user.userType);
+  //     navigate('/home')
+  //   }
+  // }
+
   const loginCallback = (returnData) => {
     if(!returnData){
       alert('Oops email/password incorrect, or your account has not been enabled ')

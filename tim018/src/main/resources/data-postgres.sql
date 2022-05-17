@@ -4,7 +4,7 @@ INSERT INTO Role (name) VALUES ('ROLE_FISHING_INSTRUCTOR');/*3*/
 INSERT INTO Role (name) VALUES ('ROLE_BOAT_RENTER');/*4*/
 INSERT INTO Role (name) VALUES ('ROLE_RESORT_RENTER');/*5*/
 INSERT INTO Role (name) VALUES ('ROLE_USER');/*6*/
-
+ 
 ALTER SEQUENCE userSeqGen RESTART;
 
 /*admin*/
@@ -57,4 +57,8 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  fishing_equipment) values
 				  (1000005, 2, 5, 'Backa Palanka', 4, 10, 'I will teach you how to fish som', false, 'SOM Fishing in Backa', 3, 'No smoking on board allowed', 10007, 3,
 				  'Harpoon');	
-
+				   
+insert into registration (id, is_deleted, status, user_id, registration_date_time) values
+	(1000001, false, 0, 3, now()::timestamp),
+	(1000002, false, 0, 4, now()::timestamp);
+	

@@ -1,0 +1,10 @@
+.centerElem {
+    align-content: center;
+    vertical-align: center;
+}
+
+.faButtonsRegistration {
+    color: var(--dark-blue);
+    font-size:xx-large;
+    margin-right: 5px;
+  }

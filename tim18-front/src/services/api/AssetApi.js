@@ -44,7 +44,7 @@ export async function getAssets(){
   }
 }
 
-export async function getFilteredAssets(assetType, address, numOfPeople, price, mark){
+export async function getFilteredAssets(assetType, address, numOfPeople, price, mark, startDate, endDate){
     try {
         console.log(assetType, address, numOfPeople, price, mark);
         const responseData = await api.get(`/assets/search`,  {
@@ -53,7 +53,9 @@ export async function getFilteredAssets(assetType, address, numOfPeople, price, 
                 "address" : address,
                 "numOfPeople":  numOfPeople, 
                 "price" : price, 
-                "mark" : mark
+                "mark" : mark, 
+                "startDate" : startDate, 
+                "endDate" : endDate
             }
           });
         return responseData;
@@ -63,15 +65,18 @@ export async function getFilteredAssets(assetType, address, numOfPeople, price, 
     }
   }
 
-  export async function getFilteredAssetsForRenter(renterId, address, numOfPeople, price, mark){
+  export async function getFilteredAssetsForRenter(renterId, address, numOfPeople, price, mark, startDate, endDate){
     try {
         console.log(address, numOfPeople, price, mark);
+        console.log( startDate, endDate)
         const responseData = await api.get(`/assets/search/${renterId}`,  {
             params: {
                 "address" : address,
                 "numOfPeople":  numOfPeople, 
                 "price" : price, 
-                "mark" : mark
+                "mark" : mark,
+                "startDate" : startDate, 
+                "endDate" : endDate
             }
           });
         return responseData;
