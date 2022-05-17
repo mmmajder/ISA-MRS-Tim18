@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import mrsa.tim018.dto.JwtAuthenticationRequest;
+import mrsa.tim018.dto.LoginDTO;
 import mrsa.tim018.dto.UserRequest;
 import mrsa.tim018.dto.UserTokenState;
 import mrsa.tim018.mapper.UserMapper;
 import mrsa.tim018.model.User;
+import mrsa.tim018.model.UserType;
 import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.UserService;
 import mrsa.tim018.utils.TokenUtils;
@@ -45,7 +47,7 @@ public class AuthenticationController {
 	private EmailService emailService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<UserTokenState> createAuthenticationToken(
+	public ResponseEntity<LoginDTO> createAuthenticationToken(
 			@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
 		// Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se AuthenticationException
@@ -62,17 +64,21 @@ public class AuthenticationController {
 
 		// Kreiraj token za tog korisnika
 		User user = (User) authentication.getPrincipal();
+		if(!user.isEnabled()) {
+			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED);
+		}
+		
 		String jwt = tokenUtils.generateToken(user);
 		int expiresIn = tokenUtils.getExpiredIn();
 	
-		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+		return ResponseEntity.ok(new LoginDTO(new UserTokenState(jwt, expiresIn), user.getUserType()));
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
 
 		User existUser = this.userService.findByEmail(userRequest.getEmail());
-
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  " + existUser);
 		if (existUser != null) {
 			return new ResponseEntity<>(null, HttpStatus.FOUND);
 		}
@@ -84,12 +90,15 @@ public class AuthenticationController {
 		user.setEnabled(false);
 		
 		user = this.userService.save(user);
-		//slanje emaila
-		try {
-			emailService.sendNotificaitionAsync(user);
-		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
-		}	
+		if(user.getUserType() == UserType.Client) {
+			//slanje emaila
+			try {
+				emailService.sendNotificaitionAsync(user);
+			}catch( Exception e ){
+				System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			}	
+		}
+		
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 }

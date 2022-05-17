@@ -23,27 +23,17 @@ export function LoginForm({handleLogin}) {
   }
 
   const navigate = useNavigate();
-  const getUserCallback = (user) => {
-    if(!user){
-      // error message popup
-      handleLogin({});
-      setRole();
-    }
-    else
-    {
-      setRole(user.userType);
-      handleLogin(user.userType);
-      navigate('/home')
-    }
-  }
   const loginCallback = (returnData) => {
     if(!returnData){
+      alert('Oops email/password incorrect, or your account has not been enabled ')
       // error message popup
     }
     else
     {
-      setToken(returnData);
-      getLogged(getUserCallback);
+      setToken(returnData.token);
+      setRole(returnData.userType);
+      handleLogin(returnData.userType);
+      navigate('/home')
     }
   }
   /*
@@ -51,7 +41,6 @@ export function LoginForm({handleLogin}) {
     <LabeledInputWithErrMessage isValid={validations.password}label="Password*" inputName="password" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
     
     */
-  
   return(
     <>
       <BoxContainer>

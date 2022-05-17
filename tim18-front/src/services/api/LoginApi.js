@@ -19,8 +19,8 @@ export async function sendRegistrationRequest(callback, request){
     const userDataJSON = JSON.stringify(request);
     console.log(userDataJSON);
     await api.post(`/auth/signup`, userDataJSON)
-              .then((responseData) => {console.log("loginApi");console.log(responseData.data); callback(responseData.data); })    // user
-              .catch(()=> {console.log("loginApi");console.log("NOPE"); callback(false);});
+              .then((responseData) => {callback(responseData.data); })    // user
+              .catch((responseData)=> {callback(responseData.data);});
 }
 
 

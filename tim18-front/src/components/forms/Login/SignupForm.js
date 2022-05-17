@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput, checkEmailInput, checkPasswordInput } from '../../../services/utils/InputValidation';
+import { onlyLetters, onlyNumbers, checkLettersInput, checkNumInput, repairInput, checkEmailInput, checkPasswordInput, checkSecondPasswordInput } from '../../../services/utils/InputValidation';
 import React, { useContext } from "react";
 import {
   BoldLink,
@@ -19,30 +19,35 @@ import FeedbackPopUp from '../PopUps/FeedbackPopUp';
 
 export function SignupForm({feedbackFunc}) {
   const navigate = useNavigate();
+  const [feedback, setFeedback] = useState('');
+  const firstUpdate = useRef(true);
   const { switchToSignin } = useContext(AccountContext);
-  const [inputs, setInputs] = useState({});
-  const [validations, setValidations] = useState({firstName: true, 
-                                                  lastName: true, 
-                                                  address: true, 
-                                                  city: true, 
-                                                  state: true, 
-                                                  phoneNum: true,
-                                                  email: true,
-                                                  password: true,
-                                                  userType: true});
+  const [inputs, setInputs] = useState({userType: 'Client'});
+  // Form validation for button disable
+  const [formValid, setFormValid] = useState(true);
+  let userTypes = [
+    { id: 'Client', name: 'Client'},
+    { id: 'BoatRenter', name: 'Boat Renter'},
+    { id: 'ResortRenter', name: 'Resort Renter' },
+    { id: 'FishingInstructor', name: 'Fishing Instructor' },
+  ];
+  const [validations, setValidations] = useState({firstName: true, lastName: true, address: true, city: true, state: true, 
+                                                  phoneNum: true, email: true, retypedPassword: true, password: true, userType: true});
 
   const handleChange = (event, validationFunc) => {
       const name = event.target.name;
       var value = event.target.value;
-      const valid = validationFunc(value)
+      let valid;
+      if(name==='retypedPassword'){
+        valid = checkSecondPasswordInput(value, inputs.password);
+      }
+      else{
+        valid = validationFunc(value);
+      }
       setInputs(values => ({...values, [name]: value}))
       setValidations(values => ({...values, [name]: valid}))
     }
 
-    // Form validation for button disable
-  const [formValid, setFormValid] = useState(true);
-  const firstUpdate = useRef(true);
-  
   useEffect(() => {
     setFormValid(validations.firstName && 
                   validations.lastName && 
@@ -51,13 +56,9 @@ export function SignupForm({feedbackFunc}) {
                   validations.state && 
                   validations.phoneNum &&
                   validations.email &&
+                  validations.retypedPassword &&
                   validations.password);
   }, [validations]);
-  
-
-  // Feedback from request to back, to create popUp
-  const [feedback, setFeedback] = useState('');
-  
   
   useEffect(() => {
     if (firstUpdate.current) {
@@ -65,26 +66,17 @@ export function SignupForm({feedbackFunc}) {
         return;
       }
     if(!!feedback){
-        //navigate('/welcome/', { replace: false })
+        console.log(feedback);
         alert('Successfuly created request for profile, Please check your email!');
-        //afeedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
-        /*setCurrentClient(feedback);
-        setOriginalClient(feedback);*/
+        //feedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
     }
     else{ 
-      feedbackFunc(true, 'Oops, something went wrong please try again!');
+      alert('Oops, something went wrong please try again! Possible that this email already exists');
      }
 
   }, [feedback])
 
-  let userTypes = [
-    { id: 'Client', name: 'Client'},
-    { id: 'BoatRenter', name: 'Boat Renter'},
-    { id: 'ResortRenter', name: 'Resort Renter' },
-    { id: 'FishingInstructor', name: 'Fishing Instructor' },
-  ];
-  /* <SubmitButton type="submit" disabled={!formValid}  onClick={(e) => prepareForUpdate(inputs, setFeedback, e)}>Sign up</SubmitButton> */
-
+  
   return (
     <>
     <BoxContainer>
@@ -96,7 +88,7 @@ export function SignupForm({feedbackFunc}) {
         </Form.Select>
         <LabeledInputWithErrMessage isValid={validations.email} label="Email*" inputName="email" required onChangeFunc={handleChange} validationFunc={checkEmailInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.password} label="Password*" inputName="password" required onChangeFunc={handleChange} validationFunc={checkPasswordInput} hoverTitile={onlyLetters}/>
-        <LabeledInputWithErrMessage isValid={true} label="Retype password*" inputName="retypedPassword" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
+        <LabeledInputWithErrMessage isValid={validations.retypedPassword} label="Retype password*" inputName="retypedPassword" required onChangeFunc={handleChange} validationFunc={checkSecondPasswordInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.firstName} label="First Name*" inputName="firstName" required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.lastName} label="Last Name*" inputName="lastName"required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
         <LabeledInputWithErrMessage isValid={validations.address} label="Address*" inputName="address"  required onChangeFunc={handleChange} validationFunc={checkLettersInput} hoverTitile={onlyLetters}/>
