@@ -36,7 +36,7 @@ const Calendar = () => {
           }
           resourceList = resourceList.concat(res)
           
-          let retData = element.calendar.availableSingle.map(function(range) {
+          let retData = element.calendar.available.map(function(range) {
             var info = {
               title : "Available",
               resourceId : element.id,
@@ -47,7 +47,7 @@ const Calendar = () => {
             }
             return info;
           })
-          retData = retData.concat(element.calendar.specialPriceSingle.map(function(range) {
+          retData = retData.concat(element.calendar.specialPrice.map(function(range) {
             var info = {
               title : "Special offer",
               resourceId : element.id,

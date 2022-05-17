@@ -1,5 +1,9 @@
 package mrsa.tim018.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
+import mrsa.tim018.dto.calendar.TimeRangeMergeElement;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Client;
@@ -43,24 +48,99 @@ public class AssetCalendarSevice {
 		switch (appointment.getType()) {
 		case Available:
 			if (appointment.isPattern()) {
-				List<TimeRange> ranges = calendar.getAvailablePattern();
-				ranges.add(new TimeRange(false, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime())));
-				calendar.setAvailablePattern(ranges);
+				List<TimeRange> ranges = calendar.getAvailable();
+				ranges = addAvailablePattern(ranges, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime()));
+				calendar.setAvailable(ranges);
 			} else {
-				List<TimeRange> ranges = calendar.getAvailableSingle();
-				ranges.add(new TimeRange(false, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime())));
-				calendar.setAvailableSingle(ranges);
+				List<TimeRange> ranges = calendar.getAvailable();
+				ranges = addAvailable(ranges, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime()));
+				calendar.setAvailable(ranges);
 			}
 			return calendar;
 		case SpecialOffer:
-			List<SpecialOffer> offers = calendar.getSpecialPriceSingle();
+			List<SpecialOffer> offers = calendar.getSpecialPrice();
 			Asset asset = assetRepository.getById(appointment.getAssetId());
 			TimeRange timeRange = new TimeRange(false, StringUtils.getDatetime(appointment.getFromDateTime()), StringUtils.getDatetime(appointment.getToDateTime()));
 			offers.add(new SpecialOffer(false, asset, null, timeRange, "", appointment.getDiscount()));
-			calendar.setSpecialPriceSingle(offers);
+			calendar.setSpecialPrice(offers);
 			return calendar;
 		default:
 			return null;
 		}
+	}
+	
+	private List<TimeRange> addAvailable(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
+		for (TimeRange timeRange : ranges) {
+			elems.add(new TimeRangeMergeElement(timeRange, false));
+		}
+		elems.add(new TimeRangeMergeElement(new TimeRange(false, startDateTime, endDateTime), false));
+		return getNewListAvailable(elems);
+	}
+	
+	private List<TimeRange> getNewListAvailable(List<TimeRangeMergeElement> elems) {
+		for (TimeRangeMergeElement elem1 : elems) {
+			if (elem1.isReduced()) {
+				continue;
+			}
+			for (TimeRangeMergeElement elem2 : elems) {
+				if (elem1.equals(elem2)) {
+					continue;
+				}
+				if (elem2.isReduced()) {
+					continue;
+				}
+				if (elem2.getTimeRange().getFromDateTime().isBefore(elem1.getTimeRange().getFromDateTime())) {
+					if (elem2.getTimeRange().getToDateTime().isAfter(elem1.getTimeRange().getFromDateTime())) {
+						elem2.setReduced(true);
+						elem1.getTimeRange().setFromDateTime(elem2.getTimeRange().getFromDateTime());
+						if (elem2.getTimeRange().getToDateTime().isAfter(elem1.getTimeRange().getToDateTime())) {
+							elem1.getTimeRange().setToDateTime(elem2.getTimeRange().getToDateTime());
+						}
+					}
+				}
+				else if(elem2.getTimeRange().getFromDateTime().isBefore(elem1.getTimeRange().getToDateTime())) {
+					elem2.setReduced(true);
+					if (elem2.getTimeRange().getToDateTime().isAfter(elem1.getTimeRange().getToDateTime())) {
+						elem1.getTimeRange().setToDateTime(elem2.getTimeRange().getToDateTime());
+					}
+				}
+			}
+		}
+		List<TimeRange> retData = new ArrayList<TimeRange>();
+		for (TimeRangeMergeElement timeRangeMergeElement : elems) {
+			if (!timeRangeMergeElement.isReduced()) {
+				retData.add(timeRangeMergeElement.getTimeRange());
+			}
+		}
+		return retData;
+	}
+	
+	private List<TimeRange> addAvailablePattern(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
+		for (TimeRange timeRange : ranges) {
+			elems.add(new TimeRangeMergeElement(timeRange, false));
+		}
+		
+		for (int i=0; i<52; i++) {
+			LocalDateTime fromDateTime = startDateTime.plusDays(i*7);
+			LocalDateTime toDateTime = endDateTime.plusDays(i*7);
+			elems.add(new TimeRangeMergeElement(new TimeRange(false, fromDateTime, toDateTime), false));
+		}
+		
+		return getNewListAvailable(elems);
+	}
+
+	public List<Asset> availableInRange(List<Asset> assets, LocalDate startDate, LocalDate endDate) {
+		List<Asset> availableAssets = new ArrayList<Asset>();
+		for (Asset asset : assets) {
+			for (TimeRange timeRange : asset.getCalendar().getAvailable()) {
+				if (timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) && timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))) {
+					availableAssets.add(asset);
+					break;
+				}
+			}
+		}
+		return availableAssets;
 	}
 }

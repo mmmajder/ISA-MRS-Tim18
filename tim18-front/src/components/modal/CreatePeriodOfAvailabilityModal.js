@@ -105,7 +105,7 @@ const CreatePeriodOfAvailabilityModal = (props) => {
                 <Time setTime={setEndTime} time={endTime}></Time>
             </Form.Group>
             <Form.Group className="mb-2">
-              <Form.Label className="mb-1">Repeat: </Form.Label>
+              <Form.Label className="mb-1">Repeat (every week for a year): </Form.Label>
               <Form.Check 
               type="switch"
               id="custom-switch"
