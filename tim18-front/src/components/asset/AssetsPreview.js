@@ -10,6 +10,7 @@ import { faHome, faSearch, faSuitcase, faBorderAll, faSailboat, faHouseChimney, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../assets/styles/buttons.css';
 import { Input, Radio, RadioGroup } from '@mui/material';
+import { makeDefDatePicker } from '../../services/utils/TimeUtils';
 
 export default function AssetsPreview({isSearch}){
 
@@ -21,8 +22,10 @@ export default function AssetsPreview({isSearch}){
     const [mark, setMark] = useState(0);
     const userType = getRole();
     const [user, setUser] = useState([]);
-    const [startDate, setStartDate] = useState(new Date("1000-01-01"))
-    const [endDate, setEndDate] = useState(new Date("9000-01-01"))
+    const [startDate, setStartDate] = useState(makeDefDatePicker(new Date()))
+    const [endDate, setEndDate] = useState(makeDefDatePicker(new Date()))
+
+
 
     useEffect(() => {
         async function fetchClient(){
@@ -34,13 +37,6 @@ export default function AssetsPreview({isSearch}){
     const onClickSearchFunction = () => {
         if (isSearch || userType==='Client' || userType==='Guest')
             getFilteredAssets(assetType, address, numOfPeople, price, mark, startDate, endDate).then(
-// =======
-//         let searchParams = {address, numOfPeople, price, mark}
-//         console.log(JSON.stringify(searchParams));
-
-//         if (userType === "Client")
-//             getFilteredAssets(address, numOfPeople, price, mark, startDate, endDate).then(
-// >>>>>>> admin
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
         else

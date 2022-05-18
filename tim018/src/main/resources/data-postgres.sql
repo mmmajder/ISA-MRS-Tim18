@@ -37,6 +37,13 @@ insert into renter (id, address, city, first_name, is_deleted, last_name, loyalt
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 5);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 6);
 
+/*renterForDelete*/
+/*rrenter1*/
+insert into renter (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, email, password,enabled) values 
+				  (NEXTVAL('userSeqGen'), 'RRenterAddress 2', 'Backa Topola', 'Pera', false, 'Peric', 0, '060123456', 'Serbia', 'ResortRenter', 'rrenter2@gmail.com', '$2a$10$nHMUGlq4M/uWZBlO7y2Vu.L/XjSB6.9otsRDvC79Q2RMAhMBSNp3y', true);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 5);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 6);
+
 
 insert into asset_calendar (id) values (10001), (10002), (10003), (10004), (10005), (10006), (10007);
 
@@ -61,4 +68,8 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 insert into registration (id, is_deleted, status, user_id, registration_date_time) values
 	(1000001, false, 0, 3, now()::timestamp),
 	(1000002, false, 0, 4, now()::timestamp);
+	
+insert into deletation_request (is_deleted, reason, status, user_id) values
+	(false, 'No reason', 0, 2),
+	(false, 'Good reason', 0, 6);
 	

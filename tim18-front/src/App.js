@@ -23,6 +23,7 @@ import { getLogged } from './services/api/LoginApi.js';
 import GuestNavbar from './layouts/navbar/GuestNavbar';
 import { Confirmation } from './components/forms/Login/Confirmation';
 import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
+import AdminDeletionRequestsPreview from './components/admin/AdminDeletionRequestsPreview.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -49,6 +50,7 @@ function App() {
   const home = <Container></Container>
   const confirmation = <Container><Confirmation/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
+  const adminProfileDeletionReq = <Container><AdminDeletionRequestsPreview/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -70,6 +72,7 @@ function App() {
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/calendarAsset" element={assetCalendar}/>
                   <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
+                  <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

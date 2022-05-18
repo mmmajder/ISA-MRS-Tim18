@@ -31,7 +31,7 @@ public class DeletationRequestDTO {
 		this.isDeleted = deletationRequest.isDeleted();
 		this.status = deletationRequest.getStatus();
 		this.reason = deletationRequest.getReason();
-//		this.user = deletationRequest.getUser();
+		this.user = deletationRequest.getUser();
 	}
 	
 
