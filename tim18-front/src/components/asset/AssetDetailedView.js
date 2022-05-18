@@ -87,7 +87,7 @@ export default function AssetDetailedView(){
                 <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                       <RegularButton text='Rent resort' disabled={userType === "Guest"} onClickFunction={''}/>
+                       {userType=="Client" ? <RegularButton text='Rent' disabled={userType === "Guest"} onClickFunction={''}/> : []}
                     </Col>
                     <Col sm={4}>
                     </Col>

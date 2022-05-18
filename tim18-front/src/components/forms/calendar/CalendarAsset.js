@@ -55,7 +55,6 @@ const CalendarAsset = () => {
 
     return (
         <div>
-        <Col sm='12'  className="mt-2 importantInfo">Naziv asseta</Col>
           <div>
               <CreateCalendarEventForm scope={"asset"} onChange={(value)=>{
                 console.log(value)
