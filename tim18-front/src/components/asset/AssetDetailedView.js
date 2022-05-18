@@ -68,7 +68,6 @@ export default function AssetDetailedView(){
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
                             </Col> 
                             <Col sm="3">
-                                <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 { userType !== "Client" && userType !== "Guest" &&
                                   <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>}
                                 { userType !== "Client"  && userType !== "Guest" &&
