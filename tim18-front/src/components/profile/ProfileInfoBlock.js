@@ -33,12 +33,7 @@ export default function ProfileInfoBlock(){
 
     useEffect(() => {
         if (!!user && !!user.profilePhotoId){
-            console.log(user)
-            console.log(user.id)
-            console.log(user.profilePhotoId)
             getProfilePhoto()
-        } else{
-            setProfilePhoto(require('../../assets/images/blue_profile_pic.jpg'))
         }
     }, [user])
 

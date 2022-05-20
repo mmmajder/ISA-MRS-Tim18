@@ -6,7 +6,9 @@ import {uploadProfilePhotoToServer, getPhotoFromServer} from '../../services/api
 
 export default function UpdateProfilePhoto(){
 
-    const [renter, setRenter] = useState();
+    const [user, setUser] = useState();
+    const [profilePhotoId, setProfilePhotoId] = useState();
+
     const [image, setImage] = useState();
     const [hasSelectedImage, setHasSelectedImage] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState();
@@ -16,37 +18,43 @@ export default function UpdateProfilePhoto(){
         setHasSelectedImage(true);
     }
 
-    const uploadProfilePhoto = (event) => {
-        console.log("tusmo")
-        let currentImage = image[0];
-        uploadProfilePhotoToServer(currentImage, renter.id);
-    }
-
-    const getProfilePhoto = useCallback(
+    const uploadProfilePhoto = useCallback(
         (e) => {
-            getPhotoFromServer(renter.profilePhotoId).then((response) =>{
-                let photo = `data:image/jpeg;base64,${response.data}`
-                setProfilePhoto(photo);
-            });
-        }, [renter]
+            if (!image){
+                return
+            }
+            let currentImage = image[0];
+            uploadProfilePhotoToServer(currentImage, user.id).then(
+                (response) => {
+                    setProfilePhotoId(response.data);
+                }
+            );
+        }, [user, image]
     )
 
     useEffect(() => {
-        getLogged(setRenter);
+        getLogged(setUser);
     }, [])
 
-    useEffect(() => {
-        if (!!renter && !!renter.profilePhotoId){
-            console.log(renter)
-            console.log(renter.id)
-            console.log(renter.profilePhotoId)
-            getProfilePhoto()
-        } else{
-            setProfilePhoto(require('../../assets/images/blue_profile_pic.jpg'))
+    useEffect(() =>{
+        if (!user){
+            return
         }
-    }, [renter])
+        setProfilePhotoId(user.profilePhotoId);
+        console.log("postavio useeffect profilnuId")
+    }, [user])
 
-    if(!!renter){
+    useEffect(() => {
+        if (!profilePhotoId){
+            return
+        }
+        getPhotoFromServer(profilePhotoId).then((response) =>{
+            let photo = `data:image/jpeg;base64,${response.data}`
+            setProfilePhoto(photo);
+        });
+    }, [profilePhotoId])
+
+    if(!!user){
         return (<>
                 <div className="borderedBlock mt-3">  
                     <Row>

@@ -5,7 +5,7 @@ import AssetScrollerPhotos from '../asset/AssetScrollerPhotos';
 import {useParams} from 'react-router-dom';
 import { getAssetById } from '../../services/api/AssetApi';
 import {useState, useEffect, useCallback} from 'react';
-import {getAssetPhotoIdsFromServer, deletePhotoOnServer} from '../../services/api/ImageApi';
+import {getAssetPhotoIdsFromServer, deletePhotoOnServer, uploadAssetPhotoToServer} from '../../services/api/ImageApi';
 
 export default function UpdateAssetPhotos(){
 
@@ -67,20 +67,23 @@ export default function UpdateAssetPhotos(){
         setHasSelectedImage(true);
     }
 
-    // const uploadProfilePhoto = (event) => {
-    //     console.log("tusmo")
-    //     let currentImage = image[0];
-    //     uploadProfilePhotoToServer(currentImage, renter.id);
-    // }
-
-    // const getProfilePhoto = useCallback(
-    //     (e) => {
-    //         getPhotoFromServer(renter.profilePhotoId).then((response) =>{
-    //             let photo = `data:image/jpeg;base64,${response.data}`
-    //             setProfilePhoto(photo);
-    //         });
-    //     }, [renter]
-    // )
+    const uploadAssetPhoto = useCallback(
+        () => {
+            if (!image){
+                return;
+            }
+            console.log("tusmo")
+            let currentImage = image[0];
+            uploadAssetPhotoToServer(currentImage, asset.id).then(
+                (response) =>{
+                    const newPhotoId = response.data;
+                    let newPhotoIds = JSON.parse(JSON.stringify(photoIds)); // deep copy array
+                    newPhotoIds.push(newPhotoId);
+                    setPhotoIds(newPhotoIds);
+                }
+            );
+        }, [image, asset, setPhotoIds, photoIds]
+    )
 
     return (<>
             <div className="borderedBlock mt-3">  
@@ -97,7 +100,7 @@ export default function UpdateAssetPhotos(){
                         </div>
                         <Row className="mt-3">
                             <Col sm={12} align="center" >
-                            <Button variant="custom" type="submit" className='formButton' disabled={!hasSelectedImage}>
+                            <Button variant="custom" type="submit" className='formButton' disabled={!hasSelectedImage} onClick={uploadAssetPhoto}>
                                 Upload
                             </Button>
                             </Col>

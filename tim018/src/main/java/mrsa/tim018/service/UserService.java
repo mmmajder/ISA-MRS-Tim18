@@ -70,21 +70,22 @@ public class UserService<T> implements UserDetailsService{
 	}
 	
 	public User updateUser(User user) {
-		if(user.getUserType() == UserType.Client) {
+		UserType userType = user.getUserType();
+		if(userType == UserType.Client) {
 			User bClass = new Client(user);
 			Client childClass = (Client) bClass;
 			return clientRepository.save(childClass);
 		}
-		if(user.getUserType() == UserType.ResortRenter || user.getUserType() == UserType.BoatRenter) {
+		if(userType == UserType.ResortRenter || userType == UserType.BoatRenter || userType == UserType.FishingInstructor) {
 			User bClass = new Renter(user);
 			Renter childClass = (Renter) bClass;
 			return renterRepository.save(childClass);
 		}
-		if(user.getUserType()== UserType.FishingInstructor) {
-			User bClass = new FishingInstructor(user);
-			FishingInstructor childClass = (FishingInstructor) bClass;
-			return fishingInstructorRepository.save(childClass);
-		}
+//		if(user.getUserType()== UserType.FishingInstructor) {
+//			User bClass = new FishingInstructor(user);
+//			FishingInstructor childClass = (FishingInstructor) bClass;
+//			return fishingInstructorRepository.save(childClass);
+//		}
 		return null;
 	}
 

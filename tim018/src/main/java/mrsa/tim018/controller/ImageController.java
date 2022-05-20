@@ -41,28 +41,26 @@ public class ImageController {
 	private AssetService assetService;
 	
 	@PostMapping("profilePhoto/{id}")
-	  public ResponseEntity<byte[]> uploadProfilePhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+	  public ResponseEntity<String> uploadProfilePhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
 	    try {
 	    	Image image = imageService.store(file);
 	    	User user = userService.findOne(id);
 	    	user.setProfilePhotoId(image.getId());
 	    	userService.updateUser(user);
-	    	byte[] encoded = Base64.getEncoder().encode(image.getData());
-	    	return new ResponseEntity<>(encoded, HttpStatus.OK);
+	    	return new ResponseEntity<>(image.getId(), HttpStatus.OK);
 	    } catch (Exception e) {
 	    	return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	    }
 	  }
 	  
 	  @PostMapping("assetPhoto/{id}")
-	  public ResponseEntity<byte[]> uploadAssetPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+	  public ResponseEntity<String> uploadAssetPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
 	    try {
 	    	Asset a = assetService.findOne(id);
 	    	
 	    	if (a != null) {
 	    		Image image = imageService.store(id, file);
-	    		byte[] encoded = Base64.getEncoder().encode(image.getData());
-		    	return new ResponseEntity<>(encoded, HttpStatus.OK);
+		    	return new ResponseEntity<>(image.getId(), HttpStatus.OK);
 	    	} else {
 	    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	    	}

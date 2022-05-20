@@ -1,11 +1,27 @@
 import {api} from "../Configs.js"
 
 export async function uploadProfilePhotoToServer(file, userId) {
-    let formData = new FormData();
-    formData.append("file", file);
-    api.post(`/photos/profilePhoto/${userId}`, formData)
-     .then((responseData) => {})
-     .catch((err)=> alert(err));
+     try {
+        let formData = new FormData();
+        formData.append("file", file);
+        const responseData = await api.post(`/photos/profilePhoto/${userId}`, formData)
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function uploadAssetPhotoToServer(file, assetId) {
+    try {
+        let formData = new FormData();
+        formData.append("file", file);
+        const responseData = await api.post(`/photos/assetPhoto/${assetId}`, formData)
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
 }
 
 export async function getPhotoFromServer(id) {

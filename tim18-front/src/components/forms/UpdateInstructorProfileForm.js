@@ -73,12 +73,7 @@ export default function UpdateRenter({id}){
 
     useEffect(() => {
         if (!!renter && !!renter.profilePhotoId){
-            console.log(renter)
-            console.log(renter.id)
-            console.log(renter.profilePhotoId)
             getProfilePhoto()
-        } else{
-            setProfilePhoto(require('../../assets/images/blue_profile_pic.jpg'))
         }
     }, [renter])
     
