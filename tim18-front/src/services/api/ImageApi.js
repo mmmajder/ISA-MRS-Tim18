@@ -17,3 +17,23 @@ export async function getPhotoFromServer(id) {
         return err.message
     }
 }
+
+export async function getAssetPhotoIdsFromServer(id) {
+    try {
+        const responseData = await api.get(`/photos/assetPhotoIds/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function deletePhotoOnServer(id) {
+    try {
+        const responseData = await api.delete(`/photos/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}

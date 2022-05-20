@@ -18,6 +18,7 @@ public class Image {
 	private byte[] data;
 	private boolean isDeleted;
 	private String type;
+	private Long assetId;
 	
 	public Image() {}
 	
@@ -25,6 +26,16 @@ public class Image {
 		this.data = data;
 		this.type = type;
 		this.isDeleted = false;
+	}
+	
+	public Image(byte[] data, String type, Long assetId) {
+		this(data, type);
+		this.assetId = assetId;
+	}
+	
+	public Image(byte[] data, String type, boolean isDeteled, Long assetId) {
+		this(data, type, assetId);
+		this.isDeleted = isDeteled;
 	}
 
 	public String getType() {
@@ -57,5 +68,13 @@ public class Image {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public Long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(Long assetId) {
+		this.assetId = assetId;
 	}
 }

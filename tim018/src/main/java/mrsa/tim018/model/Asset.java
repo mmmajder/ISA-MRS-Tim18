@@ -68,7 +68,7 @@ public class Asset {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PriceCatalog> prices;
-
+	
 	public Asset() {
 
 	}

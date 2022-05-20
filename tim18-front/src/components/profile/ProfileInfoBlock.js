@@ -5,8 +5,6 @@ import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
 
 import {useState, useEffect, useCallback} from 'react';
-import axios from 'axios';
-import {getInstructorByID} from '../../services/api/InstructorApi'
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
 

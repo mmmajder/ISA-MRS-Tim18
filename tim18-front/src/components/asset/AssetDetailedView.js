@@ -5,7 +5,7 @@ import RenterInfo from './RenterInfo';
 import RegularButton from '../buttons/RegularButton';
 import AssetMainInfo from './AssetMainInfo';
 import AssetOtherInfo from './AssetOtherInfo';
-import { faPenToSquare, faTrash, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrash, faCalendarDays, faImage} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom";
 import ResortSpecificInfo from './ResortSpecificInfo';
@@ -17,8 +17,7 @@ import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
 import MapContainer from './MapContainer';
 
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+import AssetCarousel from './AssetCarousel';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -36,23 +35,11 @@ export default function AssetDetailedView(){
         fetchAsset();
     }, [id])
 
-    console.log(asset);
-
-    // let assetType = "RESORT";
     let assetType = asset.assetType;
-    // let assetType = "FISHING";
-
-    let assetImage; 
-    if (assetType === "FISHING_ADVENTURE") {
-        assetImage = require('../../assets/images/FishingAdventure3.png')
-    } else if (assetType === "RESORT") {
-        assetImage = require('../../assets/images/Maldives.jpg')
-    } else {
-        assetImage = require('../../assets/images/boat.jpg')
-    }
 
     const linkToEditPage = "/resorts/update/" + id;
     const linkToCalendar = "/calendarAsset";
+    const linkToUpdateAssetPhotos = "/updateAssetPhotos/" + id;
     const linkToMyAssetsPage = "/resorts"
     const assetDeletion = () => {
         deleteAsset(id)
@@ -62,34 +49,25 @@ export default function AssetDetailedView(){
             <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="6">
-                        <Carousel  className="assetCarousle">
-                        <div>
-                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
-                        </div>
-                        <div>
-                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
-                        </div>
-                        <div>
-                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
-                        </div>
-                        <div>
-                            <img src={assetImage} style={{borderRadius: "0.75rem"}}/>
-                        </div>
-
-                        </Carousel>
-
-                        
-                        <RenterInfo renter={asset.renter}/>
+                        <Row>
+                            <AssetCarousel asset={asset} />
+                        </Row>
+                        <Row>
+                            <RenterInfo renter={asset.renter}/>
+                        </Row>
+                        <Row>
                         <div className="borderedBlock mt-3" align="">
                             <MapContainer address={asset.address}/>
                         </div>
+                        </Row>
                     </Col>
                     <Col sm="6">
                         <Row>
-                            <Col sm="9">
+                            <Col sm="8">
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
                             </Col> 
-                            <Col sm="3">
+                            <Col sm="4"> 
+                                <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link>
                                 <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
                                 { userType !== "Client" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
