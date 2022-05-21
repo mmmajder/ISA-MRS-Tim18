@@ -21,9 +21,10 @@ try {
 }
 }
 
-export async function declineRegistrationRequest(id){
+export async function declineRegistrationRequest(id, request){
     try {
-        const responseData = await api.put(`/regRequests/decline/${id}`);
+        const requestJSON = JSON.stringify(request);
+        const responseData = await api.put(`/regRequests/decline/${id}`, requestJSON);
         console.log(responseData)
         return responseData;
     } catch (err) {

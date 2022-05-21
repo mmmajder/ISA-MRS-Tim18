@@ -64,11 +64,11 @@ public class DeleteationRequestController {
 		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
 		for (DeletationRequest s : deletionRequests) {
 			deletionRequestsDTO.add(new DeletationRequestDTO(s));
-		}
-
+		}  
+ 
 		return new ResponseEntity<>(deletionRequestsDTO, HttpStatus.OK);
-	}
-	
+	}  
+	 
 	@PutMapping(value = "/accept/{id}")
 	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id) {
 

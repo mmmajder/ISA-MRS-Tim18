@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RegistrationDTO;
+import mrsa.tim018.dto.UserRequest;
 import mrsa.tim018.model.Registration;
 import mrsa.tim018.model.RequestStatus;
+import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.RegistrationRequestService;
 
 @RestController
@@ -24,6 +27,9 @@ import mrsa.tim018.service.RegistrationRequestService;
 public class RegistrationRequestController {
 	@Autowired
 	private RegistrationRequestService registrationRequestService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@GetMapping(value = "/active")
 	public ResponseEntity<List<RegistrationDTO>> getActiveRegistrationRequests() {
@@ -44,17 +50,30 @@ public class RegistrationRequestController {
 		}
 		registration.setStatus(RequestStatus.Accepted);
 		registrationRequestService.save(registration);
+		
+		try {
+			emailService.sendRegistrationResponseAsync(RequestStatus.Accepted, "");
+			System.out.println("Poslao mejl");
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping(value="/decline/{id}")
-	public ResponseEntity<RegistrationDTO> declineRequest(@PathVariable Integer id) {
+	public ResponseEntity<RegistrationDTO> declineRequest(@PathVariable Integer id, @RequestBody String comment) {
 		Registration registration = registrationRequestService.findById(id);
 		if (registration==null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		registration.setStatus(RequestStatus.Declined);
 		registrationRequestService.save(registration);
+		try {
+			emailService.sendRegistrationResponseAsync(RequestStatus.Declined, comment);
+			System.out.println("Poslao mejl");
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 

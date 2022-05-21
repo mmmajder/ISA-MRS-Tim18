@@ -1,23 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
-import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
-import { getRole }  from '../../services/AuthService/AuthService'
 import RegistrationRequestMainInfo from './RegistrationRequestMainInfo';
 import RegistrationRequestMoreInfo from './RegistrationRequestMoreInfo';
 import RegistationRequestButton from './RegistrationRequestButton';
 import './../../assets/styles/admin.css'
 import { acceptRegistrationRequest, declineRegistrationRequest } from '../../services/api/RegistrationRequestApi';
+import DeclineRegistrationModal from './DeclineRegistrationModal';
 
-const ListedRegistrationRequest = ({request, key}) => {
+const ListedRegistrationRequest = ({request, key, onDelete}) => {
+    const [activeForm, setActiveForm] = useState(null);
+    const [isDeleted, setDeleted] = useState(false);
+
     const accpetRequest = () => {
         acceptRegistrationRequest(request.id)
+        onDelete(request)
+    }
+
+    const handleCallback = (childData) =>{
+        onDelete(childData)
     }
 
     const declineRequest = () => {
-        declineRegistrationRequest(request.id)
+        setActiveForm(<DeclineRegistrationModal request={request} onDelete={handleCallback}/>)
     }
-
 
     return <div className="borderedBlock mt-3 pt-0 ms-4 me-4" align="">
     <Row className='ms-4'>
@@ -34,6 +40,7 @@ const ListedRegistrationRequest = ({request, key}) => {
             <RegistationRequestButton request={request} text='Decline' onClickFunction={declineRequest}/>
         </Col>
     </Row>
+    {activeForm}
     </div>
 }
 

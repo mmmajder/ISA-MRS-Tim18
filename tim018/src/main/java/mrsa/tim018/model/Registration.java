@@ -40,7 +40,7 @@ public class Registration {
 		this.user = user;
 		this.registrationDateTime = registrationDateTime;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

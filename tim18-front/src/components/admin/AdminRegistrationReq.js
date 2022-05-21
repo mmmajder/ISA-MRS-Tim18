@@ -7,6 +7,12 @@ import ListedRegistrationRequest from './ListedRegistrationRequest';
 const AdminRegistrationReq = () => {
     const [requests, setRequests] = useState([]);
 
+    const handleCallback = (childData) =>{
+        setRequests(requests.filter(function( obj ) {
+            return obj.id !== childData.id;
+          }))
+    }
+
     useEffect(() => {
         async function fetchRegistrationRequests(){
             const requestData = await getRegRequests();
@@ -14,12 +20,12 @@ const AdminRegistrationReq = () => {
             return requestData;
         }
         fetchRegistrationRequests();
-    }, [requests])
+    }, [])
     let listedRequests;
     if (requests != undefined){
         console.log(requests)
         console.log("request")
-        listedRequests = requests.map((request) => <ListedRegistrationRequest request={request} key={request.id} />)
+        listedRequests = requests.map((request) => <ListedRegistrationRequest request={request} key={request.id} onDelete={handleCallback}/>)
     }
 
     return (
