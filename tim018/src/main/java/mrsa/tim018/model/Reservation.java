@@ -61,7 +61,7 @@ public class Reservation {
 		this.timeRange = timeRange;
 		
 		this.isDeleted = false;
-		this.status = ReservationStatus.Pending;	
+		this.status = ReservationStatus.Future;	
 	}
 
 

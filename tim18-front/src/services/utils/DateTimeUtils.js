@@ -1,8 +1,8 @@
 
 export function getDateFromList(date) {
-    let day = date[1].toString();
+    let day = date[2].toString();
     if(day.length === 1){ day = "0" + day};
-    let month = date[2].toString();
+    let month = date[1].toString();
     if(month.length === 1){ month = "0" + month};
     let year = date[0];
     return day + "." + month + "." + year + ".";

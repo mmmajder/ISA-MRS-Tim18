@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.ReservationDTO;
-import mrsa.tim018.mapper.ReservationMapper;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.service.ClientService;
-import mrsa.tim018.service.ReservationRequestService;
+import mrsa.tim018.service.ReservationService;
 
 @RestController
 @CrossOrigin("*")
@@ -32,51 +31,33 @@ import mrsa.tim018.service.ReservationRequestService;
 public class ReservationController {
 
 	@Autowired
-	private ReservationRequestService reservationRequestService;
+	private ReservationService reservationService;
 	
 	@Autowired
 	private ClientService clientService;
-	
-	@GetMapping(value = "/all")
-	public ResponseEntity<List<ReservationDTO>> getAllReservations() {
-		List<Reservation> reservations = reservationRequestService.findAll();
-		List<ReservationDTO> reservationsDTO = ReservationMapper.map(reservations);
-		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
-	}
-	
-	@GetMapping(value = "/pending")
-	public ResponseEntity<List<ReservationDTO>> getPendingReservations() {
-		List<Reservation> reservations = reservationRequestService.findPending();
-		List<ReservationDTO> reservationsDTO = ReservationMapper.map(reservations);
-		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
-	}
-	
+
 	@GetMapping(value = "/current/{clientId}")
-	public ResponseEntity<List<ReservationDTO>> getCurrentReservations() {
-		List<Reservation> reservations = reservationRequestService.findCurrent();
-		List<ReservationDTO> reservationsDTO = ReservationMapper.map(reservations);
+	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long clientId, @RequestParam AssetType assetType) {
+		Client client = clientService.findOne(clientId);
+		List<Reservation> reservations = client.getReservations();
+		
+		reservations = reservations.stream().filter(r -> r.getTimeRange().getFromDateTime().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+		if(assetType!=AssetType.ALL)
+			reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
+		
+		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
 		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
 	}
-	
-//	@GetMapping(value = "/history/{clientId}")
-//	public ResponseEntity<List<ReservationDTO>> getPastReservations(@PathVariable Long clientId) {
-//		Client client = clientService.findOne(clientId);
-//		List<Reservation> reservations = client.getReservations();
-//		reservations = reservations.stream().filter(r -> r.getTimeRange().getToDateTime().isBefore(LocalDateTime.now())).collect(Collectors.toList());
-//		List<ReservationDTO> reservationsDTO = ReservationMapper.map(reservations);
-//		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
-//	}
 	
 	@GetMapping(value = "/history/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getPastReservationsByType(@PathVariable Long clientId, @RequestParam AssetType assetType) {
 		Client client = clientService.findOne(clientId);
 		List<Reservation> reservations = client.getReservations();
 		reservations = reservations.stream().filter(r -> r.getTimeRange().getToDateTime().isBefore(LocalDateTime.now())).collect(Collectors.toList());
-		if(assetType!=null)
-			if(assetType!=AssetType.ALL)
-				reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
+		if(assetType!=AssetType.ALL)
+			reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
 		
-		List<ReservationDTO> reservationsDTO = ReservationMapper.map(reservations);
+		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
 		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
 	}
 	

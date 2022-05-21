@@ -23,10 +23,12 @@ public class ReservationDTO {
 	private LocalDateTime fromDateTime;
 	private LocalDateTime toDateTime;
 	
+	private boolean isCancelable;
+	
 	public ReservationDTO() {
 	}
 	
-	public ReservationDTO(Reservation reservation) {
+	public ReservationDTO(Reservation reservation, boolean cancelable) {
 		this.asset = reservation.getAsset();
 		this.assetId = reservation.getAsset().getID();
 		
@@ -36,6 +38,8 @@ public class ReservationDTO {
 		this.timeRange = reservation.getTimeRange();
 		this.fromDateTime = reservation.getTimeRange().getFromDateTime();
 		this.toDateTime = reservation.getTimeRange().getToDateTime();
+		
+		this.isCancelable = cancelable;
 	}
 
 	public Long getAssetId() {
@@ -92,6 +96,14 @@ public class ReservationDTO {
 
 	public void setToDateTime(LocalDateTime toDateTime) {
 		this.toDateTime = toDateTime;
+	}
+
+	public boolean isCancelable() {
+		return isCancelable;
+	}
+
+	public void setCancelable(boolean cancelable) {
+		this.isCancelable = cancelable;
 	}
 	
 	
