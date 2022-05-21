@@ -22,6 +22,7 @@ import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
 import GuestNavbar from './layouts/navbar/GuestNavbar';
 import { Confirmation } from './components/forms/Login/Confirmation';
+import  AllReservations from './components/reservations/AllReservations';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -47,6 +48,7 @@ function App() {
   const assetCalendar = <Container><CalendarAsset/></Container>
   const home = <Container></Container>
   const confirmation = <Container><Confirmation/></Container>
+  const allReservations = <Container><AllReservations/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -67,6 +69,7 @@ function App() {
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/calendarAsset" element={assetCalendar}/>
+                  <Route path="/allReservations" element={allReservations}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

@@ -6,10 +6,8 @@ import {useEffect, useState} from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { getRole } from '../../services/AuthService/AuthService';
 import { getLogged } from '../../services/api/LoginApi';
-import { faHome, faSearch, faSuitcase, faBorderAll, faSailboat, faHouseChimney, faFishFins, faBell, faCircleQuestion} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../assets/styles/buttons.css';
-import { Input, Radio, RadioGroup } from '@mui/material';
+import AssetTypeOption from './AssetTypeOption';
 
 export default function AssetsPreview({isSearch}){
 
@@ -124,42 +122,5 @@ export default function AssetsPreview({isSearch}){
             <p className='mt-3'></p> 
         </>
 
-}
-
-
-const AssetTypeOption =({setAssetType}) => {
-    return (<>
-    <Row className='mt-2'>
-    
-        <Col sm={3}/>
-        <Col sm={1} align='center'>
-            <label onClick={()=>setAssetType("ALL")}>
-                <input  type="radio" name="optionsRadio" id="allOption" value="ALL"  title="ALL" />
-                <FontAwesomeIcon className='faRadio' icon={faBorderAll} size='xl'/> ALL
-            </label>
-        </Col>
-        <Col sm={2} align='center'>
-            <label onClick={()=>setAssetType("BOAT")}>
-                <input type="radio" name="optionsRadio" id="boatOption" value="BOAT"title="BOAT" />
-                <FontAwesomeIcon className='faRadio' icon={faSailboat}  size='xl'/> Boats
-            </label>
-        </Col>
-        <Col sm={2} align='center'>
-            <label onClick={()=>setAssetType("RESORT")}>
-                <input type="radio" name="optionsRadio" id="ResortOption" value="RESORT" title="RESORT" />
-                <FontAwesomeIcon className='faRadio' icon={faHouseChimney} size='xl'/> Resorts
-            </label>
-           
-        </Col>
-        <Col sm={2} align='center'>
-            <label onClick={()=>setAssetType("FISHING_ADVENTURE")}>
-                <input type="radio" name="optionsRadio" id="FishingOption" value="FISHING_ADVENTURE" title="FISHING_ADVENTURE" />
-                <FontAwesomeIcon className='faRadio' icon={faFishFins}  size='xl'/> Fishing
-            </label>
-        </Col>
-        <Col sm={4}/>
-    </Row>
-    <Row className='mt-4'></Row>
-    </>);
 }
 

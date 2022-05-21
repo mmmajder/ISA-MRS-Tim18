@@ -14,6 +14,14 @@
     width: 250px !important;
 }
 
+.alertFixedWidthButton {
+  width: 250px !important;
+  background-color: indianred!important;
+}
+.alertFixedWidthButton:hover {
+  background-color: crimson !important;
+}
+
 .faButtons {
   color: var(--dark-blue);
   font-size:xx-large;
