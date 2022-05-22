@@ -70,7 +70,7 @@ function App() {
                   <Route path="/resorts/:id" element={resortView} /> 
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
-                  <Route path="/calendarAsset" element={assetCalendar}/
+                  <Route path="/calendarAsset" element={assetCalendar}/>
                   <Route path="/allReservations" element={allReservations}/>
                   <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
                 </Route>
