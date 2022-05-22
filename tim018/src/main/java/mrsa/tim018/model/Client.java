@@ -59,4 +59,22 @@ public class Client extends User {
 	public void setPenaltyPoints(int penaltyPoints) {
 		this.penaltyPoints = penaltyPoints;
 	}
+
+	public List<SpecialOffer> getSpecialOffers() {
+		return specialOffers;
+	}
+
+	public void setSpecialOffers(List<SpecialOffer> specialOffers) {
+		this.specialOffers = specialOffers;
+	}
+
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+	
+	
 }

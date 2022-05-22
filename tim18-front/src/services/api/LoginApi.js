@@ -1,4 +1,5 @@
 import {api} from "../Configs.js"
+import { useNavigate } from "react-router-dom";
 
 export async function loginRequest(userData, callback){
     const userDataJSON = JSON.stringify(userData);
@@ -10,7 +11,7 @@ export async function loginRequest(userData, callback){
 export async function getLogged(callback){
     await api.get(`/users/whoami`)
               .then((responseData) => {callback(responseData.data)})    // user
-              .catch(()=> {callback(false)});
+              .catch(()=> {/*navigate('/login')*/});
 
 }
 

@@ -57,8 +57,32 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  fishing_equipment) values
 				  (1000005, 2, 5, 'Backa Palanka', 4, 10, 'I will teach you how to fish som', false, 'SOM Fishing in Backa', 3, 'No smoking on board allowed', 10007, 3,
 				  'Harpoon');	
+				  
+/*future*/
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('12.12.2022.', false, '15.12.2022.');
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('11.11.2022.', false, '21.11.2022.');
+/*past*/
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('12.03.2022.', false, '15.03.2022.');
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('04.04.2022.', false, '08.04.2022.');
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('21.05.2022. 11:15', false, '30.05.2022. 12:38');
+					  
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
+						(false, 0, 1000001, null, 2, null, null, 1);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
+						(false, 0, 1000002, null, 2, null, null, 3);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
+						(false, 0, 1000004, null, 2, null, null, 2);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
+						(false, 0, 1000005, null, 2, null, null, 4);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
+						(false, 0, 1000007, null, 2, null, null, 5);
+
 				   
 insert into registration (id, is_deleted, status, user_id, registration_date_time) values
 	(1000001, false, 0, 3, now()::timestamp),
 	(1000002, false, 0, 4, now()::timestamp);
-	

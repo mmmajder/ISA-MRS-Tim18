@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Reservation {
 	@Id
@@ -23,10 +25,12 @@ public class Reservation {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "asset_id")
+	@JsonBackReference
 	private Asset asset;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
+	@JsonBackReference
 	private Client client;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -36,20 +40,30 @@ public class Reservation {
 	private ReservationStatus status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_review_id", nullable = false)
+    @JoinColumn(name = "client_review_id", nullable = true)
 	private Review clientReview;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "asset_review_id", nullable = false)
+    @JoinColumn(name = "asset_review_id", nullable = true)
 	private Review assetReview;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "renter_review_id", nullable = false)
+    @JoinColumn(name = "renter_review_id", nullable = true)
 	private Review renterReview;
 	
 
 	public Reservation() {
 	}
+	
+	public Reservation(Asset asset, Client client, TimeRange timeRange) {
+		this.asset = asset;
+		this.client = client;
+		this.timeRange = timeRange;
+		
+		this.isDeleted = false;
+		this.status = ReservationStatus.Future;	
+	}
+
 
 	public boolean isDeleted() {
 		return isDeleted;
@@ -77,6 +91,54 @@ public class Reservation {
 
 	public Asset getAsset() {
 		return asset;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public TimeRange getTimeRange() {
+		return timeRange;
+	}
+
+	public void setTimeRange(TimeRange timeRange) {
+		this.timeRange = timeRange;
+	}
+
+	public Review getClientReview() {
+		return clientReview;
+	}
+
+	public void setClientReview(Review clientReview) {
+		this.clientReview = clientReview;
+	}
+
+	public Review getAssetReview() {
+		return assetReview;
+	}
+
+	public void setAssetReview(Review assetReview) {
+		this.assetReview = assetReview;
+	}
+
+	public Review getRenterReview() {
+		return renterReview;
+	}
+
+	public void setRenterReview(Review renterReview) {
+		this.renterReview = renterReview;
+	}
+
+	public void setID(Long iD) {
+		ID = iD;
+	}
+
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 	
 	

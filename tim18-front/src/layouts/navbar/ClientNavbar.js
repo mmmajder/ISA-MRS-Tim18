@@ -23,7 +23,7 @@ export default function ClientNavbar(){
 
                 
                 <NavDropdown title={<span><FontAwesomeIcon icon={faSuitcase} /> Reservations</span>}> 
-                    <NavDropdown.Item href="#"><FontAwesomeIcon icon={faBorderAll} /> All </NavDropdown.Item> 
+                    <NavDropdown.Item href="/allReservations"><FontAwesomeIcon icon={faBorderAll} /> All </NavDropdown.Item> 
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faHouseChimney} /> Resorts </NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faSailboat} /> Boats</NavDropdown.Item>
                     <NavDropdown.Item href="#"><FontAwesomeIcon icon={faFishFins} /> Fishing adventures </NavDropdown.Item>

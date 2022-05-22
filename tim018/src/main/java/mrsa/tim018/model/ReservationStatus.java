@@ -2,9 +2,7 @@ package mrsa.tim018.model;
 
 public enum ReservationStatus {
 
-	Pending,
-	Accepted,
+	Future,
 	Canceled,
-	Declined,
 	Finished
 }

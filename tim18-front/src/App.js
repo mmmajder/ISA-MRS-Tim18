@@ -22,6 +22,7 @@ import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
 import GuestNavbar from './layouts/navbar/GuestNavbar';
 import { Confirmation } from './components/forms/Login/Confirmation';
+import  AllReservations from './components/reservations/AllReservations';
 import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
 
 const AppContainer = styled.div`
@@ -48,6 +49,7 @@ function App() {
   const assetCalendar = <Container><CalendarAsset/></Container>
   const home = <Container></Container>
   const confirmation = <Container><Confirmation/></Container>
+  const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
 
   return  (<Router>
@@ -68,7 +70,8 @@ function App() {
                   <Route path="/resorts/:id" element={resortView} /> 
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
-                  <Route path="/calendarAsset" element={assetCalendar}/>
+                  <Route path="/calendarAsset" element={assetCalendar}/
+                  <Route path="/allReservations" element={allReservations}/>
                   <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
                 </Route>
                 <Route path="login" element={login} />
