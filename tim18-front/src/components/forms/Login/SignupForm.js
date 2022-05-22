@@ -83,7 +83,7 @@ export function SignupForm({feedbackFunc}) {
       
       <FormContainer>
 
-        <Form.Select style={{'text-align': "center"}}aria-label="Default select example" name="userType" id="assets"  onChange={(e)=>{handleChange(e, checkLettersInput);}}>
+        <Form.Select style={{textAlign: "center"}}aria-label="Default select example" name="userType" id="assets"  onChange={(e)=>{handleChange(e, checkLettersInput);}}>
           { userTypes.map((userType) => <option key={userType.id} value={userType.id}>{userType.name}</option>) }
         </Form.Select>
         <LabeledInputWithErrMessage isValid={validations.email} label="Email*" inputName="email" required onChangeFunc={handleChange} validationFunc={checkEmailInput} hoverTitile={onlyLetters}/>

@@ -16,3 +16,12 @@ export function getTimeFromList(dateTime){
     if(minutes.length === 1){ minutes = "0" + minutes};
     return hours + ":" + minutes;
 }
+
+export function getJsFormatDate(date) {
+    let day = date[2].toString();
+    if(day.length === 1){ day = "0" + day};
+    let month = date[1].toString();
+    if(month.length === 1){ month = "0" + month};
+    let year = date[0];
+    return year + "-" + month + "-" + day;
+}

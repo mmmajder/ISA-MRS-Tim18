@@ -6,17 +6,25 @@ import AssetTypeOption from '../asset/AssetTypeOption';
 import { ListedReservation } from './ListReservations';
 import { getPastReservationsByType } from '../../services/api/ReservationApi';
 import { getLogged } from '../../services/api/LoginApi';
+import { sortReservations } from '../../services/utils/SortUtils';
+import { Marginer } from '../forms/Login/marginer'
 
 export default function HistoryReservations(){
   const [assetType, setAssetType] = useState("ALL");
-  const [price, setPrice] = useState(0);
-  const [address, setAddress] = useState("");
-  const [numOfPeople, setNumOfPeople] = useState(0);
-  const [mark, setMark] = useState(0);
-
-
   const [reservations, setReservations] = useState();
   const [client, setClient] = useState();
+  const [listedReservations, setListedReservations] = useState();
+
+  const [filter, setFilter] = useState();
+  let filterOptions = [
+    { id: 'Date1', name: 'Date (Least to most recent)'},
+    { id: 'Date2', name: 'Date (Most to least recent)'},
+    { id: 'Price1', name: 'Price (Least to most)'},
+    { id: 'Price2', name: 'Price (Most to least)'},
+    { id: 'Duration1', name: 'Duration (Shortest to longest)' },
+    { id: 'Duration2', name: 'Duration (Longest to shortest)' },
+  ];
+
   useEffect(() => {
       async function fetchUser(){
           await getLogged(setClient);
@@ -34,68 +42,36 @@ export default function HistoryReservations(){
       
   }, [client, assetType])
 
-  let listedReservations;
-    if (reservations !== undefined){
-      listedReservations = reservations.map((reservation) => <ListedReservation reservation={reservation}/>)
-  }
+  useEffect(() => {
+        if (reservations !== undefined){
+            let listedReservations = reservations.map((reservation) => <ListedReservation reservation={reservation}/>)
+            setListedReservations(listedReservations);
+        }
+    }, [reservations])
+  
 
-  const searchFilterFunc = () => {
-      console.log("TODO: IMPLEMENTIRAJ SEARCH I FILTER ISTORIJE REZERVACIJA");
-  }
+  useEffect(() => {
+    sortReservations(filter, reservations, setReservations);
+  }, [filter])
 
   return (
     <>
-      
         <AssetTypeOption setAssetType={setAssetType}/>
+        <Marginer direction="vertical" margin="1em" />
+        <Row>
+              <Col sm="3"/>
+              <Col>
+              <h5 style={{textAlign: "center"}} >Sort by:</h5>
+              <Form.Select style={{textAlign: "center", width: "100%", fontSize: "20px"}}name="filterOption" id="filterOption"  onChange={(e)=>{setFilter(e.target.value)}}>
+                    { filterOptions.map((filterOption) => <option key={filterOption.id} value={filterOption.id}>{filterOption.name}</option>) }
+                </Form.Select>
+              </Col>  
+              <Col sm="3"/>
+        </Row>
 
-        <Row className='mt-2'>
-            <Col sm={3} align='right'><Form.Label>Max price</Form.Label></Col>
-            <Col sm={2}>
-                <Form.Control name="price"  type="number" min="0" required
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)}>
-                </Form.Control>
-            </Col>
-            <Col sm={2} align='right'><Form.Label >Address</Form.Label></Col>
-            <Col sm={4}>
-                <Form.Control value={address} name="address" placeholder="Type address" 
-                    onChange={(e) => setAddress(e.target.value)}>
-                </Form.Control>
-            </Col>
-            <Col sm={1}/>
-        </Row>
-        <Row className='mt-2'>
-            <Col sm={3} align='right'><Form.Label>Min number of people</Form.Label></Col>
-            <Col sm={2}>
-                <Form.Control name="numOfPeople"  type="number" min="1" required
-                    value={numOfPeople} 
-                    onChange={(e) => setNumOfPeople(e.target.value)}>
-                </Form.Control>
-            </Col>
-            <Col sm={2} align='right'><Form.Label>Min mark </Form.Label></Col>
-            <Col sm={4}>
-                <Form.Control name="mark"  type="number" min="0" max="5" required
-                    value={mark} 
-                    onChange={(e) => setMark(e.target.value)}>
-                </Form.Control>
-            </Col>
-            <Col sm={1}/>
-        </Row>
-        <Row className='mt-2'>
-            <Col sm={4}/>
-            <Col sm={4} align='center'>
-                <Button variant="custom" type="submit" className='formButton' onClick={searchFilterFunc}>
-                    Search
-                </Button>
-            </Col>
-            <Col sm={4}/>
-        </Row>
+        <Marginer direction="vertical" margin="2em" />
         
-
         {listedReservations}
     </>
-    
   );
 }
-
-

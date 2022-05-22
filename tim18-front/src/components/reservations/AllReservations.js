@@ -14,10 +14,10 @@ export default function AllReservations(){
   return (
     <div className="borderedBlock mb-3 mt-3">
       <div className="bloc-tabs">
-        <button className={toggleState === 1 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(1)} >
+        <button style={{fontSize: "20px"}} className={toggleState === 1 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(1)} >
           Reservations
         </button>
-        <button className={toggleState === 2 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(2)} >
+        <button style={{fontSize: "20px"}} className={toggleState === 2 ? "tabs active-tabs" : "tabs"} onClick={() => toggleTab(2)} >
           History
         </button>
       </div>

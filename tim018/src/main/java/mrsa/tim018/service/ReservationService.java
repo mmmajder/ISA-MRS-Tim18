@@ -1,5 +1,6 @@
 package mrsa.tim018.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ReservationService {
 	public List<ReservationDTO> map(List<Reservation> reservations){
 		List<ReservationDTO> reservationsDTO = new ArrayList<>();
 		for (Reservation res : reservations) {
-			reservationsDTO.add(new ReservationDTO(res, isCancelable(res)));
+			reservationsDTO.add(new ReservationDTO(res, isCancelable(res), calcDuration(res)));
 		}
 		return reservationsDTO;
 	}
@@ -44,5 +45,13 @@ public class ReservationService {
 		LocalDateTime lastCancelationDay = startDate.minusDays(3);
 		
 		return lastCancelationDay.isAfter(today);
+	}
+	
+	
+	private Long calcDuration(Reservation reservation) {
+		LocalDateTime from = reservation.getTimeRange().getFromDateTime();
+        LocalDateTime to = reservation.getTimeRange().getToDateTime();
+		Duration duration = Duration.between(from, to);
+		return duration.toDays();
 	}
 }

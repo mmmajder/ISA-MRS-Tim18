@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import mrsa.tim018.model.Asset;
-import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.TimeRange;
 
@@ -24,11 +23,12 @@ public class ReservationDTO {
 	private LocalDateTime toDateTime;
 	
 	private boolean isCancelable;
+	private Long duration;
 	
 	public ReservationDTO() {
 	}
 	
-	public ReservationDTO(Reservation reservation, boolean cancelable) {
+	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration) {
 		this.asset = reservation.getAsset();
 		this.assetId = reservation.getAsset().getID();
 		
@@ -40,6 +40,7 @@ public class ReservationDTO {
 		this.toDateTime = reservation.getTimeRange().getToDateTime();
 		
 		this.isCancelable = cancelable;
+		this.duration = duration;
 	}
 
 	public Long getAssetId() {
@@ -105,9 +106,12 @@ public class ReservationDTO {
 	public void setCancelable(boolean cancelable) {
 		this.isCancelable = cancelable;
 	}
-	
-	
-	
-	
-	
+
+	public Long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Long duration) {
+		this.duration = duration;
+	}
 }
