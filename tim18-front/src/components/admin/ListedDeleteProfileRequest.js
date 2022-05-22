@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
@@ -9,15 +9,26 @@ import RegistationRequestButton from './RegistrationRequestButton';
 import './../../assets/styles/admin.css'
 import { acceptDeletionRequest } from '../../services/api/DeleteRequestApi';
 import { declineDeletionRequest } from '../../services/api/DeleteRequestApi';
+import ReasonProfileDeletionModal from './ReasonProfileDeletionModal'
 
-const ListedDeleteProfileRequest = ({request, key}) => {
+const ListedDeleteProfileRequest = ({request, key, onDelete}) => {
+    const [activeForm, setActiveForm] = useState(null);
+
     const accpetRequest = () => {
-        acceptDeletionRequest(request.id)
+        setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="accept"/>)
+        
     }
 
     const declineRequest = () => {
-        declineDeletionRequest(request.id)
+        setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="decline"/>)
+        
     }
+
+    const handleCallback = (childData) =>{
+        onDelete(childData)
+    }
+
+
     console.log(request)
     console.log("request")
     
@@ -27,6 +38,9 @@ const ListedDeleteProfileRequest = ({request, key}) => {
             <RegistrationRequestMainInfo user={request.user} />
         </Col>
         <Col sm="4" className="mt-4">
+            <div className='centerElem mt-3'>
+                {"Reason: " + request.reason } 
+            </div>
         </Col>
         <Col sm="2" className="mt-3">
             <RegistationRequestButton request={request} text='Accept' onClickFunction={accpetRequest}/>
@@ -35,6 +49,7 @@ const ListedDeleteProfileRequest = ({request, key}) => {
             <RegistationRequestButton request={request} text='Decline' onClickFunction={declineRequest}/>
         </Col>
     </Row>
+    {activeForm}
     </div>
 }
 

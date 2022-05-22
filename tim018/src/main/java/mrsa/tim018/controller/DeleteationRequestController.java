@@ -22,6 +22,7 @@ import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.service.DeletationRequestService;
+import mrsa.tim018.service.EmailService;
 
 @RestController
 @CrossOrigin("*")
@@ -30,6 +31,9 @@ public class DeleteationRequestController {
 	
 	@Autowired
 	private DeletationRequestService deletationRequestService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
@@ -70,22 +74,30 @@ public class DeleteationRequestController {
 	}  
 	 
 	@PutMapping(value = "/accept/{id}")
-	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id) {
-
+	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
+ 
 		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
 		deletionRequest.setStatus(RequestStatus.Accepted);
 		deletationRequestService.save(deletionRequest);
-		
+		try {
+			emailService.sendDeleteProfileResponseAsync(RequestStatus.Accepted, comment);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
 		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/decline/{id}")
-	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id) {
+	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 
 		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
 		deletionRequest.setStatus(RequestStatus.Declined);
 		deletationRequestService.save(deletionRequest);
-		
+		try {
+			emailService.sendDeleteProfileResponseAsync(RequestStatus.Declined, comment);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
 		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
 	}
 }

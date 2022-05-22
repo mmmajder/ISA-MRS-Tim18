@@ -14,9 +14,16 @@ const AdminDeletionRequestsPreview = () => {
     }
     fetchRequests();
   }, [])
+
+  const handleCallback = (childData) =>{
+    setRequests(requests.filter(function( obj ) {
+        return obj.id !== childData.id;
+      }))
+}
+
   let listedRequests;
   if (requests != undefined){
-      listedRequests = requests.map((request) => <ListedDeleteProfileRequest request={request} key={request.id} />)
+      listedRequests = requests.map((request) => <ListedDeleteProfileRequest request={request} key={request.id} onDelete={handleCallback}/>)
   }
 
   return (

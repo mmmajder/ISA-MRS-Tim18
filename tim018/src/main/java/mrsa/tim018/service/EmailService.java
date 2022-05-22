@@ -69,21 +69,6 @@ public class EmailService {
 	
 	@Async
 	public void sendRegistrationResponseAsync(RequestStatus status, String adminExpl) throws MessagingException, UnsupportedEncodingException  {
-		//SimpleMailMessage mail = new SimpleMailMessage();
-		
-		
-//		//mail.setTo(user.getEmail());
-//		mail.setTo("isamrs018@gmail.com");
-//		mail.setFrom(env.getProperty("spring.mail.username"));
-//		mail.setSubject("Please verify your registration");
-//		String siteURL = "http://localhost:3000";
-		
-//		String content = "Dear [[name]],<br>"
-//		            + "Please click the link below to verify your registration:<br>"
-//		            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-//		            + "Thank you,<br>"
-//		            + "Hakuna matata.";
-		
 		MimeMessage message = javaMailSender.createMimeMessage();
 		if (status == RequestStatus.Accepted)
 			message.setSubject("Hakuna Matata profile registration accepted");
@@ -98,6 +83,38 @@ public class EmailService {
 		String siteURL = "http://localhost:3000";
 		String verifyURL;
 		String content = EmailContentUtils.getRegistrationResponseContent(status, adminExpl); ;
+		if (status == RequestStatus.Accepted) {
+			verifyURL = siteURL + "/login";
+		} else {
+			verifyURL = siteURL + "/login#";
+		}
+
+		content = content.replace("[[URL]]", verifyURL);
+		
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+
+		System.out.println("Email poslat!");
+	} 
+	
+	@Async
+	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) throws MessagingException, UnsupportedEncodingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		if (status == RequestStatus.Accepted)
+			message.setSubject("Hakuna Matata profile delete accepted");
+		else 
+			message.setSubject("Hakuna Matata profile delete denied");
+		
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String siteURL = "http://localhost:3000";
+		String verifyURL;
+		String content = EmailContentUtils.getDeleteProfileResponseContent(status, adminExpl); ;
 		if (status == RequestStatus.Accepted) {
 			verifyURL = siteURL + "/login";
 		} else {

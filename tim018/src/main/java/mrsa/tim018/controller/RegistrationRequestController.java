@@ -70,7 +70,6 @@ public class RegistrationRequestController {
 		registrationRequestService.save(registration);
 		try {
 			emailService.sendRegistrationResponseAsync(RequestStatus.Declined, comment);
-			System.out.println("Poslao mejl");
 		}catch( Exception e ){
 			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
 		}

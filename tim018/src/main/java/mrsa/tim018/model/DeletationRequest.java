@@ -18,7 +18,7 @@ public class DeletationRequest {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id; 
 	
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
@@ -27,8 +27,8 @@ public class DeletationRequest {
 	private RequestStatus status;
 	
 	@Column(name = "reason", nullable = false)
-	private String reason;
-
+	private String reason; 
+  
 	@OneToOne()
 	private User user;
 

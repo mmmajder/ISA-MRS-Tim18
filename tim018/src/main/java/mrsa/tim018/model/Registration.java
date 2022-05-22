@@ -46,7 +46,7 @@ public class Registration {
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.id = id; 
 	}
 
 	public LocalDateTime getRegistrationDateTime() {

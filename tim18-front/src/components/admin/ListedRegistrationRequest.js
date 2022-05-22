@@ -9,8 +9,8 @@ import { acceptRegistrationRequest, declineRegistrationRequest } from '../../ser
 import DeclineRegistrationModal from './DeclineRegistrationModal';
 
 const ListedRegistrationRequest = ({request, key, onDelete}) => {
+    console.log(request)
     const [activeForm, setActiveForm] = useState(null);
-    const [isDeleted, setDeleted] = useState(false);
 
     const accpetRequest = () => {
         acceptRegistrationRequest(request.id)
