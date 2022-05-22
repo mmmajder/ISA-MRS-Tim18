@@ -16,7 +16,7 @@ import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
 import { Marginer } from '../forms/Login/marginer';
-
+import CalendarAsset from '../forms/calendar/CalendarAsset';
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
@@ -68,7 +68,6 @@ export default function AssetDetailedView(){
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
                             </Col> 
                             <Col sm="3">
-                                <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
                                 { userType !== "Client" && userType !== "Guest" &&
                                   <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>}
                                 { userType !== "Client"  && userType !== "Guest" &&
@@ -83,12 +82,17 @@ export default function AssetDetailedView(){
                 </Row>
                 <Marginer direction="vertical" margin="3em" />
                 <Row>
+                    <CalendarAsset></CalendarAsset>
+                </Row>
+                <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                       <RegularButton text='Rent resort' disabled={userType === "Guest"} onClickFunction={''}/>
+                       {userType=="Client" ? <RegularButton text='Rent' disabled={userType === "Guest"} onClickFunction={''}/> : []}
                     </Col>
-                    <Col sm={4}/>
+                    <Col sm={4}>
+                    </Col>
                 </Row>
+                
                 
                 <Row>
                     {/* Reviews will go under */}

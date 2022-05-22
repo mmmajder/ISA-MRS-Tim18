@@ -4,7 +4,7 @@ INSERT INTO Role (name) VALUES ('ROLE_FISHING_INSTRUCTOR');/*3*/
 INSERT INTO Role (name) VALUES ('ROLE_BOAT_RENTER');/*4*/
 INSERT INTO Role (name) VALUES ('ROLE_RESORT_RENTER');/*5*/
 INSERT INTO Role (name) VALUES ('ROLE_USER');/*6*/
-
+ 
 ALTER SEQUENCE userSeqGen RESTART;
 
 /*admin*/
@@ -82,3 +82,7 @@ insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000007, null, 2, null, null, 5);
 
+				   
+insert into registration (id, is_deleted, status, user_id, registration_date_time) values
+	(1000001, false, 0, 3, now()::timestamp),
+	(1000002, false, 0, 4, now()::timestamp);

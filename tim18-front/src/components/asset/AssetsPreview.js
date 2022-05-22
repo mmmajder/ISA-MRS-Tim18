@@ -19,6 +19,8 @@ export default function AssetsPreview({isSearch}){
     const [mark, setMark] = useState(0);
     const userType = getRole();
     const [user, setUser] = useState([]);
+    const [startDate, setStartDate] = useState(new Date("1000-01-01"))
+    const [endDate, setEndDate] = useState(new Date("9000-01-01"))
 
     useEffect(() => {
         async function fetchClient(){
@@ -29,11 +31,18 @@ export default function AssetsPreview({isSearch}){
 
     const onClickSearchFunction = () => {
         if (isSearch || userType==='Client' || userType==='Guest')
-            getFilteredAssets(assetType, address, numOfPeople, price, mark).then(
+            getFilteredAssets(assetType, address, numOfPeople, price, mark, startDate, endDate).then(
+// =======
+//         let searchParams = {address, numOfPeople, price, mark}
+//         console.log(JSON.stringify(searchParams));
+
+//         if (userType === "Client")
+//             getFilteredAssets(address, numOfPeople, price, mark, startDate, endDate).then(
+// >>>>>>> admin
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
         else
-            getFilteredAssetsForRenter(user.id, address, numOfPeople, price, mark).then(
+            getFilteredAssetsForRenter(user.id, address, numOfPeople, price, mark, startDate, endDate).then(
                 requestData => setAssets(!!requestData ? requestData.data : [])
             );
     }
@@ -104,6 +113,19 @@ export default function AssetsPreview({isSearch}){
                             value={mark} 
                             onChange={(e) => setMark(e.target.value)}>
                         </Form.Control>
+                    </Col>
+                    <Col sm={1}/>
+                </Row>
+                <Row className='mt-2'>
+                    <Col sm={3} align='right'><Form.Label>Start date:</Form.Label></Col>
+                    <Col sm={2}>
+                        <Form.Control className="mb-1" type="date" name="dob" placeholder="Start date" value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}/>
+                    </Col>
+                    <Col sm={2} align='right'><Form.Label>End date: </Form.Label></Col>
+                    <Col sm={4}>
+                        <Form.Control className="mb-1" type="date" name="dob" placeholder="End date" value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}/>
                     </Col>
                     <Col sm={1}/>
                 </Row>

@@ -27,11 +27,11 @@ export default function ProfileInfoBlock(){
         return <div className="borderedBlock" align="center">
                 <img src={profilePic} className="profilePicture rounded-circle" ></img>
                 <ProfileInfo infoClass="profileNameLastname" text={user.firstName + " " + user.lastName}/>
-                <MarkStars mark={user.mark} />
+                {user.userType!="Admin" ? <MarkStars mark={user.mark} /> : [] }
                 <ProfileInfo infoClass="profileOtherInfo" text={user.city + ", " + user.state }/>
                 <ProfileInfo infoClass="profileOtherInfo" text={user.dateBirth}/>
                 <hr className="solidDivider"/>
-                <ProfileBusinessInfo assetsName={ getAssetName(user.userType)} assetsNum="5" rentsName="RENTS" rentsNum="7" reviewsNum="3"/>
+                {user.userType!="Admin" ? <ProfileBusinessInfo assetsName={ getAssetName(user.userType)} assetsNum="5" rentsName="RENTS" rentsNum="7" reviewsNum="3"/> : []}
             </div>
     }
     else 

@@ -9,29 +9,32 @@ import CreateCalendarEventForm from './CreateCalendarEventForm'
 import './../../../assets/styles/calendar.css'
 import { getAssetCalendarData } from '../../../services/api/CalendarApi'
 import { Row, Col, Container } from 'react-bootstrap';
+import {makeDateString} from './../../../services/utils/TimeUtils'
+
 
 const CalendarAsset = () => {
     const calendarRef = createRef()
     const [events, setEvents] = useState()
 
     const assetId = localStorage.getItem("assetId");
+    
 
     useEffect(() => {
       async function fetchCalendarData() {
         const requestData = await getAssetCalendarData(assetId);
-        let retData = requestData.data.calendar.availableSingle.map(function(range) {
+        let retData = requestData.data.calendar.available.map(function(range) {
           var info = {
             title : "Available",
-            start : range.fromDateTime,
-            end : range.toDateTime
+            start : makeDateString(range.fromDateTime),
+            end : makeDateString(range.toDateTime)
           }
           return info;
         })
-        let specialOffers = requestData.data.calendar.specialPriceSingle.map(function(range) {
+        let specialOffers = requestData.data.calendar.specialPrice.map(function(range) {
           var info = {
             title : "Special offer",
-            start : range.timeRange.fromDateTime,
-            end : range.timeRange.toDateTime,
+            start : makeDateString(range.timeRange.fromDateTime),
+            end : makeDateString(range.timeRange.toDateTime),
             backgroundColor : "orange",
             borderColor : "orange"
           }
@@ -40,19 +43,22 @@ const CalendarAsset = () => {
         if (specialOffers.length!=0){
           retData = [...retData, ...specialOffers] 
         }
+        console.log("retData")
+        console.log(retData)
         if (requestData) {
           setEvents(retData);
         }
         return requestData;
       }
       fetchCalendarData()
-    })
+    }, [events])
 
     return (
         <div>
-        <Col sm='12'  className="mt-2 importantInfo">Dubrovnik Pirate</Col>
           <div>
               <CreateCalendarEventForm scope={"asset"} onChange={(value)=>{
+                console.log(value)
+                console.log("value")
               if (!!events) {
                 setEvents([...events, value])
               } else { setEvents([value])}

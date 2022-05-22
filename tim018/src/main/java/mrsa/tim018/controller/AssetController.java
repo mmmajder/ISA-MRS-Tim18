@@ -1,5 +1,7 @@
 package mrsa.tim018.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
@@ -34,6 +36,7 @@ import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.BoatService;
 import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ResortService;
+import mrsa.tim018.utils.TimeUtils;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -197,9 +200,9 @@ public class AssetController {
 	
 	@GetMapping(value = "/search")
 	public ResponseEntity<List<AssetDTO>> searchAssets(@RequestParam AssetType assetType, @RequestParam String address,
-			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
+			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark, @RequestParam String startDate, @RequestParam String endDate) {
 		List<Asset> assets = assetService.findAll();
-		assets = filterAssets(assets, assetType, address, numOfPeople,  price,  mark);
+		assets = filterAssets(assets, assetType, address, numOfPeople,  price,  mark, TimeUtils.getLocalDate(startDate), TimeUtils.getLocalDate(endDate));
 		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
 		
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
@@ -207,15 +210,15 @@ public class AssetController {
 	
 	@GetMapping(value = "/search/{renterId}")
 	public ResponseEntity<List<AssetDTO>> searchRenterAssets(@PathVariable Long renterId, @RequestParam String address,
-			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark) {
+			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark, @RequestParam String startDate, @RequestParam String endDate) {
 		List<Asset> assets = assetService.findAllByRenterId(renterId);
-		assets = filterAssets(assets, AssetType.ALL, address, numOfPeople,  price,  mark);
+		assets = filterAssets(assets, AssetType.ALL, address, numOfPeople,  price,  mark, TimeUtils.getLocalDate(startDate), TimeUtils.getLocalDate(endDate));
 		List<AssetDTO> assetDTOs = mapAssetsToDto(assets);
 		
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
 	}
 	
-	private List<Asset> filterAssets(List<Asset> assets, AssetType assetType, String address, int numOfPeople, double price, double mark) {
+	private List<Asset> filterAssets(List<Asset> assets, AssetType assetType, String address, int numOfPeople, double price, double mark, LocalDate startDate, LocalDate endDate) {
 		if (price != 0)
 			assets = assets.stream().filter(a -> a.getPrice() <= price).collect(Collectors.toList());
 		if (mark != 0)
@@ -226,6 +229,7 @@ public class AssetController {
 			assets = assets.stream().filter(a -> a.getAddress().toLowerCase().contains(address.toLowerCase())).collect(Collectors.toList());
 		if(assetType!=AssetType.ALL)
 			assets = assets.stream().filter(a -> a.getAssetType() == assetType).collect(Collectors.toList());
+		assets = assetCalendarSevice.availableInRange(assets, startDate, endDate);
 		return assets;
 	} 
 	

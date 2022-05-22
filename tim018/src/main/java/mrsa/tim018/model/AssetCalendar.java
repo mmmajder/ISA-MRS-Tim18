@@ -12,22 +12,19 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-
+ 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) 
 public class AssetCalendar {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<TimeRange> availablePattern = new ArrayList<TimeRange>();
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<TimeRange> availableSingle = new ArrayList<TimeRange>();
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<TimeRange> available = new ArrayList<TimeRange>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<SpecialOffer> specialPriceSingle = new ArrayList<SpecialOffer>();
+	private List<SpecialOffer> specialPrice = new ArrayList<SpecialOffer>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Reservation> reserved = new ArrayList<Reservation>();
@@ -44,28 +41,20 @@ public class AssetCalendar {
 		this.id = id;
 	}
 
-	public List<TimeRange> getAvailablePattern() {
-		return availablePattern;
+	public List<TimeRange> getAvailable() {
+		return available;
 	}
 
-	public void setAvailablePattern(List<TimeRange> availablePattern) {
-		this.availablePattern = availablePattern;
+	public void setAvailable(List<TimeRange> available) {
+		this.available = available;
 	}
 
-	public List<TimeRange> getAvailableSingle() {
-		return availableSingle;
+	public List<SpecialOffer> getSpecialPrice() {
+		return specialPrice;
 	}
 
-	public void setAvailableSingle(List<TimeRange> availableSingle) {
-		this.availableSingle = availableSingle;
-	}
-
-	public List<SpecialOffer> getSpecialPriceSingle() {
-		return specialPriceSingle;
-	}
-
-	public void setSpecialPriceSingle(List<SpecialOffer> specialPriceSingle) {
-		this.specialPriceSingle = specialPriceSingle;
+	public void setSpecialPrice(List<SpecialOffer> specialPrice) {
+		this.specialPrice = specialPrice;
 	}
 
 	public List<Reservation> getReserved() {

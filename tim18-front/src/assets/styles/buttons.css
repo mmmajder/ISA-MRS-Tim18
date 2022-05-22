@@ -20,6 +20,22 @@
 }
 .alertFixedWidthButton:hover {
   background-color: crimson !important;
+
+.acceptReqReq {
+  width: 80% !important;
+  text-align: center;
+}
+
+.declineButton {
+  background-color: white !important;
+  color: var(--dark-blue) !important;
+  border-color: var(--dark-blue) !important;
+  font-size: x-large !important;
+}
+
+.declineButton:hover {
+  background-color: var(--hovered-blue) !important;
+  
 }
 
 .faButtons {

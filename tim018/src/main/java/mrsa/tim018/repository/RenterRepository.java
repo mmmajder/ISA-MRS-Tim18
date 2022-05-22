@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.User;
 
 public interface RenterRepository extends JpaRepository<Renter, Long> {
 	public Page<Renter> findAll(Pageable pageable);
@@ -19,4 +20,6 @@ public interface RenterRepository extends JpaRepository<Renter, Long> {
 	
 	@Query(value = "SELECT nextval('userSeqGen')", nativeQuery = true)
 	Long getNextSeriesId();
+
+	public User save(User renter);
 }
