@@ -43,3 +43,12 @@ export const makeDateOfList = (data) => {
   let seconds = data[4]
   return hours + ":" + seconds + " " + day + "." + month + "." + year + "." 
 }
+
+export const makeDefDatePicker = (data) => {
+  var month = data.getUTCMonth() + 1; //months from 1-12
+  var day = data.getUTCDate();
+  var year = data.getUTCFullYear();
+
+  let newdate = year + "-" + month + "-" + day;
+  return newdate
+}

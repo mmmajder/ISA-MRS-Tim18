@@ -70,10 +70,13 @@ public class AssetCalendarSevice {
 	}
 	
 	public List<Asset> availableInRange(List<Asset> assets, LocalDate startDate, LocalDate endDate) {
+		if (startDate==null && endDate==null) {
+			return assets;
+		}
 		List<Asset> availableAssets = new ArrayList<Asset>();
-		for (Asset asset : assets) {
+		for (Asset asset : assets) { 
 			for (TimeRange timeRange : asset.getCalendar().getAvailable()) {
-				if (timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) && timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))) {
+				if ((timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) || startDate==null)&& (timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))|| endDate==null) ) {
 					availableAssets.add(asset);
 					break;
 				}

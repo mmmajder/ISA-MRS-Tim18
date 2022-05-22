@@ -10,4 +10,33 @@ export async function getDeleteRequestByID(id){
     }
 }
 
+export async function getPendingDeleteProfileRequests() {
+    try {
+        const responseData = await api.get(`/deletationRequest/pending`);
+        return responseData;
+    } catch (err) {
+        return false;
+    }
+}
+
+export async function acceptDeletionRequest(id, reason) {
+    const requestJSON = JSON.stringify(reason);
+    try {
+        const responseData = await api.put(`/deletationRequest/accept/${id}`, requestJSON);
+        return responseData;
+    } catch (err) {
+        return false;
+    }
+}
+
+export async function declineDeletionRequest(id, reason) {
+    const requestJSON = JSON.stringify(reason);
+    try {
+        const responseData = await api.put(`/deletationRequest/decline/${id}`, requestJSON);
+        return responseData;
+    } catch (err) {
+        return false;
+    }
+}
+
   

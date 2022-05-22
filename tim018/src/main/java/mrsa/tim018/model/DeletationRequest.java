@@ -11,12 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class DeletationRequest {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id; 
 	
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
@@ -25,10 +27,9 @@ public class DeletationRequest {
 	private RequestStatus status;
 	
 	@Column(name = "reason", nullable = false)
-	private String reason;
-
-	@OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+	private String reason; 
+  
+	@OneToOne()
 	private User user;
 
 	public DeletationRequest() {

@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,9 @@ import mrsa.tim018.dto.ClientDTO;
 import mrsa.tim018.dto.DeletationRequestDTO;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
+import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.service.DeletationRequestService;
+import mrsa.tim018.service.EmailService;
 
 @RestController
 @CrossOrigin("*")
@@ -27,6 +31,9 @@ public class DeleteationRequestController {
 	
 	@Autowired
 	private DeletationRequestService deletationRequestService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
@@ -61,8 +68,36 @@ public class DeleteationRequestController {
 		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
 		for (DeletationRequest s : deletionRequests) {
 			deletionRequestsDTO.add(new DeletationRequestDTO(s));
-		}
-
+		}  
+ 
 		return new ResponseEntity<>(deletionRequestsDTO, HttpStatus.OK);
+	}  
+	 
+	@PutMapping(value = "/accept/{id}")
+	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
+ 
+		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
+		deletionRequest.setStatus(RequestStatus.Accepted);
+		deletationRequestService.save(deletionRequest);
+		try {
+			emailService.sendDeleteProfileResponseAsync(RequestStatus.Accepted, comment);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
+		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/decline/{id}")
+	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
+
+		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
+		deletionRequest.setStatus(RequestStatus.Declined);
+		deletationRequestService.save(deletionRequest);
+		try {
+			emailService.sendDeleteProfileResponseAsync(RequestStatus.Declined, comment);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
+		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
 	}
 }

@@ -1,37 +1,46 @@
 import React, { useState } from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
+import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
+import { getRole }  from '../../services/AuthService/AuthService'
 import RegistrationRequestMainInfo from './RegistrationRequestMainInfo';
 import RegistrationRequestMoreInfo from './RegistrationRequestMoreInfo';
 import RegistationRequestButton from './RegistrationRequestButton';
 import './../../assets/styles/admin.css'
-import { acceptRegistrationRequest, declineRegistrationRequest } from '../../services/api/RegistrationRequestApi';
-import DeclineRegistrationModal from './DeclineRegistrationModal';
+import { acceptDeletionRequest } from '../../services/api/DeleteRequestApi';
+import { declineDeletionRequest } from '../../services/api/DeleteRequestApi';
+import ReasonProfileDeletionModal from './ReasonProfileDeletionModal'
 
-const ListedRegistrationRequest = ({request, key, onDelete}) => {
-    console.log(request)
+const ListedDeleteProfileRequest = ({request, key, onDelete}) => {
     const [activeForm, setActiveForm] = useState(null);
 
     const accpetRequest = () => {
-        acceptRegistrationRequest(request.id)
-        onDelete(request)
+        setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="accept"/>)
+        
+    }
+
+    const declineRequest = () => {
+        setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="decline"/>)
+        
     }
 
     const handleCallback = (childData) =>{
         onDelete(childData)
     }
 
-    const declineRequest = () => {
-        setActiveForm(<DeclineRegistrationModal request={request} onDelete={handleCallback}/>)
-    }
 
+    console.log(request)
+    console.log("request")
+    
     return <div className="borderedBlock mt-3 pt-0 ms-4 me-4" align="">
     <Row className='ms-4'>
         <Col sm="4" className='mt-4'>
             <RegistrationRequestMainInfo user={request.user} />
         </Col>
         <Col sm="4" className="mt-4">
-            <RegistrationRequestMoreInfo user = {request.user} registrationDateTime={request.registrationDateTime}  />
+            <div className='centerElem mt-3'>
+                {"Reason: " + request.reason } 
+            </div>
         </Col>
         <Col sm="2" className="mt-3">
             <RegistationRequestButton request={request} text='Accept' onClickFunction={accpetRequest}/>
@@ -44,4 +53,4 @@ const ListedRegistrationRequest = ({request, key, onDelete}) => {
     </div>
 }
 
-export default ListedRegistrationRequest
+export default ListedDeleteProfileRequest

@@ -90,7 +90,7 @@ public class User implements UserDetails{
 	private String password;
 	
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private DeletationRequest deletationRequest;
 	
 	@Column(name="biography")

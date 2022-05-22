@@ -37,6 +37,13 @@ insert into renter (id, address, city, first_name, is_deleted, last_name, loyalt
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 5);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 6);
 
+/*renterForDelete*/
+/*rrenter1*/
+insert into renter (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, email, password,enabled) values 
+				  (NEXTVAL('userSeqGen'), 'RRenterAddress 2', 'Backa Topola', 'Pera', false, 'Peric', 0, '060123456', 'Serbia', 'ResortRenter', 'rrenter2@gmail.com', '$2a$10$nHMUGlq4M/uWZBlO7y2Vu.L/XjSB6.9otsRDvC79Q2RMAhMBSNp3y', true);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 5);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (CURRVAL('userSeqGen'), 6);
+
 
 insert into asset_calendar (id) values (10001), (10002), (10003), (10004), (10005), (10006), (10007);
 
@@ -60,16 +67,16 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  
 /*future*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('12.12.2022.', false, '15.12.2022.');
+					  ('2022-12-12', false, '2022-12-15');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('11.11.2022.', false, '21.11.2022.');
+					  ('2022-11-11', false, '2022-11-21');
 /*past*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('12.03.2022.', false, '15.03.2022.');
+					  ('2022-03-12', false, '2022-03-15');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('04.04.2022.', false, '08.04.2022.');
+					  ('2022-04-04', false, '2022-04-08');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('21.05.2022. 11:15', false, '30.05.2022. 12:38');
+					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000001, null, 2, null, null, 1);
@@ -86,3 +93,8 @@ insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id
 insert into registration (id, is_deleted, status, user_id, registration_date_time) values
 	(1000001, false, 0, 3, now()::timestamp),
 	(1000002, false, 0, 4, now()::timestamp);
+
+insert into deletation_request (is_deleted, reason, status, user_id) values
+	(false, 'No reason', 0, 2),
+	(false, 'Good reason', 0, 6);
+	
