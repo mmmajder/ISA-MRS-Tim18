@@ -1,16 +1,15 @@
 package mrsa.tim018.dto;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
 
 public class ReservationDTO {
-
-	private Long assetId;
+	
+	private Long id;
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Asset asset;
@@ -19,38 +18,42 @@ public class ReservationDTO {
 	//private Client client;
 	
 	private TimeRange timeRange;
-	private LocalDateTime fromDateTime;
-	private LocalDateTime toDateTime;
 	
 	private boolean isCancelable;
 	private Long duration;
+	private boolean isReviewable;
+	
+	private ReservationStatus reservationStatus;
 	
 	public ReservationDTO() {
 	}
 	
 	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration) {
+		this.id = reservation.getID();
 		this.asset = reservation.getAsset();
-		this.assetId = reservation.getAsset().getID();
 		
 		//this.client = reservation.getClient();
 		this.clientId = reservation.getClient().getID();
 		
 		this.timeRange = reservation.getTimeRange();
-		this.fromDateTime = reservation.getTimeRange().getFromDateTime();
-		this.toDateTime = reservation.getTimeRange().getToDateTime();
-		
 		this.isCancelable = cancelable;
 		this.duration = duration;
+		this.reservationStatus = reservation.getStatus();
 	}
 
-	public Long getAssetId() {
-		return assetId;
+	public ReservationDTO(Reservation reservation) {
+		this.id = reservation.getID();
+		this.asset = reservation.getAsset();
+		
+		//this.client = reservation.getClient();
+		this.clientId = reservation.getClient().getID();
+		this.timeRange = reservation.getTimeRange();
+		this.reservationStatus = reservation.getStatus();
+		
+		this.isCancelable = false;
+		this.isReviewable = false;
 	}
-
-	public void setAssetId(Long assetId) {
-		this.assetId = assetId;
-	}
-
+	
 	public Asset getAsset() {
 		return asset;
 	}
@@ -83,21 +86,6 @@ public class ReservationDTO {
 		this.timeRange = timeRange;
 	}
 
-	public LocalDateTime getFromDateTime() {
-		return fromDateTime;
-	}
-
-	public void setFromDateTime(LocalDateTime fromDateTime) {
-		this.fromDateTime = fromDateTime;
-	}
-
-	public LocalDateTime getToDateTime() {
-		return toDateTime;
-	}
-
-	public void setToDateTime(LocalDateTime toDateTime) {
-		this.toDateTime = toDateTime;
-	}
 
 	public boolean isCancelable() {
 		return isCancelable;
@@ -114,4 +102,30 @@ public class ReservationDTO {
 	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
+
+	public boolean isReviewable() {
+		return isReviewable;
+	}
+
+	public void setReviewable(boolean isReviewable) {
+		this.isReviewable = isReviewable;
+	}
+
+	public ReservationStatus getReservationStatus() {
+		return reservationStatus;
+	}
+
+	public void setReservationStatus(ReservationStatus reservationStatus) {
+		this.reservationStatus = reservationStatus;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 }

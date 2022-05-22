@@ -12,6 +12,7 @@ import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.ReservationRepository;
 
@@ -25,6 +26,10 @@ public class ReservationService {
 		return reservationRepository.save(reservation);
 	}
 	
+	public Reservation findOne(Long id) {
+		return reservationRepository.findById(id).orElse(null);
+	}
+	
 	public Reservation create(Asset asset, Client client, TimeRange timeRange) {
 		Reservation reservation = new Reservation(asset, client, timeRange);
 		save(reservation);
@@ -34,7 +39,16 @@ public class ReservationService {
 	public List<ReservationDTO> map(List<Reservation> reservations){
 		List<ReservationDTO> reservationsDTO = new ArrayList<>();
 		for (Reservation res : reservations) {
-			reservationsDTO.add(new ReservationDTO(res, isCancelable(res), calcDuration(res)));
+			ReservationDTO dto = new ReservationDTO(res);
+			dto.setCancelable(isCancelable(res));
+			dto.setDuration(calcDuration(res));
+			boolean reviewable = isReviewable(res);
+			if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
+				res.setStatus(ReservationStatus.Finished);
+				save(res);
+			}
+			dto.setReviewable(reviewable);
+			reservationsDTO.add(dto);
 		}
 		return reservationsDTO;
 	}
@@ -47,6 +61,13 @@ public class ReservationService {
 		return lastCancelationDay.isAfter(today);
 	}
 	
+	// DA LI VEĆ IMA REVIEW?
+	private boolean isReviewable(Reservation reservation) {
+		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime endDate = reservation.getTimeRange().getToDateTime();
+		boolean isCanceled = reservation.getStatus() == ReservationStatus.Canceled;
+		return endDate.isBefore(today) && !isCanceled;
+	}
 	
 	private Long calcDuration(Reservation reservation) {
 		LocalDateTime from = reservation.getTimeRange().getFromDateTime();

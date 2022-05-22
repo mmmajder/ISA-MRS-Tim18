@@ -69,7 +69,7 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('04.04.2022.', false, '08.04.2022.');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('11.05.2022.', false, '16.05.2022.');
+					  ('21.05.2022. 11:15', false, '30.05.2022. 12:38');
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000001, null, 2, null, null, 1);

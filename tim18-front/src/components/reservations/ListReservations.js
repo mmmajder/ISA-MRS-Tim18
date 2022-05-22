@@ -3,13 +3,13 @@ import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from '../asset/AssetMainInfo';
 import { Row, Col, Button } from 'react-bootstrap'; 
 
-export const ListedReservation = ({reservation}) => {
+export const ListedReservation = ({reservation, handleChange}) => {
     return(
       <>
         <div className="borderedBlock mb-3 mt-3">
           <ReservationHeaderInfo timeRange={reservation.timeRange}/>
           <hr style={{width: "100%"}}></hr>
-          <ReservationDetails asset={reservation.asset} isCancelable={reservation.cancelable}/>
+          <ReservationDetails reservation={reservation} handleChange={handleChange}/>
         </div>
       </>
     )
@@ -36,7 +36,12 @@ export const ListedReservation = ({reservation}) => {
     )
   }
   
-  const ReservationDetails = ({asset, isCancelable}) => {
+  const ReservationDetails = ({reservation, handleChange}) => {
+    const asset = reservation.asset;
+    const isCancelable = reservation.cancelable;
+    const isReviewable = reservation.reviewable;
+    const status = reservation.reservationStatus; // Da li treba prikazati i cancled reservations
+
     const detViewUrl = "/resorts/" + asset.id;
     let assetImage; 
     if (asset.assetType === "FISHING_ADVENTURE") {
@@ -46,10 +51,7 @@ export const ListedReservation = ({reservation}) => {
     } else {
         assetImage = require('../../assets/images/boat.jpg')
     }
-  
-    const cancelReservation = () => {
-  
-    }
+    
     return(
       <>
         <Row>
@@ -64,13 +66,18 @@ export const ListedReservation = ({reservation}) => {
                       <Col sm="3" /> 
                       <Col sm="2" >
                           <div className='mt-3'>
-                              <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
+                              <FixedWidthRegButton href={detViewUrl} text='Preview'/>
                           </div>
                           {isCancelable && 
                           <div className='mt-3'>
-                            <Button href={"#"} variant="custom" className='alertFixedWidthButton formButton pe-5 ps-5 mt-2' onClick={cancelReservation}>
+                            <Button href={"#"} variant="custom" className='alertFixedWidthButton formButton pe-5 ps-5 mt-2' onClick={() => handleChange(reservation)}>
                                 Cancel Reservation
                             </Button>
+                          </div>
+                          }
+                          {isReviewable &&
+                          <div className='mt-3'>
+                              <FixedWidthRegButton href={detViewUrl} text='Make review' onClickFunction={''}/>
                           </div>
                           }
                       </Col>
