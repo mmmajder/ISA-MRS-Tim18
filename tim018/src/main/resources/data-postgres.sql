@@ -97,13 +97,13 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000001, null, 2, null, null, 1);
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000002, null, 2, null, null, 3);
+						(false, 0, 1000000, null, 2, null, null, 3);
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000004, null, 2, null, null, 2);
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
 						(false, 0, 1000005, null, 2, null, null, 4);
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000007, null, 2, null, null, 5);
+						(false, 0, 1000005, null, 2, null, null, 5);
 
 insert into asset_calendar_reserved(asset_calendar_id, reserved_id) values
 	(10003, 1), (10004, 2), (10006, 3), (10007, 4), (10005, 5);

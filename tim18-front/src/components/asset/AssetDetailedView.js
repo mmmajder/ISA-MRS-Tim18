@@ -15,16 +15,12 @@ import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState, useCallback} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
-<<<<<<< HEAD
 import { Marginer } from '../forms/Login/marginer';
 import CalendarAsset from '../forms/calendar/CalendarAsset';
-=======
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
-
 import AssetCarousel from './AssetCarousel';
 
->>>>>>> priceAndMap
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
     const {id} = useParams();
@@ -89,20 +85,15 @@ export default function AssetDetailedView(){
                             <Col sm="7">
                                 <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
                             </Col> 
-<<<<<<< HEAD
-                            <Col sm="3">
-                                { userType !== "Client" && userType !== "Guest" &&
-                                  <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>}
-                                { userType !== "Client"  && userType !== "Guest" &&
-                                 <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
-=======
-                            <Col sm="5"> 
-                                <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link>
-                                <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link>
-                                <Link to={linkToCalendar}><FontAwesomeIcon icon={faCalendarDays} className="faButtons" /></Link>
-                                <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link>
-                                { userType !== "Client" && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
->>>>>>> priceAndMap
+                            <Col sm="4">
+                                { userType !== "Client" && userType !== "Guest" ? 
+                                <>
+                                <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link> 
+                                <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link> 
+                                <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> 
+                                <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>
+                                </> : null
+                                }
                             </Col>
                         </Row>
                         <AssetOtherInfo description={asset.description} rules={asset.rules} maxNumOfPeope={asset.numOfPeople} cancelationFee={asset.cancelationConditions}/>

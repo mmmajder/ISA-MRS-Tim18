@@ -8,21 +8,15 @@ import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 
-<<<<<<< HEAD
 export default function ListedAsset({asset, isSearch}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
-=======
-export default function ListedAsset({asset}){
->>>>>>> priceAndMap
     const userType = getRole();
 
     const [assetProfilePhoto, setAssetProfilePhoto] = useState();
     const [assetPrice, setAssetPrice] = useState(0);
     
-<<<<<<< HEAD
     const detViewUrl = "/resorts/" + asset.id;
-=======
     // getAssetTodayPrice
     const getAssetProfilePhoto = useCallback(
         (e) => {
@@ -54,11 +48,6 @@ export default function ListedAsset({asset}){
             getAssetPrice();
         }
     }, [asset]);
-
-
-
-    const detViewUrl = "resorts/" + asset.id;
->>>>>>> priceAndMap
 
     return <div className="borderedBlock mt-3" align="">
                 <Row>
