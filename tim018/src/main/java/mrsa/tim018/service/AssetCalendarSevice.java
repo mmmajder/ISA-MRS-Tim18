@@ -114,7 +114,10 @@ public class AssetCalendarSevice {
 				else if (toDateTime.isBefore(timeRange.getToDateTime())) {
 					retData.add(new TimeRange(false, timeRange.getFromDateTime(), fromDateTime));
 					retData.add(new TimeRange(false, toDateTime, timeRange.getToDateTime()));
-				}
+				} 
+			}
+			else {
+				retData.add(timeRange);
 			}
 		}
 		return retData;
@@ -141,8 +144,8 @@ public class AssetCalendarSevice {
 					continue;
 				}
 				if (elem2.isReduced()) {
-					continue;
-				}
+					continue;  
+				} 
 				if (elem2.getTimeRange().getFromDateTime().isBefore(elem1.getTimeRange().getFromDateTime())) {
 					if (elem2.getTimeRange().getToDateTime().isAfter(elem1.getTimeRange().getFromDateTime())) {
 						elem2.setReduced(true);
@@ -165,7 +168,7 @@ public class AssetCalendarSevice {
 			if (!timeRangeMergeElement.isReduced()) {
 				retData.add(timeRangeMergeElement.getTimeRange());
 			}
-		}  
+		}   
 		return retData; 
 	}
 	

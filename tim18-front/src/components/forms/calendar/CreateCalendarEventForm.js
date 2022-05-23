@@ -25,8 +25,12 @@ export default function CreateCalendarEventForm(props){
         setActiveForm(<CreateReservationFormModal props={props} scope = {props.scope}/>)
     }
 
+    const periodRemovedCallback = (fromDateTime, toDateTime) => {
+        props.periodRemoved(fromDateTime, toDateTime)
+    }
+
     const removePeriodOfAvailability = () => {
-        setActiveForm(<RemovePeriodOfAvailabilityModal props={props} scope = {props.scope}/>)
+        setActiveForm(<RemovePeriodOfAvailabilityModal props={props} scope = {props.scope} periodRemoved = {periodRemovedCallback}/>)
     }
 
     return (

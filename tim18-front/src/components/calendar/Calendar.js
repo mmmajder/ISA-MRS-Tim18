@@ -11,13 +11,16 @@ import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
 import { getLogged } from '../../services/api/LoginApi';
 import {makeDateString} from './../../services/utils/TimeUtils'
+import { displayEventsWhenAdding } from './CalendarUtils'
+import { removeAvailable } from './CalendarUtils'
+import ReserveSpecOfferModal from './ReserveSpecOfferModal'
 
 const Calendar = () => {
   const calendarRef = createRef()
   const [resources, setResources] = useState()
   const [events, setEvents] = useState()
   const [user, setUser] = useState()
-  const [update, setUpdate] = useState(false)
+  const [activeForm, setActiveForm] = useState(null);
 
   useEffect(() => {
     async function fetchUser(){
@@ -26,63 +29,61 @@ const Calendar = () => {
     fetchUser();
 }, [])
 
-  useEffect(() => {
-    async function fetchCalendarData(){
-        const requestData = await getCalendarData(user.id);
-        let resourceList = []
-        const data = requestData.data.map((element) => {
-          const res = {
-            id : element.id,
-            title : element.name
-          }
-          resourceList = resourceList.concat(res)
-          
-          let retData = element.calendar.available.map(function(range) {
-            var info = {
-              title : "Available",
-              resourceId : element.id,
-              start : makeDateString(range.fromDateTime),
-              end : makeDateString(range.toDateTime)
-              // start : "2022-05-15T11:30:00",
-              // end : "2022-05-16T11:30:00"
-            }
-            return info;
-          })
-          retData = retData.concat(element.calendar.specialPrice.map(function(range) {
-            var info = {
-              title : "Special offer",
-              resourceId : element.id,
-              start : makeDateString(range.timeRange.fromDateTime),
-              end : makeDateString(range.timeRange.toDateTime),
-              backgroundColor : "orange",
-              borderColor : "orange"
-            }
-            return info;
-          }))
-          setResources(resourceList)
-          return retData
-        }
-        );
-        if (requestData) {
-          console.log(data[0])
-          // setEvents(() => {
-          //   if (update){
-          //     // setEvents(displayEvents(update))
-          //     setEvents(update)
-          //   }
-          //   else {
-          //     setEvents(makeEventList(data));
-          //   }
-          // })
-          setEvents(makeEventList(data))
-        }
-        return requestData;
+async function fetchCalendarData(){
+  const requestData = await getCalendarData(user.id);
+  let resourceList = []
+  const data = requestData.data.map((element) => {
+    const res = {
+      id : element.id,
+      title : element.name
     }
+    resourceList = resourceList.concat(res)
+    
+    let retData = element.calendar.available.map(function(range) {
+      var info = {
+        title : "Available",
+        resourceId : element.id,
+        start : makeDateString(range.fromDateTime),
+        end : makeDateString(range.toDateTime)
+      }
+      return info;
+    })
+    retData = retData.concat(element.calendar.specialPrice.map(function(range) {
+      var info = {
+        title : "Special offer",
+        resourceId : element.id,
+        start : makeDateString(range.timeRange.fromDateTime),
+        end : makeDateString(range.timeRange.toDateTime),
+        backgroundColor : "orange",
+        borderColor : "orange"
+      }
+      return info;
+    }))
+    retData = retData.concat(element.calendar.reserved.map(function(range) {
+      var info = {
+        title : "Reserved",
+        resourceId : element.id,
+        start : makeDateString(range.timeRange.fromDateTime),
+        end : makeDateString(range.timeRange.toDateTime),
+        backgroundColor : "grey",
+        borderColor : "grey"
+      }
+      return info;
+    }))
+
+    setResources(resourceList)
+    return retData
+  }
+  );
+  if (requestData) {
+    setEvents(makeEventList(data))
+  }
+  return requestData;
+}
+
+useEffect(() => {
     fetchCalendarData();
-}, [user, update, events])
-
-
-
+}, [user])
 
 
 const makeEventList = (data) => {
@@ -93,33 +94,28 @@ const makeEventList = (data) => {
     }
   }
   return retData
+}  
+
+const removeAvailableCallback = (fromDateTime, toDateTime) => {
+  setEvents(removeAvailable(events, fromDateTime, toDateTime))
 }
 
-//TODO
-// const displayEvents = () => {
-//   for (let i=0; i<events.length; i++) {
-//     if (events[i].title!="Available") continue
-//     for (let j=0; j<events.length; j++) {
-//       if (i==j) continue
-//         if ()
-//     }
-//   }
-// }
-
-
-  
+const eventClicked = (info) => {
+  if (info.event.title=="Special offer") {
+    setActiveForm(<ReserveSpecOfferModal start={info.event.start} end={info.event.end} title={info.event.title}/>)
+  }
+}
 
   return (
     <div>
       <div>
-        <CreateCalendarEventForm scope={"global"} onChange={(value)=>{
+        <CreateCalendarEventForm periodRemoved = {removeAvailableCallback} scope={"global"} onChange={(value)=>{
           if (!!events) {
             let newVal = [...events, value] 
-            setEvents(newVal)
-            setUpdate(newVal)
+            let retData = displayEventsWhenAdding(newVal)
+            setEvents(retData)
           } else { 
             setEvents([value])
-            setUpdate([value])
           }
           
         }
@@ -127,6 +123,15 @@ const makeEventList = (data) => {
       </div>
       <div style={{marginTop: "15px"}}>
       <FullCalendar 
+          eventClick = {function(info) {
+            eventClicked(info)
+            // alert('Event: ' + info.event.title);
+            // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            // alert('View: ' + info.view.type);
+            // change the border color just for fun
+            // info.el.style.borderColor = 'red';
+          }}
+
           ref={calendarRef}
           schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
           plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
@@ -134,7 +139,7 @@ const makeEventList = (data) => {
           editable = {false}
           selectable = {true}
           select = {function(start, end, allDays) {
-            console.log(start)
+            console.log(start, end, allDays)
           }}
           resources={resources}
           events={events}
@@ -180,8 +185,8 @@ const makeEventList = (data) => {
           }}
         />
         </div>
+        {activeForm}
     </div>
-    
   )
 }
 

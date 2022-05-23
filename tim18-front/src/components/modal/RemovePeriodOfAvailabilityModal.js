@@ -34,6 +34,7 @@ const RemovePeriodOfAvailabilityModal = (props) => {
 
         const appointmentJson = {fromDateTime, toDateTime, userId, assetId}
         removePeriodOfAvailability(appointmentJson)
+        props.periodRemoved(fromDateTime, toDateTime)
     }
 
     useEffect(() => {
@@ -65,7 +66,7 @@ const RemovePeriodOfAvailabilityModal = (props) => {
             <>  
               <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-                <Modal.Title>Add period of availablity</Modal.Title>
+                <Modal.Title>Remove period of availablity</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Form>

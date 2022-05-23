@@ -17,3 +17,10 @@ export async function cancelReservation(reservationId){
             .then((responseData) => {console.log(responseData.data)})
             .catch(()=> {console.log(false)});
 }
+
+
+export async function reserveSepcialOfferRequest(reservation){
+    await api.post(`/reservation/reserveSpecialOffer`, reservation)
+            .then((responseData) => {console.log(responseData.data)})
+            .catch(()=> {console.log(false)});
+}

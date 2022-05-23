@@ -10,7 +10,7 @@ import './../../../assets/styles/calendar.css'
 import { getAssetCalendarData } from '../../../services/api/CalendarApi'
 import { Row, Col, Container } from 'react-bootstrap';
 import {makeDateString} from './../../../services/utils/TimeUtils'
-
+import { displayEventsWhenAdding, removeAvailable } from '../../calendar/CalendarUtils'
 
 const CalendarAsset = () => {
     const calendarRef = createRef()
@@ -51,16 +51,21 @@ const CalendarAsset = () => {
         return requestData;
       }
       fetchCalendarData()
-    }, [events])
+    }, [])
+
+    const removeAvailableCallback = (fromDateTime, toDateTime) => {
+      setEvents(removeAvailable(events, fromDateTime, toDateTime))
+    }
+    
 
     return (
         <div>
           <div>
-              <CreateCalendarEventForm scope={"asset"} onChange={(value)=>{
+              <CreateCalendarEventForm periodRemoved = {removeAvailableCallback} scope={"asset"} onChange={(value)=>{
                 console.log(value)
                 console.log("value")
               if (!!events) {
-                setEvents([...events, value])
+                setEvents(displayEventsWhenAdding([...events, value]))
               } else { setEvents([value])}
             }
           }/>       
