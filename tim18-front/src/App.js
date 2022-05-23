@@ -179,6 +179,7 @@ function ChooseSettings(userType){
 }
 
 function chooseNavbar(userType){
+  console.log("choosenavbar"+userType);
   let navBar = <></>
   if(userType === "Client"){
     navBar =  <ClientNavbar />

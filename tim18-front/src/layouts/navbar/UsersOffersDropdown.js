@@ -7,6 +7,8 @@ const UsersOffersDropdown = ({userType}) => {
     let assetsName;
     let assetsIcon;
     
+    console.log("looo "+userType);
+
     switch (userType) {
         case "FishingInstructor":
             assetsName = "Adventure";

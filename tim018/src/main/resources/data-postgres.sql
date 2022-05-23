@@ -21,7 +21,10 @@ insert into image(id, data, is_deleted, type, asset_id) values
 	('8', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
 	('9', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
 	('10', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
-	('11', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005);
+	('11', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
+	('12', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\skadarlija.jpg'), false, null, 1000000),
+	('13', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Maldives.jpg'), false, null, 1000001),
+	('14', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004);
 
 /*admin*/
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, email, password,enabled, profile_photo_id) values
@@ -57,11 +60,7 @@ insert into asset_calendar (id) values (10001), (10002), (10003), (10004), (1000
 
 insert into resort (id, asset_type, price, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id, number_of_rooms, number_of_beds) values
 				  (1000000, 0, 35, 'Skadarlija 14, Beograd, Srbija', 4, 40, 'Jako lepa kuca', false, 'Beogradska kuca', 5, 'Nema pravila hehe', 10002, 5, 2, 5),
-				  (1000001, 0, 42.5, 'Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', 10003, 5, 5, 3),
-				  (1000002, 0, 21, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10004, 5, 7, 2),
-				  (1000003, 0, 65, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'All inclusive Brunei', 4, 'Nema pravila hehe', 10005, 5, 4, 4),
-				  (1000006, 0, 65, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'Renter1 vila', 4, 'Nema pravila hehe', 10005, 5, 4, 4),
-				  (1000007, 0, 65, 'Brunei City 7, Yupi, 88887, Brunei', 3.7, 40, 'Jako lepa kuca', false, 'Renter1 vila 2', 4, 'Nema pravila hehe', 10005, 5, 4, 4);
+				  (1000001, 0, 42.5, 'Orchid Magu 7, Maadhad, 57887, Maldives', 4.7, 40, 'Jako lepa kuca', false, 'Maldivian hut on water', 2, 'Nema pravila hehe', 10003, 5, 5, 3);
 				  
 insert into boat (id, asset_type, price, address, average_rating, cancelation_conditions, description, is_deleted, name, num_of_people, rules, calendar_id, renter_id,
 				  boat_type, length, num_of_motor, motor_power, max_speed, navigation_equipment, fishing_equipment) values
@@ -76,4 +75,7 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 /* prices */
 insert into asset_price (id, asset_id, price, start_date, end_date) values
 						('1', 1000005, 15, '2022-05-18', '2022-05-20'),
-						('2', 1000005, 7, '2022-05-21', null);
+						('2', 1000005, 7, '2022-05-21', null),
+						('3', 1000000, 9, '2022-05-21', null),
+						('4', 1000001, 10, '2022-05-21', null),
+						('5', 1000004, 3, '2022-05-21', null);
