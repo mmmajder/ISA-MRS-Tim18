@@ -1,8 +1,15 @@
-.assetImage {
-    width: 500px;
-    height: 400px;
+.assetCarousel {
+    max-width: 600px;
+    max-height: 500px;
     border-radius: 1.5rem;
     border: solid 3px var(--dark-blue);
+    padding: 10px;
+}
+
+.assetCarouselImage {
+    max-width: 600px;
+    max-height: 350px;
+    border-radius: 0.75rem;
 }
 
 @media only screen and (max-width: 767px) {
@@ -11,6 +18,36 @@
         height: 200px;
     }
   }
+
+/* .assetScrollPicture { */
+    
+/* } */
+
+@media only screen and (max-width: 767px) {
+    .assetScrollPicture {
+        width: 100px !important;
+        height: 100px  !important;
+    }
+  }
+
+.imageScroller{
+    max-height: 600px;
+    
+    overflow:visible;
+    overflow-y:auto;
+}
+
+.imageScroller img {
+    border: solid 3px var(--dark-blue);
+    max-width: 120px !important;
+    max-height: 120px  !important;
+    padding: 2px;
+    }
+
+.imageScroller img:hover {
+    transform: scale(2);
+    border: 0;
+    }
 
 .importantInfo{
     font-size:xx-large;

@@ -60,12 +60,18 @@ public class UserService<T> implements UserDetailsService{
 	public User save(User user) {
 		user.setId(userRepository.getNextSeriesId());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if(user.getUserType() == UserType.Client) {
+		return updateUser(user);
+		
+	}
+	
+	public User updateUser(User user) {
+		UserType userType = user.getUserType();
+		if(userType == UserType.Client) {
 			User bClass = new Client(user);
 			Client childClass = (Client) bClass;
 			return clientRepository.save(childClass);
 		}
-		if(user.getUserType() == UserType.ResortRenter || user.getUserType() == UserType.BoatRenter || user.getUserType()== UserType.FishingInstructor) {
+		if(userType == UserType.ResortRenter || userType == UserType.BoatRenter || userType == UserType.FishingInstructor) {
 			User bClass = new Renter(user);
 			Renter childClass = (Renter) bClass;
 			return renterRepository.save(childClass);
@@ -84,6 +90,11 @@ public class UserService<T> implements UserDetailsService{
 		user.setEnabled(true);
 		user = userRepository.save(user);
 		return user;
+//		if(user.getUserType()== UserType.FishingInstructor) {
+//			User bClass = new FishingInstructor(user);
+//			FishingInstructor childClass = (FishingInstructor) bClass;
+//			return fishingInstructorRepository.save(childClass);
+//		}
 	}
 	
 

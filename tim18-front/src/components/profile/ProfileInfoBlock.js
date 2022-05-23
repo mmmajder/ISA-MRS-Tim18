@@ -5,13 +5,15 @@ import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
 
 import {useState, useEffect, useCallback} from 'react';
-import axios from 'axios';
-import {getInstructorByID} from '../../services/api/InstructorApi'
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
 
+import {getPhotoFromServer} from '../../services/api/ImageApi';
+
 export default function ProfileInfoBlock(){
     const [user, setUser] = useState();
+
+    const [profilePhoto, setProfilePhoto] = useState();
 
     useEffect(() => {
         async function fetchUser(){
@@ -20,12 +22,26 @@ export default function ProfileInfoBlock(){
         fetchUser();
     }, [])
 
-    const profilePic = require('../../assets/images/blue_profile_pic.jpg')
+    const getProfilePhoto = useCallback(
+        (e) => {
+            getPhotoFromServer(user.profilePhotoId).then((response) =>{
+                let photo = `data:image/jpeg;base64,${response.data}`
+                setProfilePhoto(photo);
+            });
+        }, [user]
+    )
+
+    useEffect(() => {
+        if (!!user && !!user.profilePhotoId){
+            getProfilePhoto()
+        }
+    }, [user])
+
     console.log(user)
 
     if(!!user) {
         return <div className="borderedBlock" align="center">
-                <img src={profilePic} className="profilePicture rounded-circle" ></img>
+                <img src={profilePhoto} className="profilePicture rounded-circle" ></img>
                 <ProfileInfo infoClass="profileNameLastname" text={user.firstName + " " + user.lastName}/>
                 {user.userType!="Admin" ? <MarkStars mark={user.mark} /> : [] }
                 <ProfileInfo infoClass="profileOtherInfo" text={user.city + ", " + user.state }/>

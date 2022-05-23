@@ -1,7 +1,7 @@
 import { Form, Row, Col, Button, Container} from 'react-bootstrap';
 import {LabeledInputWithErrMessage} from './LabeledInput';
 import '../../assets/styles/form.css';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useCallback} from 'react';
 import { faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackPopUp from './PopUps/FeedbackPopUp';
@@ -11,6 +11,8 @@ import {getDeleteRequestByID} from '../../services/api/DeleteRequestApi';
 import DeletionRequestStatus from './PopUps/DeletionRequestStatus'
 import DeleteRequest from './PopUps/DeleteRequest';
 import { getLogged } from '../../services/api/LoginApi';
+import {getPhotoFromServer} from '../../services/api/ImageApi';
+import { Link } from "react-router-dom";
 
 export default function UpdateRenter(){
     const [renter, setRenter] = useState();
@@ -60,7 +62,24 @@ export default function UpdateRenter(){
         setFeedbackMessage('');
     }
     
-    const profilePic = require('../../assets/images/blue_profile_pic.jpg')  // TODO: real data
+
+
+    const [profilePhoto, setProfilePhoto] = useState();
+
+    const getProfilePhoto = useCallback(
+        (e) => {
+            getPhotoFromServer(renter.profilePhotoId).then((response) =>{
+                let photo = `data:image/jpeg;base64,${response.data}` //https://stackoverflow.com/questions/42395034/how-to-display-binary-data-as-image-in-react
+                setProfilePhoto(photo);
+            });
+        }, [renter]
+    )
+
+    useEffect(() => {
+        if (!!renter && !!renter.profilePhotoId){
+            getProfilePhoto()
+        }
+    }, [renter])
     
     if(!!renter){
         const pendingRequest = deletionRequestExists ? <DeletionRequestStatus message={"Probas"} isError={true}/> : <></>
@@ -77,7 +96,7 @@ export default function UpdateRenter(){
                  
                                     {/* Profile pic row*/}
                                     <Col sm={15} align='center'>
-                                        <img src={profilePic} className="profilePicture rounded-circle" ></img>
+                                        <Link to={`/updateProfilePhoto`}><img src={profilePhoto} className="profilePicture rounded-circle" ></img></Link>
                                     </Col>
                                     <Form>
                                         <Row className='mt-3'>  </Row>

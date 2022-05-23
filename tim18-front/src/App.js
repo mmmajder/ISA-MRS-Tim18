@@ -25,6 +25,9 @@ import { Confirmation } from './components/forms/Login/Confirmation';
 import  AllReservations from './components/reservations/AllReservations';
 import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
 import AdminDeletionRequestsPreview from './components/admin/AdminDeletionRequestsPreview.js';
+import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
+import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
+import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -53,6 +56,9 @@ function App() {
   const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
   const adminProfileDeletionReq = <Container><AdminDeletionRequestsPreview/></Container>
+  const updateProfilePhoto = <Container><UpdateProfilePhoto /></Container>
+  const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
+  const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -62,6 +68,7 @@ function App() {
                   {/* For other's Profile page */}
                   <Route path="/profile" element={<Container>{ChooseProfile(user)}</Container>} /> 
                   <Route path="/settings" element={<Container>{ChooseSettings(user)}</Container>} />
+                  <Route path="/updateProfilePhoto" element={updateProfilePhoto} />
 
                     {/* Creating/Registrating Resorts/Boats */}
                   <Route path="createResort" element={resortForm} /> 
@@ -76,6 +83,8 @@ function App() {
                   <Route path="/allReservations" element={allReservations}/>
                   <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
                   <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
+                  <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
+                  <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
@@ -112,6 +121,7 @@ function ChooseSettings(userType){
 }
 
 function chooseNavbar(userType){
+  console.log("choosenavbar"+userType);
   let navBar = <></>
   if(userType === "Client"){
     navBar =  <ClientNavbar />

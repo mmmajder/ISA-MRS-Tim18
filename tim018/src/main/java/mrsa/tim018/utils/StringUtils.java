@@ -1,5 +1,6 @@
 package mrsa.tim018.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class StringUtils {
@@ -46,5 +47,13 @@ public class StringUtils {
 		int minute = Integer.parseInt(string.split(":")[1]);
 		int second = Integer.parseInt(string.split(":")[2])*60/100;
 		return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+	}
+	
+	public static LocalDate getDate(String string) {
+		String[] splits = string.split("-");
+		int year = Integer.parseInt(splits[0]);
+		int month = Integer.parseInt(splits[1]);
+		int dayOfMonth = Integer.parseInt(splits[2]);
+		return LocalDate.of(year, month, dayOfMonth);
 	}
 }

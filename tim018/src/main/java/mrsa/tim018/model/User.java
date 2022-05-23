@@ -75,6 +75,9 @@ public class User implements UserDetails{
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
     
+    @Column(name = "profilePhotoId")
+    private String profilePhotoId;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -137,7 +140,7 @@ public class User implements UserDetails{
 		this.enabled = true;
 	}*/
 	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, String verificationCode) {
+			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, String verificationCode, String profilePhotoId) {
 		super();
 		this.id = iD;
 		this.isDeleted = isDeleted;
@@ -153,11 +156,12 @@ public class User implements UserDetails{
 		this.password = password;
 		this.enabled = enabled;
 		this.verificationCode = verificationCode;
+		this.profilePhotoId = profilePhotoId;
 	}
 	
 
 	public User(Long id, String firstName, String lastName, String address, String city, String state, String phoneNum,
-			UserType userType, String email, String password) {
+			UserType userType, String email, String password, String profilePhotoId) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -169,6 +173,7 @@ public class User implements UserDetails{
 		this.userType = userType;
 		this.email = email;
 		this.password = password;
+		this.profilePhotoId = profilePhotoId;
 		
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
@@ -177,6 +182,7 @@ public class User implements UserDetails{
 	
 	public User(User user) {
 		super();
+		this.id = user.id;
 		this.firstName = user.firstName;
 		this.lastName = user.lastName;
 		this.address = user.address;
@@ -187,11 +193,22 @@ public class User implements UserDetails{
 		this.email = user.email;
 		this.password = user.password;
 		this.verificationCode = user.verificationCode;
-		
+		this.profilePhotoId = user.profilePhotoId;
+		this.roles = user.roles;
 		this.loyaltyPoints = 0;
 		this.isDeleted = false;
 		this.enabled = false;
 	}
+	
+	
+	public String getProfilePhotoId() {
+		return profilePhotoId;
+	}
+
+	public void setProfilePhotoId(String profilePhotoId) {
+		this.profilePhotoId = profilePhotoId;
+	}
+
 	public Long getID() {
 		return id;
 	}
