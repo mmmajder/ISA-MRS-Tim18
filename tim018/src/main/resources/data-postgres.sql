@@ -73,3 +73,7 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  (1000005, 2, 5, 'Backa Palanka', 4, 10, 'I will teach you how to fish som', false, 'SOM Fishing in Backa', 3, 'No smoking on board allowed', 10007, 3,
 				  'Harpoon');	
 
+/* prices */
+insert into asset_price (id, asset_id, price, start_date, end_date) values
+						('1', 1000005, 15, '2022-05-18', '2022-05-20'),
+						('2', 1000005, 7, '2022-05-21', null);

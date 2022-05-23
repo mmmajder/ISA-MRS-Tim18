@@ -6,19 +6,21 @@ import AssetMainInfo from './AssetMainInfo';
 import { getRole }  from '../../services/AuthService/AuthService'
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
+import {getAssetTodayPrice} from '../../services/api/AssetApi';
 
 export default function ListedAsset({asset}){
     const userType = getRole();
 
     const [assetProfilePhoto, setAssetProfilePhoto] = useState();
-
+    const [assetPrice, setAssetPrice] = useState(0);
+    
+    // getAssetTodayPrice
     const getAssetProfilePhoto = useCallback(
         (e) => {
             getAssetPhotoIdsFromServer(asset.id).then((response) =>{
                 let photoIds = response.data;
                 let profilePhotoId = photoIds[0];
                 getPhotoFromServer(profilePhotoId).then((response) =>{
-                    console.log(response);
                     let profilePhoto = `data:image/jpeg;base64,${response.data}`
                     setAssetProfilePhoto(profilePhoto);
                 });
@@ -26,11 +28,25 @@ export default function ListedAsset({asset}){
         }, []
     )
 
+    const getAssetPrice = useCallback(
+        () => {
+            console.log("getAsset rpice usaaa")
+            getAssetTodayPrice(asset.id).then((response) =>{
+                let price = response.data.price;
+                console.log("pricee"+price);
+                setAssetPrice(price);
+            });
+        }, [asset, setAssetPrice]
+    )
+
     useEffect(() => {
         if (asset != undefined){
             getAssetProfilePhoto();
+            getAssetPrice();
         }
     }, [asset]);
+
+
 
     const detViewUrl = "resorts/" + asset.id;
 
@@ -42,7 +58,7 @@ export default function ListedAsset({asset}){
                     <Col sm="6">
                         <Row>
                             <Col sm="7">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
+                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
                             </Col>
                             <Col sm="3">
                                 

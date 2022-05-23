@@ -4,7 +4,7 @@ import LabeledInput from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';
 import '../../assets/styles/buttons.css';
 import {useCallback, useState, useEffect} from 'react';
-import { updateAsset } from '../../services/api/AssetApi';
+import { updateAsset, createNewAsset } from '../../services/api/AssetApi';
 import { useNavigate  } from "react-router-dom";
 import { getLogged } from '../../services/api/LoginApi';
 
@@ -19,6 +19,7 @@ export default function AdventureForm({adventure, buttonText, id}){
     const [numOfPeople, setNumOfPeople] = useState();
     const [cancelationFee, setCancelationFee] = useState();
     const [fishingEquipment, setFishingEquipment] = useState();
+    const[price, setPrice] = useState();
 
     const assetType = "FISHING_ADVENTURE";
     
@@ -31,7 +32,6 @@ export default function AdventureForm({adventure, buttonText, id}){
             setRules(adventure.rules);
             setNumOfPeople(adventure.numOfPeople);
             setCancelationFee(adventure.cancelationConditions);
-
             setFishingEquipment(adventure.fishingEquipment);
         }
     }, [adventure])
@@ -49,16 +49,24 @@ export default function AdventureForm({adventure, buttonText, id}){
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
+            console.log("price"+price)
             const adventureJson = {name, address, description, rules, numOfPeople, cancelationFee, assetType,
-                fishingEquipment, renterId}
-            const request = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(adventureJson)
-            };
-            fetch('http://localhost:8000/assets', request) 
-                .then(response => response.json())
-        }, [name, address, description, rules, numOfPeople, cancelationFee, fishingEquipment]
+                fishingEquipment, renterId, price};
+            createNewAsset(adventureJson).then(
+                (response) => {
+
+                }
+            );
+            
+            // const request = {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(adventureJson)
+            // };
+            // console.log(JSON.stringify(adventureJson));
+            // fetch('http://localhost:8000/assets', request) 
+            //     .then(response => {})
+        }, [name, address, description, rules, numOfPeople, cancelationFee, fishingEquipment, price]
     )
 
     const putRequest = useCallback(() => {
@@ -73,13 +81,21 @@ export default function AdventureForm({adventure, buttonText, id}){
                 assetType : assetType,
                 fishingEquipment:fishingEquipment
             };
-            console.log(updatedadventure);
             const response = updateAsset(updatedadventure.id, updatedadventure);
-            console.log(response.data);
             navigate('/resorts/' + id);
     }, [id, name, address, description, rules, numOfPeople, cancelationFee, fishingEquipment]);
 
     const onClickFunction = id === -1 ? postRequest : putRequest;
+
+    const priceInput =  id === -1 ? <>
+                        <Col sm={2} align='right'><Form.Label>Price</Form.Label></Col>
+                        <Col sm={1}>
+                            <Form.Control name="price"  type="number" min="0" required
+                                value={price} 
+                                onChange={(e) => setPrice(e.target.value)}>
+                            </Form.Control>
+                        </Col>
+                        </> : null
 
     return (<>
     <Row className='mt-5' >
@@ -92,22 +108,26 @@ export default function AdventureForm({adventure, buttonText, id}){
                     <LabeledTextarea value={description} label="Description" inputName="description" placeholder="Type description of your adventure" required onChangeFunc={setDescription}/>
                     <LabeledTextarea value={rules} label="Rules" inputName="rules" placeholder="Type rules of your adventure" required onChangeFunc={setRules}/>
                     <Row className='mt-2'>
-                        <Col sm={3} align='right'><Form.Label>Number of people</Form.Label></Col>
-                        <Col sm={2}>
+                        <Col sm={2} align='right'><Form.Label>Number of people</Form.Label></Col>
+                        <Col sm={1}>
                             <Form.Control name="numOfPeople"  type="number" min="1" required
                                 value={numOfPeople} 
                                 onChange={(e) => setNumOfPeople(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        <Col sm={3} align='right'><Form.Label>Cancelation fee in % </Form.Label></Col>
-                        <Col sm={2}>
+                        <Col sm={1} />
+                        <Col sm={2} align='right'><Form.Label>Cancelation fee in % </Form.Label></Col>
+                        <Col sm={1}>
                             <Form.Control name="cancelationFee"  type="number" min="0" max="100" required
                                 value={cancelationFee} 
                                 onChange={(e) => setCancelationFee(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        <Col sm={2}/>
+                        <Col sm={1}/>
+                        {priceInput}
                     </Row>
+
+                    
 
                     <LabeledTextarea value={fishingEquipment} label="Fishing gear" inputName="fishing gear" placeholder="Type fishing gear of your adventure" required onChangeFunc={setFishingEquipment}/>
 

@@ -37,6 +37,13 @@ public class Image {
 		this(data, type, assetId);
 		this.isDeleted = isDeteled;
 	}
+	
+	public Image(byte[] data, Long assetId) {
+		this.data = data;
+		this.type = null;
+		this.assetId = assetId;
+		this.isDeleted = false;
+	}
 
 	public String getType() {
 		return type;

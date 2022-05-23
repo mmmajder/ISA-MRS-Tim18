@@ -1,6 +1,8 @@
 package mrsa.tim018.service;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +34,11 @@ public class ImageService {
 		Image image = new Image(file.getBytes(), file.getContentType(), assetId);
 		return imageRepository.save(image);
 	}
+	
+	public Image store(Long assetId, byte[] file) throws IOException{
+		Image image = new Image(file, assetId);
+		return imageRepository.save(image);
+	}
 	 
 	public Optional<Image> getImage(String id) {
 		return imageRepository.findById(id);
@@ -45,5 +52,17 @@ public class ImageService {
 		return imageRepository.getAssetImages(assetId)
 				.stream().map(image -> image.getId())
 				.collect(Collectors.toList());
+	}
+	
+	public byte[] readImageFromAddress(String address) {
+		try {
+			File fi = new File(address);
+			byte[] fileContent = Files.readAllBytes(fi.toPath());
+			return fileContent;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

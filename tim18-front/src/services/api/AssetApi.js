@@ -90,6 +90,16 @@ export async function getAssetsByRenter(renterId){
     }
   }
 
+export async function createNewAsset(asset){
+    try {
+        const responseData = await api.post(`/assets`, asset);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
 export async function updateAsset(id, asset){
     try {
         console.log("updateAsset id " + id);
@@ -116,3 +126,26 @@ export async function getAllAssetsByUser(userId){
     }
   }
 
+// prices
+
+export async function createNewPriceForAsset(assetId, newPrice) {
+     try {
+        let formData = new FormData();
+        formData.append("newPrice", newPrice);
+        const responseData = await api.post(`/prices/${assetId}`, formData)
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function getAssetTodayPrice(assetId) {
+    try {
+       const responseData = await api.get(`/prices/today/${assetId}`)
+       return responseData;
+   } catch (err) {
+       console.log(err.message);
+       return err.message
+   }
+}

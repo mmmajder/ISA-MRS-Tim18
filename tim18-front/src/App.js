@@ -42,6 +42,7 @@ import {Container} from 'react-bootstrap'
 import { getLogged } from './services/api/LoginApi.js';
 import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
+import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -122,6 +123,7 @@ function App() {
   const home = <Container></Container>
   const updateProfilePhoto = <Container><UpdateProfilePhoto /></Container>
   const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
+  const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -143,6 +145,7 @@ function App() {
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/calendarAsset" element={assetCalendar}/>
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
+                  <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
                 </Route>
                 <Route path="login" element={login} />
                 <Route index element={login} />
