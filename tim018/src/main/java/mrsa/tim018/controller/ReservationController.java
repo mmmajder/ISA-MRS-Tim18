@@ -1,8 +1,6 @@
 package mrsa.tim018.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,21 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.dto.ReservationRequestDTO;
 import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
-import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
-import mrsa.tim018.model.User;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
-import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ReservationService;
 
 @RestController
@@ -81,6 +75,14 @@ public class ReservationController {
 		Reservation reservation = reservationService.findOne(reservationId);
 		reservation.setStatus(ReservationStatus.Canceled);
 		reservation = reservationService.save(reservation);
+		
+		Client client = reservation.getClient();	// TODO: penalty points?
+		
+		Asset asset = reservation.getAsset();
+		int cancelationConditions = asset.getCancelationConditions();		// TODO: reports?
+		
+		asset.getCalendar().getReserved().remove(reservation);
+		
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
 	
