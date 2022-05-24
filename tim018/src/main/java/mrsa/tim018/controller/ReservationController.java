@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.dto.ReservationDTO;
+import mrsa.tim018.dto.ReservationRequestDTO;
 import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
@@ -96,5 +97,26 @@ public class ReservationController {
 		
 		assetService.save(asset);
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/makeReservation")
+	public ResponseEntity<ReservationRequestDTO> makeReservation(@RequestBody ReservationRequestDTO reservationDto) {
+		Asset asset = assetService.findOne(reservationDto.getAssetId());
+		Client client = clientService.findOne(reservationDto.getClientId());
+		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
+		
+		Reservation reservation = new Reservation(asset, client, timeRange);
+		boolean isValid = reservationService.isValidReservation(reservation);
+		if(!isValid) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		reservationService.save(reservation);
+		
+		client.getReservations().add(reservation);
+		asset.getCalendar().getReserved().add(reservation);
+		
+		assetService.save(asset);
+		clientService.save(client);
+		return new ResponseEntity<ReservationRequestDTO>(reservationDto, HttpStatus.OK);
 	}
 }

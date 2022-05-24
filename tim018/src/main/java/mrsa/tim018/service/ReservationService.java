@@ -15,6 +15,7 @@ import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.ReservationRepository;
+import mrsa.tim018.utils.TimeUtils;
 
 
 @Service
@@ -74,5 +75,21 @@ public class ReservationService {
         LocalDateTime to = reservation.getTimeRange().getToDateTime();
 		Duration duration = Duration.between(from, to);
 		return duration.toDays();
+	}
+
+	public boolean isValidReservation(Reservation reservation) {
+		Client client = reservation.getClient();
+		List<Reservation> clientReservations = client.getReservations();
+		
+		for (Reservation clientRes : clientReservations) {
+			if(TimeUtils.isSameTimeRange(clientRes.getTimeRange(), reservation.getTimeRange())) {
+				if(clientRes.getAsset().getID() == reservation.getAsset().getID() && 
+				   clientRes.getStatus() == ReservationStatus.Canceled ) {
+					return false;	
+				}
+			}
+		}
+		
+		return true;
 	}
 }

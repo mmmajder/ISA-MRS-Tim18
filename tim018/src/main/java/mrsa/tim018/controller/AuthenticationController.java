@@ -78,7 +78,6 @@ public class AuthenticationController {
 	public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
 
 		User existUser = this.userService.findByEmail(userRequest.getEmail());
-		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  " + existUser);
 		if (existUser != null) {
 			return new ResponseEntity<>(null, HttpStatus.FOUND);
 		}
