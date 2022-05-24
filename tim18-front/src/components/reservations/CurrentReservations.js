@@ -15,7 +15,7 @@ export default function CurrentReservations(){
   const [show, setShow] = useState(false);
 
   const [canceledReservation, setCanceledReservation] = useState();
-  const message="Are you sure you want to cancel this reservation?\nYou won't be able to reserve these dates again.";
+  const message=`Renter is allowed to keep ${canceledReservation.asset.cancelationConditions}% of the price + You won't be able to reserve these dates again.`;
 
   useEffect(() => {
       async function fetchUser(){
