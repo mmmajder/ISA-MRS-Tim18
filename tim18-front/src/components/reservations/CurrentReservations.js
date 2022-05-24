@@ -5,12 +5,17 @@ import AssetTypeOption from '../asset/AssetTypeOption';
 import { getLogged } from '../../services/api/LoginApi'
 import { ListedReservation } from './ListReservations'
 import { cancelReservation, getCurrentReservationsByType } from '../../services/api/ReservationApi';
+import { ConfirmModal } from '../modal/ConfirmModal';
 
 export default function CurrentReservations(){
   const [assetType, setAssetType] = useState("ALL");
   const [reservations, setReservations] = useState();
   const [client, setClient] = useState();
   const [listedReservations, setListedReservations] = useState();
+  const [show, setShow] = useState(false);
+
+  const [canceledReservation, setCanceledReservation] = useState();
+  const message="Are you sure you want to cancel this reservation?\nYou won't be able to reserve these dates again.";
 
   useEffect(() => {
       async function fetchUser(){
@@ -30,8 +35,8 @@ export default function CurrentReservations(){
   }, [client, assetType])
 
   const handleChange = (reservation) => {
-    cancelReservation(reservation.id)
-    setReservations(reservations.filter(item => item.id !== reservation.id));
+    setShow(true);
+    setCanceledReservation(reservation);
   }
   
   useEffect(() => {
@@ -41,12 +46,20 @@ export default function CurrentReservations(){
     }
   }, [reservations])
   
+  const handleConfirm = (result) => {
+    setShow(false);
+    if(result !== 'Cancel'){
+      cancelReservation(canceledReservation.id)
+      setReservations(reservations.filter(item => item.id !== canceledReservation.id));
+    }
+  }
 
   
   return (
     <>
       <AssetTypeOption setAssetType={setAssetType}/>
       {listedReservations}
+      {<ConfirmModal message={message} show={show} handleClose={handleConfirm}/>}
     </>
   );
 }
