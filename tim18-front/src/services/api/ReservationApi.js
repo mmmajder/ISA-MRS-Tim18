@@ -24,3 +24,11 @@ export async function reserveSepcialOfferRequest(reservation){
             .then((responseData) => {console.log(responseData.data)})
             .catch(()=> {console.log(false)});
 }
+
+export async function makeReservation(callback, reservation){
+    const reservationJSON = JSON.stringify(reservation);
+    await api.post(`/reservation/makeReservation`, reservationJSON)
+            .then((responseData) => {console.log("SSSSSS"); console.log(responseData.data); callback(responseData.data)})
+            .catch(()=> {console.log("FFFFFFF");callback(false)});
+}
+

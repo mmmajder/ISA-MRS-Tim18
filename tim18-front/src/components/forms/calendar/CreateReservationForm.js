@@ -1,17 +1,29 @@
 import React from 'react'
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker'
 import moment from 'moment';
 import {createAppointment} from "./../../../services/api/CalendarApi.js"
 import {useState, useEffect} from 'react';
 import { getAllAssetsByUser } from '../../../services/api/AssetApi.js';
 import { getLogged } from '../../../services/api/LoginApi.js';
+import Time from './Time.js';
+import { Marginer } from '../Login/marginer/index.jsx';
+import { calculateTotalPrice } from '../../../services/utils/Calculations.js';
 
-const CreateReservationForm = (props) => {
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
-    const [assetId, setAssetId] = useState({});
-    const [assets, setAssets] = useState([])
+const CreateReservationForm = ({asset, setInputs}) => {
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
+    const [numberOfPeople, setNumOfPeople] = useState([]);
+    const [clientId, setClientId] = useState({});
+
+    const props = {numberOfPeople: numberOfPeople, startDate: startDate, endDate: endDate, price: asset.price};
+
+    useEffect(() => {
+        setInputs({startDate, endDate, startTime, endTime, numberOfPeople, clientId});
+    }, [startDate, endDate, startTime, endTime, numberOfPeople])  
 
     const [user, setUser] = useState([]);
     useEffect(() => {
@@ -19,48 +31,66 @@ const CreateReservationForm = (props) => {
             await getLogged(setUser);
         }
         fetchUser();
-    }, [])
-
-    const userId = user.id;
-
-    
-    const addAppointment = (e) => {
-    }
-
-    useEffect(() => {
-        async function fetchAssets(){
-            const requestData = await getAllAssetsByUser(userId);
-            setAssets(!!requestData ? requestData.data : {});
-            return requestData;
+    }, []);
+    if(!!user){
+        if(user.userType === 'Client' && clientId!=user.id){
+            setClientId(user.id);
         }
-        fetchAssets();
-    }, [user])
 
+    return (
+        <Form>
+            <Form.Group className="mb-2">
+                <Row>
+                    <Col sm={2}>
+                        <Form.Label className="mb-1">Asset:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Label className="mb-1">{asset.name}</Form.Label>
+                    </Col>
+                </Row>
+            </Form.Group>
 
-    if (!!assets) {
-        return (
-            <Card className='mb-5 mt-3' style={{color: "#123", borderRadius: "25px"}}>
-                    <Card.Body>
-                        <Card.Title >Add period of availablity</Card.Title>
-                        <div className='mb-2'>
-                            <label className='lbl__create_avbl_period'>From: </label>
-                            <DateTimePicker id="from" onChange={setStartDateTime} value={startDateTime}/>
-                        </div>
-                        <div className='mb-2'> 
-                            <label className='lbl__create_avbl_period'>To: </label>
-                            <DateTimePicker id="to" onChange={setEndDateTime} value={endDateTime}/>
-                        </div>
-                        <div className='mb-2'>
-                            <label className='lbl__create_avbl_period'>Asset:</label>
-                            <select name="assets" id="assets" onChange={(e)=>{setAssetId(e.target.value);}} value={assetId}>
-                                { assets.map((asset) => <option value={asset.id}>{asset.name}</option>) }
-                            </select>
-                        </div>
-                        <Button className='mb-2 mt-2' style={{backgroundColor: "#5da4b4", borderColor: "#5da4b4"}} onClick={addAppointment}>Add appointment</Button>
-                    </Card.Body>
-                </Card>
-            )
-        }
+            <Form.Group className="mb-2">
+                <Row>
+                    <Col sm={2}>
+                        <Form.Label className="mb-1">Client:</Form.Label>
+                    </Col>
+                    { user.userType === 'Client' &&
+                    <Col>
+                        <Form.Label className="mb-1">{user.firstName} {user.lastName}</Form.Label>
+                    </Col>}
+                    { user.userType !== 'Client' &&
+                    <Col>
+                        {/* DOBAVITI KAO COMBOBOX SVE KLIJENTE*/}
+                    </Col>}
+                </Row>
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+                <Form.Label className="mb-1">From: </Form.Label>
+                <Form.Control className="mb-1" type="date" name="dob" placeholder="Start date" value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}/>
+                <Time setTime={setStartTime} time={startTime}></Time>
+            </Form.Group>
+            <Form.Group className="mb-2">
+                <Form.Label className="mb-1">To: </Form.Label>
+                <Form.Control className="mb-1" type="date" name="dob" placeholder="End date" value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}/>
+                <Time setTime={setEndTime} time={endTime}></Time>
+            </Form.Group>
+            <Form.Group className="mb-2">
+                <Form.Label className="mb-1">Number of people: </Form.Label>
+                <Form.Control name="numberOfPeople"  type="number" min="1" required value={numberOfPeople} 
+                            onChange={(e) => setNumOfPeople(e.target.value)}>
+                    </Form.Control>
+            </Form.Group>
+            <Marginer direction="vertical" margin="2em" />
+            <Form.Group className="mb-2">
+                <Form.Label className="mb-1">Total price: {calculateTotalPrice(props)}</Form.Label>
+            </Form.Group>
+        </Form>
+    )
+}
 }
 
 export default CreateReservationForm
