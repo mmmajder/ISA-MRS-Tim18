@@ -2,10 +2,13 @@ package mrsa.tim018.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import mrsa.tim018.model.TimeRange;
 
 public class TimeUtils {
+	
+	
 	public static LocalDate getLocalDate(String date) {
 		String[] elems = date.split("-");
 		return LocalDate.of(Integer.parseInt(elems[0]), Integer.parseInt(elems[1]), Integer.parseInt(elems[2]));
@@ -27,6 +30,11 @@ public class TimeUtils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static String FormatToString(LocalDateTime date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
+		return date.format(formatter);
 	}
 
 }

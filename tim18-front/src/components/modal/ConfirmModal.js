@@ -12,7 +12,7 @@ export function ConfirmModal({show, handleClose, message}){
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => handleClose("Cancel")}>
-              Close
+              Cancel
             </Button>
             <Button variant="primary" onClick={() => handleClose("Save")}>
               Ok
