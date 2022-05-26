@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './../../../assets/styles/calendar.css'
 import CreateReservationForm from './CreateReservationForm'
 import CreatePeriodOfAvailabilityModal from './../../modal/CreatePeriodOfAvailabilityModal'
@@ -12,7 +12,6 @@ import { getRole } from '../../../services/AuthService/AuthService'
 export default function CreateCalendarEventForm(props){
     const [activeForm, setActiveForm] = useState(null);
     const userType = getRole()
-    console.log(userType)
 
     const availableForm = () => {
         setActiveForm(<CreatePeriodOfAvailabilityModal props={props} scope = {props.scope}/>)
@@ -22,7 +21,7 @@ export default function CreateCalendarEventForm(props){
     }
 
     const reservationForm = () => {
-        setActiveForm(<CreateReservationFormModal props={props} scope = {props.scope}/>)
+        setActiveForm(<CreateReservationFormModal props={props}/>)
     }
 
     const periodRemovedCallback = (fromDateTime, toDateTime) => {
@@ -33,6 +32,10 @@ export default function CreateCalendarEventForm(props){
         setActiveForm(<RemovePeriodOfAvailabilityModal props={props} scope = {props.scope} periodRemoved = {periodRemovedCallback}/>)
     }
 
+    useEffect(() => {
+        props.setShow(true)
+    }, [activeForm])
+
     return (
         <div>
             {userType!="Client" ? <>
@@ -41,7 +44,7 @@ export default function CreateCalendarEventForm(props){
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={specialOfferForm}>Add special offer</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={reservationForm}>Add reservation</button>
             </> : []}
-            {activeForm}
+            {props.show ? activeForm : <></>}
         </div>
     );
 }

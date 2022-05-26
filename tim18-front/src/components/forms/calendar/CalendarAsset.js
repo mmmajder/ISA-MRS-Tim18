@@ -57,13 +57,12 @@ const CalendarAsset = () => {
       setEvents(removeAvailable(events, fromDateTime, toDateTime))
     }
     
+    const [show, setShow] = useState(true);
 
     return (
         <div>
           <div>
-              <CreateCalendarEventForm periodRemoved = {removeAvailableCallback} scope={"asset"} onChange={(value)=>{
-                console.log(value)
-                console.log("value")
+              <CreateCalendarEventForm show={show} setShow={setShow} assetId={assetId} periodRemoved = {removeAvailableCallback} scope={"asset"} onChange={(value)=>{
               if (!!events) {
                 setEvents(displayEventsWhenAdding([...events, value]))
               } else { setEvents([value])}

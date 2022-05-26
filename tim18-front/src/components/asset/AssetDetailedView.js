@@ -65,7 +65,7 @@ export default function AssetDetailedView(){
         }, [asset]
     )
     const [show, setShow] = useState(false);
-    const props = {scope: 'global', asset: asset, setShow: setShow, show: show};
+    const props = {scope: 'global', assetId: asset.id, asset: asset, setShow: setShow, show: show};
 
     const makeReservation = () =>{
         setShow(true);

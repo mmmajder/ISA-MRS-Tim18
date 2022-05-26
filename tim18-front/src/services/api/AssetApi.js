@@ -146,7 +146,10 @@ export async function createNewPriceForAsset(assetId, newPrice) {
     }
 }
 
-export async function getAssetTodayPrice(assetId) {
+export async function getAssetTodayPrice(assetId, callback) {
+    // api.get(`/prices/today/${assetId}`)
+    //  .then((responseData) => callback(responseData.data.price))
+    //  .catch((err)=> callback(err));
     try {
        const responseData = await api.get(`/prices/today/${assetId}`)
        return responseData;

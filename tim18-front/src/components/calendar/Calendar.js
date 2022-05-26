@@ -105,11 +105,12 @@ const eventClicked = (info) => {
     setActiveForm(<ReserveSpecOfferModal start={info.event.start} end={info.event.end} title={info.event.title}/>)
   }
 }
+  const [show, setShow] = useState(true);
 
   return (
     <div>
       <div>
-        <CreateCalendarEventForm periodRemoved = {removeAvailableCallback} scope={"global"} onChange={(value)=>{
+        <CreateCalendarEventForm show={show} setShow={setShow} periodRemoved = {removeAvailableCallback} scope={"global"} onChange={(value)=>{
           if (!!events) {
             let newVal = [...events, value] 
             let retData = displayEventsWhenAdding(newVal)
@@ -185,7 +186,7 @@ const eventClicked = (info) => {
           }}
         />
         </div>
-        {activeForm}
+        {show && activeForm}
     </div>
   )
 }

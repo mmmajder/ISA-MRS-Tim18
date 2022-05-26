@@ -12,7 +12,7 @@ const CreateReservationFormModal = ({props}) => {
     const fromDateTime = inputs.startDate + "T" + toHHMMSS(inputs.startTime);
     const toDateTime = inputs.endDate + "T" + toHHMMSS(inputs.endTime);
 
-    const appointmentJson = {fromDateTime: fromDateTime, toDateTime: toDateTime, assetId: props.asset.id ,clientId: inputs.clientId, 
+    const appointmentJson = {fromDateTime: fromDateTime, toDateTime: toDateTime, assetId: props.assetId ,clientId: inputs.clientId, 
       numOfPeople: inputs.numberOfPeople, type: "RegularOffer"};
 
     const resCallback = (data) => {
@@ -35,7 +35,7 @@ const CreateReservationFormModal = ({props}) => {
           <Modal.Title>Create new reservation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateReservationForm asset={props.asset} setInputs={setInputs}/>
+          <CreateReservationForm assetParam={props.asset} assetId={props.assetId} setInputs={setInputs}/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => props.setShow(false)}>
