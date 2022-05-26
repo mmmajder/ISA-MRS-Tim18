@@ -19,17 +19,23 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
     const [endDate, setEndDate] = useState(new Date());
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
-    const [numberOfPeople, setNumOfPeople] = useState([]);
+    const [numberOfPeople, setNumOfPeople] = useState(1);
     const [clientId, setClientId] = useState({});
     const [asset, setAsset] = useState({});
     const [assetPrice, setAssetPrice] = useState("");
-
-    const props = {numberOfPeople: numberOfPeople, startDate: startDate, endDate: endDate, price: assetParam!=undefined ? assetParam.price : assetPrice};
+    const [totalPrice, setPrice] = useState();
+    const [hours, setHours] = useState(0);
+    
+    const props = {numberOfPeople: numberOfPeople, 
+                   startDate: startDate, endDate: endDate, 
+                   startTime: startTime, endTime: endTime, 
+                   price: assetParam!=undefined ? assetParam.price : assetPrice};
 
 
     useEffect(() => {
-        setInputs({startDate, endDate, startTime, endTime, numberOfPeople, clientId});
-    }, [startDate, endDate, startTime, endTime, numberOfPeople])  
+        setInputs({startDate, endDate, startTime, endTime, numberOfPeople, clientId, totalPrice});
+        calculateTotalPrice(props, setPrice, setHours);
+    }, [startDate, endDate, startTime, endTime, numberOfPeople, totalPrice])  
 
     const [user, setUser] = useState([]);
     useEffect(() => {
@@ -46,7 +52,7 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
             setAsset(!!requestData ? requestData.data : {});
             return requestData;
         }
-        if(assetParam!=undefined){
+        if(assetParam==undefined){
             fetchAsset();
         }
         
@@ -57,9 +63,16 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
             getAssetTodayPrice(asset.id).then((response) =>{
                 let price = response.data.price;
                 setAssetPrice(price);
+                setPrice(price);
             });
         }, [asset, setAssetPrice]
     )
+
+    useEffect(() => {
+        if (asset != undefined){
+            getAssetPrice();
+        }
+    }, [asset]);
 
     useEffect(() => {
         async function fetchUser(){
@@ -68,13 +81,9 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
         fetchUser();
     }, []);
     
-    useEffect(
-        () => {
-            getAssetPrice();
-        }, [asset]
-    )
+    
 
-    const [clients, setClients] = useState([]);
+    const [clients, setClients] = useState();
     async function fetchClients(){
         await getAllMappedClients(setClients);
     }
@@ -84,7 +93,10 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
             setClientId(user.id);
         }
         else{
-            fetchClients();    
+            if(clients===undefined){
+                fetchClients();   
+            }
+             
         }
     return (
         <Form>
@@ -128,14 +140,38 @@ const CreateReservationForm = ({assetParam, setInputs, assetId}) => {
                 <Time setTime={setEndTime} time={endTime}></Time>
             </Form.Group>
             <Form.Group className="mb-2">
-                <Form.Label className="mb-1">Number of people: </Form.Label>
-                <Form.Control name="numberOfPeople"  type="number" min="1" required value={numberOfPeople} 
-                            onChange={(e) => setNumOfPeople(e.target.value)}>
-                    </Form.Control>
+                <Form.Label className="mb-1">Number of people: (max number = {assetParam!=undefined ? assetParam.numOfPeople : asset.numOfPeople})
+                </Form.Label>
+                <Form.Control name="numberOfPeople"  type="number" min="1" max={assetParam!=undefined ? assetParam.numOfPeople : asset.numOfPeople}
+                              required value={numberOfPeople} onChange={(e) => setNumOfPeople(e.target.value)}>
+                </Form.Control>
             </Form.Group>
             <Marginer direction="vertical" margin="2em" />
             <Form.Group className="mb-2">
-                <Form.Label className="mb-1">Total price: {/*calculateTotalPrice(props)*/}</Form.Label>
+                <Row>
+                    <Col sm={4}>
+                        <Form.Label className="mb-1">Price per hour:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Label className="mb-1"> {assetParam!=undefined ? assetParam.price : assetPrice} €</Form.Label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm={4}>
+                        <Form.Label className="mb-1">Number of hours:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Label className="mb-1"> {hours} h</Form.Label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm={4}>
+                        <Form.Label className="mb-1">Total price:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Label className="mb-1"> {totalPrice} €</Form.Label>
+                    </Col>
+                </Row>
             </Form.Group>
         </Form>
     )

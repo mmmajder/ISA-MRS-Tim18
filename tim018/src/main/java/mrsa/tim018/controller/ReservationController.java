@@ -114,7 +114,7 @@ public class ReservationController {
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
 		
-		Reservation reservation = new Reservation(asset, client, timeRange);
+		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice());
 		boolean isValid = reservationService.isValidReservation(reservation);
 		if(!isValid) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

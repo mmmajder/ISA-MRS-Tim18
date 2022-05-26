@@ -13,7 +13,7 @@ const CreateReservationFormModal = ({props}) => {
     const toDateTime = inputs.endDate + "T" + toHHMMSS(inputs.endTime);
 
     const appointmentJson = {fromDateTime: fromDateTime, toDateTime: toDateTime, assetId: props.assetId ,clientId: inputs.clientId, 
-      numOfPeople: inputs.numberOfPeople, type: "RegularOffer"};
+      numOfPeople: inputs.numberOfPeople, totalPrice:  inputs.totalPrice};
 
     const resCallback = (data) => {
       if(data){
@@ -27,7 +27,6 @@ const CreateReservationFormModal = ({props}) => {
       props.setShow(false);
       makeReservation(resCallback, appointmentJson);
     }
-
     return (
       <>  
         <Modal show={props.show} onHide={() => props.setShow(false)}>

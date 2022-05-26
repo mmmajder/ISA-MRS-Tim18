@@ -10,7 +10,7 @@ ALTER SEQUENCE userSeqGen RESTART;
 /*images*/
 insert into image(id, data, is_deleted, type, asset_id) values
 	/*user images*/
-	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\renter_stanivuk.jpg'), false, null, null),
+	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null),
 	('2', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Katarina_Komad.jpg'), false, null, null),
 	('3', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_ajder.jpg'), false, null, null),
 	('4', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null),
@@ -26,6 +26,7 @@ insert into image(id, data, is_deleted, type, asset_id) values
 	('13', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Maldives.jpg'), false, null, 1000001),
 	('14', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004),
 	('15', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null);
+
 
 /*admin*/
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, email, password,enabled, profile_photo_id) values
@@ -94,16 +95,16 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
 					  
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000001, null, 2, null, null, 1);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000000, null, 2, null, null, 3);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000004, null, 2, null, null, 2);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000005, null, 2, null, null, 4);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id) values
-						(false, 0, 1000005, null, 2, null, null, 5);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000001, null, 2, null, null, 1, 100);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000000, null, 2, null, null, 3, 150);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000004, null, 2, null, null, 2, 200);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000005, null, 2, null, null, 4, 250);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000005, null, 2, null, null, 5, 150);
 
 insert into asset_calendar_reserved(asset_calendar_id, reserved_id) values
 	(10003, 1), (10004, 2), (10006, 3), (10007, 4), (10005, 5);

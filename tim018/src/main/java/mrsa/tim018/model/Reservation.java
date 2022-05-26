@@ -51,10 +51,22 @@ public class Reservation {
     @JoinColumn(name = "renter_review_id", nullable = true)
 	private Review renterReview;
 	
+	@Column(name = "total_price", nullable = false)
+	private double totalPrice;
+	
 
 	public Reservation() {
 	}
 	
+	public Reservation(Asset asset, Client client, TimeRange timeRange, double totalPrice) {
+		this.asset = asset;
+		this.client = client;
+		this.timeRange = timeRange;
+		this.totalPrice = totalPrice;
+		
+		this.isDeleted = false;
+		this.status = ReservationStatus.Future;	
+	}
 	public Reservation(Asset asset, Client client, TimeRange timeRange) {
 		this.asset = asset;
 		this.client = client;
@@ -62,6 +74,7 @@ public class Reservation {
 		
 		this.isDeleted = false;
 		this.status = ReservationStatus.Future;	
+		this.totalPrice = 0;
 	}
 
 
@@ -139,6 +152,14 @@ public class Reservation {
 
 	public void setAsset(Asset asset) {
 		this.asset = asset;
+	}
+
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	
 	
