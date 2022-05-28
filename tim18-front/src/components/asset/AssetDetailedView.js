@@ -21,14 +21,23 @@ import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
 import CreateReservationFormModal from '../modal/CreateReservationFormModal';
+import { getLogged } from '../../services/api/LoginApi';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
+    const [client, setClient] = useState();
     const {id} = useParams();
     const userType = getRole()
     localStorage.setItem("assetId", id);
 
     const [assetPrice, setAssetPrice] = useState(0);
+
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setClient);
+        }
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         async function fetchAsset(){
@@ -116,7 +125,13 @@ export default function AssetDetailedView(){
                 <Row>
                     <Col sm={4}/>
                     <Col sm={4} align='center'>
-                       {userType=="Client" ? <RegularButton text='Rent' disabled={userType === "Guest"} onClickFunction={makeReservation}/> : []}
+                       {(userType=="Client" || userType === "Guest" ) && 
+                       
+                       <RegularButton text='Rent' disabled={userType === "Guest" || client?.penaltyPoints>3} 
+                            disabledReason={userType === "Guest" ? "You must be logged in to do this": 
+                                            client?.penaltyPoints>3 ? "You have 3 or more penalties, wait for the first of the month for reset" : ""} 
+                            onClickFunction={makeReservation}/>
+                        }
                     </Col>
                     <Col sm={4}>
                     </Col>

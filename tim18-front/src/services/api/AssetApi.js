@@ -23,6 +23,12 @@ export async function getAssetById(id){
   }
 }
 
+export async function getCallbackAssetById(callback, id){
+    api.get(`/assets/${id}`)
+       .then((responseData) => callback(responseData.data))
+       .catch((err)=> callback(err));
+  }
+
 export async function getAssetsByUserId(userId){
     try {
         const responseData = await api.get(`/assets/all/${userId}`);
@@ -147,9 +153,6 @@ export async function createNewPriceForAsset(assetId, newPrice) {
 }
 
 export async function getAssetTodayPrice(assetId, callback) {
-    // api.get(`/prices/today/${assetId}`)
-    //  .then((responseData) => callback(responseData.data.price))
-    //  .catch((err)=> callback(err));
     try {
        const responseData = await api.get(`/prices/today/${assetId}`)
        return responseData;

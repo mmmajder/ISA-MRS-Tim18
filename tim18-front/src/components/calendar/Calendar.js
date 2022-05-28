@@ -82,7 +82,9 @@ async function fetchCalendarData(){
 }
 
 useEffect(() => {
+  if(user!==undefined){
     fetchCalendarData();
+  }
 }, [user])
 
 

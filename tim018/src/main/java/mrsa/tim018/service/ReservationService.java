@@ -77,6 +77,12 @@ public class ReservationService {
 		return duration.toDays();
 	}
 
+	// VALID 
+	// 1) Ako klijent otkaze ne moze opet u istom intervalu
+	// 2) Ako ne postoji ovaj termin u availability
+	// 3) Ako klijent ima 3 penala
+	// 4) Ako datum From > To
+	// 5) Ako datum from u proslosti
 	public boolean isValidReservation(Reservation reservation) {
 		Client client = reservation.getClient();
 		List<Reservation> clientReservations = client.getReservations();

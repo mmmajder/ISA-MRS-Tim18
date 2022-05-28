@@ -22,13 +22,14 @@ public class ReservationDTO {
 	private boolean isCancelable;
 	private Long duration;
 	private boolean isReviewable;
+	private double totalPrice;
 	
 	private ReservationStatus reservationStatus;
 	
 	public ReservationDTO() {
 	}
 	
-	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration) {
+	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration, double totalPrice) {
 		this.id = reservation.getID();
 		this.asset = reservation.getAsset();
 		
@@ -39,6 +40,7 @@ public class ReservationDTO {
 		this.isCancelable = cancelable;
 		this.duration = duration;
 		this.reservationStatus = reservation.getStatus();
+		this.totalPrice = totalPrice;
 	}
 
 	public ReservationDTO(Reservation reservation) {
@@ -49,6 +51,7 @@ public class ReservationDTO {
 		this.clientId = reservation.getClient().getID();
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();
+		this.totalPrice = reservation.getTotalPrice();
 		
 		this.isCancelable = false;
 		this.isReviewable = false;
@@ -125,6 +128,14 @@ public class ReservationDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	
 	

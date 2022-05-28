@@ -18,7 +18,7 @@ export async function getAllClients(callback){
 
 export async function getAllMappedClients(callback){
   api.get(`/clients`)
-     .then((responseData) => callback(responseData.data.map(client => ({ value: client.id, label: client.firstName + ' ' + client.lastName }))))
+     .then((responseData) => callback(responseData.data.map(client => ({ value: client.id, name: client.firstName + ' ' + client.lastName }))))
      .catch((err)=> callback(err));
 }
 

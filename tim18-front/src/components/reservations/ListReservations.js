@@ -61,7 +61,7 @@ export const ListedReservation = ({reservation, handleChange}) => {
               <Col sm="7">
                   <Row>
                       <Col sm="7">
-                          <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={asset.price}/>
+                          <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={reservation.totalPrice}/>
                       </Col>
                       <Col sm="3" /> 
                       <Col sm="2" >

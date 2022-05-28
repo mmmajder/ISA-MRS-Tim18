@@ -38,7 +38,7 @@ export default function CreateCalendarEventForm(props){
 
     return (
         <div>
-            {userType!="Client" ? <>
+            {userType!=="Client" && userType!=="Guest" ? <>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={availableForm}>Add period of availablity</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={removePeriodOfAvailability}>Remove period of availablity</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={specialOfferForm}>Add special offer</button>
