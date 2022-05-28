@@ -109,25 +109,16 @@ public class ReservationController {
 	}
 	
 	@PostMapping(value = "/makeReservation")
-	public ResponseEntity<ReservationRequestDTO> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
+	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Asset asset = assetService.findOne(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		
 		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice());
-		boolean isValid = reservationService.isValidReservation(reservation);
-		if(!isValid) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		reservation = reservationService.makeRegularReservation(reservation);
+		if(reservation!=null) {
+			emailService.sendReservationSuccessfull(reservation);
+			return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 		}
-		reservationService.save(reservation);
-		
-		client.getReservations().add(reservation);
-		asset.getCalendar().getReserved().add(reservation);
-		
-		assetService.save(asset);
-		clientService.save(client);
-		
-		emailService.sendReservationSuccessfull(reservation);
-		return new ResponseEntity<ReservationRequestDTO>(reservationDto, HttpStatus.OK);
+		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
 }

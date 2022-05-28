@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Reservation;
 import mrsa.tim018.repository.ClientRepository;
 
 @Service
@@ -34,5 +35,11 @@ public class ClientService {
 
 	public void remove(Long id) {
 		clientRepository.deleteById(id);
+	}
+
+	public void addRegularReservation(Reservation reservation) {
+		Client client = reservation.getClient();
+		client.getReservations().add(reservation);
+		save(client);
 	}
 }

@@ -92,7 +92,7 @@ public class AssetCalendarSevice {
 		return calendar;
 	}
 	
-	private List<TimeRange> removeAvailable(List<TimeRange> ranges, LocalDateTime fromDateTime,
+	public List<TimeRange> removeAvailable(List<TimeRange> ranges, LocalDateTime fromDateTime,
 			LocalDateTime toDateTime) {
 		List<TimeRange> retData = new ArrayList<TimeRange>();
 		for (TimeRange timeRange : ranges) {

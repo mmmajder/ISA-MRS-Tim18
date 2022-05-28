@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.AssetCalendar;
+import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetRepository;
 
 @Service
@@ -15,6 +18,9 @@ public class AssetService {
 	
 	@Autowired
 	private AssetRepository assetRepository;
+	
+	@Autowired
+	private AssetCalendarSevice assetCalendarService;
 
 	public Asset save(Asset asset) {
 		return assetRepository.save(asset);
@@ -34,5 +40,16 @@ public class AssetService {
 	
 	public List<Asset> findAllByRenterId(long id) {
 		return assetRepository.findAllByRenterId(id);
+	}
+
+	public void addRegularReservation(Reservation reservation) {
+		Asset asset = reservation.getAsset();
+		TimeRange timeRange = reservation.getTimeRange();
+		
+		AssetCalendar calendar= asset.getCalendar();
+		calendar.getReserved().add(reservation);
+		List<TimeRange> ranges = assetCalendarService.removeAvailable(calendar.getAvailable(), timeRange.getFromDateTime(), timeRange.getFromDateTime());
+		calendar.setAvailable(ranges);
+		save(asset);
 	}
 }

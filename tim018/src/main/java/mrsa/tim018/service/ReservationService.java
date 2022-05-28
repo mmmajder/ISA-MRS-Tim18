@@ -1,5 +1,6 @@
 package mrsa.tim018.service;
 
+import java.nio.file.spi.FileSystemProvider;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +22,13 @@ import mrsa.tim018.utils.TimeUtils;
 @Service
 public class ReservationService {
 	@Autowired
-	private ReservationRepository reservationRepository;	
+	private ReservationRepository reservationRepository;
+		
+	@Autowired
+	private AssetService assetService;
+
+	@Autowired
+	private ClientService clientService;	
 
 	public Reservation save(Reservation reservation) {
 		return reservationRepository.save(reservation);
@@ -85,10 +92,19 @@ public class ReservationService {
 	// 5) Ako datum from u proslosti
 	public boolean isValidReservation(Reservation reservation) {
 		Client client = reservation.getClient();
-		List<Reservation> clientReservations = client.getReservations();
+		Asset asset = reservation.getAsset();
 		
-		for (Reservation clientRes : clientReservations) {
-			if(TimeUtils.isSameTimeRange(clientRes.getTimeRange(), reservation.getTimeRange())) {
+		boolean canceled = hasBeenCanceled(reservation, client);
+		boolean penalty = isPenaltyValid(client);
+		boolean dateOrder = isDateOrderValid(reservation.getTimeRange());
+		boolean present = isReservationInFuture(reservation.getTimeRange());
+		boolean available = checkAvailabilty(reservation, asset);
+		
+		return canceled && penalty && dateOrder && present && available;
+	}
+	private boolean hasBeenCanceled(Reservation reservation, Client client){
+		for (Reservation clientRes : client.getReservations()) {
+			if(TimeUtils.isExactSameTimeRange(clientRes.getTimeRange(), reservation.getTimeRange())) {
 				if(clientRes.getAsset().getID() == reservation.getAsset().getID() && 
 				   clientRes.getStatus() == ReservationStatus.Canceled ) {
 					return false;	
@@ -97,5 +113,39 @@ public class ReservationService {
 		}
 		
 		return true;
+	}
+	
+	private boolean isPenaltyValid(Client client) {
+		return client.getPenaltyPoints() < 3;
+	}
+	
+
+	private boolean isDateOrderValid(TimeRange timeRange) {
+		return timeRange.getFromDateTime().isBefore(timeRange.getToDateTime());
+	}
+	
+	private boolean isReservationInFuture(TimeRange timeRange) {
+		return LocalDateTime.now().isBefore(timeRange.getFromDateTime());
+	}
+
+	private boolean checkAvailabilty(Reservation reservation, Asset asset) {
+		TimeRange timeRange = reservation.getTimeRange();
+		List<TimeRange> available = asset.getCalendar().getAvailable();
+		for (TimeRange timeRange2 : available) {
+			if(TimeUtils.isInTimeRange(timeRange, timeRange2)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Reservation makeRegularReservation(Reservation reservation) {
+		boolean isValid = isValidReservation(reservation);
+		if(!isValid) {
+			return null;
+		}
+		assetService.addRegularReservation(reservation);	
+		clientService.addRegularReservation(reservation);
+		return save(reservation);
 	}
 }

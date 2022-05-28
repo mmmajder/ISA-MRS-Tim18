@@ -37,10 +37,6 @@ const CreateReservationForm = ({setInputs, assetId, setValidations}) => {
         var value = event.target.value;
         const valid = validationFunc(value)
         setInputs(values => ({...values, [name]: value}))
-        console.log("name")
-        console.log(name)
-        console.log("valid")
-        console.log(valid)
         setValidations(values => ({...values, [name]: valid}))
     }
     

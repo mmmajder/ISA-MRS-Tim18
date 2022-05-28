@@ -33,13 +33,13 @@ const CreateReservationFormModal = ({props}) => {
     const resCallback = (data) => {
       if(data){
           alert("Successfully created reservation.\nPlease check your email.")
+          props.setShow(false);
       }
       else{
         alert("Oops, you are not able to create this reservation, please try again.")
       }
     }
     const createReservation = () => {
-      props.setShow(false);
       makeReservation(resCallback, appointmentJson);
     }
     return (
