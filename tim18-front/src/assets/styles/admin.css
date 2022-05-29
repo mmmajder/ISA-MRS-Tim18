@@ -8,3 +8,21 @@
     font-size:xx-large;
     margin-right: 5px;
   }
+
+.react-bootstrap-table {
+    margin-top: 1rem;
+}
+
+.rightBtn {
+    float: right;
+    background-color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+}
+
+.loyaltybtn {
+    background-color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+}
+
+
+

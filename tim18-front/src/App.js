@@ -25,6 +25,7 @@ import { Confirmation } from './components/forms/Login/Confirmation';
 import  AllReservations from './components/reservations/AllReservations';
 import AdminRegistrationReq from './components/admin/AdminRegistrationReq.js';
 import AdminDeletionRequestsPreview from './components/admin/AdminDeletionRequestsPreview.js';
+import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -53,6 +54,7 @@ function App() {
   const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
   const adminProfileDeletionReq = <Container><AdminDeletionRequestsPreview/></Container>
+  const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -76,6 +78,7 @@ function App() {
                   <Route path="/allReservations" element={allReservations}/>
                   <Route path="/adminRegistrationReq" element={adminRegistrationReq}/>
                   <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
+                  <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

@@ -100,3 +100,13 @@ insert into deletation_request (is_deleted, reason, status, user_id) values
 	(false, 'No reason', 0, 2),
 	(false, 'Good reason', 0, 6);
 	
+insert into loyalty_program (is_deleted, user_discount_type, discount, level, points) values
+	(false, 0, 2, 'Regular', 10),
+	(false, 0, 5, 'Silver', 25),
+	(false, 0, 10, 'Gold', 50),
+	(false, 1, 2, 'Regular', 10),
+	(false, 1, 5, 'Silver', 20),
+	(false, 1, 7.5, 'Gold', 40);
+	
+insert into reservation_finances (points_per_reservation, reservation_tax) values
+	(3, 40);
