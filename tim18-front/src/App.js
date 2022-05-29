@@ -28,6 +28,7 @@ import AdminDeletionRequestsPreview from './components/admin/AdminDeletionReques
 import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
 import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
+import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -59,6 +60,7 @@ function App() {
   const updateProfilePhoto = <Container><UpdateProfilePhoto /></Container>
   const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
   const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
+  const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -85,6 +87,7 @@ function App() {
                   <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
+                  <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
