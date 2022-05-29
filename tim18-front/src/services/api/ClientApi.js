@@ -10,14 +10,16 @@ export async function getClientByID(id){
   }
 }
 
-export async function getAllClients(){
-  try {
-      const responseData = await api.get(`/clients`);
-      return responseData;
-  } catch (err) {
-      console.log(err.message);
-      return err.message
-  }
+export async function getAllClients(callback){
+  api.get(`/clients`)
+     .then((responseData) => callback(responseData.data))
+     .catch((err)=> callback(err));
+}
+
+export async function getAllMappedClients(callback){
+  api.get(`/clients`)
+     .then((responseData) => callback(responseData.data.map(client => ({ value: client.id, name: client.firstName + ' ' + client.lastName }))))
+     .catch((err)=> callback(err));
 }
 
 export function addClient(clientData){

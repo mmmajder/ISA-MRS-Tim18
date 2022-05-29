@@ -1,8 +1,11 @@
 package mrsa.tim018.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
+import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.ReservationService;
 
 @RestController
@@ -44,6 +48,9 @@ public class ReservationController {
 	@Autowired
 	private AssetService assetService;
 
+	@Autowired
+	private EmailService emailService;
+	
 	@GetMapping(value = "/current/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long clientId, @RequestParam AssetType assetType) {
 		Client client = clientService.findOne(clientId);
@@ -73,15 +80,12 @@ public class ReservationController {
 	@PutMapping(value = "/cancel/{reservationId}")
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
 		Reservation reservation = reservationService.findOne(reservationId);
-		reservation.setStatus(ReservationStatus.Canceled);
-		reservation = reservationService.save(reservation);
-		
 		Client client = reservation.getClient();	// TODO: penalty points?
 		
 		Asset asset = reservation.getAsset();
 		int cancelationConditions = asset.getCancelationConditions();		// TODO: reports?
 		
-		asset.getCalendar().getReserved().remove(reservation);
+		reservation = reservationService.cancelReservation(reservation);
 		
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
@@ -102,23 +106,16 @@ public class ReservationController {
 	}
 	
 	@PostMapping(value = "/makeReservation")
-	public ResponseEntity<ReservationRequestDTO> makeReservation(@RequestBody ReservationRequestDTO reservationDto) {
+	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Asset asset = assetService.findOne(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		
-		Reservation reservation = new Reservation(asset, client, timeRange);
-		boolean isValid = reservationService.isValidReservation(reservation);
-		if(!isValid) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice());
+		reservation = reservationService.makeRegularReservation(reservation);
+		if(reservation!=null) {
+			emailService.sendReservationSuccessfull(reservation);
+			return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 		}
-		reservationService.save(reservation);
-		
-		client.getReservations().add(reservation);
-		asset.getCalendar().getReserved().add(reservation);
-		
-		assetService.save(asset);
-		clientService.save(client);
-		return new ResponseEntity<ReservationRequestDTO>(reservationDto, HttpStatus.OK);
+		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
 }

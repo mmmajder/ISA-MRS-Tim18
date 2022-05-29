@@ -11,16 +11,18 @@ public class ReservationRequestDTO {
 	private LocalDateTime toDateTime;
 
 	private int numOfPeople;
+	private double totalPrice;
 	
 	public ReservationRequestDTO() {
 	}
 	
-	public ReservationRequestDTO(Long assetId, Long clientId, LocalDateTime fromDateTime, LocalDateTime toDateTime, int numOfPeople) {
+	public ReservationRequestDTO(Long assetId, Long clientId, LocalDateTime fromDateTime, LocalDateTime toDateTime, int numOfPeople, double totalPrice) {
 		this.assetId = assetId;
 		this.clientId =clientId;
 		this.fromDateTime = fromDateTime;
 		this.toDateTime = toDateTime;
 		this.numOfPeople = numOfPeople;
+		this.totalPrice = totalPrice;
 	}
 	
 	public int getNumOfPeople() {
@@ -61,6 +63,15 @@ public class ReservationRequestDTO {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
 	}	
+	
 	
 }

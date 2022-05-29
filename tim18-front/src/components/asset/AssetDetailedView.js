@@ -2,7 +2,6 @@ import React from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 import RenterInfo from './RenterInfo';
-import RegularButton from '../buttons/RegularButton';
 import AssetMainInfo from './AssetMainInfo';
 import AssetOtherInfo from './AssetOtherInfo';
 import { faPenToSquare, faTrash, faCalendarDays, faImage, faCoins} from '@fortawesome/free-solid-svg-icons'
@@ -20,7 +19,6 @@ import CalendarAsset from '../forms/calendar/CalendarAsset';
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
-import CreateReservationFormModal from '../modal/CreateReservationFormModal';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -64,13 +62,7 @@ export default function AssetDetailedView(){
             getAssetPrice();
         }, [asset]
     )
-    const [show, setShow] = useState(false);
-    const props = {scope: 'global', asset: asset, setShow: setShow, show: show};
-
-    const makeReservation = () =>{
-        setShow(true);
-    }
-
+    
     return <>
             <div className="borderedBlock mt-3" align="">
                 <Row>
@@ -113,16 +105,6 @@ export default function AssetDetailedView(){
                 <Row>
                     <CalendarAsset></CalendarAsset>
                 </Row>
-                <Row>
-                    <Col sm={4}/>
-                    <Col sm={4} align='center'>
-                       {userType=="Client" ? <RegularButton text='Rent' disabled={userType === "Guest"} onClickFunction={makeReservation}/> : []}
-                    </Col>
-                    <Col sm={4}>
-                    </Col>
-                </Row>
-                {show && <CreateReservationFormModal props={props}/>}
-                
                 <Row>
                     {/* Reviews will go under */}
                 </Row>

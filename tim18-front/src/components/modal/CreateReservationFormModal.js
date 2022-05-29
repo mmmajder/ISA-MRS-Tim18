@@ -1,33 +1,52 @@
 import React from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import {useState, useEffect} from 'react';
-import { getLogged } from '../../services/api/LoginApi.js';
 import { toHHMMSS } from '../../services/utils/TimeUtils';
 import CreateReservationForm from '../forms/calendar/CreateReservationForm';
 import { makeReservation } from '../../services/api/ReservationApi'
 
 const CreateReservationFormModal = ({props}) => {
     const [inputs, setInputs] = useState({});
+    const [formValid, setFormValid] = useState(true);
+    const [validations, setValidations] = useState({fromDateTime: false, 
+                                                    toDateTime: false, 
+                                                    assetId: false, 
+                                                    clientId: false, 
+                                                    numOfPeople: true, 
+                                                    totalPrice: true});
 
     const fromDateTime = inputs.startDate + "T" + toHHMMSS(inputs.startTime);
     const toDateTime = inputs.endDate + "T" + toHHMMSS(inputs.endTime);
 
-    const appointmentJson = {fromDateTime: fromDateTime, toDateTime: toDateTime, assetId: props.asset.id ,clientId: inputs.clientId, 
-      numOfPeople: inputs.numberOfPeople, type: "RegularOffer"};
+    const appointmentJson = {fromDateTime: fromDateTime, toDateTime: toDateTime, assetId: inputs.assetId ,clientId: inputs.clientId, 
+      numOfPeople: inputs.numberOfPeople, totalPrice:  inputs.totalPrice};
 
-    const resCallback = (data) => {
+    useEffect(() => {
+      setFormValid(validations.fromDateTime && 
+                    validations.toDateTime && 
+                    validations.assetId && 
+                    validations.clientId && 
+                    validations.numOfPeople && 
+                    validations.totalPrice);
+    }, [validations]);
+
+    const makeReservationCallback = (data) => {
       if(data){
           alert("Successfully created reservation.\nPlease check your email.")
+          props.newReservation({
+            title  : 'Reserved',
+            start  : fromDateTime,
+            end    : toDateTime,
+            resourceId : inputs.assetId,
+            backgroundColor : "grey",
+            borderColor : "grey"
+          }, fromDateTime, toDateTime)
+          props.setShow(false);
       }
       else{
         alert("Oops, you are not able to create this reservation, please try again.")
       }
     }
-    const createReservation = () => {
-      props.setShow(false);
-      makeReservation(resCallback, appointmentJson);
-    }
-
     return (
       <>  
         <Modal show={props.show} onHide={() => props.setShow(false)}>
@@ -35,13 +54,13 @@ const CreateReservationFormModal = ({props}) => {
           <Modal.Title>Create new reservation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateReservationForm asset={props.asset} setInputs={setInputs}/>
+          <CreateReservationForm assetId={props.assetId} setInputs={setInputs} setValidations={setValidations}/>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => props.setShow(false)}>
             Close
           </Button>
-          <Button variant="primary" type="submit" onClick={createReservation}>
+          <Button variant="primary" type="submit" onClick={() => makeReservation(makeReservationCallback, appointmentJson)} disabled={!formValid}>
             Save Changes
           </Button>
         </Modal.Footer>
