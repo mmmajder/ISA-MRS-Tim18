@@ -47,9 +47,21 @@ public class AssetService {
 		TimeRange timeRange = reservation.getTimeRange();
 		
 		AssetCalendar calendar= asset.getCalendar();
-		calendar.getReserved().add(reservation);
-		List<TimeRange> ranges = assetCalendarService.removeAvailable(calendar.getAvailable(), timeRange.getFromDateTime(), timeRange.getFromDateTime());
+		calendar.getReserved().add(reservation);	
+		List<TimeRange> ranges = assetCalendarService.removeAvailable(calendar.getAvailable(), timeRange.getFromDateTime(), timeRange.getToDateTime());
 		calendar.setAvailable(ranges);
-		save(asset);
+	}
+
+	public void cancelReservation(Reservation reservation) {
+		Asset asset = reservation.getAsset();
+		AssetCalendar calendar = asset.getCalendar();
+		TimeRange timeRange = reservation.getTimeRange();
+		
+		calendar.getReserved().remove(reservation);
+		
+		List<TimeRange> ranges = calendar.getAvailable();
+		ranges = assetCalendarService.addAvailable(ranges, timeRange.getFromDateTime(), timeRange.getToDateTime());
+		calendar.setAvailable(ranges);
+		
 	}
 }

@@ -11,12 +11,28 @@ import { getAssetCalendarData } from '../../../services/api/CalendarApi'
 import { Row, Col, Container } from 'react-bootstrap';
 import {makeDateString} from './../../../services/utils/TimeUtils'
 import { displayEventsWhenAdding, removeAvailable } from '../../calendar/CalendarUtils'
+import RegularButton from '../../buttons/RegularButton'
+import { getRole } from '../../../services/AuthService/AuthService'
+import { getLogged } from '../../../services/api/LoginApi'
+import CreateReservationFormModal from '../../modal/CreateReservationFormModal'
 
 const CalendarAsset = () => {
-    const calendarRef = createRef()
-    const [events, setEvents] = useState()
+    const guestTxt = "You must be logged in to do this";
+    const penaltyTxt = "You have 3 or more penalties, wait for the first of the month for reset";
 
+    const calendarRef = createRef()
+    const userType = getRole()
+    const [events, setEvents] = useState()
+    const [client, setClient] = useState();
+    const [show, setShow] = useState(true);
+    const [clientShow, setClientShow] = useState(false);
     const assetId = localStorage.getItem("assetId");
+    useEffect(() => {
+      async function fetchUser(){
+          await getLogged(setClient);
+      }
+      fetchUser();
+    }, []);
     
 
     useEffect(() => {
@@ -40,11 +56,22 @@ const CalendarAsset = () => {
           }
           return info;
         })
+        let reserved = requestData.data.calendar.reserved.map(function(range) {
+          var info = {
+            title : "Reserved",
+            start : makeDateString(range.timeRange.fromDateTime),
+            end : makeDateString(range.timeRange.toDateTime),
+            backgroundColor : "grey",
+            borderColor : "grey"
+          }
+          return info;
+        })
         if (specialOffers.length!=0){
           retData = [...retData, ...specialOffers] 
         }
-        console.log("retData")
-        console.log(retData)
+        if(reserved.length!=0){
+          retData = [...retData, ...reserved] 
+        }
         if (requestData) {
           setEvents(retData);
         }
@@ -57,12 +84,20 @@ const CalendarAsset = () => {
       setEvents(removeAvailable(events, fromDateTime, toDateTime))
     }
     
-    const [show, setShow] = useState(true);
+    const createReservationCallback = (value, fromDateTime, toDateTime) => {
+      let newEvents = removeAvailable(events, fromDateTime, toDateTime)
+      newEvents = displayEventsWhenAdding([...newEvents, value])
+      setEvents(newEvents);
+    } 
+
+    const clientProps = {assetId: assetId, setShow: setClientShow, show: clientShow, newReservation: createReservationCallback};
 
     return (
         <div>
           <div>
-              <CreateCalendarEventForm show={show} setShow={setShow} assetId={assetId} periodRemoved = {removeAvailableCallback} scope={"asset"} onChange={(value)=>{
+              <CreateCalendarEventForm show={show} setShow={setShow} assetId={assetId} newReservation={createReservationCallback}
+                                      periodRemoved = {removeAvailableCallback} scope={"asset"}
+              onChange={(value)=>{
               if (!!events) {
                 setEvents(displayEventsWhenAdding([...events, value]))
               } else { setEvents([value])}
@@ -114,6 +149,19 @@ const CalendarAsset = () => {
                 backgroundColor: "#5da4b4",
               }}
             />
+            <Row>
+                <Col sm={4}/>
+                  <Col sm={4} align='center'>
+                      {(userType==="Client" || userType === "Guest" ) && 
+                        <RegularButton text='Rent' disabled={userType === "Guest" || client?.penaltyPoints>3} 
+                          disabledReason={userType === "Guest" ? guestTxt: client?.penaltyPoints>3 ? penaltyTxt : ""} 
+                          onClickFunction={() => setClientShow(true)}/>
+                      }
+                  </Col>
+                  <Col sm={4}>
+                  </Col>
+              </Row>
+              {clientShow && <CreateReservationFormModal props={clientProps}/>}
         </div>
     )
 }

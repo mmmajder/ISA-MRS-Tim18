@@ -30,17 +30,22 @@ const CreateReservationFormModal = ({props}) => {
                     validations.totalPrice);
     }, [validations]);
 
-    const resCallback = (data) => {
+    const makeReservationCallback = (data) => {
       if(data){
           alert("Successfully created reservation.\nPlease check your email.")
+          props.newReservation({
+            title  : 'Reserved',
+            start  : fromDateTime,
+            end    : toDateTime,
+            resourceId : inputs.assetId,
+            backgroundColor : "grey",
+            borderColor : "grey"
+          }, fromDateTime, toDateTime)
           props.setShow(false);
       }
       else{
         alert("Oops, you are not able to create this reservation, please try again.")
       }
-    }
-    const createReservation = () => {
-      makeReservation(resCallback, appointmentJson);
     }
     return (
       <>  
@@ -55,7 +60,7 @@ const CreateReservationFormModal = ({props}) => {
           <Button variant="secondary" onClick={() => props.setShow(false)}>
             Close
           </Button>
-          <Button variant="primary" type="submit" onClick={createReservation} disabled={!formValid}>
+          <Button variant="primary" type="submit" onClick={() => makeReservation(makeReservationCallback, appointmentJson)} disabled={!formValid}>
             Save Changes
           </Button>
         </Modal.Footer>

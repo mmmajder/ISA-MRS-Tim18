@@ -2,7 +2,6 @@ import React from 'react';
 import '../../assets/styles/asset.css';
 import { Row, Col } from 'react-bootstrap';
 import RenterInfo from './RenterInfo';
-import RegularButton from '../buttons/RegularButton';
 import AssetMainInfo from './AssetMainInfo';
 import AssetOtherInfo from './AssetOtherInfo';
 import { faPenToSquare, faTrash, faCalendarDays, faImage, faCoins} from '@fortawesome/free-solid-svg-icons'
@@ -20,24 +19,14 @@ import CalendarAsset from '../forms/calendar/CalendarAsset';
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
-import CreateReservationFormModal from '../modal/CreateReservationFormModal';
-import { getLogged } from '../../services/api/LoginApi';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
-    const [client, setClient] = useState();
     const {id} = useParams();
     const userType = getRole()
     localStorage.setItem("assetId", id);
 
     const [assetPrice, setAssetPrice] = useState(0);
-
-    useEffect(() => {
-        async function fetchUser(){
-            await getLogged(setClient);
-        }
-        fetchUser();
-    }, []);
 
     useEffect(() => {
         async function fetchAsset(){
@@ -73,13 +62,7 @@ export default function AssetDetailedView(){
             getAssetPrice();
         }, [asset]
     )
-    const [show, setShow] = useState(false);
-    const props = {scope: 'global', assetId: asset.id, asset: asset, setShow: setShow, show: show};
-
-    const makeReservation = () =>{
-        setShow(true);
-    }
-
+    
     return <>
             <div className="borderedBlock mt-3" align="">
                 <Row>
@@ -122,22 +105,6 @@ export default function AssetDetailedView(){
                 <Row>
                     <CalendarAsset></CalendarAsset>
                 </Row>
-                <Row>
-                    <Col sm={4}/>
-                    <Col sm={4} align='center'>
-                       {(userType=="Client" || userType === "Guest" ) && 
-                       
-                       <RegularButton text='Rent' disabled={userType === "Guest" || client?.penaltyPoints>3} 
-                            disabledReason={userType === "Guest" ? "You must be logged in to do this": 
-                                            client?.penaltyPoints>3 ? "You have 3 or more penalties, wait for the first of the month for reset" : ""} 
-                            onClickFunction={makeReservation}/>
-                        }
-                    </Col>
-                    <Col sm={4}>
-                    </Col>
-                </Row>
-                {show && <CreateReservationFormModal props={props}/>}
-                
                 <Row>
                     {/* Reviews will go under */}
                 </Row>

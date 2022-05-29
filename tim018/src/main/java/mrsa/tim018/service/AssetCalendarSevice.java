@@ -125,7 +125,7 @@ public class AssetCalendarSevice {
 
 	
 
-	private List<TimeRange> addAvailable(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	public List<TimeRange> addAvailable(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
 		for (TimeRange timeRange : ranges) {
 			elems.add(new TimeRangeMergeElement(timeRange, false));

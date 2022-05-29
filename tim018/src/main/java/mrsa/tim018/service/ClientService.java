@@ -40,6 +40,5 @@ public class ClientService {
 	public void addRegularReservation(Reservation reservation) {
 		Client client = reservation.getClient();
 		client.getReservations().add(reservation);
-		save(client);
 	}
 }

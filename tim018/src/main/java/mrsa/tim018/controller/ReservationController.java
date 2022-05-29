@@ -80,15 +80,12 @@ public class ReservationController {
 	@PutMapping(value = "/cancel/{reservationId}")
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
 		Reservation reservation = reservationService.findOne(reservationId);
-		reservation.setStatus(ReservationStatus.Canceled);
-		reservation = reservationService.save(reservation);
-		
 		Client client = reservation.getClient();	// TODO: penalty points?
 		
 		Asset asset = reservation.getAsset();
 		int cancelationConditions = asset.getCancelationConditions();		// TODO: reports?
 		
-		asset.getCalendar().getReserved().remove(reservation);
+		reservation = reservationService.cancelReservation(reservation);
 		
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}

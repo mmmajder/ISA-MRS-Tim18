@@ -1,6 +1,5 @@
 package mrsa.tim018.service;
 
-import java.nio.file.spi.FileSystemProvider;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -146,6 +145,12 @@ public class ReservationService {
 		}
 		assetService.addRegularReservation(reservation);	
 		clientService.addRegularReservation(reservation);
+		return save(reservation);
+	}
+
+	public Reservation cancelReservation(Reservation reservation) {
+		assetService.cancelReservation(reservation);
+		reservation.setStatus(ReservationStatus.Canceled);
 		return save(reservation);
 	}
 }
