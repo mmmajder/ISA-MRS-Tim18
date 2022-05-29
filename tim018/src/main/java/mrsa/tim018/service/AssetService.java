@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetRepository;
 
@@ -37,6 +38,13 @@ public class AssetService {
 	public Asset findById(long id) {
 		return assetRepository.findById(id);
 	}
+
+	public Asset joinFetchAssetWithSubsById(long id) {
+		Asset asset =  assetRepository.joinFetchAssetWithSubsById(id);
+		System.out.println(asset);
+		System.out.println(id);
+		return asset;
+	}
 	
 	public List<Asset> findAllByRenterId(long id) {
 		return assetRepository.findAllByRenterId(id);
@@ -63,5 +71,15 @@ public class AssetService {
 		ranges = assetCalendarService.addAvailable(ranges, timeRange.getFromDateTime(), timeRange.getToDateTime());
 		calendar.setAvailable(ranges);
 		
+	}
+	
+	public void addSubscription(Subscription subscription) {
+		Asset asset = subscription.getAsset();
+		asset.getSubscriptions().add(subscription);
+	}
+
+	public void removeSubscription(Subscription subscription) {
+		Asset asset = subscription.getAsset();
+		asset.getSubscriptions().remove(subscription);
 	}
 }

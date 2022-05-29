@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.repository.ClientRepository;
 
 @Service
@@ -40,5 +41,15 @@ public class ClientService {
 	public void addRegularReservation(Reservation reservation) {
 		Client client = reservation.getClient();
 		client.getReservations().add(reservation);
+	}
+	
+	public void addSubscription(Subscription subscription) {
+		Client client = subscription.getClient();
+		client.getSubscriptions().add(subscription);
+	}
+	
+	public void removeSubscription(Subscription subscription) {
+		Client client = subscription.getClient();
+		client.getSubscriptions().remove(subscription);
 	}
 }

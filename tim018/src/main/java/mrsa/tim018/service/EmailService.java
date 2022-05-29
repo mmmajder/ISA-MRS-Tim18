@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.User;
 import mrsa.tim018.utils.EmailContentUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -127,5 +129,24 @@ public class EmailService {
 		helper.setText(content, true);
 		
 		javaMailSender.send(message);
+	}
+	
+	@Async
+	public void notifySubscribers(List<Subscription> subscriptions) throws MessagingException, UnsupportedEncodingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("Hakuna Matata new special offer");
+
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		String URL = siteURL + "/allSubscriptions";
+
+		for (Subscription subscription : subscriptions) {
+			System.out.println("aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			String content = EmailContentUtils.getVerificationContent(); 
+			content = content.replace("[[URL]]", URL);
+			helper.setText(content, true);
+			javaMailSender.send(message);
+		}
 	}
 }
