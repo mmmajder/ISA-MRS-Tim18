@@ -38,13 +38,6 @@ public class AssetService {
 	public Asset findById(long id) {
 		return assetRepository.findById(id);
 	}
-
-	public Asset joinFetchAssetWithSubsById(long id) {
-		Asset asset =  assetRepository.joinFetchAssetWithSubsById(id);
-		System.out.println(asset);
-		System.out.println(id);
-		return asset;
-	}
 	
 	public List<Asset> findAllByRenterId(long id) {
 		return assetRepository.findAllByRenterId(id);
@@ -81,5 +74,6 @@ public class AssetService {
 	public void removeSubscription(Subscription subscription) {
 		Asset asset = subscription.getAsset();
 		asset.getSubscriptions().remove(subscription);
+		save(asset);
 	}
 }

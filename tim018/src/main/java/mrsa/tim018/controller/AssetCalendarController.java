@@ -22,10 +22,12 @@ import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.RenterService;
+import mrsa.tim018.service.SubscriptionService;
 
 @RestController
 @CrossOrigin("*")
@@ -36,12 +38,15 @@ public class AssetCalendarController<T> {
 	
 	@Autowired
 	private AssetService assetService;
-
+	
 	@Autowired
 	private RenterService renterService;
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private SubscriptionService subscriptionService;
 	
 	@GetMapping(value = "/allCalendarsForUser/{id}") 
 	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
@@ -77,12 +82,13 @@ public class AssetCalendarController<T> {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		try {
-			Asset asset = assetService.joinFetchAssetWithSubsById(appointment.getAssetId());
+			Asset asset = assetService.findById(appointment.getAssetId());
 			AssetCalendar calendar = asset.getCalendar();
 			AssetCalendar newCalendar = calendarService.addAppointment(calendar, appointment);
 			calendarService.save(newCalendar);
 			if(appointment.getType() == AppointmentType.SpecialOffer) {
-				emailService.notifySubscribers(asset.getSubscriptions());
+				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(asset.getID());
+				emailService.notifySubscribers(subscriptions, appointment);
 			}
 		} catch (Exception e) {
 			System.out.println(e);

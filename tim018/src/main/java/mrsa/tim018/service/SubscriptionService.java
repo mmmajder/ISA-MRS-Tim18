@@ -1,5 +1,7 @@
 package mrsa.tim018.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +44,16 @@ public class SubscriptionService {
 		if(subscription == null) {
 			return null;
 		}
-		subscription.setDeleted(true);
+		// subscription.setDeleted(true);
 		return save(subscription);
+	}
+
+	public List<Subscription> findClientsActiveSubscriptions(Long clientId) {
+		return subscriptionRepository.findClientsActiveSubscriptions(clientId);
+	}
+	
+	public List<Subscription> findAssetsActiveSubscriptions(Long clientId) {
+		return subscriptionRepository.findAssetsActiveSubscriptions(clientId);
 	}
 
 }

@@ -51,5 +51,6 @@ public class ClientService {
 	public void removeSubscription(Subscription subscription) {
 		Client client = subscription.getClient();
 		client.getSubscriptions().remove(subscription);
+		save(client);
 	}
 }

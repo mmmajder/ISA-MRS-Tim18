@@ -48,5 +48,10 @@ public class TimeUtils {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 		return date.format(formatter);
 	}
+	
+	public static String FormatToString(LocalDate date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+		return date.format(formatter);
+	}
 
 }
