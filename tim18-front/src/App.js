@@ -29,6 +29,7 @@ import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
 import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
+import Reviews from './components/reservations/Reviews.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -61,6 +62,7 @@ function App() {
   const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
   const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
   const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
+  const reviews = <Container><Reviews/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -88,6 +90,7 @@ function App() {
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
                   <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
+                  <Route path="/reviews/:reservationId" element={reviews}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

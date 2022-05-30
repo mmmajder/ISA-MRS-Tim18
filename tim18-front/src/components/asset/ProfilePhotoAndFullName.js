@@ -1,35 +1,33 @@
 import React from 'react';
-import MarkStars from '../MarkStars';
 import {getPhotoFromServer} from '../../services/api/ImageApi';
 import {useState, useEffect, useCallback} from 'react';
 
-export default function RenterInfo({renter}){
+export default function ProfilePhotoAndFullName({user}){
 
     const [profilePhoto, setProfilePhoto] = useState();
 
     const getProfilePhoto = useCallback(
         (e) => {
-            getPhotoFromServer(renter.profilePhotoId).then((response) =>{
+            getPhotoFromServer(user.profilePhotoId).then((response) =>{
                 let photo = `data:image/jpeg;base64,${response.data}`
                 setProfilePhoto(photo);
             });
-        }, [renter]
+        }, [user]
     )
 
     useEffect(() => {
-        if (!!renter){
+        if (!!user){
             getProfilePhoto()
         }
-    }, [renter])
+    }, [user])
 
-    let renterInfo = "";
-    if (renter != undefined)
-        renterInfo = "" + renter.firstName + " " + renter.lastName + ", " + renter.city;
+    let userInfo = "";
+    if (user != undefined)
+        userInfo = "" + user.firstName + " " + user.lastName;
 
-    return <div className='mt-4'><span className='borderedBlockNoShadow m-3'>
+    return <>
                 <img src={profilePhoto} className="renterProfilePicture rounded-circle me-4 ms-1"/>
-                {renterInfo}
-                <MarkStars  mark={4.1} />
-            </span></div>
+                {userInfo}
+            </>
 }
 

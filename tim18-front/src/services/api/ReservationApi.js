@@ -24,6 +24,17 @@ export async function getCurrentRenterReservations(callback, renterId){
             .catch(()=> {callback(false)});
 }
 
+export async function getReservation(reservationId) {
+    try {
+        const responseData = await api.get(`/reservation/${reservationId}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+
 export async function cancelReservation(reservationId){
     await api.put(`/reservation/cancel/${reservationId}`)
             .then((responseData) => {console.log(responseData.data)})

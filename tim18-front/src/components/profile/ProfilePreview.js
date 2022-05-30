@@ -3,12 +3,13 @@ import { Row, Col  } from 'react-bootstrap';
 import ProfileInfoBlock from './ProfileInfoBlock';
 import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
-import {getRenter} from '../../services/api/InstructorApi'
+import {getReviews} from '../../services/api/ReviewApi'
 import AssetList from '../asset/AssetsList';
 import { getRole } from '../../services/AuthService/AuthService';
 import ClientProfilePreview from './ClientProfilePreview';
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
+import ListedReview from '../reservations/ListedReview';
 
 export default function ProfilePreview(){
     // const [user, setUser] = useState();
@@ -23,7 +24,12 @@ export default function ProfilePreview(){
     //     fetchUser();
     // }, [userId])
 
+    //TODO ODRADITI PRIKAZ TUDJEG PROFILA
+
     const [user, setUser] = useState([]);
+    const [reviews, setReviews] = useState();
+    const [listedReviews, setListedReviews] = useState("listedreviews");
+
     useEffect(() => {
         async function fetchUser(){
             await getLogged(setUser);
@@ -31,18 +37,33 @@ export default function ProfilePreview(){
         fetchUser();
     }, [])
 
+    useEffect(() => {
+        if (!!user){
+            getReviews(user.id).then((response) => {
+                let revs = response.data;
+                setReviews(revs);
+            })
+        }
+    }, [user])
+
+    useEffect(() => {
+        if (!!reviews){
+            let listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
+            setListedReviews(listedRevs);
+        }
+    }, [reviews])
+
 
     console.log(user)
     const userType =  getRole();
     const infoBlock =  userType === 'Client' ? <ClientProfilePreview /> : <ProfileInfoBlock user={user}/>
-    const assetList =  userType === 'Client' ? <></> : <AssetList/>
     if(!!user) {
         return <Row className="pt-5">
                     <Col sm='3'>
                         {infoBlock}
                     </Col>
                     <Col sm='9'>
-                        {assetList}
+                        {listedReviews}
                     </Col>
                 </Row>
     }
