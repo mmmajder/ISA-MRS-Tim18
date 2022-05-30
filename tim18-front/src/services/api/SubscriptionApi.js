@@ -15,9 +15,14 @@ export async function subscribeToAsset(assetId, clientId){
 }
 
 export async function hasSubscription(callback, assetId, clientId){
-    console.log(`/subscription/hasSubscription/`);
-    console.log(assetId, clientId)
     await api.get(`/subscription/hasSubscription/${assetId}/${clientId}`)
             .then((responseData) => {console.log("responseData.data");console.log(responseData.data);callback(responseData.data)})
             .catch(()=> {callback(false)});
 }
+
+export async function getMySubscriptions(callback, clientId, assetType){
+    await api.put(`/subscription/mySubscriptions/${clientId}`, assetType)
+            .then((responseData) => {callback(responseData.data)})
+            .catch(()=> {callback(false)});
+}
+
