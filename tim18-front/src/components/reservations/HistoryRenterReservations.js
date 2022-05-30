@@ -4,13 +4,11 @@ import { React, useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap'; 
 import AssetTypeOption from '../asset/AssetTypeOption';
 import { ListedReservation } from './ListReservations';
-import { getPastReservationsByType } from '../../services/api/ReservationApi';
-import { getLogged } from '../../services/api/LoginApi';
+import { getPastRenterReservations, getPastReservationsByType } from '../../services/api/ReservationApi';
 import { sortReservations } from '../../services/utils/SortUtils';
 import { Marginer } from '../forms/Login/marginer'
 
-export default function HistoryReservations({client}){
-  const [assetType, setAssetType] = useState("ALL");
+export default function HistoryRenterReservations({renter}){
   const [reservations, setReservations] = useState();
   const [listedReservations, setListedReservations] = useState();
 
@@ -26,13 +24,13 @@ export default function HistoryReservations({client}){
 
   useEffect(() => {
       async function fetchReservations(){
-          await getPastReservationsByType(setReservations, client.id, assetType);
+          await getPastRenterReservations(setReservations, renter.id);
       }
-      if(client !== undefined){
+      if(renter !== undefined){
         fetchReservations();
       }
       
-  }, [client, assetType])
+  }, [renter])
 
   useEffect(() => {
         if (reservations !== undefined){
@@ -48,7 +46,6 @@ export default function HistoryReservations({client}){
 
   return (
     <>
-        <AssetTypeOption setAssetType={setAssetType}/>
         <Marginer direction="vertical" margin="1em" />
         <Row>
               <Col sm="3"/>
