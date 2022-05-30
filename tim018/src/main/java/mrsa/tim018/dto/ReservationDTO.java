@@ -26,6 +26,10 @@ public class ReservationDTO {
 	
 	private ReservationStatus reservationStatus;
 	
+	private Long assetReviewId;
+	private Long renterReviewId;
+	private Long clientReviewId;
+	
 	public ReservationDTO() {
 	}
 	
@@ -52,6 +56,9 @@ public class ReservationDTO {
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();
 		this.totalPrice = reservation.getTotalPrice();
+		this.assetReviewId = reservation.getAssetReviewId();
+		this.renterReviewId = reservation.getRenterReviewId();
+		this.clientReviewId = reservation.getClientReviewId();
 		
 		this.isCancelable = false;
 		this.isReviewable = false;
@@ -136,6 +143,30 @@ public class ReservationDTO {
 
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public Long getAssetReviewId() {
+		return assetReviewId;
+	}
+
+	public void setAssetReviewId(Long assetReviewId) {
+		this.assetReviewId = assetReviewId;
+	}
+
+	public Long getRenterReviewId() {
+		return renterReviewId;
+	}
+
+	public void setRenterReviewId(Long renterReviewId) {
+		this.renterReviewId = renterReviewId;
+	}
+
+	public Long getClientReviewId() {
+		return clientReviewId;
+	}
+
+	public void setClientReviewId(Long clientReviewId) {
+		this.clientReviewId = clientReviewId;
 	}
 	
 	

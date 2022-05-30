@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RenterDTO;
+import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.service.AdminService;
+import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.DeletationRequestService;
 import mrsa.tim018.service.RenterService;
 
@@ -35,6 +37,9 @@ public class RenterController {
 
 	@Autowired
 	private RenterService renterService;
+	
+	@Autowired
+	private AssetService assetService;
 	
 	@Autowired
 	private AdminService adminService;
@@ -115,6 +120,17 @@ public class RenterController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping(value = "/assetId/{assetId}")
+	public ResponseEntity<Long> getRenter(@PathVariable Long assetId) {
+
+		Asset a = assetService.findOne(assetId);
+		
+		if (a == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		return new ResponseEntity<>(a.getRenter().getID(), HttpStatus.OK);
 	}
 
 }

@@ -85,26 +85,27 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  
 /*future*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-12-12', false, '2022-12-15');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-12-12', false, '2022-12-15'),
 					  ('2022-11-11', false, '2022-11-21');
 /*past*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-03-12', false, '2022-03-15');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-04-04', false, '2022-04-08');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-03-12', false, '2022-03-15'),
+					  ('2022-04-04', false, '2022-04-08'),
 					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
+			
+insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status) values
+						/*asset*/
+						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 0),
+						/*renter*/
+						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 0);
+						/*client*/
+--						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0);
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000001, null, 2, null, null, 1, 100);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000000, null, 2, null, null, 3, 150);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000004, null, 2, null, null, 2, 200);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000005, null, 2, null, null, 4, 250);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000001, null, 2, null, null, 1, 100),
+						(false, 0, 1000000, null, 2, null, null, 3, 150),
+						(false, 0, 1000004, null, 2, null, null, 2, 200),
+						(false, 0, 1000005, 1, 2, null, 2, 4, 250),
 						(false, 0, 1000005, null, 2, null, null, 5, 150);
 
 insert into asset_calendar_reserved(asset_calendar_id, reserved_id) values

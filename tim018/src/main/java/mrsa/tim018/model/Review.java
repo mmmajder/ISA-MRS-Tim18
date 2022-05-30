@@ -14,41 +14,57 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
 	
-	@Column(name = "isDeleted", nullable = false)
+	@Column(name = "isDeleted")
 	private boolean isDeleted;
 
-	@Column(name = "text", nullable = false)
+	@Column(name = "text")
 	private String text;
 	
-	@Column(name = "rating", nullable = false)
+	@Column(name = "rating")
 	private int rating;
 	
-	@Column(name = "isComplaint", nullable = false)
+	@Column(name = "isComplaint")
 	private boolean isComplaint;	// TODO: add option in review when client doesn't show up
 	
-	@Column(name = "senderID", nullable = false)
-	private Long senderID;
+	@Column(name = "isClientWriting")
+	private boolean isClientWriting;
 	
-	@Column(name = "recieverID", nullable = false)
-	private Long recieverID;
+	@Column(name = "clientID")
+	private Long clientID;
 	
-	@Column(name = "status", nullable = false)
+	@Column(name = "renterID")
+	private Long renterID;
+	
+	@Column(name = "assetId")
+	private Long assetId;
+	
+	@Column(name = "status")
 	private RequestStatus status;
 	
 	public Review() {
 	}
 
-	public Review(Long iD, boolean isDeleted, String text, int rating, boolean isComplaint, Long senderID, Long recieverID,
-			RequestStatus status) {
+	public Review(Long iD, boolean isDeleted, String text, int rating, boolean isComplaint, boolean isClientWriting, Long clientID, Long renterID,
+			Long assetId, RequestStatus status) {
 		super();
 		ID = iD;
 		this.isDeleted = isDeleted;
 		this.text = text;
 		this.rating = rating;
 		this.isComplaint = isComplaint;
-		this.senderID = senderID;
-		this.recieverID = recieverID;
+		this.clientID = clientID;
+		this.renterID = renterID;
 		this.status = status;
+		this.assetId = assetId;
+		this.isClientWriting = isClientWriting;
+	}
+
+	public Long getID() {
+		return ID;
+	}
+
+	public void setID(Long iD) {
+		ID = iD;
 	}
 
 	public boolean isDeleted() {
@@ -59,6 +75,62 @@ public class Review {
 		this.isDeleted = isDeleted;
 	}
 
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public boolean isComplaint() {
+		return isComplaint;
+	}
+
+	public void setComplaint(boolean isComplaint) {
+		this.isComplaint = isComplaint;
+	}
+
+	public boolean isClientWriting() {
+		return isClientWriting;
+	}
+
+	public void setClientWriting(boolean isClientWriting) {
+		this.isClientWriting = isClientWriting;
+	}
+
+	public Long getClientID() {
+		return clientID;
+	}
+
+	public void setClientID(Long clientID) {
+		this.clientID = clientID;
+	}
+
+	public Long getRenterID() {
+		return renterID;
+	}
+
+	public void setRenterID(Long renterID) {
+		this.renterID = renterID;
+	}
+
+	public Long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(Long assetId) {
+		this.assetId = assetId;
+	}
+
 	public RequestStatus getStatus() {
 		return status;
 	}
@@ -66,59 +138,4 @@ public class Review {
 	public void setStatus(RequestStatus status) {
 		this.status = status;
 	}
-
-	public Long getID() {
-		return ID;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public int getRating() {
-		return rating;
-	}
-
-	public boolean isComplaint() {
-		return isComplaint;
-	}
-
-	public Long getSenderID() {
-		return senderID;
-	}
-
-	public Long getRecieverID() {
-		return recieverID;
-	}
-
-	@Override
-	public String toString() {
-		return "Review [ID=" + ID + ", isDeleted=" + isDeleted + ", text=" + text + ", rating=" + rating
-				+ ", isComplaint=" + isComplaint + ", senderID=" + senderID + ", recieverID=" + recieverID + ", status="
-				+ status + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(ID, isComplaint, isDeleted, rating, recieverID, senderID, status, text);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Review other = (Review) obj;
-		return Objects.equals(ID, other.ID) && isComplaint == other.isComplaint && isDeleted == other.isDeleted
-				&& rating == other.rating && Objects.equals(recieverID, other.recieverID)
-				&& Objects.equals(senderID, other.senderID) && status == other.status
-				&& Objects.equals(text, other.text);
-	}
-
-	
-	
-
 }

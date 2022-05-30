@@ -47,19 +47,25 @@ public class ReservationService {
 	public List<ReservationDTO> map(List<Reservation> reservations){
 		List<ReservationDTO> reservationsDTO = new ArrayList<>();
 		for (Reservation res : reservations) {
-			ReservationDTO dto = new ReservationDTO(res);
-			dto.setCancelable(isCancelable(res));
-			dto.setDuration(calcDuration(res));
-			boolean reviewable = isReviewable(res);
-			if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
-				res.setStatus(ReservationStatus.Finished);
-				save(res);
-			}
-			dto.setReviewable(reviewable);
+			ReservationDTO dto = map(res);
 			reservationsDTO.add(dto);
 		}
 		return reservationsDTO;
 	}
+	
+	public ReservationDTO map(Reservation res){
+		ReservationDTO dto = new ReservationDTO(res);
+		dto.setCancelable(isCancelable(res));
+		dto.setDuration(calcDuration(res));
+		boolean reviewable = isReviewable(res);
+		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
+			res.setStatus(ReservationStatus.Finished);
+			save(res);
+		}
+		dto.setReviewable(reviewable);
+		
+		return dto;
+	} 
 
 	private boolean isCancelable(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();

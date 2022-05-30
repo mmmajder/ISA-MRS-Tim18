@@ -56,6 +56,16 @@ public class ReservationController {
 	@Autowired
 	private EmailService emailService;
 	
+	@GetMapping(value = "/{reservationId}")
+	public ResponseEntity<ReservationDTO> getReservation(@PathVariable Long reservationId) {
+		Reservation res = reservationService.findOne(reservationId);
+		
+		if (res == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		return new ResponseEntity<>(reservationService.map(res), HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/current/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long clientId, @RequestParam AssetType assetType) {
 		Client client = clientService.findOne(clientId);
