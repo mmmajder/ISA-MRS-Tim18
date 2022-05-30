@@ -26,12 +26,14 @@ import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
 import mrsa.tim018.service.EmailService;
+import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ReservationService;
 
 @RestController
@@ -44,6 +46,9 @@ public class ReservationController {
 	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private RenterService renterService;
 	
 	@Autowired
 	private AssetService assetService;
@@ -118,4 +123,31 @@ public class ReservationController {
 		}
 		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
+	
+	@GetMapping(value = "/current/renter/{renterId}")
+	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
+		Renter renter = renterService.findOne(renterId);
+		
+		if (renter == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		List<Reservation> reservations = reservationService.getCurrentRenterReservations(renterId);
+		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
+		
+		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/history/renter/{renterId}")
+	public ResponseEntity<List<ReservationDTO>> getPastReservations(@PathVariable Long renterId) {
+		Renter renter = renterService.findOne(renterId);
+		
+		if (renter == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		List<Reservation> reservations = reservationService.getPastRenterReservations(renterId);
+		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
+		
+		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
+	}
+	
 }

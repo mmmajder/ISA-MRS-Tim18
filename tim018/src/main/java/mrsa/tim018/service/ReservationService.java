@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,9 +71,14 @@ public class ReservationService {
 	
 	// DA LI VEĆ IMA REVIEW?
 	private boolean isReviewable(Reservation reservation) {
+		return isCompleted(reservation);
+	}
+	
+	public boolean isCompleted(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime endDate = reservation.getTimeRange().getToDateTime();
 		boolean isCanceled = reservation.getStatus() == ReservationStatus.Canceled;
+		
 		return endDate.isBefore(today) && !isCanceled;
 	}
 	
@@ -152,5 +158,19 @@ public class ReservationService {
 		assetService.cancelReservation(reservation);
 		reservation.setStatus(ReservationStatus.Canceled);
 		return save(reservation);
+	}
+	
+	public List<Reservation> getCurrentRenterReservations(Long renterId){
+		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
+		reservations = reservations.stream().filter(r -> !isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
+		
+		return reservations;
+	}
+	
+	public List<Reservation> getPastRenterReservations(Long renterId){
+		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
+		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
+		
+		return reservations;
 	}
 }
