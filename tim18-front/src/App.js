@@ -87,7 +87,7 @@ function App() {
                   <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
-                  <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
+                  <Route path="/adminLoyaltyProgram" element={adminFinancialPreview}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

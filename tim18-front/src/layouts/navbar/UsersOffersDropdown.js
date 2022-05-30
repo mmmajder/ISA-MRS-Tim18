@@ -1,7 +1,7 @@
 import React from 'react'
 import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faHouseChimney, faPlus, faRightToBracket, faBook, faChartLine, faFishFins, faShip, faUserSlash, faAnchor, faCircleQuestion, faSackDollar, faBell, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faHouseChimney, faPlus, faRightToBracket, faBook, faChartLine, faFishFins, faShip, faUserSlash, faAnchor, faCircleQuestion, faSackDollar, faBell, faUserPlus, faMoneyBillTrendUp, faMoneyBill1Wave, faStarHalfStroke, faFaceFrown } from '@fortawesome/free-solid-svg-icons'
 
 const UsersOffersDropdown = ({userType}) => {
     let assetsName;
@@ -23,14 +23,22 @@ const UsersOffersDropdown = ({userType}) => {
             assetsIcon = faShip;
             break;
         case "Admin":
-            return (<Nav>
-                <Nav.Link href="/adminRegistrationReq"><FontAwesomeIcon icon={faCircleQuestion} /> Registration requests</Nav.Link>
-                <Nav.Link href="/adminProfileDeletionReq"><FontAwesomeIcon icon={faUserSlash} /> Profile delete requests</Nav.Link>
-                <Nav.Link href="/adminNotifications"><FontAwesomeIcon icon={faBell} /> Notifications</Nav.Link>
-                <Nav.Link href="/adminFinancialPreview"><FontAwesomeIcon icon={faSackDollar} /> Financial preview</Nav.Link>
-                <Nav.Link href="/adminRegister"><FontAwesomeIcon icon={faUserPlus} /> Register new admin</Nav.Link>
-            </Nav>
-            )
+            return <>
+            <NavDropdown title={<span><FontAwesomeIcon icon={faUserPlus} /> User management </span>}>
+                <NavDropdown.Item href="adminRegistrationReq"><FontAwesomeIcon icon={faCircleQuestion}/> Registration requests</NavDropdown.Item>
+                <NavDropdown.Item href="adminProfileDeletionReq"><FontAwesomeIcon icon={faUserSlash}/> Profile delete requests</NavDropdown.Item>
+                <NavDropdown.Item href="adminRegister"><FontAwesomeIcon icon={faUserPlus}/> Register new admin</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title={<span><FontAwesomeIcon icon={faSackDollar} /> Finance</span>}>
+                <NavDropdown.Item href="adminLoyaltyProgram"><FontAwesomeIcon icon={faMoneyBill1Wave}/> Loyalty program</NavDropdown.Item>
+                <NavDropdown.Item href="adminFinancialReports"><FontAwesomeIcon icon={faMoneyBillTrendUp}/> Financial reports</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title={<span><FontAwesomeIcon icon={faBell} /> Reviews/complaints</span>}>
+                <NavDropdown.Item href="adminReviews"><FontAwesomeIcon icon={faStarHalfStroke}/> Reviews</NavDropdown.Item>
+                <NavDropdown.Item href="adminClientsComplaints"><FontAwesomeIcon icon={faFaceFrown}/> Clients complaints</NavDropdown.Item>
+                <NavDropdown.Item href="adminRentersComplaints"><FontAwesomeIcon icon={faFaceFrown}/> Renters complaints</NavDropdown.Item>
+            </NavDropdown>
+            </>
             break;
         default:
             break;
