@@ -65,7 +65,7 @@ public class AuthenticationController {
 		// Kreiraj token za tog korisnika
 		User user = (User) authentication.getPrincipal();
 		if(!user.isEnabled()) {
-			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED); 
 		}
 		
 		String jwt = tokenUtils.generateToken(user);

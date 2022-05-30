@@ -23,5 +23,9 @@ public class AdminService {
 	public User save(User user) {
 		return adminRepo.save(user);
 	}
+	
+	public Admin save(Admin admin) {
+		return adminRepo.save(admin);
+	}
 
 }

@@ -29,6 +29,8 @@ import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
 import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
+import AdminRegister from './components/admin/AdminRegister.js';
+import Home from './components/forms/Home.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -52,7 +54,7 @@ function App() {
   const assetUpdate = <Container><UpdateForm /></Container>
   const calendar = <Container><Calendar /></Container>
   const assetCalendar = <Container><CalendarAsset/></Container>
-  const home = <Container></Container>
+  const home = <Container><Home/></Container>
   const confirmation = <Container><Confirmation/></Container>
   const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
@@ -61,6 +63,7 @@ function App() {
   const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
   const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
   const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
+  const adminRegister = <Container><AdminRegister/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -88,6 +91,7 @@ function App() {
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
                   <Route path="/adminLoyaltyProgram" element={adminFinancialPreview}/>
+                  <Route path="/adminRegister" element={adminRegister}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

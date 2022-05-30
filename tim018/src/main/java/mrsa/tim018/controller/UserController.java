@@ -45,7 +45,7 @@ public class UserController {
 	} 
 
 	@GetMapping("/whoami")
-	@PreAuthorize("hasRole('USER')")
+//	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<User> user(Principal user) {
 		User uuser = userService.findByEmail(user.getName());
 		if (uuser == null) {

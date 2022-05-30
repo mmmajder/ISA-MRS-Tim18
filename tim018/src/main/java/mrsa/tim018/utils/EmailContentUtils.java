@@ -1,5 +1,6 @@
 package mrsa.tim018.utils;
 
+import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 
@@ -1619,5 +1620,13 @@ public class EmailContentUtils {
 				+ "\r\n"
 				+ "</html>";
 		return content;
+	}
+
+	//todo
+	public static String getNewAdminContent(RegisterAdminRequestDTO registerAdminRequestDTO) {
+		String title = "                              Welcome on board new Admin\r\n";
+		String body = "                              To start using our application, click on login button and set new password for your account.\r\n";
+		String buttonText = "                                                Login\r\n";
+		return originalTemplate(title, body, buttonText);
 	}
 }

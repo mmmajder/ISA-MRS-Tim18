@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.User;
@@ -37,7 +38,7 @@ public class EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo("isamrs018@gmail.com");
 		helper.setFrom(env.getProperty("spring.mail.username"));
-		
+		 
 		String content = EmailContentUtils.getVerificationContent(); 
 		String verifyURL = siteURL + "/verify/" + user.getVerificationCode();
 		content = content.replace("[[URL]]", verifyURL);
@@ -127,5 +128,23 @@ public class EmailService {
 		helper.setText(content, true);
 		
 		javaMailSender.send(message);
+	}
+	
+	@Async
+	public void sendReservationSuccessfullAdmin(RegisterAdminRequestDTO registerAdminRequestDTO) throws MessagingException, UnsupportedEncodingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("Hakuna Matata Admin account created");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getNewAdminContent(registerAdminRequestDTO); 
+		String URL = siteURL + "/login";
+		content = content.replace("[[URL]]", URL);
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message); 
 	}
 }

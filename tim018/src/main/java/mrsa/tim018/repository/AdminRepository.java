@@ -14,5 +14,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 	
 	public Admin findById(long id);
 
+	public Admin save(Admin admin);
+	
 	public User save(User user);
 }

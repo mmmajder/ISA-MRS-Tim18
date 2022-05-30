@@ -37,7 +37,7 @@ public class User implements UserDetails{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="userSeqGen", sequenceName = "Seq", initialValue = 1, allocationSize = 1)
+	@SequenceGenerator(name="userSeqGen", sequenceName = "Seq", initialValue = 10000, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGen")
 	private Long id;
 	
@@ -200,7 +200,8 @@ public class User implements UserDetails{
 		this.enabled = false;
 	}
 	
-	
+
+
 	public String getProfilePhotoId() {
 		return profilePhotoId;
 	}
