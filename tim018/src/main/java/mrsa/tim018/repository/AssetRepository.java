@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AssetRepository extends JpaRepository<Asset, Long> {
+	
 	public Page<Asset> findAll(Pageable pageable);
 	
 	public List<Asset> findAllByRenterId(long id);

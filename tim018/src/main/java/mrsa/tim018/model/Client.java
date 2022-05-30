@@ -23,6 +23,8 @@ public class Client extends User {
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<Reservation>();
 	
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Subscription> subscriptions = new ArrayList<Subscription>();
 	
 	public Client() {
 	}
@@ -73,6 +75,14 @@ public class Client extends User {
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
+	}
+
+	public List<Subscription> getSubscriptions() {
+		return subscriptions;
+	}
+
+	public void setSubscriptions(List<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
 	}
 	
 	

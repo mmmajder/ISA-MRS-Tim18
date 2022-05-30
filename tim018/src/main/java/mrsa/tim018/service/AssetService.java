@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetRepository;
 
@@ -63,5 +64,16 @@ public class AssetService {
 		ranges = assetCalendarService.addAvailable(ranges, timeRange.getFromDateTime(), timeRange.getToDateTime());
 		calendar.setAvailable(ranges);
 		
+	}
+	
+	public void addSubscription(Subscription subscription) {
+		Asset asset = subscription.getAsset();
+		asset.getSubscriptions().add(subscription);
+	}
+
+	public void removeSubscription(Subscription subscription) {
+		Asset asset = subscription.getAsset();
+		asset.getSubscriptions().remove(subscription);
+		save(asset);
 	}
 }

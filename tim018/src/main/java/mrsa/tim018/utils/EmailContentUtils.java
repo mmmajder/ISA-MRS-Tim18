@@ -1,7 +1,15 @@
 package mrsa.tim018.utils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import mrsa.tim018.dto.AppointmentCreationDTO;
+import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Client;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
+import net.bytebuddy.asm.Advice.Local;
 
 public class EmailContentUtils {
 
@@ -21,6 +29,20 @@ public class EmailContentUtils {
 		String body2 = "                              We hope you will enjoy your vacations with Hakuna Matata! \r\n";
 		String body = body1 + body2;
 		String buttonText = "                                                See my all reservations\r\n";
+		return originalTemplate(title, body, buttonText);
+	}
+	
+	public static String notifySubscribers(Subscription subscription, AppointmentCreationDTO offer) {
+		Asset asset = subscription.getAsset();
+		Client client = subscription.getClient();
+		String startDate = TimeUtils.FormatToString(LocalDateTime.parse(offer.getFromDateTime()));
+		String endDate = TimeUtils.FormatToString(LocalDateTime.parse(offer.getToDateTime()));
+		String untilDate = TimeUtils.FormatToString(LocalDate.parse(offer.getOfferUntil().split("T")[0]));
+		String title = "                            Heyy "+ client.getFirstName() +", we have new special offer for you!\r\n";
+		String body1 = "                            " + asset.getName() + "has created great deal from " + startDate  + " to " + endDate +".\r\n";
+		String body2 = "                              Hurry up, this offer is available only until " +  untilDate +"\r\n";
+		String body = body1 + body2;
+		String buttonText = "                                                See this beautiful asset\r\n";
 		return originalTemplate(title, body, buttonText);
 	}
 	

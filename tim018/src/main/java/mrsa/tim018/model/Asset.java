@@ -3,6 +3,7 @@ package mrsa.tim018.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,10 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+
+import org.springframework.data.jpa.repository.Query;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -68,6 +71,9 @@ public class Asset {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PriceCatalog> prices;
+	
+	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Subscription> subscriptions = new ArrayList<Subscription>();
 	
 	public Asset() {
 
@@ -207,5 +213,12 @@ public class Asset {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
+	public List<Subscription> getSubscriptions() {
+		return subscriptions;
+	}
 
+	public void setSubscriptions(List<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
 }

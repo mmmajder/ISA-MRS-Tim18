@@ -20,7 +20,7 @@ export default function ClientNavbar(){
                 <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <Nav.Link href="/allReservations"><FontAwesomeIcon icon={faSuitcase} /> My Reservations</Nav.Link>
-                <Nav.Link href="#"><FontAwesomeIcon icon={faBell} /> Subscriptions </Nav.Link>
+                <Nav.Link href="/subscriptions"><FontAwesomeIcon icon={faBell} /> Subscriptions </Nav.Link>
 
                 <ProfileDropdown />
             </Nav>

@@ -8,7 +8,7 @@ import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 
-export default function ListedAsset({asset, isSearch}){
+export default function ListedAsset({asset, isSearch, subscriptionProp}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
     const userType = getRole();
@@ -66,6 +66,7 @@ export default function ListedAsset({asset, isSearch}){
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
                                     { !isSearch && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
+                                    { subscriptionProp!==undefined &&  <FixedWidthRegButton text={subscriptionProp.text} onClickFunction={()=>subscriptionProp.subscribe(asset.id)}/>}
                                 </div>
                             </Col>
                         </Row>
