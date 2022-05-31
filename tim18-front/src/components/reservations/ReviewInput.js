@@ -7,6 +7,7 @@ import { getAssetById } from '../../services/api/AssetApi';
 import {useState, useEffect, useCallback} from 'react';
 import { createReview } from '../../services/api/ReviewApi'
 import LabeledTextarea from '../forms/LabeledTextarea'
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 
 
 export default function ReviewInput({reservation, reviewFor, renterId}){
@@ -16,6 +17,9 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
     const [text, setText] = useState();
     const [rating, setRating] = useState();
     const [buttonActive, setButtonActive] = useState(false);
+    const [complaintRow, setComplaintRow] = useState();
+    const [complaint, setIsComplaint] = useState(false);
+    const [didntShowUp, setDidntShowUp] = useState(false);
 
     const postReview = useCallback(
         (e) => {
@@ -24,13 +28,12 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
             let clientID = reservation.clientId;
             let assetId = reservation.asset.id;
             let renterID = reviewFor == "asset" ? null : renterId;
-            let isComplaint = false;
-            const resortJson = {text, rating, clientWriting, clientID, assetId, renterID, isComplaint}
+            const resortJson = {text, rating, clientWriting, clientID, assetId, renterID, complaint, didntShowUp}
             console.log(resortJson);
             createReview(reservation.id, resortJson).then((response) => {
                 console.log("izvrseno")
             })
-        }, [text, rating, reviewFor, renterId, reservation, createReview]
+        }, [text, rating, reviewFor, renterId, reservation, createReview, complaint, didntShowUp]
     )
 
     useEffect(() => {
@@ -40,6 +43,38 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
             setButtonActive(false);
         }
     }, [text, rating]
+    )
+
+    useEffect(() => {
+        if (reviewFor == "client"){
+            let complRow = <Row className='pt-4'>
+                <Col sm={4} align='right'><Form.Label >Make a complaint?</Form.Label></Col>
+                <Col sm={2}>
+                    <BootstrapSwitchButton
+                        checked={complaint}
+                        onlabel='Yes'
+                        offlabel="No"
+                        onChange={(checked) => {
+                            setIsComplaint(checked);
+                        }}
+                    />
+                </Col>
+                <Col sm={4} align='right'><Form.Label >User didn't show up?</Form.Label></Col>
+                <Col sm={2}>
+                    <BootstrapSwitchButton
+                        size="md"
+                        checked={didntShowUp}
+                        onlabel="Didn't"
+                        offlabel="Did"
+                        onChange={(checked) => {
+                            setDidntShowUp(checked);
+                        }}
+                    />
+                </Col>
+            </Row>
+            setComplaintRow(complRow);
+        }
+    }, [setIsComplaint, setDidntShowUp]
     )
 
     return (<>
@@ -56,6 +91,7 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
                 </Col>
                
             </Row>
+            {complaintRow}
             <Row className='mt-2'>
             <Col sm={4}/>
             <Col sm={4} align='center'>
