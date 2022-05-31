@@ -3,7 +3,7 @@ import { Row, Col  } from 'react-bootstrap';
 import ProfileInfoBlock from './ProfileInfoBlock';
 import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
-import {getReviews} from '../../services/api/ReviewApi'
+import {getReviews, getRating} from '../../services/api/ReviewApi'
 import AssetList from '../asset/AssetsList';
 import { getRole } from '../../services/AuthService/AuthService';
 import ClientProfilePreview from './ClientProfilePreview';
@@ -30,6 +30,9 @@ export default function ProfilePreview(){
     const [reviews, setReviews] = useState();
     const [listedReviews, setListedReviews] = useState();
 
+    const [reviewNum, setReviewNum]  = useState(0);         // TODO: real data
+    const [mark, setMark]  = useState(0);                 // TODO: real data
+
     useEffect(() => {
         async function fetchUser(){
             await getLogged(setUser);
@@ -39,9 +42,14 @@ export default function ProfilePreview(){
 
     useEffect(() => {
         if (!!user){
-            getReviews(user.id).then((response) => {
+            getReviews(user.id, true).then((response) => {
                 let revs = response.data;
                 setReviews(revs);
+                setReviewNum(revs.length)
+            })
+            getRating(user.id).then((response) => {
+                let mar = response.data;
+                setMark(mar);
             })
         }
     }, [user])
@@ -56,7 +64,7 @@ export default function ProfilePreview(){
 
     console.log(user)
     const userType =  getRole();
-    const infoBlock =  userType === 'Client' ? <ClientProfilePreview /> : <ProfileInfoBlock user={user}/>
+    const infoBlock =  userType === 'Client' ? <ClientProfilePreview reviewNum={reviewNum} mark={mark}/> : <ProfileInfoBlock user={user}/>
     if(!!user) {
         return <Row className="pt-5">
                     <Col sm='3'>

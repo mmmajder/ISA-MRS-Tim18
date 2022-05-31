@@ -19,7 +19,7 @@ import CalendarAsset from '../forms/calendar/CalendarAsset';
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
-import {getAssetReviews} from '../../services/api/ReviewApi'
+import {getAssetReviews, getAssetRating} from '../../services/api/ReviewApi'
 import ListedReview from '../reservations/ListedReview';
 
 export default function AssetDetailedView(){
@@ -32,6 +32,7 @@ export default function AssetDetailedView(){
 
     const [reviews, setReviews] = useState();
     const [listedReviews, setListedReviews] = useState();
+    const [mark, setMark] = useState(0);
 
     useEffect(() => {
         async function fetchAsset(){
@@ -65,9 +66,14 @@ export default function AssetDetailedView(){
         () => {
             if (!!asset){
                 getAssetPrice();
-                getAssetReviews(asset.id).then((response) => {
+                getAssetReviews(asset.id, true).then((response) => {
+                    console.log(response)
                     let revs = response.data;
                     setReviews(revs);
+                });
+                getAssetRating(asset.id).then((response) => {
+                    let mar = response.data;
+                    setMark(mar);
                 })
             }
         }, [asset]
@@ -99,7 +105,7 @@ export default function AssetDetailedView(){
                     <Col sm="6">
                         <Row>
                             <Col sm="7">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
+                                <AssetMainInfo name={asset.name} mark={mark} address={asset.address} price={assetPrice}/>
                             </Col> 
                             <Col sm="4">
                                 { userType !== "Client" && userType !== "Guest" ? 

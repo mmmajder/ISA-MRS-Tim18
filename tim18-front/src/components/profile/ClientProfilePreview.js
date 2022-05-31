@@ -9,11 +9,11 @@ import { getClientByID } from '../../services/api/ClientApi';
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
 
-export default function ClientProfilePreview(){
+export default function ClientProfilePreview({reviewNum, mark}){
     const [client, setClient]  = useState();
-    const [mark, setMark]  = useState(0);                 // TODO: real data
+    
     const [penaltyCount, setPenaltyCount]  = useState(2);   // TODO: real data
-    const [reviewNum, setReviewNum]  = useState(0);         // TODO: real data
+    
     
     const profilePic = require('../../assets/images/Katarina_Komad.jpg')  // TODO: real data
 
