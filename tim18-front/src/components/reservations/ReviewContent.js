@@ -43,7 +43,14 @@ export default function ReviewContent({reviewId}){
                 let rev = response.data;
                 setReviewer(rev);
             })
-            setText(review.text);
+            if (review.didntShowUp){
+                setText("DIDN'T SHOWUP  " + review.text);
+            }
+            else if (review.status == "Accepted"){
+                setText(review.text);
+            } else {
+                setText("Review is waiting for Admin's approval. Comment and rating will be visible if the review is Accepted.");
+            }
             setRating(review.rating);
         }
     }, [review]

@@ -28,7 +28,7 @@ export default function ProfilePreview(){
 
     const [user, setUser] = useState([]);
     const [reviews, setReviews] = useState();
-    const [listedReviews, setListedReviews] = useState("listedreviews");
+    const [listedReviews, setListedReviews] = useState();
 
     useEffect(() => {
         async function fetchUser(){
