@@ -19,6 +19,8 @@ import CalendarAsset from '../forms/calendar/CalendarAsset';
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
+import {getAssetReviews} from '../../services/api/ReviewApi'
+import ListedReview from '../reservations/ListedReview';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState({});
@@ -27,6 +29,9 @@ export default function AssetDetailedView(){
     localStorage.setItem("assetId", id);
 
     const [assetPrice, setAssetPrice] = useState(0);
+
+    const [reviews, setReviews] = useState();
+    const [listedReviews, setListedReviews] = useState();
 
     useEffect(() => {
         async function fetchAsset(){
@@ -40,7 +45,6 @@ export default function AssetDetailedView(){
     let assetType = asset.assetType;
 
     const linkToEditPage = "/resorts/update/" + id;
-    const linkToCalendar = "/calendarAsset";
     const linkToUpdateAssetPhotos = "/updateAssetPhotos/" + id;
     const linkToUpdateAssetPrice = "/updateAssetPrice/" + id;
     const linkToMyAssetsPage = "/resorts"
@@ -59,9 +63,22 @@ export default function AssetDetailedView(){
 
     useEffect(
         () => {
-            getAssetPrice();
+            if (!!asset){
+                getAssetPrice();
+                getAssetReviews(asset.id).then((response) => {
+                    let revs = response.data;
+                    setReviews(revs);
+                })
+            }
         }, [asset]
     )
+
+    useEffect(() => {
+        if (!!reviews){
+            let listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
+            setListedReviews(listedRevs);
+        }
+    }, [reviews])
     
     return <>
             <div className="borderedBlock mt-3" align="">
@@ -106,7 +123,7 @@ export default function AssetDetailedView(){
                     <CalendarAsset></CalendarAsset>
                 </Row>
                 <Row>
-                    {/* Reviews will go under */}
+                    {listedReviews}
                 </Row>
             </div>
                 

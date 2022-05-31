@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
 import mrsa.tim018.model.ReviewType;
 import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
+import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ReservationService;
 import mrsa.tim018.service.ReviewService;
 import mrsa.tim018.service.UserService;
@@ -35,7 +37,10 @@ public class ReviewController {
 	private ReservationService reservationService;
 	
 	@Autowired
-	private UserService userService;
+	private UserService userService; 
+	
+	@Autowired
+	private AssetService assetService;
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Review> getReview(@PathVariable Long id) {
@@ -111,6 +116,17 @@ public class ReviewController {
 		}else {
 			r = reviewService.getReviewsAboutRenter(userId);
 		}
+		
+		return new ResponseEntity<>(r, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/asset/{assetId}")
+	public ResponseEntity<List<Review>> getAssetReviews(@PathVariable Long assetId) {
+		Asset a = assetService.findOne(assetId);
+		if (a == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		List<Review> r = reviewService.getReviewsAboutAsset(assetId);
 		
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}

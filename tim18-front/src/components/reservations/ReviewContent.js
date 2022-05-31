@@ -37,8 +37,6 @@ export default function ReviewContent({reviewId}){
                 reviewerId = review.clientID;
             else 
                 reviewerId = review.renterID;
-            console.log(reviewerId);
-            console.log(review);
             getRenter(reviewerId).then((response) =>{
                 let rev = response.data;
                 setReviewer(rev);
@@ -59,7 +57,6 @@ export default function ReviewContent({reviewId}){
     return (
             <Row className='pt-3'>
                 <Col sm='3'>
-                    {/* here this is actually for showing reviewer's info */}
                     <ProfilePhotoAndFullName user={reviewer} />
                 </Col>
                 <Col sm='7'>

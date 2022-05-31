@@ -49,6 +49,10 @@ public class ReviewService {
 		return (List<Review>) reviewRepository.getReviewsAboutClient(clientId);
 	}	
 	
+	public List<Review> getReviewsAboutAsset(Long assetId){
+		return (List<Review>) reviewRepository.getReviewsAboutAsset(assetId);
+	}	
+	
 	public Review acceptReview(Review review) {
 		review.setStatus(RequestStatus.Accepted);
 		reviewRepository.save(review);

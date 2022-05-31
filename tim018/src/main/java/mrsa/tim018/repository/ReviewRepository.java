@@ -21,6 +21,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 	
 	@Query("SELECT r "
 			+ "FROM Review r "
+			+ "WHERE r.renterID = null AND r.assetId = :assetId")
+	Collection<Review> getReviewsAboutAsset(@Param("assetId") Long userId);
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
 			+ "WHERE r.status = 0")
 	Collection<Review> getPendingReviews();
 }

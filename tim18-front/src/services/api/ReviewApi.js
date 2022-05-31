@@ -20,6 +20,16 @@ export async function getReviews(userId) {
     }
 }
 
+export async function getAssetReviews(assetId) {
+    try {
+        const responseData = await api.get(`/review/asset/${assetId}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
 export async function createReview(reservationId, review){
     try {
         const responseData = await api.post(`/review/${reservationId}`, review);
