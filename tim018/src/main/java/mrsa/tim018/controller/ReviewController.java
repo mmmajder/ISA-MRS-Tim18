@@ -43,6 +43,12 @@ public class ReviewController {
 		
 		if (r == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		// so more technicaly smart users wouldn't be able to 'hack' and see the message before it was accepted
+		if (r.getStatus() == RequestStatus.Pending) {
+			r.setText("");
+			r.setRating(0);
+		}
 			
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}
@@ -55,9 +61,14 @@ public class ReviewController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		review.setDeleted(false);
-		review.setStatus(RequestStatus.Accepted);
-		Long id;
+		review.setReservationId(reservationId);
 		
+		// if Client didn't show up, Review is automatically Accepted (if valid)
+		if (review.isDidntShowUp())
+			return reviewService.acceptDidntShowUpReview(review, reservation);
+		
+		review.setStatus(RequestStatus.Pending);
+		Long id;
 		ReviewType type = reviewService.determineReviewType(review);
 		
 		switch(type) {

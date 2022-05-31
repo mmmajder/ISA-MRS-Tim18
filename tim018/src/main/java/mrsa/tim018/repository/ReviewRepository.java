@@ -18,4 +18,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 			+ "FROM Review r "
 			+ "WHERE r.clientID = :userId AND r.isClientWriting = FALSE")
 	Collection<Review> getReviewsAboutClient(@Param("userId") Long userId);
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.status = 0")
+	Collection<Review> getPendingReviews();
 }

@@ -93,13 +93,13 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-04-04', false, '2022-04-08'),
 					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
 			
-insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status) values
+insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id) values
 						/*asset*/
-						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 0),
+						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 1, false, 4),
 						/*renter*/
-						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 0);
+						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4);
 						/*client*/
---						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0);
+--						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0, false, 4);
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
 						(false, 0, 1000001, null, 2, null, null, 1, 100),

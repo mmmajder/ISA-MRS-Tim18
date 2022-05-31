@@ -26,6 +26,9 @@ public class Review {
 	@Column(name = "isComplaint")
 	private boolean isComplaint;	// TODO: add option in review when client doesn't show up
 	
+	@Column(name = "didntShowUp")
+	private boolean didntShowUp;
+	
 	@Column(name = "isClientWriting")
 	private boolean isClientWriting;
 	
@@ -41,22 +44,27 @@ public class Review {
 	@Column(name = "status")
 	private RequestStatus status;
 	
+	@Column(name = "reservationId")
+	private Long reservationId;
+	
 	public Review() {
 	}
 
-	public Review(Long iD, boolean isDeleted, String text, int rating, boolean isComplaint, boolean isClientWriting, Long clientID, Long renterID,
-			Long assetId, RequestStatus status) {
+	public Review(Long iD, boolean isDeleted, String text, int rating, boolean isComplaint, boolean didntShowUp, boolean isClientWriting, Long clientID, Long renterID,
+			Long assetId, RequestStatus status, Long reservationId) {
 		super();
 		ID = iD;
 		this.isDeleted = isDeleted;
 		this.text = text;
 		this.rating = rating;
 		this.isComplaint = isComplaint;
-		this.clientID = clientID;
+		this.didntShowUp = didntShowUp;
+ 		this.clientID = clientID;
 		this.renterID = renterID;
 		this.status = status;
 		this.assetId = assetId;
 		this.isClientWriting = isClientWriting;
+		this.reservationId = reservationId;
 	}
 
 	public Long getID() {
@@ -137,5 +145,21 @@ public class Review {
 
 	public void setStatus(RequestStatus status) {
 		this.status = status;
+	}
+
+	public boolean isDidntShowUp() {
+		return didntShowUp;
+	}
+
+	public void setDidntShowUp(boolean didntShowUp) {
+		this.didntShowUp = didntShowUp;
+	}
+
+	public Long getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(Long reservationId) {
+		this.reservationId = reservationId;
 	}
 }
