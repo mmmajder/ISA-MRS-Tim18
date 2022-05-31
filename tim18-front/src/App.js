@@ -30,6 +30,8 @@ import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
 import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
 import Reviews from './components/reservations/Reviews.js';
+import MyProfile from './components/profile/MyProfile.js';
+import OtherProfile from './components/profile/OtherProfile.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -41,10 +43,11 @@ const AppContainer = styled.div`
 `;
 function App() {
   const [user, setUser] = React.useState(getRole());
+  const [userId, setUserId] = React.useState();
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
   const handleLogin = (user) => {setUser(user);};  
-  const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
+  const login =<AppContainer> <AccountBox handleLogin={handleLogin} /> </AppContainer>;
   
   const resortForm = <Container><CreateForm  /></Container>
   const resortView = <Container><AssetDetailedView /></Container>
@@ -70,7 +73,8 @@ function App() {
                 <Route path='' element={<ProtectedRoute isAllowedUser={user}>{chooseNavbar(user)} </ProtectedRoute>}>
                   <Route path="/home" element={home} /> 
                   {/* For other's Profile page */}
-                  <Route path="/profile" element={<Container>{ChooseProfile(user)}</Container>} /> 
+                  <Route exact path="/profile" element={<Container><MyProfile /></Container>} /> 
+                  <Route path="/profile/:id" element={<Container><OtherProfile /></Container>} /> 
                   <Route path="/settings" element={<Container>{ChooseSettings(user)}</Container>} />
                   <Route path="/updateProfilePhoto" element={updateProfilePhoto} />
 
@@ -110,11 +114,6 @@ const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => 
   return <Navigate to={redirectPath} replace />;
   
 };
-
-function ChooseProfile(userType) {
-  const profilePreview = userType === 'Client' ? <ClientProfilePreview /> : <ProfileInfoBlock/>
-  return <ProfilePreview profileComponent={profilePreview} />
-}
 
 function ChooseSettings(userType){
   if (userType === 'Client'){

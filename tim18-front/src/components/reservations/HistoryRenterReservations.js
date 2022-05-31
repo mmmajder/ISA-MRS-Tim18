@@ -4,7 +4,7 @@ import { React, useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap'; 
 import AssetTypeOption from '../asset/AssetTypeOption';
 import { ListedReservation } from './ListReservations';
-import { getPastRenterReservations, getPastReservationsByType } from '../../services/api/ReservationApi';
+import { getPastRenterReservations } from '../../services/api/ReservationApi';
 import { sortReservations } from '../../services/utils/SortUtils';
 import { Marginer } from '../forms/Login/marginer'
 

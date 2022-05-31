@@ -10,8 +10,10 @@ import ClientProfilePreview from './ClientProfilePreview';
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
 import ListedReview from '../reservations/ListedReview';
+import {getRenter} from '../../services/api/RenterApi'
+import {useParams} from 'react-router-dom';
 
-export default function ProfilePreview(){
+export default function ProfilePreview({user}){
     // const [user, setUser] = useState();
 
     // console.log("userId iz profile " + userId)
@@ -25,20 +27,11 @@ export default function ProfilePreview(){
     // }, [userId])
 
     //TODO ODRADITI PRIKAZ TUDJEG PROFILA
-
-    const [user, setUser] = useState([]);
     const [reviews, setReviews] = useState();
     const [listedReviews, setListedReviews] = useState();
 
-    const [reviewNum, setReviewNum]  = useState(0);         // TODO: real data
-    const [mark, setMark]  = useState(0);                 // TODO: real data
-
-    useEffect(() => {
-        async function fetchUser(){
-            await getLogged(setUser);
-        }
-        fetchUser();
-    }, [])
+    const [reviewNum, setReviewNum]  = useState(0);       
+    const [mark, setMark]  = useState(0);                 
 
     useEffect(() => {
         if (!!user){
@@ -63,8 +56,9 @@ export default function ProfilePreview(){
 
 
     console.log(user)
-    const userType =  getRole();
-    const infoBlock =  userType === 'Client' ? <ClientProfilePreview reviewNum={reviewNum} mark={mark}/> : <ProfileInfoBlock user={user}/>
+    const userType =  user.userType;
+    const infoBlock =  userType === 'Client' ? <ClientProfilePreview user={user} reviewNum={reviewNum} mark={mark}/> 
+                                             : <ProfileInfoBlock user={user} reviewNum={reviewNum} mark={mark}/>
     if(!!user) {
         return <Row className="pt-5">
                     <Col sm='3'>

@@ -24,7 +24,6 @@ export async function sendRegistrationRequest(callback, request){
               .catch((responseData)=> {callback(responseData.data);});
 }
 
-
 export async function getVerificationCode(callback, code){
     await api.get(`/users/verify/${code}`)
               .then((responseData) => {callback(responseData.data)})    // user
