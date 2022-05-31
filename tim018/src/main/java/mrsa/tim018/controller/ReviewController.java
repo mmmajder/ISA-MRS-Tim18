@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.RequestStatus;
@@ -104,7 +106,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping(value = "/user/{userId}")
-	public ResponseEntity<List<Review>> getReviews(@PathVariable Long userId) {
+	public ResponseEntity<List<Review>> getReviews(@PathVariable Long userId, @RequestParam("acceptedOnly") Boolean acceptedOnly) {
 		User u = userService.findOne(userId);
 		if (u == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -112,21 +114,55 @@ public class ReviewController {
 		List<Review> r;
 		
 		if (u.getUserType() == UserType.Client) {
-			r = reviewService.getReviewsAboutClient(userId);
+			r = (acceptedOnly == true) 
+					? reviewService.getAcceptedReviewsAboutClient(userId)
+					: reviewService.getReviewsAboutClient(userId);
 		}else {
-			r = reviewService.getReviewsAboutRenter(userId);
+			r = (acceptedOnly == true) 
+					? reviewService.getAcceptedReviewsAboutRenter(userId)
+					: reviewService.getReviewsAboutRenter(userId);
 		}
 		
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/asset/{assetId}")
-	public ResponseEntity<List<Review>> getAssetReviews(@PathVariable Long assetId) {
+	public ResponseEntity<List<Review>> getAssetReviews(@PathVariable Long assetId, @RequestParam("acceptedOnly") Boolean acceptedOnly) {
 		Asset a = assetService.findOne(assetId);
 		if (a == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
-		List<Review> r = reviewService.getReviewsAboutAsset(assetId);
+		List<Review> r = (acceptedOnly == true) 
+				? reviewService.getAcceptedReviewsAboutAsset(assetId)
+				: reviewService.getReviewsAboutAsset(assetId);
+		
+		return new ResponseEntity<>(r, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/userRating/{userId}")
+	public ResponseEntity<Double> getRenterRating(@PathVariable Long userId) {
+		User u = userService.findOne(userId);
+		if (u == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		double r;
+		
+		if (u.getUserType() == UserType.Client) {
+			r = reviewService.getClientRating(userId);
+		}else {
+			r = reviewService.getRenterRating(userId);
+		}
+		
+		return new ResponseEntity<>(r, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/assetRating/{assetId}")
+	public ResponseEntity<Double> getAssetRating(@PathVariable Long assetId) {
+		Asset a = assetService.findOne(assetId);
+		if (a == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		double r = reviewService.getAssetRating(assetId);
 		
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}

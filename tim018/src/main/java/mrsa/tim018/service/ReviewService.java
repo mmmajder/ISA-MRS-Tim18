@@ -1,6 +1,7 @@
 package mrsa.tim018.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -51,7 +52,52 @@ public class ReviewService {
 	
 	public List<Review> getReviewsAboutAsset(Long assetId){
 		return (List<Review>) reviewRepository.getReviewsAboutAsset(assetId);
+	}
+	
+	public List<Review> getAcceptedReviewsAboutRenter(Long renterId){
+		return (List<Review>) reviewRepository.getAcceptedReviewsAboutRenter(renterId);
+	}
+	
+	public List<Review> getAcceptedReviewsAboutClient(Long clientId){
+		return (List<Review>) reviewRepository.getAcceptedReviewsAboutClient(clientId);
 	}	
+	
+	public List<Review> getAcceptedReviewsAboutAsset(Long assetId){
+		return (List<Review>) reviewRepository.getAcceptedReviewsAboutAsset(assetId);
+	}
+	
+	public double getAssetRating(Long assetId){
+		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutAsset(assetId)
+				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+		
+		return calculateRating(reviews);
+	}
+	
+	public double getRenterRating(Long renterId){
+		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutRenter(renterId)
+				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+		
+		return calculateRating(reviews);
+	}
+	
+	public double getClientRating(Long clientId){
+		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutClient(clientId)
+				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+		
+		return calculateRating(reviews);
+	}
+	
+	private double calculateRating(List<Review> reviews) {
+		double rating = 0;
+		int size = reviews.size();
+		
+		if (size != 0) {
+			rating = reviews.stream().map(r -> r.getRating()).reduce(0, Integer::sum);
+			rating = rating / size;
+		}
+		
+		return rating;
+	}
 	
 	public Review acceptReview(Review review) {
 		review.setStatus(RequestStatus.Accepted);
