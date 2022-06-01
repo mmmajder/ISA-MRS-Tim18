@@ -18,7 +18,7 @@ const CreateReservationForm = ({setInputs, assetId, setValidations}) => {
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
     const [numberOfPeople, setNumOfPeople] = useState(1);
-    const [clientId, setClientId] = useState({});
+    const [clientId, setClientId] = useState();
     const [asset, setAsset] = useState({});
     const [assetPrice, setAssetPrice] = useState("");
     const [totalPrice, setPrice] = useState();
@@ -140,11 +140,8 @@ const CreateReservationForm = ({setInputs, assetId, setValidations}) => {
                     </Col>
                     <Col>
                         { user.userType === 'Client' && <Form.Label className="mb-1">{user.firstName} {user.lastName}</Form.Label> }
-                        { user.userType !== 'Client' && clients &&
-                        <Form.Select name="clientId" onChange={(e)=>{handleChange(e, isEmpty); setClientId(e.target.value)}}>
-                        <option></option>
-                        { clients.map((client) => <option value={client.value}>{client.name}</option>) }
-                        </Form.Select>
+                        { user.userType !== 'Client' && clients !==undefined &&
+                            <Select options={clients} onChange={(selected) => setClientId(selected.value)}/>
                         }
                     </Col>
                 </Row>
