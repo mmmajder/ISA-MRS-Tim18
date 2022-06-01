@@ -179,4 +179,8 @@ public class ReservationService {
 		
 		return reservations;
 	}
+	
+	public List<Reservation> getAssetReservations(Long assetId){
+		return (List<Reservation>) reservationRepository.getAssetReservations(assetId);
+	}
 }
