@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Client;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Subscription;
@@ -32,6 +33,9 @@ public class EmailService {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired 
+	private ClientService clientService;
 	
 	private String siteURL = "http://localhost:3000";
 	@Async
@@ -166,5 +170,45 @@ public class EmailService {
 			helper.setText(content, true);
 			javaMailSender.send(message);
 		}
+	}
+	@Async
+	public void sendMailsClientsComplaint(String mailClient, String mailRenter, Long clientId) throws MessagingException {
+		
+		Client client = clientService.findOne(clientId);
+		
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("[Hakuna Matata] Clients complaint");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getClientsComplaintResponseToClient(mailClient, client); 
+		String URL = siteURL + "/login";
+		content = content.replace("[[URL]]", URL);
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message); 
+		
+
+
+		MimeMessage messageRenter = javaMailSender.createMimeMessage();
+		messageRenter.setSubject("[Hakuna Matata] Clients complaint");
+		
+		MimeMessageHelper helperRenter = new MimeMessageHelper(messageRenter, true);
+		helperRenter.setTo("isamrs018@gmail.com");
+		helperRenter.setFrom(env.getProperty("spring.mail.username"));
+		String contentRenter = EmailContentUtils.getClientsComplaintResponseToRenter(mailRenter, client); 
+		
+		helperRenter.setText(contentRenter, true);
+		
+		javaMailSender.send(messageRenter); 
+		
+//		String content2 = EmailContentUtils.getClientsComplaintResponseToRenter(mailClient, client); 
+//		
+//		helper.setText(content2, true);
+//		
+//		javaMailSender.send(message); 
 	}
 }

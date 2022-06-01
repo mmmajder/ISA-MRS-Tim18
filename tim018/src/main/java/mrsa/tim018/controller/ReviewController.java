@@ -2,6 +2,8 @@ package mrsa.tim018.controller;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +11,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import mrsa.tim018.dto.MailsDTO;
+import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
@@ -23,6 +29,7 @@ import mrsa.tim018.model.ReviewType;
 import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.service.AssetService;
+import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.ReservationService;
 import mrsa.tim018.service.ReviewService;
 import mrsa.tim018.service.UserService;
@@ -44,6 +51,9 @@ public class ReviewController {
 	@Autowired
 	private AssetService assetService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Review> getReview(@PathVariable Long id) {
 		Review r = reviewService.findOne(id);
@@ -59,6 +69,15 @@ public class ReviewController {
 			
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/clients/pending")
+	public ResponseEntity<List<Review>> getAllClientPendingReviews() {
+		List<Review> data = reviewService.getPendingReviewsFromClients();
+		if (data == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	
 	@PostMapping(value = "/{reservationId}", consumes = "application/json")
 	public ResponseEntity<Review> createReview(@PathVariable Long reservationId, @RequestBody Review review) {
@@ -165,5 +184,33 @@ public class ReviewController {
 		double r = reviewService.getAssetRating(assetId);
 		
 		return new ResponseEntity<>(r, HttpStatus.OK);
+	}//
+	
+	@PutMapping(value = "/cancelClientsComplaint/{id}")
+	public ResponseEntity<Review> cancelClientsComplaint(@PathVariable Long id) {
+		Review review = reviewService.findOne(id);
+		if (review==null) { 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		review.setStatus(RequestStatus.Declined);
+		reviewService.save(review);
+		return new ResponseEntity<>(review, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/sendCommentOnComplaint/{id}")
+	public ResponseEntity<Review> sendCommentOnComplaint(@PathVariable Long id, @RequestBody MailsDTO reqData) {
+		Review review = reviewService.findOne(id);
+		if (review==null) { 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		review.setStatus(RequestStatus.Declined);
+		reviewService.save(review);
+		try {
+			emailService.sendMailsClientsComplaint(reqData.getMailClient(), reqData.getMailRenter(), review.getClientID());
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
 }

@@ -43,4 +43,21 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 			+ "FROM Review r "
 			+ "WHERE r.renterID = null AND r.assetId = :assetId AND r.status = 1")
 	Collection<Review> getAcceptedReviewsAboutAsset(@Param("assetId") Long userId);
+	
+	
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.renterID != null AND r.isClientWriting = TRUE AND r.status = 0")
+	Collection<Review> getPendingReviewsAboutRenter();
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.renterID = null AND r.isClientWriting = TRUE AND r.status = 0")
+	Collection<Review> getPendingReviewsAboutAsset();
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.clientID != null AND r.isClientWriting = FALSE AND r.status = 0")
+	Collection<Review> getPendingReviewsAboutClient();
 }

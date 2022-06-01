@@ -23,7 +23,7 @@ public class ClientsComplaintController {
 	@Autowired
 	private ClientsComplaintService clientsComplaintService;	
 
-	@GetMapping(value = "/all")
+	/*@GetMapping(value = "/all")
 	public ResponseEntity<List<ClientsComplaintDTO>> getAllClientComplaints() {
 
 		List<ClientsComplaint> clientsComplaints = clientsComplaintService.findAll();
@@ -35,5 +35,5 @@ public class ClientsComplaintController {
 		}
 
 		return new ResponseEntity<>(clientsComplaintDTOs, HttpStatus.OK);
-	}
+	}*/
 }

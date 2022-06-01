@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getClientsComplaints } from '../../services/api/ClientComplaintsApi';
+import { getClientsReviews } from '../../services/api/ReviewApi';
 import ListedAdminClientsComplaint from './ListedAdminClientsComplaint';
 
 const AdminClientsComplaints = () => {
@@ -7,7 +7,7 @@ const AdminClientsComplaints = () => {
 
     useEffect(() => {
         async function fetchClientComplaints(){
-            const requestData = await getClientsComplaints();
+            const requestData = await getClientsReviews();
             setRequests(!!requestData ? requestData.data : []);
             return requestData;
         }

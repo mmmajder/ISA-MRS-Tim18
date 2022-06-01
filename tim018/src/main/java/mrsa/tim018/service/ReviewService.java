@@ -147,4 +147,10 @@ public class ReviewService {
 		
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
+	
+	public List<Review> getPendingReviewsFromClients() {
+		List<Review> retData = (List<Review>) reviewRepository.getPendingReviewsAboutAsset();
+		retData.addAll(reviewRepository.getPendingReviewsAboutRenter());
+		return retData;
+	}
 }

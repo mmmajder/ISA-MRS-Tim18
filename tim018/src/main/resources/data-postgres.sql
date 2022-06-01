@@ -97,7 +97,13 @@ insert into review(is_deleted, text, rating, is_complaint, is_client_writing, cl
 						/*asset*/
 						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 1, false, 4),
 						/*renter*/
-						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4);
+						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4),
+						
+						/*asset*/
+						(false, 'Old boat', 2, true, true, 2, null, 1000005, 0, false, 4),
+						/*renter*/
+						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4);
+						
 						/*client*/
 --						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0, false, 4);
 					  
