@@ -31,6 +31,7 @@ import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
 import AdminRegister from './components/admin/AdminRegister.js';
 import Home from './components/forms/Home.js';
+import AdminClientsComplaints from './components/admin/AdminClientsComplaints.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -64,6 +65,7 @@ function App() {
   const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
   const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
   const adminRegister = <Container><AdminRegister/></Container>
+  const adminClientsComplaints = <Container><AdminClientsComplaints/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -92,6 +94,7 @@ function App() {
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
                   <Route path="/adminLoyaltyProgram" element={adminFinancialPreview}/>
                   <Route path="/adminRegister" element={adminRegister}/>
+                  <Route path="/adminClientsComplaints" element={adminClientsComplaints}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

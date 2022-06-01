@@ -6,7 +6,7 @@ export async function saveNewPassword(user, password){
               .then((responseData) => { console.log(responseData.data)})
               .catch(()=> {});
 
-  
+   
 }
 
 

@@ -136,4 +136,10 @@ insert into loyalty_program (is_deleted, user_discount_type, discount, level, po
 /*percent per reservation and points per reservation*/
 insert into reservation_finances (points_per_reservation, reservation_tax) values
 	(3, 40);
+	
+insert into clients_complaint (asset_id, is_deleted, receiver_clients_complaint, sender, text) values
+	(1000004, false, null, 2, 'Boat was drowning'),
+	(null, false, 4, 2, 'Rude boat owner'),
+	(null, false, 4, 2, 'Rude boat owner');
+	
 

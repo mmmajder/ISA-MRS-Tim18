@@ -33,7 +33,7 @@ public class AdminController {
 		Admin admin = adminService.findOne(id);
 		admin.setPassword(passwordEncoder.encode(password.substring(1, password.length() - 1)));
 		admin.setAlreadyLogged(true);
-		adminService.save(admin);
+		adminService.save(admin); 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 }
