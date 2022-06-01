@@ -19,7 +19,7 @@ export default function ReviewContent({reviewId}){
     const [ review, setReview] = useState();
     const [reviewer, setReviewer] = useState();
     const [text, setText] = useState();
-    const [rating, setRating] = useState();
+    const [rating, setRating] = useState(0);
 
     useEffect(() => {
         getReview(reviewId).then((response) =>{
@@ -63,7 +63,7 @@ export default function ReviewContent({reviewId}){
                     {text}
                 </Col>
                 <Col sm='2' align='right'>
-                    <MarkStars mark={rating}/>
+                    {rating > 0 ? <MarkStars mark={rating}/> : null}
                 </Col>
                
             </Row>

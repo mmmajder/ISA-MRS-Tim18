@@ -49,7 +49,9 @@ export default function ProfilePreview({user}){
 
     useEffect(() => {
         if (!!reviews){
-            let listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
+            let listedRevs = <p className='profileNameLastname'>User still hasn't got any reviews.</p>
+            if (reviews.length != 0)
+                listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
             setListedReviews(listedRevs);
         }
     }, [reviews])

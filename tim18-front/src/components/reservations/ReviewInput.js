@@ -32,6 +32,7 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
             console.log(resortJson);
             createReview(reservation.id, resortJson).then((response) => {
                 console.log("izvrseno")
+                window.location.reload(true);
             })
         }, [text, rating, reviewFor, renterId, reservation, createReview, complaint, didntShowUp]
     )
