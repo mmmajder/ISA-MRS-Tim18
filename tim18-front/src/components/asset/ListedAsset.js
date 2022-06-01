@@ -7,6 +7,7 @@ import { getRole }  from '../../services/AuthService/AuthService'
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
+import {getAssetRating} from '../../services/api/ReviewApi'
 
 export default function ListedAsset({asset, isSearch, subscriptionProp}){
     // let assetType = "RESORT";
@@ -15,6 +16,7 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
 
     const [assetProfilePhoto, setAssetProfilePhoto] = useState();
     const [assetPrice, setAssetPrice] = useState(0);
+    const [mark, setMark] = useState(0);
     
     const detViewUrl = "/resorts/" + asset.id;
     // getAssetTodayPrice
@@ -46,6 +48,10 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
         if (asset != undefined){
             getAssetProfilePhoto();
             getAssetPrice();
+            getAssetRating(asset.id).then((response) => {
+                let mar = response.data;
+                setMark(mar);
+            })
         }
     }, [asset]);
 
@@ -57,7 +63,7 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
                     <Col sm="6">
                         <Row>
                             <Col sm="7">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
+                                <AssetMainInfo name={asset.name} mark={mark} address={asset.address} price={assetPrice}/>
                             </Col>
                             <Col sm="3">
                                 

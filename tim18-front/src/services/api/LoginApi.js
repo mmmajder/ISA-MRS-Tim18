@@ -10,7 +10,7 @@ export async function loginRequest(userData, callback){
 
 export async function getLogged(callback){
     await api.get(`/users/whoami`)
-              .then((responseData) => {callback(responseData.data)})    // user
+              .then((responseData) => { callback(responseData.data)})    // user
               .catch(()=> {/*navigate('/login')*/});
 
 }
@@ -23,7 +23,6 @@ export async function sendRegistrationRequest(callback, request){
               .then((responseData) => {callback(responseData.data); })    // user
               .catch((responseData)=> {callback(responseData.data);});
 }
-
 
 export async function getVerificationCode(callback, code){
     await api.get(`/users/verify/${code}`)

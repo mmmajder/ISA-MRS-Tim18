@@ -27,7 +27,7 @@ export default function AssetCarousel({asset}){
     }, [asset]);
 
 
-    return (<Carousel  className="assetCarousel">
+    return (<Carousel  showThumbs={false} className="assetCarousel">
             {carouselItems}
         </Carousel>
     );

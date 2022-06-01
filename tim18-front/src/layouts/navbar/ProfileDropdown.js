@@ -2,8 +2,11 @@ import React from 'react';
 import {faChevronCircleRight, faCogs, faUser, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
 import {NavDropdown} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { getLogged } from '../../services/api/LoginApi.js';
+import {useState, useEffect} from 'react';
 
-export default function ProfileDropdown(){
+export default function ProfileDropdown({userId}){
+
     const profileTitle = <span><FontAwesomeIcon icon={faUser} /> Profile</span>;
 
     return <NavDropdown title={profileTitle}> 

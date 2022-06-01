@@ -12,6 +12,29 @@ export async function getCurrentReservationsByType(callback, clientId, assetType
             .catch(()=> {callback(false)});
 }
 
+export async function getPastRenterReservations(callback, renterId){
+    await api.get(`/reservation/history/renter/${renterId}`) 
+            .then((responseData) => {console.log(responseData.data); callback(responseData.data)})
+            .catch(()=> {callback(false)});
+}
+
+export async function getCurrentRenterReservations(callback, renterId){
+    await api.get(`/reservation/current/renter/${renterId}`) 
+            .then((responseData) => {console.log(responseData.data); callback(responseData.data)})
+            .catch(()=> {callback(false)});
+}
+
+export async function getReservation(reservationId) {
+    try {
+        const responseData = await api.get(`/reservation/${reservationId}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+
 export async function cancelReservation(reservationId){
     await api.put(`/reservation/cancel/${reservationId}`)
             .then((responseData) => {console.log(responseData.data)})

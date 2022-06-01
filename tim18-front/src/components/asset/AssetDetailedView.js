@@ -22,6 +22,8 @@ import AssetCarousel from './AssetCarousel';
 import RegularButton from '../buttons/RegularButton';
 import { getLogged } from '../../services/api/LoginApi';
 import { hasSubscription, subscribeToAsset, unsubscribeFromAsset } from '../../services/api/SubscriptionApi';
+import {getAssetReviews, getAssetRating} from '../../services/api/ReviewApi'
+import ListedReview from '../reservations/ListedReview';
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState();
@@ -32,6 +34,10 @@ export default function AssetDetailedView(){
     localStorage.setItem("assetId", id);
 
     const [assetPrice, setAssetPrice] = useState(0);
+
+    const [reviews, setReviews] = useState();
+    const [listedReviews, setListedReviews] = useState();
+    const [mark, setMark] = useState(0);
 
     useEffect(() => {
         async function fetchUser(){
@@ -67,7 +73,6 @@ export default function AssetDetailedView(){
     let assetType = asset?.assetType;
 
     const linkToEditPage = "/resorts/update/" + id;
-    const linkToCalendar = "/calendarAsset";
     const linkToUpdateAssetPhotos = "/updateAssetPhotos/" + id;
     const linkToUpdateAssetPrice = "/updateAssetPrice/" + id;
     const linkToMyAssetsPage = "/resorts"
@@ -86,7 +91,18 @@ export default function AssetDetailedView(){
 
     useEffect(
         () => {
-            getAssetPrice();
+            if (!!asset){
+                getAssetPrice();
+                getAssetReviews(asset.id, true).then((response) => {
+                    console.log(response)
+                    let revs = response.data;
+                    setReviews(revs);
+                });
+                getAssetRating(asset.id).then((response) => {
+                    let mar = response.data;
+                    setMark(mar);
+                })
+            }
         }, [asset]
     )
     const subscribe = () => {
@@ -103,6 +119,13 @@ export default function AssetDetailedView(){
         }
         
     }
+
+    useEffect(() => {
+        if (!!reviews){
+            let listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
+            setListedReviews(listedRevs);
+        }
+    }, [reviews])
 
     if(!!asset){
     return <>
@@ -124,7 +147,7 @@ export default function AssetDetailedView(){
                     <Col sm="6">
                         <Row>
                             <Col sm="7">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
+                                <AssetMainInfo name={asset.name} mark={mark} address={asset.address} price={assetPrice}/>
                             </Col> 
                             <Col sm="4">
                                 { userType !== "Client" && userType !== "Guest" ? 
@@ -149,7 +172,7 @@ export default function AssetDetailedView(){
                     <CalendarAsset></CalendarAsset>
                 </Row>
                 <Row>
-                    {/* Reviews will go under */}
+                    {listedReviews}
                 </Row>
             </div>
                 

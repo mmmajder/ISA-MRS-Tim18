@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,19 +47,25 @@ public class ReservationService {
 	public List<ReservationDTO> map(List<Reservation> reservations){
 		List<ReservationDTO> reservationsDTO = new ArrayList<>();
 		for (Reservation res : reservations) {
-			ReservationDTO dto = new ReservationDTO(res);
-			dto.setCancelable(isCancelable(res));
-			dto.setDuration(calcDuration(res));
-			boolean reviewable = isReviewable(res);
-			if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
-				res.setStatus(ReservationStatus.Finished);
-				save(res);
-			}
-			dto.setReviewable(reviewable);
+			ReservationDTO dto = map(res);
 			reservationsDTO.add(dto);
 		}
 		return reservationsDTO;
 	}
+	
+	public ReservationDTO map(Reservation res){
+		ReservationDTO dto = new ReservationDTO(res);
+		dto.setCancelable(isCancelable(res));
+		dto.setDuration(calcDuration(res));
+		boolean reviewable = isReviewable(res);
+		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
+			res.setStatus(ReservationStatus.Finished);
+			save(res);
+		}
+		dto.setReviewable(reviewable);
+		
+		return dto;
+	} 
 
 	private boolean isCancelable(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();
@@ -70,9 +77,14 @@ public class ReservationService {
 	
 	// DA LI VEĆ IMA REVIEW?
 	private boolean isReviewable(Reservation reservation) {
+		return isCompleted(reservation);
+	}
+	
+	public boolean isCompleted(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime endDate = reservation.getTimeRange().getToDateTime();
 		boolean isCanceled = reservation.getStatus() == ReservationStatus.Canceled;
+		
 		return endDate.isBefore(today) && !isCanceled;
 	}
 	
@@ -152,5 +164,19 @@ public class ReservationService {
 		assetService.cancelReservation(reservation);
 		reservation.setStatus(ReservationStatus.Canceled);
 		return save(reservation);
+	}
+	
+	public List<Reservation> getCurrentRenterReservations(Long renterId){
+		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
+		reservations = reservations.stream().filter(r -> !isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
+		
+		return reservations;
+	}
+	
+	public List<Reservation> getPastRenterReservations(Long renterId){
+		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
+		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
+		
+		return reservations;
 	}
 }

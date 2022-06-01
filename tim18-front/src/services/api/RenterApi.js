@@ -43,3 +43,13 @@ export async function getRenterByID(id){
         return err.message
     }
   }
+
+  export async function getRenterByAssetId(assetId){
+    try {
+        const responseData = await api.get(`/renters/assetId/${assetId}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }

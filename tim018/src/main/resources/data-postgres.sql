@@ -10,22 +10,23 @@ ALTER SEQUENCE userSeqGen RESTART;
 /*images*/
 insert into image(id, data, is_deleted, type, asset_id) values
 	/*user images*/
-	('1', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null),
-	('2', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\Katarina_Komad.jpg'), false, null, null),
-	('3', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_ajder.jpg'), false, null, null),
-	('4', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null),
-	('5', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null),
+	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\renter_stanivuk.jpg'), false, null, null),
+	('2', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Katarina_Komad.jpg'), false, null, null),
+	('3', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_ajder.jpg'), false, null, null),
+	('4', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null),
+	('5', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null),
 	/*asset images*/
-	('6', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
-	('7', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
-	('8', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
-	('9', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
-	('10', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
-	('11', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
-	('12', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\skadarlija.jpg'), false, null, 1000000),
-	('13', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\Maldives.jpg'), false, null, 1000001),
-	('14', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004),
-	('15', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null);
+	('6', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
+	('7', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
+	('8', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
+	('9', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
+	('10', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
+	('11', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
+	('12', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\skadarlija.jpg'), false, null, 1000000),
+	('13', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Maldives.jpg'), false, null, 1000001),
+	('14', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004),
+	
+	('15', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null);
 
 
 /*admin*/
@@ -84,26 +85,27 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  
 /*future*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-12-12', false, '2022-12-15');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-12-12', false, '2022-12-15'),
 					  ('2022-11-11', false, '2022-11-21');
 /*past*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-03-12', false, '2022-03-15');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-04-04', false, '2022-04-08');
-insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-03-12', false, '2022-03-15'),
+					  ('2022-04-04', false, '2022-04-08'),
 					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
+			
+insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id) values
+						/*asset*/
+						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 1, false, 4),
+						/*renter*/
+						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4);
+						/*client*/
+--						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0, false, 4);
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000001, null, 2, null, null, 1, 100);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000000, null, 2, null, null, 3, 150);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000004, null, 2, null, null, 2, 200);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
-						(false, 0, 1000005, null, 2, null, null, 4, 250);
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
+						(false, 0, 1000001, null, 2, null, null, 1, 100),
+						(false, 0, 1000000, null, 2, null, null, 3, 150),
+						(false, 0, 1000004, null, 2, null, null, 2, 200),
+						(false, 0, 1000005, 1, 2, null, 2, 4, 250),
 						(false, 0, 1000005, null, 2, null, null, 5, 150);
 
 insert into asset_calendar_reserved(asset_calendar_id, reserved_id) values

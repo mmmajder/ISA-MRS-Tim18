@@ -2,6 +2,8 @@ import { getDateFromList, getTimeFromList } from '../../services/utils/DateTimeU
 import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
 import AssetMainInfo from '../asset/AssetMainInfo';
 import { Row, Col, Button } from 'react-bootstrap'; 
+import {useState, useEffect, useCallback} from 'react';
+import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
 
 export const ListedReservation = ({reservation, handleChange}) => {
     return(
@@ -42,7 +44,30 @@ export const ListedReservation = ({reservation, handleChange}) => {
     const isReviewable = reservation.reviewable;
     const status = reservation.reservationStatus; // Da li treba prikazati i cancled reservations
 
-    const detViewUrl = "/resorts/" + asset.id;
+    const detViewUrl = "/resorts/" + reservation.asset.id;
+    const reviewsUrl = "/reviews/" + reservation.id;
+
+    const [assetProfilePhoto, setAssetProfilePhoto] = useState();
+    
+    const getAssetProfilePhoto = useCallback(
+        (e) => {
+            getAssetPhotoIdsFromServer(asset.id).then((response) =>{
+                let photoIds = response.data;
+                let profilePhotoId = photoIds[0];
+                getPhotoFromServer(profilePhotoId).then((response) =>{
+                    let profilePhoto = `data:image/jpeg;base64,${response.data}`
+                    setAssetProfilePhoto(profilePhoto);
+                });
+            });
+        }, []
+    )
+
+    useEffect(() => {
+      if (asset != undefined){
+          getAssetProfilePhoto();
+      }
+  }, [asset]);
+
     let assetImage; 
     if (asset.assetType === "FISHING_ADVENTURE") {
         assetImage = require('../../assets/images/FishingAdventure3.png')
@@ -56,7 +81,7 @@ export const ListedReservation = ({reservation, handleChange}) => {
       <>
         <Row>
               <Col sm="3">
-                  <img src={assetImage} alt="Asset" className="listedAssetImage"/>
+                  <img src={assetProfilePhoto} alt="Asset" className="listedAssetImage"/>
               </Col>
               <Col sm="7">
                   <Row>
@@ -77,7 +102,7 @@ export const ListedReservation = ({reservation, handleChange}) => {
                           }
                           {isReviewable &&
                           <div className='mt-3'>
-                              <FixedWidthRegButton href={detViewUrl} text='Make review' onClickFunction={''}/>
+                              <FixedWidthRegButton href={reviewsUrl} text='Reviews' onClickFunction={''}/>
                           </div>
                           }
                       </Col>
