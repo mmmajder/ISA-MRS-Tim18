@@ -7,7 +7,7 @@ import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import ProfileDropdown from './ProfileDropdown.js';
 import UsersOffersDropdown from './UsersOffersDropdown';
 
-export default function ResortRenterNavbar({userType}){
+export default function ResortRenterNavbar({userType, userId}){
     const logo = require('../../assets/images/island_logo.png')
     console.log(userType)
 
@@ -19,7 +19,7 @@ export default function ResortRenterNavbar({userType}){
                 <Nav.Link href="/home"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <UsersOffersDropdown userType={userType}/>
-                <ProfileDropdown />
+                <ProfileDropdown userId={userId}/>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

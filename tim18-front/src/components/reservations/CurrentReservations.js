@@ -7,10 +7,9 @@ import { ListedReservation } from './ListReservations'
 import { cancelReservation, getCurrentReservationsByType } from '../../services/api/ReservationApi';
 import { ConfirmModal } from '../modal/ConfirmModal';
 
-export default function CurrentReservations(){
+export default function CurrentReservations({client}){
   const [assetType, setAssetType] = useState("ALL");
   const [reservations, setReservations] = useState();
-  const [client, setClient] = useState();
   const [listedReservations, setListedReservations] = useState();
   const [show, setShow] = useState(false);
 
@@ -18,20 +17,10 @@ export default function CurrentReservations(){
   const message=`Renter is allowed to keep ${canceledReservation?.asset.cancelationConditions}% of the price + You won't be able to reserve these dates again.`;
 
   useEffect(() => {
-      async function fetchUser(){
-          await getLogged(setClient);
-      }
-      fetchUser();
-  }, [])
-
-  useEffect(() => {
       async function fetchReservations(){
           await getCurrentReservationsByType(setReservations, client.id, assetType);
       }
-      if(client !== undefined){
         fetchReservations();
-      }
-      
   }, [client, assetType])
 
   const handleChange = (reservation) => {
@@ -58,6 +47,7 @@ export default function CurrentReservations(){
   return (
     <>
       <AssetTypeOption setAssetType={setAssetType}/>
+      halooooo
       {listedReservations}
       {<ConfirmModal message={message} show={show} handleClose={handleConfirm}/>}
     </>

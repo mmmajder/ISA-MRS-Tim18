@@ -32,6 +32,10 @@ import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
 import AdminRegister from './components/admin/AdminRegister.js';
 import Home from './components/forms/Home.js';
 import AdminClientsComplaints from './components/admin/AdminClientsComplaints.js';
+import Subscriptions from './components/reservations/Subscriptions';
+import Reviews from './components/reservations/Reviews.js';
+import MyProfile from './components/profile/MyProfile.js';
+import OtherProfile from './components/profile/OtherProfile.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -43,10 +47,11 @@ const AppContainer = styled.div`
 `;
 function App() {
   const [user, setUser] = React.useState(getRole());
+  const [userId, setUserId] = React.useState();
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
   const handleLogin = (user) => {setUser(user);};  
-  const login =<AppContainer> <AccountBox handleLogin={handleLogin}/> </AppContainer>;
+  const login =<AppContainer> <AccountBox handleLogin={handleLogin} /> </AppContainer>;
   
   const resortForm = <Container><CreateForm  /></Container>
   const resortView = <Container><AssetDetailedView /></Container>
@@ -66,6 +71,8 @@ function App() {
   const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
   const adminRegister = <Container><AdminRegister/></Container>
   const adminClientsComplaints = <Container><AdminClientsComplaints/></Container>
+  const SubscriptionList = <Container><Subscriptions /></Container>
+  const reviews = <Container><Reviews/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -73,7 +80,8 @@ function App() {
                 <Route path='' element={<ProtectedRoute isAllowedUser={user}>{chooseNavbar(user)} </ProtectedRoute>}>
                   <Route path="/home" element={home} /> 
                   {/* For other's Profile page */}
-                  <Route path="/profile" element={<Container>{ChooseProfile(user)}</Container>} /> 
+                  <Route exact path="/profile" element={<Container><MyProfile /></Container>} /> 
+                  <Route path="/profile/:id" element={<Container><OtherProfile /></Container>} /> 
                   <Route path="/settings" element={<Container>{ChooseSettings(user)}</Container>} />
                   <Route path="/updateProfilePhoto" element={updateProfilePhoto} />
 
@@ -95,6 +103,9 @@ function App() {
                   <Route path="/adminLoyaltyProgram" element={adminFinancialPreview}/>
                   <Route path="/adminRegister" element={adminRegister}/>
                   <Route path="/adminClientsComplaints" element={adminClientsComplaints}/>
+                  <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
+                  <Route exact path="/subscriptions" element={SubscriptionList} /> 
+                  <Route path="/reviews/:reservationId" element={reviews}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
@@ -114,11 +125,6 @@ const ProtectedRoute = ({ isAllowedUser, redirectPath = '/login', children}) => 
   return <Navigate to={redirectPath} replace />;
   
 };
-
-function ChooseProfile(userType) {
-  const profilePreview = userType === 'Client' ? <ClientProfilePreview /> : <ProfileInfoBlock/>
-  return <ProfilePreview profileComponent={profilePreview} />
-}
 
 function ChooseSettings(userType){
   if (userType === 'Client'){

@@ -3,24 +3,19 @@ import '../../assets/styles/profile.css';
 import MarkStars from '../MarkStars';
 import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
-
+import { getPastRenterReservations } from '../../services/api/ReservationApi';
 import {useState, useEffect, useCallback} from 'react';
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
 
 import {getPhotoFromServer} from '../../services/api/ImageApi';
+import {getAssetsByUserId} from '../../services/api/AssetApi';
 
-export default function ProfileInfoBlock(){
-    const [user, setUser] = useState();
-
+export default function ProfileInfoBlock({user, reviewNum, mark}){
     const [profilePhoto, setProfilePhoto] = useState();
-
-    useEffect(() => {
-        async function fetchUser(){
-            await getLogged(setUser);
-        }
-        fetchUser();
-    }, [])
+    const [numOfAssets, setNumOfAssets] = useState(0);
+    const [reservations, setReservations] = useState();
+    const [reservationsNum, setReservationsNum] = useState(0);
 
     const getProfilePhoto = useCallback(
         (e) => {
@@ -34,8 +29,26 @@ export default function ProfileInfoBlock(){
     useEffect(() => {
         if (!!user && !!user.profilePhotoId){
             getProfilePhoto()
+            getAssetsByUserId(user.id).then((response) => {
+                let assets = response.data;
+                setNumOfAssets(assets.length);
+            });
+            async function fetchReservations(){
+                await getPastRenterReservations(setReservations, user.id).then(() => {
+                    
+                });
+            }
+            if(user !== undefined){
+              fetchReservations();
+            }
         }
     }, [user])
+
+    useEffect(() => {
+        if (!!reservations){
+            setReservationsNum(reservations.length);
+        }
+    }, [reservations])
 
     console.log(user)
 
@@ -43,11 +56,11 @@ export default function ProfileInfoBlock(){
         return <div className="borderedBlock" align="center">
                 <img src={profilePhoto} className="profilePicture rounded-circle" ></img>
                 <ProfileInfo infoClass="profileNameLastname" text={user.firstName + " " + user.lastName}/>
-                {user.userType!="Admin" ? <MarkStars mark={user.mark} /> : [] }
+                {user.userType!="Admin" ? <MarkStars mark={mark} /> : [] }
                 <ProfileInfo infoClass="profileOtherInfo" text={user.city + ", " + user.state }/>
                 <ProfileInfo infoClass="profileOtherInfo" text={user.dateBirth}/>
                 <hr className="solidDivider"/>
-                {user.userType!="Admin" ? <ProfileBusinessInfo assetsName={ getAssetName(user.userType)} assetsNum="5" rentsName="RENTS" rentsNum="7" reviewsNum="3"/> : []}
+                {user.userType!="Admin" ? <ProfileBusinessInfo assetsName={ getAssetName(user.userType)} assetsNum={numOfAssets} rentsName="RENTS" rentsNum={reservationsNum} reviewsNum={reviewNum}/> : []}
             </div>
     }
     else 

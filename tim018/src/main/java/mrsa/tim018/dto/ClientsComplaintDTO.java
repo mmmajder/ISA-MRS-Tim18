@@ -24,14 +24,14 @@ public class ClientsComplaintDTO {
 		this.receiverAssetClientsComplaint = receiverAssetClientsComplaint;
 	}
 	
-	public ClientsComplaintDTO(ClientsComplaint clientsComplaint) {
+	/*public ClientsComplaintDTO(ClientsComplaint clientsComplaint) {
 		this.isDeleted = clientsComplaint.isDeleted();
 		this.text = clientsComplaint.getText();
 		this.sender = clientsComplaint.getSender();
 		this.receiverClientsComplaint = clientsComplaint.getReceiverClientsComplaint();
 		this.receiverAssetClientsComplaint = clientsComplaint.getReceiverAssetClientsComplaint();
 
-	}
+	}*/
 
 	public ClientsComplaintDTO() {
 		super();

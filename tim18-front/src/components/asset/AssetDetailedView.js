@@ -19,14 +19,47 @@ import CalendarAsset from '../forms/calendar/CalendarAsset';
 import MapContainer from './MapContainer';
 import {getAssetTodayPrice} from '../../services/api/AssetApi';
 import AssetCarousel from './AssetCarousel';
+import RegularButton from '../buttons/RegularButton';
+import { getLogged } from '../../services/api/LoginApi';
+import { hasSubscription, subscribeToAsset, unsubscribeFromAsset } from '../../services/api/SubscriptionApi';
+import {getAssetReviews, getAssetRating} from '../../services/api/ReviewApi'
+import ListedReview from '../reservations/ListedReview';
 
 export default function AssetDetailedView(){
-    const [asset, setAsset] = useState({});
+    const [asset, setAsset] = useState();
+    const [client, setClient] = useState();
+    const [subscribeTxt, setSubscribeTxt] = useState("");
     const {id} = useParams();
     const userType = getRole()
     localStorage.setItem("assetId", id);
 
     const [assetPrice, setAssetPrice] = useState(0);
+
+    const [reviews, setReviews] = useState();
+    const [listedReviews, setListedReviews] = useState();
+    const [mark, setMark] = useState(0);
+
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setClient);
+        }
+        fetchUser();
+      }, []);
+
+
+      const hasSubscriptionCallback = (data) => {
+            !!data ? setSubscribeTxt("Unsubscribe") : setSubscribeTxt("Subscribe");
+      }
+
+      useEffect(() => {
+        async function hasSubscriptionUser(){
+            await hasSubscription(hasSubscriptionCallback, asset.id, client.id);
+        }
+
+        if(client!==undefined && asset!==undefined){
+            hasSubscriptionUser();
+        }
+      }, [asset, client]);
 
     useEffect(() => {
         async function fetchAsset(){
@@ -37,10 +70,9 @@ export default function AssetDetailedView(){
         fetchAsset();
     }, [id])
 
-    let assetType = asset.assetType;
+    let assetType = asset?.assetType;
 
     const linkToEditPage = "/resorts/update/" + id;
-    const linkToCalendar = "/calendarAsset";
     const linkToUpdateAssetPhotos = "/updateAssetPhotos/" + id;
     const linkToUpdateAssetPrice = "/updateAssetPrice/" + id;
     const linkToMyAssetsPage = "/resorts"
@@ -50,7 +82,7 @@ export default function AssetDetailedView(){
 
     const getAssetPrice = useCallback(
         () => {
-            getAssetTodayPrice(asset.id).then((response) =>{
+            getAssetTodayPrice(asset?.id).then((response) =>{
                 let price = response.data.price;
                 setAssetPrice(price);
             });
@@ -59,10 +91,43 @@ export default function AssetDetailedView(){
 
     useEffect(
         () => {
-            getAssetPrice();
+            if (!!asset){
+                getAssetPrice();
+                getAssetReviews(asset.id, true).then((response) => {
+                    console.log(response)
+                    let revs = response.data;
+                    setReviews(revs);
+                });
+                getAssetRating(asset.id).then((response) => {
+                    let mar = response.data;
+                    setMark(mar);
+                })
+            }
         }, [asset]
     )
-    
+    const subscribe = () => {
+        console.log("subscribeFunc")
+        if(subscribeTxt === 'Subscribe'){
+            console.log(asset.id, client.id, "Subscribe")
+            subscribeToAsset(asset.id, client.id);
+            setSubscribeTxt("Unsubscribe")
+        }
+        else if(subscribeTxt === 'Unsubscribe'){
+            console.log(asset.id, client.id, "Unsubscribe")
+            unsubscribeFromAsset(asset.id, client.id);
+            setSubscribeTxt("Subscribe")
+        }
+        
+    }
+
+    useEffect(() => {
+        if (!!reviews){
+            let listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
+            setListedReviews(listedRevs);
+        }
+    }, [reviews])
+
+    if(!!asset){
     return <>
             <div className="borderedBlock mt-3" align="">
                 <Row>
@@ -82,7 +147,7 @@ export default function AssetDetailedView(){
                     <Col sm="6">
                         <Row>
                             <Col sm="7">
-                                <AssetMainInfo name={asset.name} mark={asset.averageRating} address={asset.address} price={assetPrice}/>
+                                <AssetMainInfo name={asset.name} mark={mark} address={asset.address} price={assetPrice}/>
                             </Col> 
                             <Col sm="4">
                                 { userType !== "Client" && userType !== "Guest" ? 
@@ -91,7 +156,8 @@ export default function AssetDetailedView(){
                                 <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link> 
                                 <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> 
                                 <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>
-                                </> : null
+                                </> : 
+                                <RegularButton text={subscribeTxt} disabled={userType === "Guest"} onClickFunction={subscribe}/>
                                 }
                             </Col>
                         </Row>
@@ -106,10 +172,11 @@ export default function AssetDetailedView(){
                     <CalendarAsset></CalendarAsset>
                 </Row>
                 <Row>
-                    {/* Reviews will go under */}
+                    {listedReviews}
                 </Row>
             </div>
                 
         </>
+        }
 }
 

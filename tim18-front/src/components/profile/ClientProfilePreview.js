@@ -4,35 +4,40 @@ import MarkStars from '../MarkStars';
 import PenaltyInfo from './PenaltyInfo';
 import ProfileInfo from './ProfileInfo';
 import ProfileBusinessInfo from './ProfileBusinessInfo';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import { getClientByID } from '../../services/api/ClientApi';
 import { getLogged } from '../../services/api/LoginApi';
 import '../../assets/styles/style.css';
+import {getPhotoFromServer} from '../../services/api/ImageApi';
 
-export default function ClientProfilePreview(){
-    const [client, setClient]  = useState();
-    const [mark, setMark]  = useState(0);                 // TODO: real data
+export default function ClientProfilePreview({user, reviewNum, mark}){
+    const [profilePhoto, setProfilePhoto] = useState();
     const [penaltyCount, setPenaltyCount]  = useState(2);   // TODO: real data
-    const [reviewNum, setReviewNum]  = useState(0);         // TODO: real data
     
-    const profilePic = require('../../assets/images/Katarina_Komad.jpg')  // TODO: real data
+    const getProfilePhoto = useCallback(
+        (e) => {
+            getPhotoFromServer(user.profilePhotoId).then((response) =>{
+                let photo = `data:image/jpeg;base64,${response.data}`
+                setProfilePhoto(photo);
+            });
+        }, [user]
+    )
 
     useEffect(() => {
-        async function fetchClient(){
-            await getLogged(setClient);
+        if (!!user && !!user.profilePhotoId){
+            getProfilePhoto()
         }
-        fetchClient();
-    }, [])
+    }, [user])
 
     const penalties = <PenaltyInfo penaltyCount={penaltyCount} />
 
-    if(!!client){
+    if(!!user){
         return <div className="borderedBlock" align="center">
-                <img src={profilePic} className="profilePicture rounded-circle" ></img>
-                <ProfileInfo infoClass="profileNameLastname" text={client.firstName + " " + client.lastName}/>
+                <img src={profilePhoto} className="profilePicture rounded-circle" ></img>
+                <ProfileInfo infoClass="profileNameLastname" text={user.firstName + " " + user.lastName}/>
                 <MarkStars mark={mark} />
-                <ProfileInfo infoClass="profileOtherInfo" text={client.city + ", " + client.state }/>
-                <ProfileInfo infoClass="profileOtherInfo" text={client.dateBirth}/>
+                <ProfileInfo infoClass="profileOtherInfo" text={user.city + ", " + user.state }/>
+                <ProfileInfo infoClass="profileOtherInfo" text={user.dateBirth}/>
                 <hr className="solidDivider"/>
                 <ProfileBusinessInfo assetsName="PENALTIES" assetsNum={penalties} rentsName="" rentsNum="" reviewsNum={reviewNum}/>
             </div>

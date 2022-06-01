@@ -6,7 +6,7 @@ import '../../assets/styles/style.css';
 import {Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import ProfileDropdown from './ProfileDropdown.js';
 
-export default function ClientNavbar(){
+export default function ClientNavbar({userId}){
     const logo = require('../../assets/images/island_logo.png')
     // mySubscriptions -- na profilu(samo ja vidim)? bell
     // reviews i gave (na istoriji rezervacija prikazem?), 
@@ -20,9 +20,9 @@ export default function ClientNavbar(){
                 <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <Nav.Link href="/allReservations"><FontAwesomeIcon icon={faSuitcase} /> My Reservations</Nav.Link>
-                <Nav.Link href="#"><FontAwesomeIcon icon={faBell} /> Subscriptions </Nav.Link>
+                <Nav.Link href="/subscriptions"><FontAwesomeIcon icon={faBell} /> Subscriptions </Nav.Link>
 
-                <ProfileDropdown />
+                <ProfileDropdown userId={userId}/>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

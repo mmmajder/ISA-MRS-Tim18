@@ -39,17 +39,14 @@ public class Reservation {
 	@Column(name = "status", nullable = false)
 	private ReservationStatus status;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_review_id", nullable = true)
-	private Review clientReview;
+	private Long clientReviewId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_review_id", nullable = true)
-	private Review assetReview;
+	private Long assetReviewId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "renter_review_id", nullable = true)
-	private Review renterReview;
+	private Long renterReviewId;
 	
 	@Column(name = "total_price", nullable = false)
 	private double totalPrice;
@@ -122,28 +119,28 @@ public class Reservation {
 		this.timeRange = timeRange;
 	}
 
-	public Review getClientReview() {
-		return clientReview;
+	public Long getClientReviewId() {
+		return clientReviewId;
 	}
 
-	public void setClientReview(Review clientReview) {
-		this.clientReview = clientReview;
+	public void setClientReviewId(Long clientReviewId) {
+		this.clientReviewId = clientReviewId;
 	}
 
-	public Review getAssetReview() {
-		return assetReview;
+	public Long getAssetReviewId() {
+		return assetReviewId;
 	}
 
-	public void setAssetReview(Review assetReview) {
-		this.assetReview = assetReview;
+	public void setAssetReviewId(Long assetReviewId) {
+		this.assetReviewId = assetReviewId;
 	}
 
-	public Review getRenterReview() {
-		return renterReview;
+	public Long getRenterReviewId() {
+		return renterReviewId;
 	}
 
-	public void setRenterReview(Review renterReview) {
-		this.renterReview = renterReview;
+	public void setRenterReviewId(Long renterReviewId) {
+		this.renterReviewId = renterReviewId;
 	}
 
 	public void setID(Long iD) {

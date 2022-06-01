@@ -8,12 +8,16 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.dto.RegisterAdminRequestDTO;
+import mrsa.tim018.dto.AppointmentCreationDTO;
+import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.User;
 import mrsa.tim018.utils.EmailContentUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -146,5 +150,21 @@ public class EmailService {
 		helper.setText(content, true);
 		
 		javaMailSender.send(message); 
+	}
+	public void notifySubscribers(List<Subscription> subscriptions, AppointmentCreationDTO offer) throws MessagingException, UnsupportedEncodingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("Hakuna Matata new special offer");
+
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		String URL = siteURL + "/resorts/" + offer.getAssetId();
+
+		for (Subscription subscription : subscriptions) {
+			String content = EmailContentUtils.notifySubscribers(subscription, offer); 
+			content = content.replace("[[URL]]", URL);
+			helper.setText(content, true);
+			javaMailSender.send(message);
+		}
 	}
 }

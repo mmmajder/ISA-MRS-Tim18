@@ -1,16 +1,45 @@
 import '../../assets/styles/asset.css';
 import '../../assets/styles/reservationsTab.css';
-import { React, useState } from 'react';
+import { React, useState, useEffect} from 'react';
 import CurrentReservations from './CurrentReservations'
 import HistoryReservations from './HistoryReservations'
+import CurrentRenterReservations from './CurrentRenterReservation';
+import { getLogged } from '../../services/api/LoginApi'
+import HistoryRenterReservations from './HistoryRenterReservations';
 
 export default function AllReservations(){
     const [toggleState, setToggleState] = useState(1);
+    const [user, setUser] = useState();
+    const [currentReservations, setCurrentReservations] = useState();
+    const [historyReservations, setHistoryReservations] = useState();
 
   const toggleTab = (index) => {
     setToggleState(index);
   };
 
+  useEffect(() => {
+    async function fetchUser(){
+        await getLogged(setUser);
+    }
+    fetchUser();
+  }, [])
+
+  useEffect(() => {
+    if (user != undefined){
+      let currentReservationss;
+      let historyReservationss;
+      if (user.userType == "Client"){
+        currentReservationss = <CurrentReservations client={user}/> 
+        historyReservationss = <HistoryReservations client={user}/> 
+      } else {
+        currentReservationss = <CurrentRenterReservations renter={user}/>
+        historyReservationss = <HistoryRenterReservations renter={user}/>
+      }
+      setCurrentReservations(currentReservationss);
+      setHistoryReservations(historyReservationss);
+    }
+  }, [user])
+  
   return (
     <div className="borderedBlock mb-3 mt-3">
       <div className="bloc-tabs">
@@ -24,11 +53,10 @@ export default function AllReservations(){
 
       <div className="content-tabs">
         <div className={toggleState === 1 ? "content  active-content" : "content"} >
-            <CurrentReservations/>
+            {currentReservations}
         </div>
-
         <div className={toggleState === 2 ? "content  active-content" : "content"} >
-            <HistoryReservations/>
+          {historyReservations}
         </div>
       </div>
     </div>
