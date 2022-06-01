@@ -47,8 +47,9 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
     )
 
     useEffect(() => {
+        let complRow;
         if (reviewFor == "client"){
-            let complRow = <Row className='pt-4'>
+            complRow = <Row className='pt-4'>
                 <Col sm={4} align='right'><Form.Label >Make a complaint?</Form.Label></Col>
                 <Col sm={2}>
                     <BootstrapSwitchButton
@@ -73,8 +74,23 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
                     />
                 </Col>
             </Row>
-            setComplaintRow(complRow);
+            
+        } else {
+            complRow = <Row className='pt-4'>
+                <Col sm={4} align='right'><Form.Label >Make a complaint?</Form.Label></Col>
+                <Col sm={2}>
+                    <BootstrapSwitchButton
+                        checked={complaint}
+                        onlabel='Yes'
+                        offlabel="No"
+                        onChange={(checked) => {
+                            setIsComplaint(checked);
+                        }}
+                    />
+                </Col>
+            </Row>
         }
+        setComplaintRow(complRow);
     }, [setIsComplaint, setDidntShowUp]
     )
 
