@@ -2,7 +2,9 @@ package mrsa.tim018.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import mrsa.tim018.model.TimeRange;
 
@@ -52,6 +54,22 @@ public class TimeUtils {
 	public static String FormatToString(LocalDate date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 		return date.format(formatter);
+	}
+	
+	public static LocalDate getLocalDate(Date date) {
+		 ZoneId zone = ZoneId.of("Europe/Belgrade");
+		 
+		 return date.toInstant()
+			      .atZone(zone)
+			      .toLocalDate();
+	}
+	
+	public static String formatYearMonth(LocalDate date) {
+		return date.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+	}
+	
+	public static String formatYear(LocalDate date) {
+		return date.format(DateTimeFormatter.ofPattern("yyyy"));
 	}
 
 }

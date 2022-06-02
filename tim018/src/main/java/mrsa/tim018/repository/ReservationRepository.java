@@ -21,14 +21,69 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 			+ "WHERE r.asset.id = :assetId AND r.isDeleted = FALSE")
 	Collection<Reservation> getAssetReservations(@Param("assetId") Long assetId);
 	
-//	@Query("SELECT r "
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
 //			+ "FROM Reservation r "
-//			+ "WHERE r.asset.id = :assetId AND r.isDeleted = FALSE")
-//	Collection<Reservation> getAssetYearlyReservations(@Param("assetId") Long assetId);
+//			+ "WHERE r.timeRange.fromDateTime < now() AND r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyReports();
+//	
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+//			+ "FROM Reservation r "
+//			+ "WHERE r.asset.id = :assetId AND r.timeRange.fromDateTime < now() AND r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyReports(@Param("assetId") Long assetId);
 	
-	@Query("SELECT new mrsa.tim018.model.Report(DATE_FORMAT(r.timeRange.fromDateTime,'%Y-%m'), SUM(r.totalPrice), SUM(1))"
+	// monthly
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyReports();
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.timeRange.fromDateTime < now() AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyCompletedReports();
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.status = 1 AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyCanceledReports();
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.timeRange.fromDateTime > now() AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyPotentialReports();
+	
+	// monthly assetId
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
 			+ "FROM Reservation r "
 			+ "WHERE r.asset.id = :assetId AND r.isDeleted = FALSE"
-			+ " GROUP BY DATE_FORMAT(r.timeRange.fromDateTime,'%Y-%m')")
-	Collection<Report> getAssetMonthlyReservations(@Param("assetId") Long assetId);
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyReports(@Param("assetId") Long assetId);
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.asset.id = :assetId AND r.timeRange.fromDateTime < now() AND r.status != 1 AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyCompletedReports(@Param("assetId") Long assetId);
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.asset.id = :assetId AND r.status = 1 AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyCanceledReports(@Param("assetId") Long assetId);
+	
+	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+			+ "FROM Reservation r "
+			+ "WHERE r.asset.id = :assetId AND r.timeRange.fromDateTime > now() AND r.status != 1 AND r.isDeleted = FALSE"
+			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+	Collection<Report> getMonthlyPotentialReports(@Param("assetId") Long assetId);
+	
+//	SELECT date_trunc('month', txn_date) AS txn_month, sum(amount) as monthly_sum
+//    FROM yourtable
+//GROUP BY txn_month
 }

@@ -152,9 +152,39 @@ export async function createNewPriceForAsset(assetId, newPrice) {
     }
 }
 
-export async function getAssetTodayPrice(assetId, callback) {
+export async function getAssetTodayPrice(assetId) {
     try {
        const responseData = await api.get(`/prices/today/${assetId}`)
+       return responseData;
+   } catch (err) {
+       console.log(err.message);
+       return err.message
+   }
+}
+
+//reports
+
+export async function getMonthlyReport(reportFilters) {
+    try {
+       const responseData = await api.get(`/assets/report/monthly`, {
+        params: {
+            "completed" : reportFilters.completed,
+            "canceled":  reportFilters.canceled, 
+            "potential" : reportFilters.potential, 
+            "fromDate" : reportFilters.fromDate,
+            "toDate" : reportFilters.toDate
+        }
+      })
+       return responseData;
+   } catch (err) {
+       console.log(err.message);
+       return err.message
+   }
+}
+
+export async function getMonthlyReportById(assetId) {
+    try {
+       const responseData = await api.get(`/assets/report/monthly/${assetId}`)
        return responseData;
    } catch (err) {
        console.log(err.message);
