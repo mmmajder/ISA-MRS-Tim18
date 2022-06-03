@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { getMonthlyReport, getMonthlyReportById } from '../../services/api/AssetApi';
-import { useEffect } from 'react';
-import { Row, Col, Table } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryZoomContainer, VictoryLabel } from 'victory';
 import {useState} from 'react';
 import "bootstrap/dist/css/bootstrap.css";
@@ -9,36 +8,47 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import '../../assets/styles/style.css';
+import { getLogged } from '../../services/api/LoginApi';
+import { getAssetsByUserId } from '../../services/api/AssetApi';
+import ReportTable from './ReportTable';
+import ReportCharts from './ReportCharts';
 
 export default function Report(){
 
     const [data, setData] = useState([]);
-
-    const columns = [
-        {
-          dataField: "group",
-          text: "Group",
-          sort: true
-        },
-        {
-          dataField: "income",
-          text: "Income",
-          sort: true
-        },
-        {
-          dataField: "numOfRes",
-          text: "Number of reservations",
-          sort: true
-        }
-      ];
+    const [completed, setCompleted] = useState(true);
+    const [canceled, setCanceled] = useState(true);
+    const [potential, setPotential] = useState(true);
+    const [renter, setRenter] = useState();
+    const [assets, setAssets] = useState([]);
+    const [chosenAssetId, setChosenAssetId] = useState("-1");
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
+    const [period, setPeriod] = useState(1);
 
     useEffect(() => {
-        let completed = true;
-        let canceled = false;
-        let potential = true;
-        let fromDate = Date.now();
-        let toDate = Date.now();
-        let reportFilters = {completed, canceled, potential, fromDate, toDate};
+        async function fetchUser(){
+            await getLogged(setRenter);
+        }
+        fetchUser();
+    }, [])
+
+    useEffect(() => {
+        if (!!renter){
+            async function fetchAssets(){
+                const requestData = await getAssetsByUserId(renter.id);
+                console.log(requestData.data);
+                setAssets(!!requestData ? requestData.data : []);
+                return requestData;
+            }
+            fetchAssets();
+        }
+    }, [renter])
+
+    useEffect(() => {
+        let reportFilters = {completed, canceled, potential, fromDate, toDate, chosenAssetId, period};
+
+        console.log(reportFilters);
 
         getMonthlyReport(reportFilters).then((response) => {
             let data = [];
@@ -51,154 +61,74 @@ export default function Report(){
                 });
             }
 
-            for (let group of response.data){
-                data.push({
-                    group: group.group + "-2",
-                    income: group.income,
-                    numOfRes: group.numberOfReservations
-                });
-            }
-
-            for (let group of response.data){
-                data.push({
-                    group: group.group + "-4",
-                    income: group.income,
-                    numOfRes: group.numberOfReservations
-                });
-            }
-
             setData(data);
-        });
-
-        getMonthlyReportById(1000005).then((response) => {
-            console.log(response)
-            console.log(response.data)
-        });
-    }, [])
-
-    // reference: https://react-bootstrap-table.github.io/react-bootstrap-table2/storybook/index.html?selectedKind=Pagination&selectedStory=Custom%20Pagination&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel
-    const customTotal = (from, to, size) => (
-        <span className="react-bootstrap-table-pagination-total">
-          Showing { from } to { to } of { size } Results
-        </span>
-      );
-      
-    const options = {
-        paginationSize: 4,
-        pageStartIndex: 0,
-        // alwaysShowAllBtns: true, // Always show next and previous button
-        // withFirstAndLast: false, // Hide the going to First and Last page button
-        // hideSizePerPage: true, // Hide the sizePerPage dropdown always
-        // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
-        firstPageText: 'First',
-        prePageText: 'Back',
-        nextPageText: 'Next',
-        lastPageText: 'Last',
-        nextPageTitle: 'First page',
-        prePageTitle: 'Pre page',
-        firstPageTitle: 'Next page',
-        lastPageTitle: 'Last page',
-        showTotal: true,
-        paginationTotalRenderer: customTotal,
-        disablePageTitle: true,
-        sizePerPageList: [{
-            text: '5', value: 5
-        }, {
-            text: '10', value: 10
-        }, {
-            text: 'All', value: data.length
-        }]
-    };
+        })
+    }, [completed, canceled, potential, chosenAssetId, fromDate, toDate, period]
+    )
 
     return <div className='borderedBlock mt-4'>
-            <Row>
-                <Col sm={6} align="center" className='mt-3'>
-                    <p style={{fontSize: "xx-large"}}>Income</p>
+            <Row className='pt-4'>
+                <Col sm={4}>
+                    <Form.Select 
+                        name="assetIdSelect" 
+                        onChange={(e)=>{setChosenAssetId(e.target.value)}}>
+                            <option value={-1}>All</option>
+                        { assets.map((asset) => <option value={asset.id}>{asset.name}</option>) }
+                    </Form.Select>
+                    <Form.Select className='mt-1' 
+                        name="reportPeriodSelect" 
+                        onChange={(e)=>{setPeriod(e.target.value)}}>
+                            <option value={1}>Monthly</option>
+                            <option value={2}>Yearly</option>
+                            <option value={0}>Weekly</option>
+                    </Form.Select>
                 </Col>
-                <Col sm={6} align="center" className='mt-3'>
-                    <p style={{fontSize: "xx-large"}}>Number of Reserations</p>
-                </Col>
-            </Row>
-            <Row >
-                <Col sm={6}>
-                    <VictoryChart
-                        theme={VictoryTheme.material}
-                        domainPadding={20}
-                        containerComponent={
-                            <VictoryZoomContainer
-                            allowZoom={false}
-                            zoomDomain={{x:[0,4]}}/>
-                        }
-                        animate={{
-                            duration: 1000,
-                        }}
-                        
-                    >
-                        <VictoryAxis />
-                        <VictoryAxis
-                        dependentAxis
-                        tickFormat={(x) => (`${x} €`)}
-                        />
-                        <VictoryBar
-                            data={data}
-                            x="group"
-                            y="income"
-                            barWidth={30}
-                            labels={({ datum }) => datum.income}
-                            style={
-                                { 
-                                    labels: { fill: "white" },
-                                    data: { fill: "#5da4b4" } 
-                                }
+                <Col sm={1} />
+                <Col sm={3}>
+                    <Form.Control
+                        className="mb-1" type="date" name="fromDate" placeholder="Start date" 
+                        value={fromDate}
+                        onChange={(e) => {
+                                setFromDate(e.target.value)
                             }
-                            labelComponent={<VictoryLabel dy={30}/>}
-                            
-                        />
-                    </VictoryChart>
-                </Col>
-                <Col sm={6}>
-                    <VictoryChart
-                        theme={VictoryTheme.material}
-                        domainPadding={20}
-                        containerComponent={
-                            <VictoryZoomContainer
-                            allowZoom={false}
-                            zoomDomain={{x:[0,4]}}/>
-                        }
-                        animate={{
-                            duration: 1000,
-                        }}
-                    >
-                        <VictoryAxis />
-                        <VictoryAxis
-                        dependentAxis
-                        tickFormat={(x) => (`${x}`)}
-                        />
-                        <VictoryBar
-                            data={data}
-                            x="group"
-                            y="numOfRes"
-                            barWidth={30}
-                            labels={({ datum }) => datum.numOfRes}
-                            style={
-                                { 
-                                    labels: { fill: "white" },
-                                    data: { fill: "#5da4b4" } 
-                                }
+                    }/>
+                    <Form.Control
+                        className="mb-1" type="date" name="toDate" placeholder="End date" 
+                        value={toDate}
+                        onChange={(e) => {
+                                setToDate(e.target.value)
                             }
-                            labelComponent={<VictoryLabel dy={30}/>}
-                        />
-                    </VictoryChart>
+                    }/>
+                </Col>
+                <Col sm={1} />
+                <Col sm={3}>
+                    <div><input
+                        type="checkbox"
+                        id="topping"
+                        name="topping"
+                        value="Paneer"
+                        checked={completed}
+                        onChange={() => setCompleted(!completed)}
+                    /> Completed</div>
+                    <div><input
+                        type="checkbox"
+                        id="topping"
+                        name="topping"
+                        value="Paneer"
+                        checked={canceled}
+                        onChange={() => setCanceled(!canceled)}
+                    /> Canceled</div>
+                    <div><input
+                        type="checkbox"
+                        id="topping"
+                        name="topping"
+                        value="Paneer"
+                        checked={potential}
+                        onChange={() => setPotential(!potential)}
+                    /> Potential</div>
                 </Col>
             </Row>
-            <Row>
-                <BootstrapTable
-                    bootstrap4
-                    keyField="group"
-                    data={data}
-                    columns={columns}
-                    pagination={ paginationFactory(options) }
-                />
-            </Row>
+            <ReportCharts data={data}/>
+            <ReportTable data={data}/>
         </div> 
 }
