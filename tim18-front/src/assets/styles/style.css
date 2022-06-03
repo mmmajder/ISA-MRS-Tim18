@@ -84,3 +84,11 @@ img.profile_picture  {
   border: solid 3px var(--dark-blue);
   padding: 25px;
 }
+
+.pagination>li>a:focus {
+  background-color:var(--dark-blue) !important;
+}
+
+.pagination>li>a:active {
+  background-color:var(--dark-blue) !important;
+}
