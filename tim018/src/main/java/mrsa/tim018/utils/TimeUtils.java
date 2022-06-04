@@ -71,5 +71,9 @@ public class TimeUtils {
 	public static String formatYear(LocalDate date) {
 		return date.format(DateTimeFormatter.ofPattern("yyyy"));
 	}
+	
+	public static String formatYearMonthDay(LocalDate date) {
+		return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	}
 
 }

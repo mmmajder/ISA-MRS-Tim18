@@ -38,7 +38,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 			+ "FROM Reservation r "
 			+ "WHERE r.isDeleted = FALSE"
 			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
-	Collection<Report> getMonthlyReports();
+	Collection<Report> getMonthlyReports(String period);
 	
 	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
 			+ "FROM Reservation r "
@@ -86,4 +86,63 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 //	SELECT date_trunc('month', txn_date) AS txn_month, sum(amount) as monthly_sum
 //    FROM yourtable
 //GROUP BY txn_month
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+//			+ "FROM Reservation r "
+//			+ "WHERE r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc(':period', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyReports(String period);
+	
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+//			+ "FROM Reservation r "
+//			+ "WHERE r.timeRange.fromDateTime < now() AND r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyCompletedReports();
+//	
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+//			+ "FROM Reservation r "
+//			+ "WHERE r.status = 1 AND r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyCanceledReports();
+//	
+//	@Query("SELECT new mrsa.tim018.model.Report(date_trunc('month', r.timeRange.fromDateTime), SUM(r.totalPrice), COUNT(r.id))"
+//			+ "FROM Reservation r "
+//			+ "WHERE r.timeRange.fromDateTime > now() AND r.isDeleted = FALSE"
+//			+ " GROUP BY date_trunc('month', r.timeRange.fromDateTime)")
+//	Collection<Report> getMonthlyPotentialReports();
 }

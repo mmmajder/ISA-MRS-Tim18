@@ -189,7 +189,7 @@ public class ReservationService {
 	}
 	
 	public List<Report> getMonthlyReports() {
-		return (List<Report>) reservationRepository.getMonthlyReports();
+		return (List<Report>) reservationRepository.getMonthlyReports("month");
 	}
 	
 	public List<Report> getMonthlyReports(Long assetId) {

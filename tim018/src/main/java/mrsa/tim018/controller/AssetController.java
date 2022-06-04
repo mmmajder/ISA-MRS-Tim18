@@ -40,6 +40,7 @@ import mrsa.tim018.model.Image;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.ReportFilters;
+import mrsa.tim018.model.ReportPeriod;
 import mrsa.tim018.model.Resort;
 import mrsa.tim018.service.AdventureService;
 import mrsa.tim018.service.AssetCalendarSevice;
@@ -347,46 +348,12 @@ public class AssetController {
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/report/monthly")
-	public ResponseEntity<List<Report>> getMonthlyReports(@RequestParam boolean completed, @RequestParam boolean canceled,
-			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate) {
-		List<Report> reports = reportService.getMonthlyReports(completed, canceled, potential);
+	@GetMapping(value = "/report/{renterId}") //LocalDateTime
+	public ResponseEntity<List<Report>> getReports(@PathVariable Long renterId, @RequestParam boolean completed, @RequestParam boolean canceled,
+			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period) {
+		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period);
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
 	}
-	
-	@GetMapping(value = "/report/monthly/{id}")
-	public ResponseEntity<List<Report>> getAssetMonthlyReports(@PathVariable Long id) {
-		Asset a = assetService.findOne(id);
-		if (a == null) 
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
-		List<Report> reports = reservationService.getMonthlyReports(id);
-		
-		for (Report r : reports) {
-			LocalDate date = TimeUtils.getLocalDate(r.getTimestamp());
-			r.setGroup(TimeUtils.formatYearMonth(date));
-		}
-		
-		return new ResponseEntity<>(reports, HttpStatus.OK);
-	}
-	
-//	@GetMapping(value = "/report/yearly/{id}")
-//	public ResponseEntity<List<Report>> getAssetYearlyReports(@PathVariable Long id) {
-//		Asset a = assetService.findOne(id);
-//		if (a == null)
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		
-//		List<Report> reports = reservationService.getAssetMonthlyReports(id);
-//		
-//		for (Report r : reports) {
-//			LocalDate date = TimeUtils.getLocalDate(r.getTimestamp());
-//			r.setGroup(TimeUtils.formatYearMonth(date));
-//		}
-//		
-//		return new ResponseEntity<>(reports, HttpStatus.OK);
-//	}
-//	
-	
 }
 

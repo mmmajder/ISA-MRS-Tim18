@@ -1,6 +1,7 @@
 package mrsa.tim018.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +11,15 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.ReportFilters;
+import mrsa.tim018.model.ReportPeriod;
+import mrsa.tim018.model.ReportReservationStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.repository.ReportRepository;
 import mrsa.tim018.repository.ReservationRepository;
 import mrsa.tim018.utils.TimeUtils;
 
@@ -30,50 +36,56 @@ public class ReportService {
 	@Autowired
 	private ReservationRepository reservationRepository;
 	
-	public List<Report> getMonthlyReports(ReportFilters reportFilters) {
-		return getMonthlyReports(reportFilters.isCompleted(), reportFilters.isCanceled(), reportFilters.isPotential());
-	}
+	@Autowired
+	private ReportRepository reportRepository;
 	
-	public List<Report> getMonthlyReports(boolean completed, boolean canceled, boolean potential) {
+	public List<Report> getReports(Long renterId, boolean completed, boolean canceled, boolean potential, String period) {
 		if (completed && canceled && potential) 
-			return getMontlhyCombinedReports();
+			return getCombinedReports(renterId, period);
 		
 		if (!completed && !canceled && !potential)
 			return new ArrayList<>();
 		
-		List<Report> reports = getReportsFromRepo(completed, canceled, potential); 
-		setGroups(reports);
+		List<Report> reports = getReportsFromRepo(renterId, completed, canceled, potential, period); 
+		setGroups(reports, period);
 		reports = formReports(reports);
 		
 		return reports;
 	}
 	
-	private List<Report> getMontlhyCombinedReports(){
-		List<Report> reports = (List<Report>) reservationRepository.getMonthlyReports();
-		setGroups(reports);
+	private List<Report> getCombinedReports(Long renterId, String period){
+		List<Report> reports = (List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.ALL, period);
+		setGroups(reports, period);
 		sortReports(reports);
 		return reports;
 	}
 	
-	private List<Report> getReportsFromRepo(boolean completed, boolean canceled, boolean potential){
+	private List<Report> getReportsFromRepo(Long renterId, boolean completed, boolean canceled, boolean potential, String period){
 		List<Report> reports = new ArrayList<Report>(); 
 		
 		if (completed)
-			reports.addAll((List<Report>) reservationRepository.getMonthlyCompletedReports());
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.COMPLETED, period));
 			
 		if (canceled)
-			reports.addAll((List<Report>) reservationRepository.getMonthlyCanceledReports());
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.CANCELED, period));
 		
 		if (potential)
-			reports.addAll((List<Report>) reservationRepository.getMonthlyPotentialReports());
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.POTENTIAL, period));
 		
 		return reports;
 	}
 	
-	private void setGroups(List<Report> reports) {
+	private void setGroups(List<Report> reports, String period) {
 		for (Report r : reports) {
 			LocalDate date = TimeUtils.getLocalDate(r.getTimestamp());
-			r.setGroup(TimeUtils.formatYearMonth(date));
+			
+			switch(period) {
+			case "month" : r.setGroup(TimeUtils.formatYearMonth(date)); break;
+			case "year" : r.setGroup(TimeUtils.formatYear(date)); break;
+			case "week" : r.setGroup(TimeUtils.formatYearMonthDay(date)); break;
+			default: r.setGroup(null);
+			}
+			
 		}
 	}
 	

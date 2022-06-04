@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { getMonthlyReport, getMonthlyReportById } from '../../services/api/AssetApi';
+import { getReport, getAssetReport } from '../../services/api/AssetApi';
 import { Row, Col, Form } from 'react-bootstrap';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryZoomContainer, VictoryLabel } from 'victory';
 import {useState} from 'react';
@@ -23,8 +23,10 @@ export default function Report(){
     const [assets, setAssets] = useState([]);
     const [chosenAssetId, setChosenAssetId] = useState("-1");
     const [fromDate, setFromDate] = useState(new Date());
+    const [hasChangedFromDate, setHasChangedFromDate] = useState(false);
     const [toDate, setToDate] = useState(new Date());
-    const [period, setPeriod] = useState(1);
+    const [hasChangedToDate, setHasChangedToDate] = useState(false);
+    const [period, setPeriod] = useState("month");
 
     useEffect(() => {
         async function fetchUser(){
@@ -46,14 +48,35 @@ export default function Report(){
     }, [renter])
 
     useEffect(() => {
-        let reportFilters = {completed, canceled, potential, fromDate, toDate, chosenAssetId, period};
+        let fromDatee = fromDate;
+        if (!hasChangedFromDate)
+            fromDatee = "none";
+
+        let toDatee = toDate;
+        if (!hasChangedToDate)
+            toDatee = "none";
+
+        let reportFilters = {completed, canceled, potential, fromDatee, toDatee, period};
 
         console.log(reportFilters);
+        
+        if (chosenAssetId == -1 && !!renter)
+            getReport(renter.id, reportFilters).then((response) => {
+                fillInData(response.data);
+            })
+        else 
+            getAssetReport(chosenAssetId, reportFilters).then((response) => {
+                fillInData(response.data);
+            })
 
-        getMonthlyReport(reportFilters).then((response) => {
+    }, [completed, canceled, potential, chosenAssetId, fromDate, toDate, period, hasChangedFromDate, hasChangedToDate, renter]
+    )
+
+    const fillInData = useCallback(
+        (responseData) => {
             let data = [];
 
-            for (let group of response.data){
+            for (let group of responseData){
                 data.push({
                     group: group.group,
                     income: group.income,
@@ -62,8 +85,7 @@ export default function Report(){
             }
 
             setData(data);
-        })
-    }, [completed, canceled, potential, chosenAssetId, fromDate, toDate, period]
+        }, [setData]
     )
 
     return <div className='borderedBlock mt-4'>
@@ -78,9 +100,9 @@ export default function Report(){
                     <Form.Select className='mt-1' 
                         name="reportPeriodSelect" 
                         onChange={(e)=>{setPeriod(e.target.value)}}>
-                            <option value={1}>Monthly</option>
-                            <option value={2}>Yearly</option>
-                            <option value={0}>Weekly</option>
+                            <option value={"month"}>Month</option>
+                            <option value={"year"}>Year</option>
+                            <option value={"week"}>Week</option>
                     </Form.Select>
                 </Col>
                 <Col sm={1} />
@@ -90,6 +112,7 @@ export default function Report(){
                         value={fromDate}
                         onChange={(e) => {
                                 setFromDate(e.target.value)
+                                setHasChangedFromDate(true);
                             }
                     }/>
                     <Form.Control
@@ -97,6 +120,7 @@ export default function Report(){
                         value={toDate}
                         onChange={(e) => {
                                 setToDate(e.target.value)
+                                setHasChangedToDate(true);
                             }
                     }/>
                 </Col>
