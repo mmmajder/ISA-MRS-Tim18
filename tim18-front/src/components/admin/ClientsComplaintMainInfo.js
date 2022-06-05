@@ -1,36 +1,46 @@
 import React, {useEffect, useState} from 'react'
-import {getRenterByAssetId, getRenterByID} from './../../services/api/RenterApi'
+import { getRenterByID} from './../../services/api/RenterApi'
 import {getAssetById} from './../../services/api/AssetApi'
 import { Col, Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faHouseChimney, faFishFins, faShip } from '@fortawesome/free-solid-svg-icons'
+import { getClientByID } from '../../services/api/ClientApi'
 
 
 const ClientsComplaintMainInfo = ({request}) => {
     const [renter, setRenter] = useState(null)
     const [asset, setAsset] = useState(null)
-
-    async function fetchAsset(){
-        const requestData = await getAssetById(request.assetId);
-        setAsset(!!requestData ? requestData.data : []);
-        return requestData;
-    }
-
-    async function fetchRenter(){
-        const requestData = await getRenterByID(request.renterID);
-        setRenter(!!requestData ? requestData.data : []);
-        return requestData;
-    }
+    const [client, setClient] = useState(null)
+    let prefix = ""
+    
 
     useEffect(() => {
-        console.log("request")
-        console.log(request)
+        async function fetchAsset(){
+            const requestData = await getAssetById(request.assetId);
+            setAsset(!!requestData ? requestData.data : []);
+            return requestData;
+        }
+    
+        async function fetchRenter(){
+            const requestData = await getRenterByID(request.renterID);
+            setRenter(!!requestData ? requestData.data : []);
+            return requestData;
+        }
+
+        async function fetchClient(){
+            const requestData = await getClientByID(request.clientID);
+            setClient(!!requestData ? requestData.data : []);
+            return requestData;
+        }
+
         if (request.assetId!=null) {
             fetchAsset();
         }
         else {
             fetchRenter();
         }
+
+        fetchClient();
     }, [])
 
     let image;
@@ -38,6 +48,7 @@ const ClientsComplaintMainInfo = ({request}) => {
     if (renter || asset){
         //console.log(asset.assetType)
         if (renter!=null) {
+            prefix = "Renter: "
             data = renter.firstName + " " + renter.lastName
             switch (renter.userType) {
                 case "BoatRenter":
@@ -59,12 +70,17 @@ const ClientsComplaintMainInfo = ({request}) => {
             data = asset.name
             switch (asset.assetType) {
                 case "BOAT":
+                    prefix = "Boat: "
                     image = <FontAwesomeIcon icon={faShip} className="faButtonsRegistration mt-2"/>
                     break;
                 case "FISHING_ADVENTURE":
+                    prefix = "Adventure: "
+                    data = asset.name
                     image = <FontAwesomeIcon icon={faFishFins} className="faButtonsRegistration mt-2"/>
                     break;
                 case "RESORT":
+                    prefix = "Resort: "
+                    data = asset.name
                     image = <FontAwesomeIcon icon={faHouseChimney} className="faButtonsRegistration mt-2"/>
                     break;    
                 default:
@@ -72,8 +88,6 @@ const ClientsComplaintMainInfo = ({request}) => {
             }
         }
     }
-    
-    
 
     return (
         <Row>
@@ -84,8 +98,11 @@ const ClientsComplaintMainInfo = ({request}) => {
             
         </Col>
         <Col>
-            <Row className="importantInfo">
-                {data}
+            <Row>
+                {prefix + data}
+            </Row>
+            <Row>
+                {"Reviewer: " + client.firstName + " " + client.lastName}
             </Row>
         </Col>
     </Row>

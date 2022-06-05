@@ -20,6 +20,16 @@ export async function getClientsReviews() {
     }
 }
 
+export async function getRentersReviews() {
+    try {
+        const responseData = await api.get(`/review/renters/pending`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
 export async function getReviews(userId, acceptedOnly) {
     try {
         const responseData = await api.get(`/review/user/${userId}`, {
@@ -99,3 +109,22 @@ export async function createReview(reservationId, review){
     }
   } 
   
+  export async function addPoint(request){
+    try {
+        const responseData = await api.put(`/review/addPoint/`, request);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function declineAddPoint(request){
+    try {
+        const responseData = await api.put(`/review/declineAddPoint/`, request);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}

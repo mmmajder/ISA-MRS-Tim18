@@ -36,6 +36,7 @@ import Subscriptions from './components/reservations/Subscriptions';
 import Reviews from './components/reservations/Reviews.js';
 import MyProfile from './components/profile/MyProfile.js';
 import OtherProfile from './components/profile/OtherProfile.js';
+import AdminRentersComplaints from './components/admin/AdminRentersComplaints.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -73,6 +74,7 @@ function App() {
   const adminClientsComplaints = <Container><AdminClientsComplaints/></Container>
   const SubscriptionList = <Container><Subscriptions /></Container>
   const reviews = <Container><Reviews/></Container>
+  const adminRentersComplaints = <Container><AdminRentersComplaints/></Container>
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -106,6 +108,7 @@ function App() {
                   <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
                   <Route exact path="/subscriptions" element={SubscriptionList} /> 
                   <Route path="/reviews/:reservationId" element={reviews}/>
+                  <Route path="/adminRentersComplaints" element={adminRentersComplaints}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

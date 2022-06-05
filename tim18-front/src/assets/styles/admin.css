@@ -52,3 +52,11 @@
     background-color: var(--hovered-blue) !important;
     
   }
+
+
+  .declineButtonAdmin {
+    background-color: white !important;
+    color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+    font-size: large !important;
+  }

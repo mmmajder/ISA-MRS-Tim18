@@ -24,6 +24,13 @@
 .acceptReqReq {
   width: 80% !important;
   text-align: center;
+
+}
+
+.commentBtn {
+  width: 100% !important;
+  text-align: center;
+  font-size: large !important;
 }
 
 .declineButton {

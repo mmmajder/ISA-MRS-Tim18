@@ -78,6 +78,14 @@ public class ReviewController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/renters/pending")
+	public ResponseEntity<List<Review>> getAllRenterPendingReviews() {
+		List<Review> data = reviewService.getPendingPointReviewsFromRenters();
+		if (data == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	
 	@PostMapping(value = "/{reservationId}", consumes = "application/json")
 	public ResponseEntity<Review> createReview(@PathVariable Long reservationId, @RequestBody Review review) {
@@ -184,7 +192,7 @@ public class ReviewController {
 		double r = reviewService.getAssetRating(assetId);
 		
 		return new ResponseEntity<>(r, HttpStatus.OK);
-	}//
+	}
 	
 	@PutMapping(value = "/cancelClientsComplaint/{id}")
 	public ResponseEntity<Review> cancelClientsComplaint(@PathVariable Long id) {

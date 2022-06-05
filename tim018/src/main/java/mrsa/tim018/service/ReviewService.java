@@ -153,4 +153,8 @@ public class ReviewService {
 		retData.addAll(reviewRepository.getPendingReviewsAboutRenter());
 		return retData;
 	}
+
+	public List<Review> getPendingPointReviewsFromRenters() {
+		return  (List<Review>) reviewRepository.getPendingReviewsAboutClient();
+	}
 }

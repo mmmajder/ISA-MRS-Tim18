@@ -31,12 +31,17 @@ const ListedAdminClientsComplaint = ({request, key, onDelete}) => {
         <Col sm="4" className="mt-4">
             {request.text}
         </Col>
-        <Col sm="2" className="mt-3">
-            <RegistrationRequestButton request={request} text='Comment' onClickFunction={commentRequest}/>
+        <Col>
+            <Row>
+            <Col sm="6" className="mt-3">
+                <RegistrationRequestButton request={request} text='Comment' onClickFunction={commentRequest}/>
+            </Col>
+            <Col sm="6" className="mt-3">
+                <RegistrationRequestButton request={request} text='Decline' onClickFunction={cancelRequest}/>
+            </Col>
+            </Row>
         </Col>
-        <Col sm="2" className="mt-3">
-            <RegistrationRequestButton request={request} text='Cancel' onClickFunction={cancelRequest}/>
-        </Col>
+        
         
     </Row>
     {activeForm}

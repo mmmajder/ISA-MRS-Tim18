@@ -102,10 +102,13 @@ insert into review(is_deleted, text, rating, is_complaint, is_client_writing, cl
 						/*asset*/
 						(false, 'Old boat', 2, true, true, 2, null, 1000005, 0, false, 4),
 						/*renter*/
-						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4);
+						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4),
 						
 						/*client*/
---						(false, 'Meh.', 3, false, false, 2, 3, 1000005, 0, false, 4);
+						(false, 'Meh.', 3, false, true, 2, 3, 1000005, 0, false, 4),
+						(false, 'Very bad.', 2, true, false, 2, 3, 1000005, 0, false, 4),
+						(false, 'Awful.', 1, true, false, 2, 3, 1000005, 0, false, 4);
+						
 					  
 insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price) values
 						(false, 0, 1000001, null, 2, null, null, 1, 100),
@@ -144,10 +147,5 @@ insert into loyalty_program (is_deleted, user_discount_type, discount, level, po
 /*percent per reservation and points per reservation*/
 insert into reservation_finances (points_per_reservation, reservation_tax) values
 	(3, 40);
-	
-insert into clients_complaint (asset_id, is_deleted, receiver_clients_complaint, sender, text) values
-	(1000004, false, null, 2, 'Boat was drowning'),
-	(null, false, 4, 2, 'Rude boat owner'),
-	(null, false, 4, 2, 'Rude boat owner');
 	
 
