@@ -149,12 +149,16 @@ public class ReviewService {
 	}
 	
 	public List<Review> getPendingReviewsFromClients() {
-		List<Review> retData = (List<Review>) reviewRepository.getPendingReviewsAboutAsset();
-		retData.addAll(reviewRepository.getPendingReviewsAboutRenter());
+		List<Review> retData = (List<Review>) reviewRepository.getPendingComplaintsAboutAsset();
+		retData.addAll(reviewRepository.getPendingComplaintsAboutRenter());
 		return retData;
 	}
 
 	public List<Review> getPendingPointReviewsFromRenters() {
-		return  (List<Review>) reviewRepository.getPendingReviewsAboutClient();
+		return  (List<Review>) reviewRepository.getPendingComplaintsCollectionAboutClient();
+	}
+
+	public List<Review> getPendingReviewsNotComplaints() {
+		return (List<Review>) reviewRepository.getPendingReviewsNotComplaints();
 	}
 }
