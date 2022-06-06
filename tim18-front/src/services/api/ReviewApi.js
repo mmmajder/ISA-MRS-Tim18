@@ -111,7 +111,8 @@ export async function createReview(reservationId, review){
   
   export async function addPoint(request){
     try {
-        const responseData = await api.put(`/review/addPoint/`, request);
+        console.log(request)
+        const responseData = await api.put(`/review/addPoint/${request.id}`);
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -121,7 +122,7 @@ export async function createReview(reservationId, review){
 
 export async function declineAddPoint(request){
     try {
-        const responseData = await api.put(`/review/declineAddPoint/`, request);
+        const responseData = await api.put(`/review/declineAddPoint/${request.id}`);
         return responseData;
     } catch (err) {
         console.log(err.message);

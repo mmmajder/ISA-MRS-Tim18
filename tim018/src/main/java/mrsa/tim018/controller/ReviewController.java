@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import mrsa.tim018.dto.MailsDTO;
 import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
@@ -211,10 +212,50 @@ public class ReviewController {
 		if (review==null) { 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		review.setStatus(RequestStatus.Declined);
+		review.setStatus(RequestStatus.Accepted);
 		reviewService.save(review);
 		try {
 			emailService.sendMailsClientsComplaint(reqData.getMailClient(), reqData.getMailRenter(), review.getClientID());
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(review, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/addPoint/{id}")
+	public ResponseEntity<Review> addPoint(@PathVariable Long id) {
+		Review review = reviewService.findOne(id);
+		if (review==null) {  
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		review.setStatus(RequestStatus.Accepted);
+		reviewService.save(review);
+		Client client = userService.findClient(review.getClientID());
+		client.setPenaltyPoints(client.getPenaltyPoints()+1);
+		userService.saveClient(client);  
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		try {
+			emailService.sendPointMail(review, client, renter, true);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(review, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/declineAddPoint/{id}")
+	public ResponseEntity<Review> declineAddPoint(@PathVariable Long id) {
+		Review review = reviewService.findOne(id);
+		if (review==null) { 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		review.setStatus(RequestStatus.Declined);
+		reviewService.save(review);
+		Client client = (Client) userService.findOne(review.getClientID());
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		try {
+			emailService.sendPointMail(review, client, renter, false);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

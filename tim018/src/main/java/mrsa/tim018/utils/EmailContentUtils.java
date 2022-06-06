@@ -7,8 +7,10 @@ import java.time.LocalDateTime;
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Review;
 import mrsa.tim018.model.Subscription;
 import net.bytebuddy.asm.Advice.Local;
 
@@ -1668,6 +1670,34 @@ public class EmailContentUtils {
 		String clientName = client.getFirstName() + " " + client.getLastName();
 		String title = "                              "+ clientName + " has complaint on your work\r\n";
 		String body = mailClient;
+		String buttonText = "";
+		return originalTemplate(title, body, buttonText);
+	}
+
+	public static String getAddPointMail(Review review, Client client, Renter renter, String receiver, boolean isAccepted) {
+		String renterName = renter.getFirstName() + " " + renter.getLastName();
+		String title;
+		if (receiver=="client") {
+			if (isAccepted) {
+				title = "                              "+ renterName + " has complaint on your work and you got punishment point\r\n";
+			} else {
+				title = "                              "+ renterName + " has complaint on your work but it was not enough to give you points\r\n";
+			}
+		} else {
+			if (isAccepted) {
+				title = "                              Your complaint has been sent to user and he got 1 point\r\n";
+			} else {
+				title = "                              Your complaint has been sent to user but it is not enough to give user 1 point\r\n";
+			}
+		}
+		String body = "Comment: " + review.getText();
+		String buttonText = "";
+		return originalTemplate(title, body, buttonText);
+	}
+
+	public static String getRentersAddPoint(Review review, Client client, Renter renter) {
+		String title = "                              Your complaint has been sent to user and he got 1 point\r\n";
+		String body = review.getText();
 		String buttonText = "";
 		return originalTemplate(title, body, buttonText);
 	}

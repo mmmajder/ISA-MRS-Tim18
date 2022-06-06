@@ -11,8 +11,10 @@ import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.Review;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.User;
 import mrsa.tim018.utils.EmailContentUtils;
@@ -205,10 +207,29 @@ public class EmailService {
 		
 		javaMailSender.send(messageRenter); 
 		
-//		String content2 = EmailContentUtils.getClientsComplaintResponseToRenter(mailClient, client); 
-//		
-//		helper.setText(content2, true);
-//		
-//		javaMailSender.send(message); 
+	}
+	
+	public void sendPointMail(Review review, Client client, Renter renter, boolean isAccepted) throws MessagingException {
+		sendPointMail(review, client, renter, "client", isAccepted);
+		sendPointMail(review, client, renter, "renter", isAccepted);
+	}
+	
+	@Async
+	private void sendPointMail(Review review, Client client, Renter renter, String receiver, boolean isAccepted) throws MessagingException {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("[Hakuna Matata] Renters complaint");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getAddPointMail(review, client, renter, receiver, isAccepted); 
+		String URL = siteURL + "/login";
+		content = content.replace("[[URL]]", URL);
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+		
 	}
 }

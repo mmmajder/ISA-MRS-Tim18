@@ -10,6 +10,7 @@ const ListedAdminRentersComplaint = ({request, key, onDelete}) => {
     const acceptRequest = () => {
         // add pop up
         addPoint(request);
+        onDelete(request)
     }
 
     const handleCallback = (childData) =>{

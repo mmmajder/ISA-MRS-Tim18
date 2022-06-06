@@ -42,6 +42,15 @@ public class UserService<T> implements UserDetailsService{
 		User user = userRepository.findById(id).get();
 		return user;
 	}
+	
+	public Client findClient(Long id) {
+		Client client = clientRepository.findById(id).get();
+		return client;
+	}
+	
+	public Client saveClient(Client client) {
+		return clientRepository.save(client);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
