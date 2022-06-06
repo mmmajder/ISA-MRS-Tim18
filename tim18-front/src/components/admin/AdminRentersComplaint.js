@@ -31,7 +31,7 @@ const AdminRentersComplaint = ({request}) => {
                     {"Client: " + client.firstName + " "  + client.lastName}
                 </Row>
                 <Row>
-                    {"Reviewer: " + client.firstName + " "  + client.lastName}
+                    {"Reviewer: " + renter.firstName + " "  + renter.lastName}
                 </Row>
             </Col>
         </Row>

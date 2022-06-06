@@ -129,3 +129,24 @@ export async function declineAddPoint(request){
         return err.message
     }
 }
+
+
+export async function getPendingNonComplaintReviews() {
+    try {
+        const responseData = await api.get(`/review/pendingNonComplaint`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function acceptdeclineReview(request, isAccepted){
+    try {
+        const responseData = await api.put(`/review/acceptdeclineReview/${request.id}`, isAccepted);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}

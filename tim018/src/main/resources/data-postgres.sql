@@ -99,7 +99,7 @@ insert into review(is_deleted, text, rating, is_complaint, is_client_writing, cl
 						/*renter*/
 						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4),
 						
-						/*asset*/
+						/*asset*/  
 						(false, 'Old boat', 2, true, true, 2, null, 1000005, 0, false, 4),
 						/*renter*/
 						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4),

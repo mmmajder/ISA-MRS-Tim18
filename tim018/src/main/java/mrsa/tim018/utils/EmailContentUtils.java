@@ -1699,9 +1699,9 @@ public class EmailContentUtils {
 			String receiver) {
 		String renterName = renter.getFirstName() + " " + renter.getLastName();
 		String clientName = client.getFirstName() + " " + client.getLastName();
-		String title = "";
+		String title = ""; 
 		if (receiver=="client") {
-			if (isAccepted) {
+			if (isAccepted) { 
 				if (review.isClientWriting())
 					title = "                              Your review on " + renterName  + " is accepted! \r\n";
 				else

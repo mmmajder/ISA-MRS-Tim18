@@ -263,13 +263,13 @@ public class ReviewController {
 	}
 
 	@PutMapping(value = "/acceptdeclineReview/{id}")
-	public ResponseEntity<Review> acceptReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
+	public ResponseEntity<Review> acceptdeclineReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
 		Review review = reviewService.findOne(id);
 		if (review == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		if (isAccepted) {
-			review.setStatus(RequestStatus.Accepted);
+			review.setStatus(RequestStatus.Accepted); 
 		} else {
 			review.setStatus(RequestStatus.Declined);
 		}
@@ -286,7 +286,7 @@ public class ReviewController {
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/review")
+	@GetMapping(value = "/pendingNonComplaint")
 	public ResponseEntity<List<Review>> getPendingReviews() {
 		List<Review> pendingReviews = reviewService.getPendingReviewsNotComplaints();
 		if (pendingReviews.size() == 0)

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { getRentersReviews } from '../../services/api/ReviewApi';
-import ListedAdminRentersComplaint from './ListedAdminRentersComplaint';
+import { getPendingNonComplaintReviews } from '../../services/api/ReviewApi';
+import ListedAdminReviews from "./ListedAdminReviews"
 
-const AdminRentersComplaints = () => {
+const AdminReviews = () => {
     const [requests, setRequests] = useState([]);
 
     useEffect(() => {
         async function fetchRenterComplaints(){
-            const requestData = await getRentersReviews();
+            const requestData = await getPendingNonComplaintReviews();
             setRequests(!!requestData ? requestData.data : []);
             return requestData;
         }
@@ -24,13 +24,13 @@ const AdminRentersComplaints = () => {
     if (requests != undefined){
         console.log(requests)
         console.log("request")
-        listedRequests = requests.map((request) => <ListedAdminRentersComplaint request={request} key={request.id} onDelete={handleCallback}/>)
+        listedRequests = requests.map((request) => <ListedAdminReviews request={request} key={request.id} onDelete={handleCallback}/>)
     }
 
     return (
         <>
             <div className="importantInfo mt-2">
-                Renters complaints
+                Reviews
             </div>
             {listedRequests}
             <p className='mt-3'></p> 
@@ -38,4 +38,4 @@ const AdminRentersComplaints = () => {
     )
 }
 
-export default AdminRentersComplaints
+export default AdminReviews

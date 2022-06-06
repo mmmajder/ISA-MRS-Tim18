@@ -29,6 +29,9 @@ const AdminClientsComplaints = () => {
 
     return (
         <>
+            <div className="importantInfo mt-2">
+                Clients complaints
+            </div>
             {listedRequests}
             <p className='mt-3'></p> 
         </>
