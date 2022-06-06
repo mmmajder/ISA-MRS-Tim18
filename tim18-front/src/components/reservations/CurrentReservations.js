@@ -47,7 +47,6 @@ export default function CurrentReservations({client}){
   return (
     <>
       <AssetTypeOption setAssetType={setAssetType}/>
-      halooooo
       {listedReservations}
       {<ConfirmModal message={message} show={show} handleClose={handleConfirm}/>}
     </>

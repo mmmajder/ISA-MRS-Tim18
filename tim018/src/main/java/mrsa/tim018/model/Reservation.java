@@ -51,6 +51,9 @@ public class Reservation {
 	@Column(name = "total_price", nullable = false)
 	private double totalPrice;
 	
+	@Column(name = "cancelation_fee", nullable = false)
+	private int cancelationFee;
+	
 
 	public Reservation() {
 	}
@@ -158,7 +161,12 @@ public class Reservation {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	
-	
 
+	public int getCancelationFee() {
+		return cancelationFee;
+	}
+
+	public void setCancelationFee(int cancelationFee) {
+		this.cancelationFee = cancelationFee;
+	}
 }

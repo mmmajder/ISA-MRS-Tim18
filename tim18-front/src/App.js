@@ -38,6 +38,7 @@ import MyProfile from './components/profile/MyProfile.js';
 import OtherProfile from './components/profile/OtherProfile.js';
 import AdminRentersComplaints from './components/admin/AdminRentersComplaints.js';
 import AdminReviews from './components/admin/AdminReviews.js';
+import Report from './components/asset/Report.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -49,7 +50,6 @@ const AppContainer = styled.div`
 `;
 function App() {
   const [user, setUser] = React.useState(getRole());
-  const [userId, setUserId] = React.useState();
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
   const handleLogin = (user) => {setUser(user);};  
@@ -114,7 +114,7 @@ function App() {
                   <Route path="/reviews/:reservationId" element={reviews}/>
                   <Route path="/adminRentersComplaints" element={adminRentersComplaints}/>
                   <Route path="/adminReviews" element={adminReviews}/>
-                </Route>
+                  <Route path="/report" element={<Container><Report/></Container>}/></Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
                 <Route index element={login} />

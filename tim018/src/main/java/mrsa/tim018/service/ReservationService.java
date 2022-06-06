@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Report;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.TimeRange;
@@ -162,6 +163,9 @@ public class ReservationService {
 
 	public Reservation cancelReservation(Reservation reservation) {
 		assetService.cancelReservation(reservation);
+		int cancelationFee = reservation.getCancelationFee();
+		double moneyThatRenterKeeps = reservation.getTotalPrice() * cancelationFee;
+		reservation.setTotalPrice(moneyThatRenterKeeps);
 		reservation.setStatus(ReservationStatus.Canceled);
 		return save(reservation);
 	}
@@ -178,5 +182,17 @@ public class ReservationService {
 		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
 		
 		return reservations;
+	}
+	
+	public List<Reservation> getAssetReservations(Long assetId){
+		return (List<Reservation>) reservationRepository.getAssetReservations(assetId);
+	}
+	
+	public List<Report> getMonthlyReports() {
+		return (List<Report>) reservationRepository.getMonthlyReports("month");
+	}
+	
+	public List<Report> getMonthlyReports(Long assetId) {
+		return (List<Report>) reservationRepository.getMonthlyReports(assetId);
 	}
 }
