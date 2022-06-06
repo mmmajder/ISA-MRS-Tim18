@@ -152,9 +152,30 @@ export async function createNewPriceForAsset(assetId, newPrice) {
     }
 }
 
-export async function getAssetTodayPrice(assetId, callback) {
+export async function getAssetTodayPrice(assetId) {
     try {
        const responseData = await api.get(`/prices/today/${assetId}`)
+       return responseData;
+   } catch (err) {
+       console.log(err.message);
+       return err.message
+   }
+}
+
+//reports
+export async function getReport(renterId, reportFilters) {
+    try {
+       const responseData = await api.get(`/assets/report/${renterId}`, {
+        params: {
+            "completed" : reportFilters.completed,
+            "canceled":  reportFilters.canceled, 
+            "potential" : reportFilters.potential, 
+            "fromDate" : reportFilters.fromDatee,
+            "toDate" : reportFilters.toDatee,
+            "period": reportFilters.period,
+            "assetId": reportFilters.assetId
+        }
+      })
        return responseData;
    } catch (err) {
        console.log(err.message);

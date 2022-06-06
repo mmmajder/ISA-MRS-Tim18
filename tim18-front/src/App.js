@@ -33,6 +33,7 @@ import Subscriptions from './components/reservations/Subscriptions';
 import Reviews from './components/reservations/Reviews.js';
 import MyProfile from './components/profile/MyProfile.js';
 import OtherProfile from './components/profile/OtherProfile.js';
+import Report from './components/asset/Report.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -44,7 +45,6 @@ const AppContainer = styled.div`
 `;
 function App() {
   const [user, setUser] = React.useState(getRole());
-  const [userId, setUserId] = React.useState();
 
   const handleLogout = () => {setUser(null); localStorage.clear();};  
   const handleLogin = (user) => {setUser(user);};  
@@ -98,6 +98,7 @@ function App() {
                   <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
                   <Route exact path="/subscriptions" element={SubscriptionList} /> 
                   <Route path="/reviews/:reservationId" element={reviews}/>
+                  <Route path="/report" element={<Container><Report/></Container>}/>
                 </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />

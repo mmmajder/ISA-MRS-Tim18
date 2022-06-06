@@ -96,10 +96,7 @@ public class ReservationController {
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
 		Reservation reservation = reservationService.findOne(reservationId);
 		Client client = reservation.getClient();	// TODO: penalty points?
-		
-		Asset asset = reservation.getAsset();
-		int cancelationConditions = asset.getCancelationConditions();		// TODO: reports?
-		
+			//TODO: tri dana do pocetka
 		reservation = reservationService.cancelReservation(reservation);
 		
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
@@ -112,6 +109,7 @@ public class ReservationController {
 		TimeRange timeRange = new TimeRange(false, specialOfferReservationDTO.getStartDateTime(), specialOfferReservationDTO.getEndDateTime());
 		
 		Reservation reservation = new Reservation(asset, client, timeRange);
+		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservationService.save(reservation);
 		
 		asset.getCalendar().getReserved().add(reservation);
@@ -126,6 +124,7 @@ public class ReservationController {
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
 		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice());
+		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservation = reservationService.makeRegularReservation(reservation);
 		if(reservation!=null) {
 			emailService.sendReservationSuccessfull(reservation);
