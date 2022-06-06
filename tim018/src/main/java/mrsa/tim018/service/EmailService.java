@@ -232,4 +232,37 @@ public class EmailService {
 		javaMailSender.send(message);
 		
 	}
+
+	public void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted) throws MessagingException {
+		if (isAccepted) {
+			sendReviewMail(review, client, renter, isAccepted, "client");
+			sendReviewMail(review, client, renter, isAccepted, "renter");
+		} else {
+			if (review.isClientWriting()) {
+				sendReviewMail(review, client, renter, isAccepted, "client");
+			}
+			else {
+				sendReviewMail(review, client, renter, isAccepted, "renter");
+			}
+		}
+		
+	}
+	
+	@Async
+	private void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted, String receiver) throws MessagingException {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("[Hakuna Matata] Renters complaint");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getReviewMail(review, client, renter, isAccepted, receiver); 
+		String URL = siteURL + "/login";
+		content = content.replace("[[URL]]", URL);
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+	}
 }

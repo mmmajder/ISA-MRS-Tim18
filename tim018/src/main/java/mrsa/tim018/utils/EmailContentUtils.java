@@ -1695,9 +1695,34 @@ public class EmailContentUtils {
 		return originalTemplate(title, body, buttonText);
 	}
 
-	public static String getRentersAddPoint(Review review, Client client, Renter renter) {
-		String title = "                              Your complaint has been sent to user and he got 1 point\r\n";
-		String body = review.getText();
+	public static String getReviewMail(Review review, Client client, Renter renter, Boolean isAccepted,
+			String receiver) {
+		String renterName = renter.getFirstName() + " " + renter.getLastName();
+		String clientName = client.getFirstName() + " " + client.getLastName();
+		String title = "";
+		if (receiver=="client") {
+			if (isAccepted) {
+				if (review.isClientWriting())
+					title = "                              Your review on " + renterName  + " is accepted! \r\n";
+				else
+					title = "                              "+ renterName + " left a review on you\r\n";
+			} else {
+				if (review.isClientWriting())
+					title = "                              Your review on " + renterName  + " is not accepted! \r\n";
+				
+			}
+		} else {
+			if (isAccepted) {
+				if (!review.isClientWriting())
+					title = "                              Your review on " + clientName  + " is accepted! \r\n";
+				else
+					title = "                              "+ clientName + " left a review on you\r\n";
+			} else {
+				if (review.isClientWriting())
+					title = "                              Your review on " + clientName  + " is not accepted! \r\n";
+			}
+		}
+		String body = "Comment: " + review.getText();
 		String buttonText = "";
 		return originalTemplate(title, body, buttonText);
 	}

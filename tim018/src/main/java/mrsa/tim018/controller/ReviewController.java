@@ -262,4 +262,28 @@ public class ReviewController {
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
+	
+	@PutMapping(value = "/acceptdeclineReview/{id}")
+	public ResponseEntity<Review> acceptReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
+		Review review = reviewService.findOne(id);
+		if (review==null) {  
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		if (isAccepted) {
+			review.setStatus(RequestStatus.Accepted);
+		} else {
+			review.setStatus(RequestStatus.Declined);
+		}
+		reviewService.save(review);
+		Client client = userService.findClient(review.getClientID());
+		userService.saveClient(client);  
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		try {
+			emailService.sendReviewMail(review, client, renter, isAccepted);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(review, HttpStatus.OK);
+	}
 }
