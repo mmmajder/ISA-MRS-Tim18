@@ -29,15 +29,14 @@ public class ReportRepository {
 	private final String groupByPart = " GROUP BY date_trunc('%s', r.timeRange.fromDateTime) ";
 	
 	@SuppressWarnings("unchecked")
-	public List<Report> getReports(Long id, ReportReservationStatus status, String period, Long assetId) {
+	public List<Report> getReports(Long renterId, ReportReservationStatus status, String period, 
+			Long assetId, String fromDate, String toDate) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format(queryBegining, period))
 		.append(getReportReservationStatusPart(status));
 		
-		if (assetId == -1) // if assetId is not specified get all Renter's assets
-			sb.append(" AND r.asset.renter.id = " + id);
-		else 			// else get data only for the specified Asset
-			sb.append(" AND r.asset.id = " + assetId);
+		appendIdPart(sb, renterId, assetId);
+		appendDatePart(sb, fromDate, toDate);
 		
 		sb.append(String.format(groupByPart, period));
 		
@@ -55,5 +54,20 @@ public class ReportRepository {
 		case POTENTIAL : return potentialPart;
 		default: return "";
 		}
+	}
+	
+	private void appendIdPart(StringBuilder sb, Long renterId, Long assetId) {
+		if (assetId == -1) // if assetId is not specified get all Renter's assets
+			sb.append(" AND r.asset.renter.id = " + renterId);
+		else 			// else get data only for the specified Asset
+			sb.append(" AND r.asset.id = " + assetId);
+	}
+	
+	private void appendDatePart(StringBuilder sb, String fromDate, String toDate) {
+		if (!"none".equals(fromDate))
+			sb.append(" AND r.timeRange.fromDateTime > '" + fromDate + "'");
+		
+		if (!"none".equals(toDate))
+			sb.append(" AND r.timeRange.fromDateTime < '" + toDate + "'");
 	}
 }

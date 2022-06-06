@@ -39,38 +39,41 @@ public class ReportService {
 	@Autowired
 	private ReportRepository reportRepository;
 	
-	public List<Report> getReports(Long renterId, boolean completed, boolean canceled, boolean potential, String period, Long assetId) {
+	public List<Report> getReports(Long renterId, boolean completed, boolean canceled, boolean potential,
+			String period, Long assetId, String fromDate, String toDate) {
 		if (completed && canceled && potential) 
-			return getCombinedReports(renterId, period, assetId);
+			return getCombinedReports(renterId, period, assetId, fromDate, toDate);
 		
 		if (!completed && !canceled && !potential)
 			return new ArrayList<>();
 		
-		List<Report> reports = getReportsFromRepo(renterId, completed, canceled, potential, period, assetId); 
+		List<Report> reports = getReportsFromRepo(renterId, completed, canceled, potential,
+				period, assetId, fromDate, toDate); 
 		setGroups(reports, period);
 		reports = formReports(reports);
 		
 		return reports;
 	}
 	
-	private List<Report> getCombinedReports(Long renterId, String period, Long assetId){
-		List<Report> reports = (List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.ALL, period, assetId);
+	private List<Report> getCombinedReports(Long renterId, String period, Long assetId, String fromDate, String toDate){
+		List<Report> reports = (List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.ALL, period, assetId, fromDate, toDate);
 		setGroups(reports, period);
 		sortReports(reports);
 		return reports;
 	}
 	
-	private List<Report> getReportsFromRepo(Long renterId, boolean completed, boolean canceled, boolean potential, String period, Long assetId){
+	private List<Report> getReportsFromRepo(Long renterId, boolean completed, boolean canceled, boolean potential,
+			String period, Long assetId, String fromDate, String toDate){
 		List<Report> reports = new ArrayList<Report>(); 
 		
 		if (completed)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.COMPLETED, period, assetId));
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.COMPLETED, period, assetId, fromDate, toDate));
 			
 		if (canceled)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.CANCELED, period, assetId));
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.CANCELED, period, assetId, fromDate, toDate));
 		
 		if (potential)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.POTENTIAL, period, assetId));
+			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.POTENTIAL, period, assetId, fromDate, toDate));
 		
 		return reports;
 	}

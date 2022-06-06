@@ -9,6 +9,7 @@ import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -351,7 +352,7 @@ public class AssetController {
 	@GetMapping(value = "/report/{renterId}") //LocalDateTime
 	public ResponseEntity<List<Report>> getReports(@PathVariable Long renterId, @RequestParam boolean completed, @RequestParam boolean canceled,
 			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam Long assetId) {
-		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period, assetId);
+		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period, assetId, fromDate, toDate);
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
 	}

@@ -12,6 +12,8 @@ import { getLogged } from '../../services/api/LoginApi';
 import { getAssetsByUserId } from '../../services/api/AssetApi';
 import ReportTable from './ReportTable';
 import ReportCharts from './ReportCharts';
+import {getAssetRating} from '../../services/api/ReviewApi';
+import MarkStars from '../MarkStars';
 
 export default function Report(){
 
@@ -27,6 +29,8 @@ export default function Report(){
     const [toDate, setToDate] = useState(new Date());
     const [hasChangedToDate, setHasChangedToDate] = useState(false);
     const [period, setPeriod] = useState("month");
+    const [averageMarkRow, setAverageMarkRow] = useState();
+    const [markStarsRow, setMarkStarsRow] = useState();
 
     useEffect(() => {
         async function fetchUser(){
@@ -84,6 +88,21 @@ export default function Report(){
             setData(data);
         }, [setData]
     )
+
+    useEffect(() => {
+        if (chosenAssetId != -1){
+            getAssetRating(chosenAssetId).then(
+                (response) => {
+                    let mark = response.data;
+                    setAverageMarkRow("Average mark for chosen Asset is:  " + mark);
+                    setMarkStarsRow(<MarkStars mark={mark} />);
+                }
+            )
+        } else {
+            setAverageMarkRow(null);
+            setMarkStarsRow(null);
+        }
+    }, [chosenAssetId])
 
     return <div className='borderedBlock mt-4'>
             <Row className='pt-4'>
@@ -148,6 +167,10 @@ export default function Report(){
                         onChange={() => setPotential(!potential)}
                     /> Potential</div>
                 </Col>
+            </Row>
+            <Row>
+                {averageMarkRow}
+                {markStarsRow}
             </Row>
             <ReportCharts data={data}/>
             <ReportTable data={data}/>

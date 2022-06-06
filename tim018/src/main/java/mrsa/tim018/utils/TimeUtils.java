@@ -75,5 +75,12 @@ public class TimeUtils {
 	public static String formatYearMonthDay(LocalDate date) {
 		return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
+	
+	public static LocalDate parseDateForReport(String date) {
+		if ("none".equals(date)) 
+			return null;
+		
+		return LocalDate.now();
+	}
 
 }
