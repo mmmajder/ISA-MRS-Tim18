@@ -163,7 +163,6 @@ export async function getAssetTodayPrice(assetId) {
 }
 
 //reports
-
 export async function getReport(renterId, reportFilters) {
     try {
        const responseData = await api.get(`/assets/report/${renterId}`, {
@@ -173,38 +172,10 @@ export async function getReport(renterId, reportFilters) {
             "potential" : reportFilters.potential, 
             "fromDate" : reportFilters.fromDatee,
             "toDate" : reportFilters.toDatee,
-            "period": reportFilters.period
+            "period": reportFilters.period,
+            "assetId": reportFilters.assetId
         }
       })
-       return responseData;
-   } catch (err) {
-       console.log(err.message);
-       return err.message
-   }
-}
-
-export async function getAssetReport(assetId, reportFilters) {
-    try {
-       const responseData = await api.get(`/assets/report/asset/${assetId}`, {
-        params: {
-            "completed" : reportFilters.completed,
-            "canceled":  reportFilters.canceled, 
-            "potential" : reportFilters.potential, 
-            "fromDate" : reportFilters.fromDatee,
-            "toDate" : reportFilters.toDatee,
-            "period": reportFilters.period
-        }
-      })
-       return responseData;
-   } catch (err) {
-       console.log(err.message);
-       return err.message
-   }
-}
-
-export async function getMonthlyReportById(assetId) {
-    try {
-       const responseData = await api.get(`/assets/report/monthly/${assetId}`)
        return responseData;
    } catch (err) {
        console.log(err.message);

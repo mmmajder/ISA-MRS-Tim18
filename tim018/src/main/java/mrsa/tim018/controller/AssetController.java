@@ -350,8 +350,8 @@ public class AssetController {
 	
 	@GetMapping(value = "/report/{renterId}") //LocalDateTime
 	public ResponseEntity<List<Report>> getReports(@PathVariable Long renterId, @RequestParam boolean completed, @RequestParam boolean canceled,
-			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period) {
-		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period);
+			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam Long assetId) {
+		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period, assetId);
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
 	}

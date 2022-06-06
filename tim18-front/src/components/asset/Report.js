@@ -56,16 +56,13 @@ export default function Report(){
         if (!hasChangedToDate)
             toDatee = "none";
 
-        let reportFilters = {completed, canceled, potential, fromDatee, toDatee, period};
+        let assetId = chosenAssetId;
+        let reportFilters = {completed, canceled, potential, fromDatee, toDatee, period, assetId};
 
         console.log(reportFilters);
         
-        if (chosenAssetId == -1 && !!renter)
+        if (!!renter)
             getReport(renter.id, reportFilters).then((response) => {
-                fillInData(response.data);
-            })
-        else 
-            getAssetReport(chosenAssetId, reportFilters).then((response) => {
                 fillInData(response.data);
             })
 

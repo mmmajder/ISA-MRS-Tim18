@@ -29,15 +29,18 @@ public class ReportRepository {
 	private final String groupByPart = " GROUP BY date_trunc('%s', r.timeRange.fromDateTime) ";
 	
 	@SuppressWarnings("unchecked")
-	public List<Report> getReports(Long id, ReportReservationStatus status, String period) {
+	public List<Report> getReports(Long id, ReportReservationStatus status, String period, Long assetId) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format(queryBegining, period))
-		.append(getReportReservationStatusPart(status))
-		.append(" AND r.asset.renter.id = " + id)
-		.append(String.format(groupByPart, period))
-		;
+		.append(getReportReservationStatusPart(status));
 		
-		System.out.println();
+		if (assetId == -1) // if assetId is not specified get all Renter's assets
+			sb.append(" AND r.asset.renter.id = " + id);
+		else 			// else get data only for the specified Asset
+			sb.append(" AND r.asset.id = " + assetId);
+		
+		sb.append(String.format(groupByPart, period));
+		
     	Query query = entityManager.createQuery(sb.toString());
     	List<Report> reports = query.getResultList();
     	
