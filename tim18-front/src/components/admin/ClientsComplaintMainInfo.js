@@ -88,14 +88,13 @@ const ClientsComplaintMainInfo = ({request}) => {
             }
         }
     }
-
+    if (client && (renter || asset))
     return (
         <Row>
         <Col sm='2'>
             <div className='centerElem'>
                 {image}
             </div>
-            
         </Col>
         <Col>
             <Row>
