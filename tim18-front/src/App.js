@@ -39,6 +39,7 @@ import OtherProfile from './components/profile/OtherProfile.js';
 import AdminRentersComplaints from './components/admin/AdminRentersComplaints.js';
 import AdminReviews from './components/admin/AdminReviews.js';
 import Report from './components/asset/Report.js';
+import AdminFinancialReports from './components/admin/AdminFinancialReports.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -77,7 +78,7 @@ function App() {
   const reviews = <Container><Reviews/></Container>
   const adminRentersComplaints = <Container><AdminRentersComplaints/></Container>
   const adminReviews = <Container><AdminReviews/></Container>
-
+  const adminFinancialReports = <Container><AdminFinancialReports/></Container>
   
 
   return  (<Router>
@@ -114,7 +115,9 @@ function App() {
                   <Route path="/reviews/:reservationId" element={reviews}/>
                   <Route path="/adminRentersComplaints" element={adminRentersComplaints}/>
                   <Route path="/adminReviews" element={adminReviews}/>
-                  <Route path="/report" element={<Container><Report/></Container>}/></Route>
+                  <Route path="/adminFinancialReports" element={adminFinancialReports}/>
+                  <Route path="/report" element={<Container><Report/></Container>}/>
+                </Route>
                 <Route path="login" element={login} />
                 <Route path="verify/:code" element={confirmation} />
                 <Route index element={login} />

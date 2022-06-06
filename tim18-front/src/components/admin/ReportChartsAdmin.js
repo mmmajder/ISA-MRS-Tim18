@@ -1,10 +1,9 @@
-import React from 'react';
+import React from 'react'
 import { Row, Col } from 'react-bootstrap';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryZoomContainer, VictoryLabel } from 'victory';
-import "bootstrap/dist/css/bootstrap.css";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
-export default function ReportCharts({data}){
+
+const ReportChartsAdmin = ({data}) => {
     return <>
             <Row>
                 <Col sm={6} align="center" className='mt-3'>
@@ -88,3 +87,5 @@ export default function ReportCharts({data}){
             </Row>
         </>
 }
+
+export default ReportChartsAdmin
