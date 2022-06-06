@@ -38,6 +38,7 @@ import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetPriceService;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.BoatService;
+import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.ImageService;
 import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ResortService;
@@ -47,6 +48,9 @@ import mrsa.tim018.utils.TimeUtils;
 @CrossOrigin(origins="*")
 @RequestMapping(value = "/assets")
 public class AssetController {
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@Autowired
 	private AssetService assetService;
@@ -143,7 +147,7 @@ public class AssetController {
 			return updateBoat(id, assetDto);
 		case FISHING_ADVENTURE: 
 			return updateAdventure(id, assetDto);
-		default: 
+		default:  
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
@@ -156,6 +160,22 @@ public class AssetController {
 		}
 		asset.setDeleted(true);
 		assetService.save(asset);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
+	@DeleteMapping(value="/deleteAssetAdmin/{id}" )
+	public ResponseEntity<AssetDTO> deleteAssetAdmin(@PathVariable long id) {
+		Asset asset = assetService.findById(id);
+		if (asset==null) {
+			return null;
+		}
+		asset.setDeleted(true);
+		assetService.save(asset);
+		try {
+			emailService.sendDeleteAsset(asset);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
@@ -230,7 +250,8 @@ public class AssetController {
 		List<AssetDTO> assetsDTO = new ArrayList<>();
 		
 		for (Asset a : assets) {
-			assetsDTO.add(new AssetDTO(a));
+			if (!a.isDeleted())
+				assetsDTO.add(new AssetDTO(a));
 		}
 		
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);

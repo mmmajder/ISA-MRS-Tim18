@@ -34,13 +34,13 @@ const AdminReviewMainData = ({request}) => {
     }, [])
 
 
-    if (client!=null && (renter!=null || asset!=null)) {
+    if ((client!=null && renter!=null) || (client!=null && asset!=null)) {
         let reviewer, reviewee;
         if (request.clientWriting) {
             reviewer = client.firstName + " "  + client.lastName
             if (renter!=null)
                 reviewee = "Renter: " + renter.firstName + " "  + renter.lastName
-            else 
+            else if (asset!=null)
                 reviewee = "Asset: " + asset.name
         } else {
             reviewer = renter.firstName + " "  + renter.lastName

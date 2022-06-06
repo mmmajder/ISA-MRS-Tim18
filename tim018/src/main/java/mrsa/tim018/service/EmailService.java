@@ -251,7 +251,7 @@ public class EmailService {
 	@Async
 	private void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted, String receiver) throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
-		message.setSubject("[Hakuna Matata] Renters complaint");
+		message.setSubject("[Hakuna Matata] Renters review");
 		
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo("isamrs018@gmail.com");
@@ -264,5 +264,38 @@ public class EmailService {
 		helper.setText(content, true);
 		
 		javaMailSender.send(message);
+	}
+	
+	@Async
+	public void sendDeleteProfile(User user) throws MessagingException, UnsupportedEncodingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("Hakuna Matata new reservation");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getDeleteProfileAdmin(); 
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+	}
+
+	@Async
+	public void sendDeleteAsset(Asset asset) throws MessagingException {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		message.setSubject("Hakuna Matata new reservation");
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo("isamrs018@gmail.com");
+		helper.setFrom(env.getProperty("spring.mail.username"));
+		
+		String content = EmailContentUtils.getDeleteAssetAdmin(asset); 
+		
+		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+		
 	}
 }

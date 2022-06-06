@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import mrsa.tim018.dto.JwtAuthenticationRequest;
 import mrsa.tim018.dto.LoginDTO;
 import mrsa.tim018.dto.UserRequest;
@@ -66,6 +68,8 @@ public class AuthenticationController {
 		User user = (User) authentication.getPrincipal();
 		if(!user.isEnabled()) {
 			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED); 
+		} else if(user.isDeleted()) {
+			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED);  
 		}
 		
 		String jwt = tokenUtils.generateToken(user);

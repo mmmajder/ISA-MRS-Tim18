@@ -39,4 +39,14 @@ export async function declineDeletionRequest(id, reason) {
     }
 }
 
-  
+export async function deleteUser(id) {
+    try {
+        console.log(id)
+        console.log("id")
+        const responseData = await api.put(`/deletationRequest/deleteUser/${id}`);
+        return responseData;
+    } catch (err) {
+        return false;
+    }
+}
+

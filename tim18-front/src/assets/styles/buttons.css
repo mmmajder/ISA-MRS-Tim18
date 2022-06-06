@@ -21,6 +21,11 @@
 .alertFixedWidthButton:hover {
   background-color: crimson !important;
 }
+
+.onRight {
+  float: right !important;
+}
+
 .acceptReqReq {
   width: 80% !important;
   text-align: center;

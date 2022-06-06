@@ -12,6 +12,7 @@ import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
 import mrsa.tim018.model.Subscription;
+import mrsa.tim018.model.User;
 import net.bytebuddy.asm.Advice.Local;
 
 public class EmailContentUtils {
@@ -1705,7 +1706,7 @@ public class EmailContentUtils {
 				if (review.isClientWriting())
 					title = "                              Your review on " + renterName  + " is accepted! \r\n";
 				else
-					title = "                              "+ renterName + " left a review on you\r\n";
+					title = "                              "+ renterName + " left a review\r\n";
 			} else {
 				if (review.isClientWriting())
 					title = "                              Your review on " + renterName  + " is not accepted! \r\n";
@@ -1716,13 +1717,27 @@ public class EmailContentUtils {
 				if (!review.isClientWriting())
 					title = "                              Your review on " + clientName  + " is accepted! \r\n";
 				else
-					title = "                              "+ clientName + " left a review on you\r\n";
+					title = "                              "+ clientName + " left a review\r\n";
 			} else {
-				if (review.isClientWriting())
+				if (!review.isClientWriting())
 					title = "                              Your review on " + clientName  + " is not accepted! \r\n";
 			}
 		}
 		String body = "Comment: " + review.getText();
+		String buttonText = "";
+		return originalTemplate(title, body, buttonText);
+	}
+
+	public static String getDeleteProfileAdmin() {
+		String title = "                              Your profile has been deleted by admin\r\n";
+		String body = "You are no longer able to use services of our website";
+		String buttonText = "";
+		return originalTemplate(title, body, buttonText);
+	}
+
+	public static String getDeleteAssetAdmin(Asset asset) {
+		String title = "                              " + asset.getName() + " has been deleted by admin\r\n";
+		String body = "You are no longer able to see this offer";
 		String buttonText = "";
 		return originalTemplate(title, body, buttonText);
 	}

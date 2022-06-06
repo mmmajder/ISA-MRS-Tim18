@@ -73,6 +73,10 @@ public class UserService<T> implements UserDetailsService{
 		
 	}
 	
+	public User saveChanges(User user) {
+		return userRepository.save(user);
+	}
+	
 	public User updateUser(User user) {
 		UserType userType = user.getUserType();
 		if(userType == UserType.Client) {

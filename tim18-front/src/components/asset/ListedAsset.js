@@ -6,7 +6,7 @@ import AssetMainInfo from './AssetMainInfo';
 import { getRole }  from '../../services/AuthService/AuthService'
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
-import {getAssetTodayPrice} from '../../services/api/AssetApi';
+import {deleteAsset, deleteAssetAdmin, getAssetTodayPrice} from '../../services/api/AssetApi';
 import {getAssetRating} from '../../services/api/ReviewApi'
 
 export default function ListedAsset({asset, isSearch, subscriptionProp}){
@@ -32,6 +32,10 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
             });
         }, []
     )
+
+    const adminDeleteAsset = () => {
+        deleteAssetAdmin(asset.id)
+    }
 
     const getAssetPrice = useCallback(
         () => {
@@ -71,8 +75,9 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
                             <Col sm="2" >
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
-                                    { !isSearch && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
+                                    { !isSearch && userType!="Admin" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
                                     { subscriptionProp!==undefined &&  <FixedWidthRegButton text={subscriptionProp.text} onClickFunction={()=>subscriptionProp.subscribe(asset.id)}/>}
+                                    { userType=="Admin" && <FixedWidthRegButton text='Delete' onClickFunction={adminDeleteAsset}/>}
                                 </div>
                             </Col>
                         </Row>

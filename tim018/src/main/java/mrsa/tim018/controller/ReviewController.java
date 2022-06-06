@@ -121,7 +121,7 @@ public class ReviewController {
 			if (reservation.getClientReviewId() != null)
 				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 			id = reviewService.save(review).getID();
-			reservation.setClientReviewId(id);
+			reservation.setClientReviewId(id); 
 			break;
 		default:
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -270,13 +270,18 @@ public class ReviewController {
 		}
 		if (isAccepted) {
 			review.setStatus(RequestStatus.Accepted); 
-		} else {
+		} else { 
 			review.setStatus(RequestStatus.Declined);
 		}
 		reviewService.save(review);
 		Client client = userService.findClient(review.getClientID());
-		userService.saveClient(client);
-		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		Renter renter;
+		if (review.getRenterID()==null) {
+			Asset asset = assetService.findById(review.getAssetId());
+			renter = asset.getRenter();
+		} else {
+			renter = (Renter) userService.findOne(review.getRenterID());
+		}
 		try {
 			emailService.sendReviewMail(review, client, renter, isAccepted);
 		} catch (MessagingException e) {
