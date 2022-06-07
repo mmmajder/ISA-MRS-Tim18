@@ -6,10 +6,11 @@ import AssetMainInfo from './AssetMainInfo';
 import { getRole }  from '../../services/AuthService/AuthService'
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
-import {getAssetTodayPrice} from '../../services/api/AssetApi';
+import {getAssetTodayPrice, deleteAsset} from '../../services/api/AssetApi';
 import {getAssetRating} from '../../services/api/ReviewApi'
+import { Button } from 'react-bootstrap';
 
-export default function ListedAsset({asset, isSearch, subscriptionProp}){
+export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFunc}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
     const userType = getRole();
@@ -55,6 +56,14 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
         }
     }, [asset]);
 
+    const deleteAss = useCallback(
+        () => {
+            console.log("deleteAss i asset.id " + asset.id);
+            console.log(deleteFunc)
+            deleteFunc(asset.id);
+        }, [deleteFunc, asset]
+    )
+
     return <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="3">
@@ -71,7 +80,9 @@ export default function ListedAsset({asset, isSearch, subscriptionProp}){
                             <Col sm="2" >
                                 <div className='mt-4'>
                                     <FixedWidthRegButton href={detViewUrl} text='Preview' onClickFunction={''}/>
-                                    { !isSearch && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
+                                    { !isSearch && <><Button variant="custom" className='fixedWidthButton formButton pe-5 ps-5 mt-2' onClick={deleteAss}>
+                                                        Delete
+                                                    </Button></>}
                                     { subscriptionProp!==undefined &&  <FixedWidthRegButton text={subscriptionProp.text} onClickFunction={()=>subscriptionProp.subscribe(asset.id)}/>}
                                 </div>
                             </Col>

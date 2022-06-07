@@ -21,12 +21,16 @@ export default function CreateForm({userType}){
 
     let form;
 
-    if (userType === "RESORT_RENTER")
+    console.log("moj user type je " + userType);
+
+    if (userType === "ResortRenter")
         form = <ResortForm resort={asset} buttonText="Create resort" id={-1} />
-    else if (userType === "BOAT_RENTER")
+    else if (userType === "BoatRenter")
         form = <BoatForm boat={asset} buttonText="Create boat" id={-1} />
-    else
+    else if (userType === "FishingInstructor")
         form = <AdventureForm adventure={asset} buttonText="Create adventure" id={-1} />
+    else
+        form = "huga buga";
 
     return (<>
         {form}

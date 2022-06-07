@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import '../../assets/styles/asset.css';
 import ListedAsset from './ListedAsset';
-import { getAssetsByUserId } from '../../services/api/AssetApi';
+import { getAssetsByUserId, deleteAsset } from '../../services/api/AssetApi';
 import {useEffect, useState} from 'react';
 import { getLogged } from '../../services/api/LoginApi';
 
@@ -9,28 +9,51 @@ export default function AssetList(){
 
     const [assets, setAssets] = useState([]);
     const [user, setUser] = useState([]);
+    const [listedAssets, setListedAssets] = useState([])
+
     useEffect(() => {
-        async function fetchUser(){
-            await getLogged(setUser);
-        }
-        fetchUser();
+        getLogged(setUser);
     }, [])
 
     useEffect(() => {
-        async function fetchAssets(){
-            const requestData = await getAssetsByUserId(user.id);
-            console.log(requestData.data);
-            setAssets(!!requestData ? requestData.data : []);
-            return requestData;
-        }
-        fetchAssets();
+        getAssetsByUserId(user.id).then(
+            (response) => {
+                setAssets(!!response ? response.data : []);
+            }
+        )
     }, [])
 
-    let listedAssets;
-    if (assets != undefined){
-        listedAssets = assets.map((asset) => <ListedAsset asset={asset} key={asset.id} />)
-    }
-        
+    const assetDeletion = useCallback(
+        (assetId) => {
+            console.log("assetDeletion");
+            deleteAsset(assetId).then(
+                (response) => {
+                    let index = -1;
+                    let i;
+                    for (i in assets)
+                        if (assets[i].id == assetId)
+                            index = i;
+
+                    if (index > -1) {
+                        let newAssets = JSON.parse(JSON.stringify(assets)); // deep copy array
+                        newAssets.splice(index, 1); // 2nd parameter means remove one item only
+                        // setAssets(assets.filter((x) => x.id != id ));
+                        setAssets(newAssets);
+                    }
+                }
+            )
+        }, [assets]
+    )
+
+    useEffect(() => {
+        if (assets != undefined){
+            // console.log("AAAAAAAAAAAAAAAAAAAAAAA")
+            // console.log(assetDeletion)
+            // let mappedAssets = assets.map((asset) => <ListedAsset asset={asset} key={asset.id} deleteFunc={assetDeletion}/>)
+            // setListedAssets(mappedAssets);
+        }
+    }, [assets])
+
     return <>
             {listedAssets}
             {/* just gives nice space in the bottom */}

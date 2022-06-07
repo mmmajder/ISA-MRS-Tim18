@@ -54,7 +54,7 @@ export default function AdventureForm({adventure, buttonText, id}){
                 fishingEquipment, renterId, price};
             createNewAsset(adventureJson).then(
                 (response) => {
-
+                    navigate('/resorts/' + response.data.id);
                 }
             );
             
@@ -81,8 +81,11 @@ export default function AdventureForm({adventure, buttonText, id}){
                 assetType : assetType,
                 fishingEquipment:fishingEquipment
             };
-            const response = updateAsset(updatedadventure.id, updatedadventure);
-            navigate('/resorts/' + id);
+            updateAsset(updatedadventure.id, updatedadventure).then(
+                (response) => {
+                    navigate('/resorts/' + id);
+                }
+            );
     }, [id, name, address, description, rules, numOfPeople, cancelationFee, fishingEquipment]);
 
     const onClickFunction = id === -1 ? postRequest : putRequest;
@@ -95,7 +98,7 @@ export default function AdventureForm({adventure, buttonText, id}){
                                 onChange={(e) => setPrice(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        </> : null
+                        </> : null;
 
     return (<>
     <Row className='mt-5' >
@@ -107,6 +110,7 @@ export default function AdventureForm({adventure, buttonText, id}){
                     <LabeledInput value={address} label="Address" inputName="address" placeholder="Type address of your adventure" required onChangeFunc={setAddress}/>
                     <LabeledTextarea value={description} label="Description" inputName="description" placeholder="Type description of your adventure" required onChangeFunc={setDescription}/>
                     <LabeledTextarea value={rules} label="Rules" inputName="rules" placeholder="Type rules of your adventure" required onChangeFunc={setRules}/>
+                    
                     <Row className='mt-2'>
                         <Col sm={2} align='right'><Form.Label>Number of people</Form.Label></Col>
                         <Col sm={1}>
@@ -126,8 +130,6 @@ export default function AdventureForm({adventure, buttonText, id}){
                         <Col sm={1}/>
                         {priceInput}
                     </Row>
-
-                    
 
                     <LabeledTextarea value={fishingEquipment} label="Fishing gear" inputName="fishing gear" placeholder="Type fishing gear of your adventure" required onChangeFunc={setFishingEquipment}/>
 

@@ -4,7 +4,7 @@ import LabeledInput from './LabeledInput';
 import LabeledTextarea from './LabeledTextarea';
 import '../../assets/styles/buttons.css';
 import {useCallback, useState, useEffect} from 'react';
-import { updateAsset } from '../../services/api/AssetApi';
+import { updateAsset, createNewAsset } from '../../services/api/AssetApi';
 import { useNavigate  } from "react-router-dom";
 import { getLogged } from "../../services/api/LoginApi"
 
@@ -20,6 +20,7 @@ export default function ResortForm({resort, buttonText, id}){
     const [cancelationFee, setCancelationFee] = useState();
     const [numberOfRooms, setNumOfRooms] = useState();
     const [numberOfBeds, setNumOfBeds] = useState();
+    const [price, setPrice] = useState();
 
     const assetType = "RESORT";
     const [user, setUser] = useState([]);
@@ -49,15 +50,20 @@ export default function ResortForm({resort, buttonText, id}){
     const postRequest = useCallback(
         (e) => {
             e.preventDefault();
-            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, assetType, renterId}
-            const request = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(resortJson)
-            };
-            fetch('http://localhost:8000/assets', request) 
-                .then(response => response.json())
-        }, [name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds]
+            const resortJson = {name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, assetType, renterId, price}
+            createNewAsset(resortJson).then(
+                (response) => {
+                    navigate('/resorts/' + response.data.id);
+                }
+            );
+            // const request = {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(resortJson)
+            // };
+            // fetch('http://localhost:8000/assets', request) 
+            //     .then(response => response.json())
+        }, [name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds, price]
     )
 
     const putRequest = useCallback(() => {
@@ -74,12 +80,24 @@ export default function ResortForm({resort, buttonText, id}){
                 assetType : assetType
             };
             console.log(updatedResort);
-            const response = updateAsset(updatedResort.id, updatedResort);
-            console.log(response.data);
-            navigate('/resorts/' + id);
+            updateAsset(updatedResort.id, updatedResort).then(
+                (response) => {
+                    navigate('/resorts/' + id);
+                }
+            );
     }, [id, name, address, description, rules, numOfPeople, cancelationFee, numberOfRooms, numberOfBeds]);
 
     const onClickFunction = id === -1 ? postRequest : putRequest;
+
+    const priceInput =  id === -1 ? <>
+                        <Col sm={2} align='right'><Form.Label>Price</Form.Label></Col>
+                        <Col sm={1}>
+                            <Form.Control name="price"  type="number" min="0" required
+                                value={price} 
+                                onChange={(e) => setPrice(e.target.value)}>
+                            </Form.Control>
+                        </Col>
+                        </> : null;
 
     return (<>
     <Row className='mt-5' >
@@ -91,23 +109,27 @@ export default function ResortForm({resort, buttonText, id}){
                     <LabeledInput value={address} label="Address" inputName="address" placeholder="Type address of your resort" required onChangeFunc={setAddress}/>
                     <LabeledTextarea value={description} label="Description" inputName="description" placeholder="Type description of your resort" required onChangeFunc={setDescription}/>
                     <LabeledTextarea value={rules} label="Rules" inputName="rules" placeholder="Type rules of your resort" required onChangeFunc={setRules}/>
+                    
                     <Row className='mt-2'>
-                        <Col sm={3} align='right'><Form.Label>Number of people</Form.Label></Col>
-                        <Col sm={2}>
+                        <Col sm={2} align='right'><Form.Label>Number of people</Form.Label></Col>
+                        <Col sm={1}>
                             <Form.Control name="numOfPeople"  type="number" min="1" required
                                 value={numOfPeople} 
                                 onChange={(e) => setNumOfPeople(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        <Col sm={3} align='right'><Form.Label>Cancelation fee in % </Form.Label></Col>
-                        <Col sm={2}>
+                        <Col sm={1} />
+                        <Col sm={2} align='right'><Form.Label>Cancelation fee in % </Form.Label></Col>
+                        <Col sm={1}>
                             <Form.Control name="cancelationFee"  type="number" min="0" max="100" required
                                 value={cancelationFee} 
                                 onChange={(e) => setCancelationFee(e.target.value)}>
                             </Form.Control>
                         </Col>
-                        <Col sm={2}/>
+                        <Col sm={1}/>
+                        {priceInput}
                     </Row>
+                    
                     <Row className='mt-2'>
                         <Col sm={3} align='right'><Form.Label>Number of rooms</Form.Label></Col>
                         <Col sm={2}>

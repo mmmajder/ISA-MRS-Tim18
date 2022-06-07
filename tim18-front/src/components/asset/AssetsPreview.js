@@ -1,8 +1,8 @@
 import React from 'react';
 import '../../assets/styles/asset.css';
 import ListedAsset from './ListedAsset';
-import { getAssetsByUserId, getAssets, getFilteredAssets, getFilteredAssetsForRenter} from '../../services/api/AssetApi';
-import {useEffect, useState} from 'react';
+import { getAssetsByUserId, getAssets, getFilteredAssets, getFilteredAssetsForRenter, deleteAsset} from '../../services/api/AssetApi';
+import {useEffect, useState, useCallback} from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { getRole } from '../../services/AuthService/AuthService';
 import { getLogged } from '../../services/api/LoginApi';
@@ -23,8 +23,7 @@ export default function AssetsPreview({isSearch}){
     const [user, setUser] = useState([]);
     const [startDate, setStartDate] = useState(makeDefDatePicker(new Date()))
     const [endDate, setEndDate] = useState(makeDefDatePicker(new Date()))
-
-
+    const [listedAssets, setListedAssets] = useState([])
 
     useEffect(() => {
         async function fetchClient(){
@@ -60,15 +59,41 @@ export default function AssetsPreview({isSearch}){
         }
     }, [user])
 
-    let listedAssets;
-    if (assets != undefined){
-        listedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} />)
-    }
-
     let assetTypeOptions;
     if(isSearch){
         assetTypeOptions = < AssetTypeOption setAssetType={setAssetType}/>
     }
+
+    const assetDeletion = useCallback(
+        (assetId) => {
+            console.log("assetDeletion");
+            deleteAsset(assetId).then(
+                (response) => {
+                    let index = -1;
+                    let i;
+                    for (i in assets)
+                        if (assets[i].id == assetId)
+                            index = i;
+
+                    if (index > -1) {
+                        let newAssets = JSON.parse(JSON.stringify(assets)); // deep copy array
+                        newAssets.splice(index, 1); // 2nd parameter means remove one item only
+                        // setAssets(assets.filter((x) => x.id != id ));
+                        setAssets(newAssets);
+                    }
+                }
+            )
+        }, [assets]
+    )
+
+    useEffect(() => {
+        if (assets != undefined){
+            console.log("AAAAAAAAAAAAAAAAAAAAAAA")
+            console.log(assetDeletion)
+            let mappedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} key={asset.id} deleteFunc={assetDeletion}/>)
+            setListedAssets(mappedAssets);
+        }
+    }, [assets])
 
     return <>
             <div className="borderedBlock mb-3 mt-3">

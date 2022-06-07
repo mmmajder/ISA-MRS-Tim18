@@ -2,7 +2,7 @@ import {  Row, Col, Button} from 'react-bootstrap';
 import '../../assets/styles/form.css';
 import '../../assets/styles/asset.css';
 import {useState, useEffect, useCallback} from 'react';
-import {deletePhotoOnServer, getPhotoFromServer} from '../../services/api/ImageApi';
+import {getPhotoFromServer} from '../../services/api/ImageApi';
 
 export default function AssetScrollerPhotoItem({photoId, deletePhotoFun, isOnlyPhoto}){
 

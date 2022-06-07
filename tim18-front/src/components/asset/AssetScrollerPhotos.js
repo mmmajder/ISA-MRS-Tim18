@@ -9,9 +9,7 @@ export default function AssetScrollerPhotos({photoIds, deletePhotoFun, doesOnlyO
     const [scrollerPhotoItems, setScrollerPhotoItems] = useState();
     
     useEffect(() => {
-        console.log("renderovanje: "+photoIds)
         if (photoIds !== undefined){
-            console.log("usli")
             let photoItems = photoIds.map((id) => <AssetScrollerPhotoItem photoId={id} key={id.id} isOnlyPhoto={doesOnlyOnePhotoExists} deletePhotoFun={deletePhotoFun} />)
             setScrollerPhotoItems(photoItems);
         }

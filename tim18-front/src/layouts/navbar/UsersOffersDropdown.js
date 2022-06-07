@@ -39,7 +39,7 @@ const UsersOffersDropdown = ({userType}) => {
   return (
     <NavDropdown title={<span><FontAwesomeIcon icon={assetsIcon} /> {assetsName}s</span>}> 
         <NavDropdown.Item href="/resorts"><FontAwesomeIcon icon={assetsIcon} /> My {assetsName}s</NavDropdown.Item> 
-        <NavDropdown.Item href="/createResort"><FontAwesomeIcon icon={faPlus} /> Add new {assetsName}</NavDropdown.Item>
+        <NavDropdown.Item href="/createAsset"><FontAwesomeIcon icon={faPlus} /> Add new {assetsName}</NavDropdown.Item>
         <NavDropdown.Item href="/allReservations"><FontAwesomeIcon icon={faBook} /> Reservations</NavDropdown.Item>
         <NavDropdown.Item href="/report"><FontAwesomeIcon icon={faChartLine} /> Reports</NavDropdown.Item>
     </NavDropdown>

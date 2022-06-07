@@ -64,10 +64,10 @@ public class ReportRepository {
 	}
 	
 	private void appendDatePart(StringBuilder sb, String fromDate, String toDate) {
-		if (!"none".equals(fromDate))
+		if (!"none".equals(fromDate) && !"".equals(fromDate))
 			sb.append(" AND r.timeRange.fromDateTime > '" + fromDate + "'");
 		
-		if (!"none".equals(toDate))
+		if (!"none".equals(toDate) && !"".equals(fromDate))
 			sb.append(" AND r.timeRange.fromDateTime < '" + toDate + "'");
 	}
 }

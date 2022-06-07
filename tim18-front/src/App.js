@@ -50,7 +50,7 @@ function App() {
   const handleLogin = (user) => {setUser(user);};  
   const login =<AppContainer> <AccountBox handleLogin={handleLogin} /> </AppContainer>;
   
-  const resortForm = <Container><CreateForm  /></Container>
+  const resortForm = <Container><CreateForm userType={user} /></Container>
   const resortView = <Container><AssetDetailedView /></Container>
   const assetList = <Container><AssetsPreview isSearch={false}/></Container>
   const assetListAll = <Container><AssetsPreview isSearch={true}/></Container>
@@ -81,7 +81,7 @@ function App() {
                   <Route path="/updateProfilePhoto" element={updateProfilePhoto} />
 
                     {/* Creating/Registrating Resorts/Boats */}
-                  <Route path="createResort" element={resortForm} /> 
+                  <Route path="createAsset" element={resortForm} /> 
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/logout" element={<Container><Logout handleLogout={handleLogout}/></Container>} />
                   <Route exact path="/resorts" element={assetList} /> 
