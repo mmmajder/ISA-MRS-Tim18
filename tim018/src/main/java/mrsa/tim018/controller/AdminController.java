@@ -22,7 +22,6 @@ import mrsa.tim018.model.Report;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.service.AdminReportsService;
 import mrsa.tim018.service.AdminService;
-import mrsa.tim018.service.ReportService;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -47,11 +46,11 @@ public class AdminController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
-/*	@GetMapping(value = "/adminReport") //LocalDateTime
+	@GetMapping(value = "/report") //LocalDateTime
 	public ResponseEntity<List<Report>> getReports(@RequestParam boolean completed, @RequestParam boolean canceled,	@RequestParam boolean potential, 
-			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam Long assetType) {
-		List<Report> reports = reportService.getReports(completed, canceled, potential, period, assetType, fromDate, toDate);
+			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam String assetType) {
+		List<Report> reports = reportService.getReports(period, assetType, fromDate, toDate);
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
-	}*/
+	}
 }

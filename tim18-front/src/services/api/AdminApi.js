@@ -10,7 +10,7 @@ export async function saveNewPassword(user, password){
 
 export async function getReportAdmin(renterId, reportFilters) {
     try {
-       const responseData = await api.get(`/admin/report/${renterId}`, {
+       const responseData = await api.get(`/admin/report`, {
         params: {
             "completed" : reportFilters.completed,
             "canceled":  reportFilters.canceled, 

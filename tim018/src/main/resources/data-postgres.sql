@@ -84,7 +84,7 @@ insert into adventure (id, asset_type, price, address, average_rating, cancelati
 				  
 /*future*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-12-12', false, '2022-12-15');
+					  ('2023-12-12', false, '2023-12-15');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-11-11', false, '2022-11-21');
 /*past*/
@@ -110,14 +110,21 @@ insert into review(is_deleted, text, rating, is_complaint, is_client_writing, cl
 						(false, 'Meh.', 3, false, true, 2, 3, 1000005, 0, false, 4),
 						(false, 'Very bad.', 2, true, false, 2, 3, 1000005, 0, false, 4),
 						(false, 'Awful.', 1, true, false, 2, 3, 1000005, 0, false, 4);
-						
+			
+insert into loyalty_state (client_discount_percent, renter_discount_percent, tax_percent) values
+	(5, 5, 50),
+	(2, 7, 50),
+	(2, 9, 50),
+	(1, 1, 90),
+	(3, 3, 50);
+	
 					  
-insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price, cancelation_fee) values
-						(false, 0, 1000001, null, 2, null, null, 1, 100, 40),
-						(false, 0, 1000000, null, 2, null, null, 3, 150, 40),
-						(false, 0, 1000004, null, 2, null, null, 2, 200, 40),
-						(false, 0, 1000005, 1, 2, null, 2, 4, 250, 10),
-						(false, 0, 1000005, null, 2, null, null, 5, 150, 10);
+insert into reservation(is_deleted, status, asset_id, asset_review_id, client_id, client_review_id, renter_review_id, time_range_id, total_price, cancelation_fee, loyalty_state_id) values
+						(false, 0, 1000001, null, 2, null, null, 1, 100, 40, 1),
+						(false, 0, 1000000, null, 2, null, null, 3, 150, 40, 2),
+						(false, 0, 1000004, null, 2, null, null, 2, 200, 40, 3),
+						(false, 0, 1000005, 1, 2, null, 2, 4, 250, 10, 4),
+						(false, 0, 1000005, null, 2, null, null, 5, 150, 10, 5);
 						
 insert into asset_calendar_reserved(asset_calendar_id, reserved_id) values
 	(10003, 1), (10004, 2), (10006, 3), (10007, 4), (10005, 5);

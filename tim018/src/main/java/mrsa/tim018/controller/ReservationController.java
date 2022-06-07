@@ -118,7 +118,7 @@ public class ReservationController {
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/makeReservation")
+/*	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Asset asset = assetService.findOne(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
@@ -132,7 +132,7 @@ public class ReservationController {
 		}
 		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
-	
+	*/
 	@GetMapping(value = "/current/renter/{renterId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
 		Renter renter = renterService.findOne(renterId);

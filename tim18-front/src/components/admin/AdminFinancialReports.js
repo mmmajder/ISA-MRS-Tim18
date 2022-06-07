@@ -14,7 +14,7 @@ const AdminFinancialReports = () => {
     const [potential, setPotential] = useState(true);
     const [renter, setRenter] = useState();
     const [assets, setAssets] = useState([]);
-    const [chosenAssetId, setChosenAssetId] = useState("-1");
+    const [chosenAssetId, setChosenAssetId] = useState("all");
     const [fromDate, setFromDate] = useState(new Date());
     const [hasChangedFromDate, setHasChangedFromDate] = useState(false);
     const [toDate, setToDate] = useState(new Date());
@@ -71,74 +71,48 @@ const AdminFinancialReports = () => {
     return (
         <div className='borderedBlock mt-4'>
             <Row className='pt-4'>
-            <Col sm={4}>
-                    <Form.Select 
-                        name="assetIdSelect" 
-                        onChange={(e)=>{setChosenAssetId(e.target.value)}}>
-                        <option value={"all"}>All</option>
-                        <option value={"boats"}>Boats</option>
-                        <option value={"resorts"}>Resorts</option>
-                        <option value={"adventures"}>Adventures</option>
-                            
-                    </Form.Select>
-                    <Form.Select className='mt-1' 
-                        name="reportPeriodSelect" 
-                        onChange={(e)=>{setPeriod(e.target.value)}}>
-                            <option value={"month"}>Month</option>
-                            <option value={"year"}>Year</option>
-                            <option value={"week"}>Week</option>
-                    </Form.Select>
-                </Col>
-                <Col sm={1} />
-                <Col sm={3}>
-                    <Form.Control
-                        className="mb-1" type="date" name="fromDate" placeholder="Start date" 
-                        value={fromDate}
-                        onChange={(e) => {
-                                setFromDate(e.target.value)
-                                setHasChangedFromDate(true);
-                            }
-                    }/>
-                    <Form.Control
-                        className="mb-1" type="date" name="toDate" placeholder="End date" 
-                        value={toDate}
-                        onChange={(e) => {
-                                setToDate(e.target.value)
-                                setHasChangedToDate(true);
-                            }
-                    }/>
-                </Col>
-                <Col sm={1} />
-                <Col sm={3}>
-                    <div><input
-                        type="checkbox"
-                        id="topping"
-                        name="topping"
-                        value="Paneer"
-                        checked={completed}
-                        onChange={() => setCompleted(!completed)}
-                    /> Completed</div>
-                    <div><input
-                        type="checkbox"
-                        id="topping"
-                        name="topping"
-                        value="Paneer"
-                        checked={canceled}
-                        onChange={() => setCanceled(!canceled)}
-                    /> Canceled</div>
-                    <div><input
-                        type="checkbox"
-                        id="topping"
-                        name="topping"
-                        value="Paneer"
-                        checked={potential}
-                        onChange={() => setPotential(!potential)}
-                    /> Potential</div>
-                </Col>
-            </Row>
-            <ReportChartsAdmin data={data}/>
-            <ReportTableAdmin data={data}/>
-        </div>
+            <Col sm={2} />
+            <Col sm={3}>
+                <Form.Select 
+                    name="assetIdSelect" 
+                    onChange={(e)=>{setChosenAssetId(e.target.value)}}>
+                    <option value={"all"}>All</option>
+                    <option value={"boats"}>Boats</option>
+                    <option value={"resorts"}>Resorts</option>
+                    <option value={"adventures"}>Adventures</option>
+                        
+                </Form.Select>
+                <Form.Select className='mt-1' 
+                    name="reportPeriodSelect" 
+                    onChange={(e)=>{setPeriod(e.target.value)}}>
+                        <option value={"year"}>Year</option>
+                        <option value={"month"}>Month</option>
+                        <option value={"week"}>Week</option>
+                </Form.Select>
+            </Col>
+            <Col sm={2} />
+            <Col sm={3}>
+                <Form.Control
+                    className="mb-1" type="date" name="fromDate" placeholder="Start date" 
+                    value={fromDate}
+                    onChange={(e) => {
+                            setFromDate(e.target.value)
+                            setHasChangedFromDate(true);
+                        }
+                }/>
+                <Form.Control
+                    className="mb-1" type="date" name="toDate" placeholder="End date" 
+                    value={toDate}
+                    onChange={(e) => {
+                            setToDate(e.target.value)
+                            setHasChangedToDate(true);
+                        }
+                }/>
+            </Col>
+        </Row>
+        <ReportChartsAdmin data={data}/>
+        <ReportTableAdmin data={data}/>
+    </div>
     )
 }
 //ReportCharts

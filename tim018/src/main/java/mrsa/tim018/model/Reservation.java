@@ -21,77 +21,85 @@ public class Reservation {
 
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
-	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "asset_id")
 	@JsonBackReference
 	private Asset asset;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
 	@JsonBackReference
 	private Client client;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private TimeRange timeRange;
 
 	@Column(name = "status", nullable = false)
 	private ReservationStatus status;
-	
-    @JoinColumn(name = "client_review_id", nullable = true)
+
+	@JoinColumn(name = "client_review_id", nullable = true)
 	private Long clientReviewId;
-	
-    @JoinColumn(name = "asset_review_id", nullable = true)
+
+	@JoinColumn(name = "asset_review_id", nullable = true)
 	private Long assetReviewId;
-	
-    @JoinColumn(name = "renter_review_id", nullable = true)
+
+	@JoinColumn(name = "renter_review_id", nullable = true)
 	private Long renterReviewId;
-	
+
 	@Column(name = "total_price", nullable = false)
 	private double totalPrice;
-	
+
 	@Column(name = "cancelation_fee", nullable = false)
 	private int cancelationFee;
-	
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private LoyaltyState loyaltyState;
 
 	public Reservation() {
 	}
-	
-	public Reservation(Asset asset, Client client, TimeRange timeRange, double totalPrice) {
+
+	public Reservation(Asset asset, Client client, TimeRange timeRange, double totalPrice, LoyaltyState loyaltyState) {
 		this.asset = asset;
 		this.client = client;
 		this.timeRange = timeRange;
 		this.totalPrice = totalPrice;
-		
+		this.loyaltyState = loyaltyState;
+
 		this.isDeleted = false;
-		this.status = ReservationStatus.Future;	
+		this.status = ReservationStatus.Future;
 	}
+
 	public Reservation(Asset asset, Client client, TimeRange timeRange) {
 		this.asset = asset;
 		this.client = client;
 		this.timeRange = timeRange;
-		
+
 		this.isDeleted = false;
-		this.status = ReservationStatus.Future;	
+		this.status = ReservationStatus.Future;
 		this.totalPrice = 0;
+		this.loyaltyState = new LoyaltyState();
 	}
 
+	public LoyaltyState getLoyaltyState() {
+		return loyaltyState;
+	}
+
+	public void setLoyaltyState(LoyaltyState loyaltyState) {
+		this.loyaltyState = loyaltyState;
+	}
 
 	public boolean isDeleted() {
 		return isDeleted;
 	}
 
-
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
-
 	public ReservationStatus getStatus() {
 		return status;
 	}
-
 
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
@@ -100,7 +108,6 @@ public class Reservation {
 	public Long getID() {
 		return ID;
 	}
-
 
 	public Asset getAsset() {
 		return asset;

@@ -1,5 +1,6 @@
 package mrsa.tim018.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,35 +11,42 @@ import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.ReportReservationStatus;
+import mrsa.tim018.repository.ReportAdminRepository;
 import mrsa.tim018.repository.ReportRepository;
+import mrsa.tim018.utils.TimeUtils;
 
 @Service
 @Transactional
 public class AdminReportsService {
 	
-	/*@Autowired
-	private ReportRepository reportRepository;
+	@Autowired
+	private ReportAdminRepository adminReportRepository;
 
-	public List<Report> getReports(boolean completed, boolean canceled, boolean potential, String period, Long assetType, String fromDate, String toDate) {
-		if (completed && canceled && potential) 
-			return getCombinedReports(period, assetType, fromDate, toDate);
-		
-		if (!completed && !canceled && !potential)
-			return new ArrayList<>();
-		
-		List<Report> reports = getReportsFromRepo(renterId, completed, canceled, potential,
-				period, assetType, fromDate, toDate); 
-		setGroups(reports, period);
-		reports = formReports(reports);
-		
-		return reports;
-	}
-
-	private List<Report> getCombinedReports(String period, Long assetType, String fromDate, String toDate) {
-		List<Report> reports = (List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.ALL, period, assetId, fromDate, toDate);
+	public List<Report> getReports(String period, String assetType, String fromDate, String toDate) {
+		List<Report> reports = (List<Report>) adminReportRepository.getReports(period, assetType, fromDate, toDate);
 		setGroups(reports, period);
 		sortReports(reports);
 		return reports;
-	}*/
+	}
+	
+	private void setGroups(List<Report> reports, String period) {
+		for (Report r : reports) {
+			LocalDate date = TimeUtils.getLocalDate(r.getTimestamp());
+			
+			switch(period) {
+			case "month" : r.setGroup(TimeUtils.formatYearMonth(date)); break;
+			case "year" : r.setGroup(TimeUtils.formatYear(date)); break;
+			case "week" : r.setGroup(TimeUtils.formatYearMonthDay(date)); break;
+			default: r.setGroup(null);
+			}
+			
+		}
+	}
+	
+	private void sortReports(List<Report> reports) {
+		reports.sort(
+				(Report r1, Report r2) -> r1.getGroup().compareTo(r2.getGroup())
+				);
+	}
 
 }
