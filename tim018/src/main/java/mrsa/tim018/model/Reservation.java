@@ -58,6 +58,23 @@ public class Reservation {
 
 	public Reservation() {
 	}
+	
+	
+
+	public Reservation(boolean isDeleted, Asset asset, Client client, TimeRange timeRange, ReservationStatus status,
+			double totalPrice, int cancelationFee, LoyaltyState loyaltyState) {
+		super();
+		this.isDeleted = isDeleted;
+		this.asset = asset;
+		this.client = client;
+		this.timeRange = timeRange;
+		this.status = status;
+		this.totalPrice = totalPrice;
+		this.cancelationFee = cancelationFee;
+		this.loyaltyState = loyaltyState;
+	}
+
+
 
 	public Reservation(Asset asset, Client client, TimeRange timeRange, double totalPrice, LoyaltyState loyaltyState) {
 		this.asset = asset;

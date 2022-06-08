@@ -50,6 +50,7 @@ async function fetchCalendarData(){
     })
     retData = retData.concat(element.calendar.specialPrice.map(function(range) {
       var info = {
+        id : range.id,
         title : "Special offer",
         resourceId : element.id,
         start : makeDateString(range.timeRange.fromDateTime),
@@ -104,7 +105,8 @@ const removeAvailableCallback = (fromDateTime, toDateTime) => {
 
 const eventClicked = (info) => {
   if (info.event.title=="Special offer") {
-    setActiveForm(<ReserveSpecOfferModal start={info.event.start} end={info.event.end} title={info.event.title}/>)
+    console.log(info)
+    setActiveForm(<ReserveSpecOfferModal start={Date.parse(info.event.start)} end={Date.parse(info.event.end)} title={info.event.title} scope={"global"} assetId={info.event._def.resourceIds} specialOfferId={info.event.id}/>)
   }
 }
   const createReservationCallback = (value, fromDateTime, toDateTime) => {
@@ -148,9 +150,6 @@ const eventClicked = (info) => {
           initialView="resourceTimelineMonth"
           editable = {false}
           selectable = {true}
-          select = {function(start, end, allDays) {
-            console.log(start, end, allDays)
-          }}
           resources={resources}
           events={events}
           

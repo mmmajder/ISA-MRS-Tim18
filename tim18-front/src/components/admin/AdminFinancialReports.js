@@ -4,7 +4,6 @@ import { Row, Col, Form } from 'react-bootstrap';
 import ReportCharts from '../asset/ReportCharts';
 import ReportTable from '../asset/ReportTable';
 import ReportChartsAdmin from './ReportChartsAdmin';
-import ReportTableAdmin from './ReportTableAdmin';
 import { getReportAdmin } from '../../services/api/AdminApi';
 
 const AdminFinancialReports = () => {
@@ -20,8 +19,6 @@ const AdminFinancialReports = () => {
     const [toDate, setToDate] = useState(new Date());
     const [hasChangedToDate, setHasChangedToDate] = useState(false);
     const [period, setPeriod] = useState("month");
-    const [averageMarkRow, setAverageMarkRow] = useState();
-    const [markStarsRow, setMarkStarsRow] = useState();
 
     useEffect(() => {
         async function fetchUser(){
@@ -110,8 +107,7 @@ const AdminFinancialReports = () => {
                 }/>
             </Col>
         </Row>
-        <ReportChartsAdmin data={data}/>
-        <ReportTableAdmin data={data}/>
+        <ReportCharts data={data}/>
     </div>
     )
 }

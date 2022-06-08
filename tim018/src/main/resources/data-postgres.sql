@@ -94,6 +94,11 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-04-04', false, '2022-04-08');
 insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-05-21 11:15', false, '2022-05-30 12:38');
+
+/*special offer*/
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-06-11 11:15', false, '2022-06-20 12:38');
+					  
 			
 insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id) values
 						/*asset*/
@@ -156,3 +161,10 @@ insert into loyalty_program (is_deleted, user_discount_type, discount, level, po
 /*percent per reservation and points per reservation*/
 insert into reservation_finances (points_per_reservation, reservation_tax) values
 	(3, 40);
+	
+insert into special_offer (discount, is_deleted, other_services, asset_id, client_id, time_range_id) values
+	(30, false, 'None', 1000005, 2, 6);
+
+insert into asset_calendar_special_price(asset_calendar_id, special_price_id) values
+	(10007, 1);
+	

@@ -26,15 +26,18 @@ import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
+import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
 import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ReservationService;
+import mrsa.tim018.service.SpecialOfferService;
 
 @RestController
 @CrossOrigin("*")
@@ -55,6 +58,9 @@ public class ReservationController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private SpecialOfferService specialOfferService;
 	
 	@GetMapping(value = "/{reservationId}")
 	public ResponseEntity<ReservationDTO> getReservation(@PathVariable Long reservationId) {
@@ -106,9 +112,11 @@ public class ReservationController {
 	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
 		Asset asset = assetService.findOne(specialOfferReservationDTO.getAssetId());
 		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
-		TimeRange timeRange = new TimeRange(false, specialOfferReservationDTO.getStartDateTime(), specialOfferReservationDTO.getEndDateTime());
-		
-		Reservation reservation = new Reservation(asset, client, timeRange);
+		SpecialOffer specialOffer = specialOfferService.findById(specialOfferReservationDTO.getSpecialOfferId());
+		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
+		LoyaltyState loyaltyState = new LoyaltyState(taxPercent, client.getL, renterDiscountPercent)
+		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState)
+		//Reservation reservation = new Reservation(asset, client, timeRange);
 		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservationService.save(reservation);
 		

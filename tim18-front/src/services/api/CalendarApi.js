@@ -42,3 +42,13 @@ try {
     return err.message
 }
 }
+
+export async function getSpecialOffer(id) {
+    try {
+        const responseData = await api.get(`/calendar/specialOffer/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
