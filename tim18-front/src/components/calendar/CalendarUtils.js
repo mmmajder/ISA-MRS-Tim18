@@ -1,3 +1,5 @@
+import { makeDateString } from "../../services/utils/TimeUtils";
+
 export const displayEventsWhenAdding = (events) => {
     let retData = []
     for (let i=0; i<events.length; i++) {
@@ -67,4 +69,20 @@ for (let i=0; i<events.length; i++) {
   }
 }
 return retData;
+}
+
+export const removeSpecialOffer = (events, fromDateTime, toDateTime) => {
+  let retData = []
+  for (let i=0; i<events.length; i++) {
+    if (events[i].title!="Special offer") {
+      retData = [...retData, events[i]]
+      continue
+    }
+    if (makeDateString(fromDateTime) == events[i].start && makeDateString(toDateTime) == events[i].end) {
+        continue
+    } else {
+      retData = [...retData, events[i]]
+    }
+  }
+  return retData;
 }

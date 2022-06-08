@@ -11,7 +11,7 @@ import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
 import { getLogged } from '../../services/api/LoginApi';
 import {makeDateString} from './../../services/utils/TimeUtils'
-import { displayEventsWhenAdding } from './CalendarUtils'
+import { displayEventsWhenAdding, removeSpecialOffer } from './CalendarUtils'
 import { removeAvailable } from './CalendarUtils'
 import ReserveSpecOfferModal from './ReserveSpecOfferModal'
 
@@ -106,7 +106,7 @@ const removeAvailableCallback = (fromDateTime, toDateTime) => {
 const eventClicked = (info) => {
   if (info.event.title=="Special offer") {
     console.log(info)
-    setActiveForm(<ReserveSpecOfferModal start={Date.parse(info.event.start)} end={Date.parse(info.event.end)} title={info.event.title} scope={"global"} assetId={info.event._def.resourceIds} specialOfferId={info.event.id}/>)
+    setActiveForm(<ReserveSpecOfferModal start={Date.parse(info.event.start)} end={Date.parse(info.event.end)} title={info.event.title} scope={"global"} assetId={info.event._def.resourceIds} specialOfferId={info.event.id} newReservation={createSpecReservationCallback}/>)
   }
 }
   const createReservationCallback = (value, fromDateTime, toDateTime) => {
@@ -114,6 +114,12 @@ const eventClicked = (info) => {
     newEvents = displayEventsWhenAdding([...newEvents, value])
     setEvents(newEvents);
   } 
+  const createSpecReservationCallback = (value, fromDateTime, toDateTime) => {
+    let newEvents = removeSpecialOffer(events, fromDateTime, toDateTime)
+    newEvents = displayEventsWhenAdding([...newEvents, value])
+    setEvents(newEvents);
+  } 
+
   const [show, setShow] = useState(true);
 
   return (

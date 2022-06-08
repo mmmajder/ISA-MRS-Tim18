@@ -8,8 +8,10 @@ import { getAssetById } from '../../services/api/AssetApi';
 import { getSpecialOffer } from '../../services/api/CalendarApi';
 import { getAllMappedClients } from '../../services/api/ClientApi';
 import Select from 'react-select';
+import { getTimeFromList } from '../../services/utils/DateTimeUtils';
+import { makeDateString } from '../../services/utils/TimeUtils';
 
-const ReserveSpecOfferModal = ({title, start, end, scope, assetId, specialOfferId}) => {
+const ReserveSpecOfferModal = ({title, start, end, scope, assetId, specialOfferId, newReservation}) => {
     const handleClose = () => setShow(false);
     const [show, setShow] = useState(true);
     const [user, setUser] = useState()
@@ -64,10 +66,28 @@ const ReserveSpecOfferModal = ({title, start, end, scope, assetId, specialOfferI
     const reserveOffer = () => {
         const request = {
           specialOfferId: specialOfferId, 
-          assetId: assetId, 
+          assetId: assetId[0], 
           clientId: clientId, 
         }
-        reserveSepcialOfferRequest(request)
+        reserveSepcialOfferRequest(makeReservationCallback, request)
+    }
+  
+    const makeReservationCallback = (data) => {
+      if(data){
+          alert("Successfully created reservation.\nPlease check your email.")
+          newReservation({
+            title  : 'Reserved',
+            start  : makeDateString(specialOffer.timeRange.fromDateTime),
+            end    : makeDateString(specialOffer.timeRange.toDateTime),
+            resourceId : asset.id,
+            backgroundColor : "grey",
+            borderColor : "grey"
+          }, specialOffer.timeRange.fromDateTime, specialOffer.timeRange.toDateTime)
+          setShow(false);
+      }
+      else{
+        alert("Oops, you are not able to create this reservation, please try again.")
+      }
     }
 
   if (!!asset && specialOffer) {
