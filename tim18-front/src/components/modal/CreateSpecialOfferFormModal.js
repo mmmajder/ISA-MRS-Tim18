@@ -25,6 +25,7 @@ const CreateSpecialOfferFormModal = (props) => {
 
     const [assetId, setAssetId] = useState({});
     const [assets, setAssets] = useState([])
+    const [discount, setDiscount] = useState(null)
 
     const [user, setUser] = useState([]);
     useEffect(() => {
@@ -51,7 +52,7 @@ const CreateSpecialOfferFormModal = (props) => {
             borderColor: "orange"
           })
         
-        const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId, offerUntil}
+        const appointmentJson = {fromDateTime, toDateTime, type, userId, assetId, offerUntil, discount}
         createAppointment(JSON.stringify(appointmentJson))
     }
 
@@ -114,7 +115,8 @@ const CreateSpecialOfferFormModal = (props) => {
             </Form.Group>
             <Form.Group className="mb-2">
                 <Form.Label className="mb-1">Discount: </Form.Label>
-                <Form.Control type="number" name="dob" />
+                <Form.Control type="number" name="dob" value={discount}
+                onChange={(e) => setDiscount(e.target.value)}/>
             </Form.Group>
             
           </Form>

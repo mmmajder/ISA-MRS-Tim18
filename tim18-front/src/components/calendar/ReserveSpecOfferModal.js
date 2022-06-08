@@ -64,11 +64,29 @@ const ReserveSpecOfferModal = ({title, start, end, scope, assetId, specialOfferI
   //  let assetId = "1000005"
 
     const reserveOffer = () => {
-        const request = {
+      let request;
+      if (scope==="private") {
+        if (clientId===undefined) {
+          request = {
+            specialOfferId: specialOfferId, 
+            assetId: assetId, 
+            clientId: user.id, 
+          }
+        }
+        else {
+          request = {
+            specialOfferId: specialOfferId, 
+            assetId: assetId, 
+            clientId: clientId, 
+          }
+        }
+      } else {
+        request = {
           specialOfferId: specialOfferId, 
           assetId: assetId[0], 
           clientId: clientId, 
         }
+      }
         reserveSepcialOfferRequest(makeReservationCallback, request)
     }
   

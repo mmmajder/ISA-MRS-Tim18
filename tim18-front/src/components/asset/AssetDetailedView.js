@@ -173,7 +173,7 @@ export default function AssetDetailedView(){
                 </Row>
                 <Marginer direction="vertical" margin="3em" />
                 <Row>
-                    <CalendarAsset></CalendarAsset>
+                    <CalendarAsset assetId={id}></CalendarAsset>
                 </Row>
                 <Row>
                     {listedReviews}

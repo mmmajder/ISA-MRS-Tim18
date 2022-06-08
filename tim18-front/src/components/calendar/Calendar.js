@@ -143,11 +143,6 @@ const eventClicked = (info) => {
       <FullCalendar 
           eventClick = {function(info) {
             eventClicked(info)
-            // alert('Event: ' + info.event.title);
-            // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-            // alert('View: ' + info.view.type);
-            // change the border color just for fun
-            // info.el.style.borderColor = 'red';
           }}
 
           ref={calendarRef}
