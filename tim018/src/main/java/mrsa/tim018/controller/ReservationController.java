@@ -120,7 +120,7 @@ public class ReservationController {
 			//TODO: tri dana do pocetka
 		reservation = reservationService.cancelReservation(reservation);
 		
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK); 
 	}
 	
 	@PostMapping(value = "/reserveSpecialOffer")
@@ -134,7 +134,7 @@ public class ReservationController {
 		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservationService.save(reservation); 
-		 
+		  
 		asset.getCalendar().getReserved().add(reservation);     
 		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
 		if (ranges == null) {
