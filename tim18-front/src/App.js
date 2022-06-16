@@ -29,11 +29,17 @@ import UpdateProfilePhoto from './components/forms/UpdateProfilePhoto.js';
 import UpdateAssetPhotos from './components/forms/UpdateAssetPhotos.js';
 import UpdateAssetPrice from  './components/forms/UpdateAssetPrice.js';
 import AdminFinancialPreview from './components/admin/AdminFinancialPreview.js';
+import AdminRegister from './components/admin/AdminRegister.js';
+import Home from './components/forms/Home.js';
+import AdminClientsComplaints from './components/admin/AdminClientsComplaints.js';
 import Subscriptions from './components/reservations/Subscriptions';
 import Reviews from './components/reservations/Reviews.js';
 import MyProfile from './components/profile/MyProfile.js';
 import OtherProfile from './components/profile/OtherProfile.js';
+import AdminRentersComplaints from './components/admin/AdminRentersComplaints.js';
+import AdminReviews from './components/admin/AdminReviews.js';
 import Report from './components/asset/Report.js';
+import AdminFinancialReports from './components/admin/AdminFinancialReports.js';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -57,7 +63,7 @@ function App() {
   const assetUpdate = <Container><UpdateForm /></Container>
   const calendar = <Container><Calendar /></Container>
   const assetCalendar = <Container><CalendarAsset/></Container>
-  const home = <Container></Container>
+  const home = <Container><Home/></Container>
   const confirmation = <Container><Confirmation/></Container>
   const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
@@ -66,8 +72,14 @@ function App() {
   const updateAssetPhotos = <Container><UpdateAssetPhotos /></Container>
   const updateAssetPrice = <Container><UpdateAssetPrice /></Container>
   const adminFinancialPreview = <Container><AdminFinancialPreview/></Container>
+  const adminRegister = <Container><AdminRegister/></Container>
+  const adminClientsComplaints = <Container><AdminClientsComplaints/></Container>
   const SubscriptionList = <Container><Subscriptions /></Container>
   const reviews = <Container><Reviews/></Container>
+  const adminRentersComplaints = <Container><AdminRentersComplaints/></Container>
+  const adminReviews = <Container><AdminReviews/></Container>
+  const adminFinancialReports = <Container><AdminFinancialReports/></Container>
+  
 
   return  (<Router>
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
@@ -95,9 +107,15 @@ function App() {
                   <Route path="/adminProfileDeletionReq" element={adminProfileDeletionReq}/>
                   <Route path="/updateAssetPhotos/:id" element={updateAssetPhotos} />
                   <Route path="/updateAssetPrice/:id" element={updateAssetPrice} />
+                  <Route path="/adminLoyaltyProgram" element={adminFinancialPreview}/>
+                  <Route path="/adminRegister" element={adminRegister}/>
+                  <Route path="/adminClientsComplaints" element={adminClientsComplaints}/>
                   <Route path="/adminFinancialPreview" element={adminFinancialPreview}/>
                   <Route exact path="/subscriptions" element={SubscriptionList} /> 
                   <Route path="/reviews/:reservationId" element={reviews}/>
+                  <Route path="/adminRentersComplaints" element={adminRentersComplaints}/>
+                  <Route path="/adminReviews" element={adminReviews}/>
+                  <Route path="/adminFinancialReports" element={adminFinancialReports}/>
                   <Route path="/report" element={<Container><Report/></Container>}/>
                 </Route>
                 <Route path="login" element={login} />

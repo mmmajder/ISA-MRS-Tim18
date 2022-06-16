@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.dto.RegistrationDTO;
 import mrsa.tim018.dto.UserRequest;
+import mrsa.tim018.model.Admin;
 import mrsa.tim018.model.Registration;
 import mrsa.tim018.model.RequestStatus;
+import mrsa.tim018.model.UserType;
+import mrsa.tim018.service.AdminService;
 import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.RegistrationRequestService;
+import mrsa.tim018.service.UserService;
+import net.bytebuddy.utility.RandomString;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -30,6 +37,15 @@ public class RegistrationRequestController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private AdminService adminService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping(value = "/active")
 	public ResponseEntity<List<RegistrationDTO>> getActiveRegistrationRequests() {
@@ -75,5 +91,35 @@ public class RegistrationRequestController {
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
+	
+	@PutMapping(value="/registerAdmin/")
+	public ResponseEntity<RegistrationDTO> registerAdmin(@RequestBody RegisterAdminRequestDTO registerAdminRequestDTO) {
+		String randomCode = RandomString.make(64);
+		Admin admin = new Admin();
+		admin.setAlreadyLogged(false);
+		admin.setAddress("");
+		admin.setBiography("");
+		admin.setCity("");
+		admin.setPhoneNum("");
+		admin.setUserType(UserType.Admin);
+		admin.setState("");
+		admin.setEmail(registerAdminRequestDTO.getEmail());
+		admin.setDeleted(false); 
+		admin.setEnabled(true); 
+		admin.setFirstName(registerAdminRequestDTO.getName());
+		admin.setLastName(registerAdminRequestDTO.getSurname());
+		admin.setPassword(passwordEncoder.encode(registerAdminRequestDTO.getPassword()));
+		//admin.setPassword(registerAdminRequestDTO.getPassword());
+		adminService.save(admin);
+		try {
+			emailService.sendReservationSuccessfullAdmin(registerAdminRequestDTO);
+			System.out.println("Poslao mejl");
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
+	
 
 }

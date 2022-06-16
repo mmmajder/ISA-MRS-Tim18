@@ -11,7 +11,7 @@ export default function ReportCharts({data}){
                     <p style={{fontSize: "xx-large"}}>Income</p>
                 </Col>
                 <Col sm={6} align="center" className='mt-3'>
-                    <p style={{fontSize: "xx-large"}}>Number of Reserations</p>
+                    <p style={{fontSize: "xx-large"}}>Number of Reservations</p>
                 </Col>
             </Row>
             <Row >

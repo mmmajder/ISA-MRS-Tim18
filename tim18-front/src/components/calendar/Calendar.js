@@ -11,7 +11,7 @@ import './../../assets/styles/calendar.css'
 import { getCalendarData } from '../../services/api/CalendarApi'
 import { getLogged } from '../../services/api/LoginApi';
 import {makeDateString} from './../../services/utils/TimeUtils'
-import { displayEventsWhenAdding } from './CalendarUtils'
+import { displayEventsWhenAdding, removeSpecialOffer } from './CalendarUtils'
 import { removeAvailable } from './CalendarUtils'
 import ReserveSpecOfferModal from './ReserveSpecOfferModal'
 
@@ -50,6 +50,7 @@ async function fetchCalendarData(){
     })
     retData = retData.concat(element.calendar.specialPrice.map(function(range) {
       var info = {
+        id : range.id,
         title : "Special offer",
         resourceId : element.id,
         start : makeDateString(range.timeRange.fromDateTime),
@@ -104,7 +105,8 @@ const removeAvailableCallback = (fromDateTime, toDateTime) => {
 
 const eventClicked = (info) => {
   if (info.event.title=="Special offer") {
-    setActiveForm(<ReserveSpecOfferModal start={info.event.start} end={info.event.end} title={info.event.title}/>)
+    console.log(info)
+    setActiveForm(<ReserveSpecOfferModal start={Date.parse(info.event.start)} end={Date.parse(info.event.end)} title={info.event.title} scope={"global"} assetId={info.event._def.resourceIds} specialOfferId={info.event.id} newReservation={createSpecReservationCallback}/>)
   }
 }
   const createReservationCallback = (value, fromDateTime, toDateTime) => {
@@ -112,6 +114,12 @@ const eventClicked = (info) => {
     newEvents = displayEventsWhenAdding([...newEvents, value])
     setEvents(newEvents);
   } 
+  const createSpecReservationCallback = (value, fromDateTime, toDateTime) => {
+    let newEvents = removeSpecialOffer(events, fromDateTime, toDateTime)
+    newEvents = displayEventsWhenAdding([...newEvents, value])
+    setEvents(newEvents);
+  } 
+
   const [show, setShow] = useState(true);
 
   return (
@@ -135,11 +143,6 @@ const eventClicked = (info) => {
       <FullCalendar 
           eventClick = {function(info) {
             eventClicked(info)
-            // alert('Event: ' + info.event.title);
-            // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-            // alert('View: ' + info.view.type);
-            // change the border color just for fun
-            // info.el.style.borderColor = 'red';
           }}
 
           ref={calendarRef}
@@ -148,9 +151,6 @@ const eventClicked = (info) => {
           initialView="resourceTimelineMonth"
           editable = {false}
           selectable = {true}
-          select = {function(start, end, allDays) {
-            console.log(start, end, allDays)
-          }}
           resources={resources}
           events={events}
           

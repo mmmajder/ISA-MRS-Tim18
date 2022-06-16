@@ -13,6 +13,13 @@ export async function deleteAsset(id) {
      .catch((err)=> alert(err));
 }
 
+export async function deleteAssetAdmin(id) {
+    console.log(id)
+    api.delete(`/assets/deleteAssetAdmin/${id}`)
+     .then((responseData) => {})
+     .catch((err)=> alert(err));
+}
+
 export async function getAssetById(id){
   try {
       const responseData = await api.get(`/assets/${id}`);

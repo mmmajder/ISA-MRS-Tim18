@@ -46,7 +46,7 @@ export default function AssetsPreview({isSearch}){
     useEffect(() => {
         async function fetchAssets(){
             let requestData;
-            if (isSearch || userType==='Client' || userType==='Guest')
+            if (isSearch || userType==='Client' || userType==='Guest' || userType==='Admin')
                 requestData = await getAssets();
             else
                 requestData = await getAssetsByUserId(user.id);

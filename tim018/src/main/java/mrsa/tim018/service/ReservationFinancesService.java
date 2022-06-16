@@ -21,4 +21,8 @@ public class ReservationFinancesService {
 		return reservationFinancesRepository.save(reservationFinances);
 		
 	}
+	
+	public ReservationFinances getLast() {
+		return findAll().get(findAll().size()-1);
+	}
 }

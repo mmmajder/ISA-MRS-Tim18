@@ -32,3 +32,15 @@ export async function declineRegistrationRequest(id, request){
         return err.message
     }
     }
+
+export async function registerAdminRequest(requestBody) {
+    try {
+        const requestJSON = JSON.stringify(requestBody);
+        const responseData = await api.put(`/regRequests/registerAdmin/`, requestJSON);
+        console.log(responseData)
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}

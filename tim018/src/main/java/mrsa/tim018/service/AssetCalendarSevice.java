@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -185,6 +186,13 @@ public class AssetCalendarSevice {
 		}
 		
 		return getNewListAvailable(elems);
+	}
+
+	public ArrayList<SpecialOffer> removeSpecialOffer(List<SpecialOffer> specialPrice, long specialOfferId) {
+		return (ArrayList<SpecialOffer>) specialPrice
+				  .stream()
+				  .filter(c -> c.getID() != specialOfferId)
+				  .collect(Collectors.toList());
 	}
 
 	

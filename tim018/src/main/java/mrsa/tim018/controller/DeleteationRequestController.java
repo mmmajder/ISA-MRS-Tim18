@@ -21,8 +21,10 @@ import mrsa.tim018.dto.DeletationRequestDTO;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.RequestStatus;
+import mrsa.tim018.model.User;
 import mrsa.tim018.service.DeletationRequestService;
 import mrsa.tim018.service.EmailService;
+import mrsa.tim018.service.UserService;
 
 @RestController
 @CrossOrigin("*")
@@ -34,6 +36,9 @@ public class DeleteationRequestController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
@@ -79,12 +84,28 @@ public class DeleteationRequestController {
 		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
 		deletionRequest.setStatus(RequestStatus.Accepted);
 		deletationRequestService.save(deletionRequest);
+		User user = userService.findOne(deletionRequest.getUser().getID());
+		user.setDeleted(true);
+		userService.saveChanges(user);
 		try {
 			emailService.sendDeleteProfileResponseAsync(RequestStatus.Accepted, comment);
 		}catch( Exception e ){
 			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/deleteUser/{id}")
+	public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
+		User user = userService.findOne(id);
+		user.setDeleted(true);
+		userService.saveChanges(user);
+		try {
+			emailService.sendDeleteProfile(user);
+		}catch( Exception e ){
+			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+		}
+		return new ResponseEntity<>(id, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/decline/{id}")

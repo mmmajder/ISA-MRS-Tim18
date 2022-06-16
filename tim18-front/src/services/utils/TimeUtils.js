@@ -14,16 +14,16 @@ export const makeDateString = (dateList) => {
   }
 
   const addNullsToDatetime = (data) => {
-    if (data[1] < 10) {
+    if (data[1] < 10 && !(typeof data[1] === 'string')) {
       data[1] = "0" + data[1] 
     }
-    if (data[2] < 10) {
+    if (data[2] < 10  && !(typeof data[2] === 'string')) {
       data[2] = "0" + data[2] 
     }
-    if (data[3] < 10) {
+    if (data[3] < 10  && !(typeof data[3] === 'string')) {
       data[3] = "0" + data[3] 
     }
-    if (data[4] < 10) {
+    if (data[4] < 10  && !(typeof data[4] === 'string')) {
       data[4] = "0" + data[4] 
     }
     return data

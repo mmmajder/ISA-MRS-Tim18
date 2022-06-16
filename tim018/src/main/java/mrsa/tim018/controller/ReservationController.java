@@ -2,6 +2,7 @@ package mrsa.tim018.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +27,23 @@ import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.LoyaltyProgram;
+import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
+import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
+import mrsa.tim018.model.UserDiscountType;
+import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
 import mrsa.tim018.service.EmailService;
+import mrsa.tim018.service.LoyaltyProgramService;
 import mrsa.tim018.service.RenterService;
+import mrsa.tim018.service.ReservationFinancesService;
 import mrsa.tim018.service.ReservationService;
+import mrsa.tim018.service.SpecialOfferService;
 
 @RestController
 @CrossOrigin("*")
@@ -55,6 +64,18 @@ public class ReservationController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private SpecialOfferService specialOfferService;
+	
+	@Autowired
+	private LoyaltyProgramService loyaltyProgramService;
+	
+	@Autowired
+	private ReservationFinancesService reservationFinancesService;
+	
+	@Autowired
+	private AssetCalendarSevice assetCalendarSevice;
 	
 	@GetMapping(value = "/{reservationId}")
 	public ResponseEntity<ReservationDTO> getReservation(@PathVariable Long reservationId) {
@@ -99,31 +120,41 @@ public class ReservationController {
 			//TODO: tri dana do pocetka
 		reservation = reservationService.cancelReservation(reservation);
 		
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK); 
 	}
 	
 	@PostMapping(value = "/reserveSpecialOffer")
 	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
 		Asset asset = assetService.findOne(specialOfferReservationDTO.getAssetId());
 		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
-		TimeRange timeRange = new TimeRange(false, specialOfferReservationDTO.getStartDateTime(), specialOfferReservationDTO.getEndDateTime());
+		SpecialOffer specialOffer = specialOfferService.findById(specialOfferReservationDTO.getSpecialOfferId());
+		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
 		
-		Reservation reservation = new Reservation(asset, client, timeRange);
+		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
-		reservationService.save(reservation);
+		reservationService.save(reservation); 
+		  
+		asset.getCalendar().getReserved().add(reservation);     
+		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
+		if (ranges == null) {
+			asset.getCalendar().setSpecialPrice(new ArrayList<SpecialOffer>());
+		} else { 
+			asset.getCalendar().setSpecialPrice(ranges);  
+		}
 		
-		asset.getCalendar().getReserved().add(reservation);
-		
+		       
 		assetService.save(asset);
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
-	
+	 
 	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Asset asset = assetService.findOne(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice());
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
+		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservation = reservationService.makeRegularReservation(reservation);
 		if(reservation!=null) {

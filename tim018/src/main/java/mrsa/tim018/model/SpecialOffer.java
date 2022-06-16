@@ -30,6 +30,7 @@ public class SpecialOffer {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
+	@JsonBackReference
 	private Client client = null;
 
 	@OneToOne(cascade = CascadeType.ALL)

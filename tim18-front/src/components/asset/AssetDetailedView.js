@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import ResortSpecificInfo from './ResortSpecificInfo';
 import BoatSpecificInfo from './BoatSpecificInfo';
 import FishingSpecificInfo from './FishingSpecificInfo';
-import { getAssetById, deleteAsset } from '../../services/api/AssetApi';
+import { getAssetById, deleteAsset, deleteAssetAdmin } from '../../services/api/AssetApi';
 import {useEffect, useState, useCallback} from 'react';
 import {useParams} from 'react-router-dom';
 import { getRole } from '../../services/AuthService/AuthService';
@@ -77,7 +77,11 @@ export default function AssetDetailedView(){
     const linkToUpdateAssetPrice = "/updateAssetPrice/" + id;
     const linkToMyAssetsPage = "/resorts"
     const assetDeletion = () => {
-        deleteAsset(id)
+        if (userType==="Admin") {
+            deleteAssetAdmin(id)
+        } else {
+            deleteAsset(id)
+        }
     }
 
     const getAssetPrice = useCallback(
@@ -169,7 +173,7 @@ export default function AssetDetailedView(){
                 </Row>
                 <Marginer direction="vertical" margin="3em" />
                 <Row>
-                    <CalendarAsset></CalendarAsset>
+                    <CalendarAsset assetId={id}></CalendarAsset>
                 </Row>
                 <Row>
                     {listedReviews}

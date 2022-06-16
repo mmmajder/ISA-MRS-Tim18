@@ -4,10 +4,10 @@ import { Button } from 'react-bootstrap';
 
 const RegistrationRequestButton = ({request, text, onClickFunction}) => {
     let style = "formButton"
-    if (text=="Decline") {
-      style = "declineButton"
+    if (text.includes("Decline")) {
+      style = "declineButtonAdmin"
     }
-    return <Button variant="custom" className={`acceptReqReq ${style} mt-3`} onClick={onClickFunction}>
+    return <Button variant="custom" className={`commentBtn ${style} mt-3`} onClick={onClickFunction}>
       {text}
     </Button>
 }

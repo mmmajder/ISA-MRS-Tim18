@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col  } from 'react-bootstrap';
+import { Row, Col, Button  } from 'react-bootstrap';
 import ProfileInfoBlock from './ProfileInfoBlock';
 import {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
@@ -12,6 +12,8 @@ import '../../assets/styles/style.css';
 import ListedReview from '../reservations/ListedReview';
 import {getRenter} from '../../services/api/RenterApi'
 import {useParams} from 'react-router-dom';
+import FixedWidthRegButton from '../buttons/FixedWidthRegButton';
+import { deleteUser } from '../../services/api/DeleteRequestApi';
 
 export default function ProfilePreview({user}){
     // const [user, setUser] = useState();
@@ -31,7 +33,20 @@ export default function ProfilePreview({user}){
     const [listedReviews, setListedReviews] = useState();
 
     const [reviewNum, setReviewNum]  = useState(0);       
-    const [mark, setMark]  = useState(0);                 
+    const [mark, setMark]  = useState(0);        
+    
+    const [logged, setLogged] = useState(null)
+
+    const adminDeleteUser = () => {
+        deleteUser(user.id)
+    }
+
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setLogged);
+        }
+        fetchUser();
+      }, []);
 
     useEffect(() => {
         if (!!user){
@@ -52,7 +67,8 @@ export default function ProfilePreview({user}){
             let listedRevs = <p className='profileNameLastname'>User still hasn't got any reviews.</p>
             if (reviews.length != 0)
                 listedRevs = reviews.map((r) => <ListedReview reviewId={r.id}/>);
-            setListedReviews(listedRevs);
+            if (user.userType!='Admin')
+                setListedReviews(listedRevs);
         }
     }, [reviews])
 
@@ -61,13 +77,21 @@ export default function ProfilePreview({user}){
     const userType =  user.userType;
     const infoBlock =  userType === 'Client' ? <ClientProfilePreview user={user} reviewNum={reviewNum} mark={mark}/> 
                                              : <ProfileInfoBlock user={user} reviewNum={reviewNum} mark={mark}/>
-    if(!!user) {
+    if(!!user && logged) {
         return <Row className="pt-5">
                     <Col sm='3'>
                         {infoBlock}
                     </Col>
                     <Col sm='9'>
+                        <Row>
+                        { logged.userType==="Admin" && userType!="Admin" && 
+                        <Button href={"#"} variant="custom" className='alertFixedWidthButton onRight formButton pe-5 ps-5 ' onClick={adminDeleteUser}>
+                                Delete user
+                            </Button>}
+                        </Row>
+                        <Row>
                         {listedReviews}
+                        </Row>
                     </Col>
                 </Row>
     }

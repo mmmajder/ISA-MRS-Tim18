@@ -42,10 +42,10 @@ export async function cancelReservation(reservationId){
 }
 
 
-export async function reserveSepcialOfferRequest(reservation){
+export async function reserveSepcialOfferRequest(callback, reservation){
     await api.post(`/reservation/reserveSpecialOffer`, reservation)
-            .then((responseData) => {console.log(responseData.data)})
-            .catch(()=> {console.log(false)});
+            .then((responseData) => {callback(responseData.data)})
+            .catch(()=> {callback(false)});
 }
 
 export async function makeReservation(callback, reservation){

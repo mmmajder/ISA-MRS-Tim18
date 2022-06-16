@@ -1,5 +1,6 @@
 package mrsa.tim018.repository;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +44,27 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
 			+ "FROM Review r "
 			+ "WHERE r.renterID = null AND r.assetId = :assetId AND r.status = 1")
 	Collection<Review> getAcceptedReviewsAboutAsset(@Param("assetId") Long userId);
+	
+	
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.renterID != null AND r.isClientWriting = TRUE AND r.status = 0 AND isComplaint=true")
+	Collection<Review> getPendingComplaintsAboutRenter();
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.renterID = null AND r.isClientWriting = TRUE AND r.status = 0 AND isComplaint=true")
+	Collection<Review> getPendingComplaintsAboutAsset();  
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.clientID != null AND r.isClientWriting = FALSE AND r.status = 0 AND isComplaint=true")
+	Collection<Review> getPendingComplaintsCollectionAboutClient();
+	
+	@Query("SELECT r "
+			+ "FROM Review r "
+			+ "WHERE r.status = 0 AND isComplaint=false")
+	Collection<Review> getPendingReviewsNotComplaints();
+
 }

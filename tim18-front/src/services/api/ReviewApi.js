@@ -10,6 +10,26 @@ export async function getReview(id) {
     }
 }
 
+export async function getClientsReviews() {
+    try {
+        const responseData = await api.get(`/review/clients/pending`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function getRentersReviews() {
+    try {
+        const responseData = await api.get(`/review/renters/pending`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
 export async function getReviews(userId, acceptedOnly) {
     try {
         const responseData = await api.get(`/review/user/${userId}`, {
@@ -67,3 +87,66 @@ export async function createReview(reservationId, review){
         return err.message
     }
   }
+
+  export async function cancelClientsComplaint(id){
+    try {
+        const responseData = await api.put(`/review/cancelClientsComplaint/${id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  }
+
+  export async function sendCommentOnComplaint(id, mailClient, mailRenter){
+      const reqData = {mailClient, mailRenter}
+    try {
+        const responseData = await api.put(`/review/sendCommentOnComplaint/${id}`, reqData);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+  } 
+  
+  export async function addPoint(request){
+    try {
+        console.log(request)
+        const responseData = await api.put(`/review/addPoint/${request.id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function declineAddPoint(request){
+    try {
+        const responseData = await api.put(`/review/declineAddPoint/${request.id}`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+
+export async function getPendingNonComplaintReviews() {
+    try {
+        const responseData = await api.get(`/review/pendingNonComplaint`);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}
+
+export async function acceptdeclineReview(request, isAccepted){
+    try {
+        const responseData = await api.put(`/review/acceptdeclineReview/${request.id}`, isAccepted);
+        return responseData;
+    } catch (err) {
+        console.log(err.message);
+        return err.message
+    }
+}

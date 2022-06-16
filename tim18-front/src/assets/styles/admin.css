@@ -19,10 +19,44 @@
     border-color: var(--dark-blue) !important;
 }
 
+.centerBtn {
+    align-items: center;
+    align-tracks: center;
+    background-color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+}
+
 .loyaltybtn {
     background-color: var(--dark-blue) !important;
     border-color: var(--dark-blue) !important;
 }
 
+.borderedBlockRegisterAdmin {
+    background-color: white;
+    border-radius: 1.5rem;
+    border: solid 3px var(--dark-blue);
+    box-shadow: 0 0 5px var(--custom-dark-grey);
+    box-shadow: inset;
+    padding: 5%;
+    margin: 20%;
+  }
+
+.formButtonAdmin {
+    background-color: var(--dark-blue) !important;
+    color: white !important;
+    font-size: x-large !important;
+    width: 100%;
+  }
+
+.formButtonAdmin:hover {
+    background-color: var(--hovered-blue) !important;
+    
+  }
 
 
+  .declineButtonAdmin {
+    background-color: white !important;
+    color: var(--dark-blue) !important;
+    border-color: var(--dark-blue) !important;
+    font-size: large !important;
+  }

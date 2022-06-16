@@ -10,13 +10,14 @@ import './../../../assets/styles/calendar.css'
 import { getAssetCalendarData } from '../../../services/api/CalendarApi'
 import { Row, Col, Container } from 'react-bootstrap';
 import {makeDateString} from './../../../services/utils/TimeUtils'
-import { displayEventsWhenAdding, removeAvailable } from '../../calendar/CalendarUtils'
+import { displayEventsWhenAdding, removeAvailable, removeSpecialOffer } from '../../calendar/CalendarUtils'
 import RegularButton from '../../buttons/RegularButton'
 import { getRole } from '../../../services/AuthService/AuthService'
 import { getLogged } from '../../../services/api/LoginApi'
 import CreateReservationFormModal from '../../modal/CreateReservationFormModal'
+import ReserveSpecOfferModal from '../../calendar/ReserveSpecOfferModal'
 
-const CalendarAsset = () => {
+const CalendarAsset = ({assetId}) => {
     const guestTxt = "You must be logged in to do this";
     const penaltyTxt = "You have 3 or more penalties, wait for the first of the month for reset";
 
@@ -26,7 +27,7 @@ const CalendarAsset = () => {
     const [client, setClient] = useState();
     const [show, setShow] = useState(true);
     const [clientShow, setClientShow] = useState(false);
-    const assetId = localStorage.getItem("assetId");
+    const [activeForm, setActiveForm] = useState(null);
     useEffect(() => {
       async function fetchUser(){
           await getLogged(setClient);
@@ -48,6 +49,7 @@ const CalendarAsset = () => {
         })
         let specialOffers = requestData.data.calendar.specialPrice.map(function(range) {
           var info = {
+            id : range.id,
             title : "Special offer",
             start : makeDateString(range.timeRange.fromDateTime),
             end : makeDateString(range.timeRange.toDateTime),
@@ -90,7 +92,20 @@ const CalendarAsset = () => {
       setEvents(newEvents);
     } 
 
+    const createSpecReservationCallback = (value, fromDateTime, toDateTime) => {
+      let newEvents = removeSpecialOffer(events, fromDateTime, toDateTime)
+      newEvents = displayEventsWhenAdding([...newEvents, value])
+      setEvents(newEvents);
+    } 
+
     const clientProps = {assetId: assetId, setShow: setClientShow, show: clientShow, newReservation: createReservationCallback};
+
+    const eventClicked = (info) => {
+      if (info.event.title=="Special offer") {
+        console.log(info)
+        setActiveForm(<ReserveSpecOfferModal start={Date.parse(info.event.start)} end={Date.parse(info.event.end)} title={info.event.title} scope={"private"} assetId={assetId} specialOfferId={info.event.id} newReservation={createSpecReservationCallback}/>)
+      }
+    }
 
     return (
         <div>
@@ -106,15 +121,15 @@ const CalendarAsset = () => {
           </div>
           <FullCalendar 
               //dayCellContent = {injectCellCOntent}
+              eventClick = {function(info) {
+                eventClicked(info)
+              }}
               ref={calendarRef}
               schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
               plugins={[ dayGridPlugin, timeGridPlugin, resourceTimelinePlugin, interactionPlugin  ]}
               initialView="dayGridMonth"
               editable = {true}
               selectable = {true}
-              select = {function(start, end, allDays) {
-                console.log(start)
-              }}
               events={events}
               
               customButtons={{
@@ -162,6 +177,7 @@ const CalendarAsset = () => {
                   </Col>
               </Row>
               {clientShow && <CreateReservationFormModal props={clientProps}/>}
+              {activeForm}
         </div>
     )
 }
