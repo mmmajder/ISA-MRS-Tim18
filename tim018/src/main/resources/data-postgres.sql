@@ -8,15 +8,15 @@ INSERT INTO Role (name) VALUES ('ROLE_USER');/*6*/
 ALTER SEQUENCE userSeqGen RESTART;
 
 /*images*/
-/*insert into image(id, data, is_deleted, type, asset_id) values*/
+insert into image(id, data, is_deleted, type, asset_id) values
 	/*user images*/
-	/*('1', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/default_admin.jpg'), false, null, null),
+	('1', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/default_admin.jpg'), false, null, null),
 	('2', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/Katarina_Komad.jpg'), false, null, null),
 	('3', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/fishman_ajder.jpg'), false, null, null),
 	('4', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/default_user.jpg'), false, null, null),
 	('5', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/default_admin.jpg'), false, null, null),
-	*//*asset images*/
-	/*('6', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/fishman_1.jpg'), false, null, 1000005),
+	/*asset images*/
+	('6', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/fishman_1.jpg'), false, null, 1000005),
 	('7', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src/assets/images/fishman_2.jpg'), false, null, 1000005),
 	('8', lo_import('C:/Users/Korisnik/Desktop/ISA/ISA-MRS-Project/ISA-MRS-Tim18/tim18-front/src\assets\images\fishman_3.jpg'), false, null, 1000005),
 	('9', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
@@ -25,7 +25,7 @@ ALTER SEQUENCE userSeqGen RESTART;
 	('12', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\skadarlija.jpg'), false, null, 1000000),
 	('13', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\Maldives.jpg'), false, null, 1000001),
 	('14', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004),
-	('15', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null);*/
+	('15', lo_import('C:\Users\Korisnik\Desktop\ISA\ISA-MRS-Project\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null);
 
 
 /*admin*/
