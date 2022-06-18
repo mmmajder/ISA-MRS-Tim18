@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.ReservationFinances;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.repository.ClientRepository;
 
@@ -16,7 +18,10 @@ import mrsa.tim018.repository.ClientRepository;
 public class ClientService {
 	
 	@Autowired
-	private ClientRepository clientRepository;	
+	private ClientRepository clientRepository;
+	
+	@Autowired
+	private ReservationFinancesService reservationFinancesService;
 
 	public Client findOne(Long id) {
 		return clientRepository.findById(id).get();
@@ -41,6 +46,8 @@ public class ClientService {
 	public void addRegularReservation(Reservation reservation) {
 		Client client = reservation.getClient();
 		client.getReservations().add(reservation);
+		ReservationFinances finances = reservationFinancesService.getLast();
+		client.setLoyaltyPoints(client.getLoyaltyPoints() + finances.getPointsPerReservation());
 	}
 	
 	public void addSubscription(Subscription subscription) {
@@ -52,5 +59,13 @@ public class ClientService {
 		Client client = subscription.getClient();
 		client.getSubscriptions().remove(subscription);
 		save(client);
+	}
+
+	@Scheduled(cron = "0 0 0 1 1/1 *")	
+	public void resetPenaltyPoint() {
+		List<Client> clients = findAll();
+		for (Client client : clients) {
+			client.setPenaltyPoints(0);
+		}
 	}
 }

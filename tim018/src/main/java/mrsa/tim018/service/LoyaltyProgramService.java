@@ -32,6 +32,10 @@ public class LoyaltyProgramService {
 		return loyaltyProgramRepository.findByLevelAndUserDiscountType(level, userDiscountType);
 	}
 	
+	public List<LoyaltyProgram> findByUserDiscountType( UserDiscountType userDiscountType) {
+		return loyaltyProgramRepository.findByUserDiscountType(userDiscountType);
+	}
+	
 	public List<LoyaltyProgram> saveAll(List<LoyaltyProgram> loyaltyProgram) {
 		return loyaltyProgramRepository.saveAll(loyaltyProgram);
 	}

@@ -30,6 +30,9 @@ public class ReservationService {
 
 	@Autowired
 	private ClientService clientService;	
+	
+	@Autowired
+	private RenterService renterService;
 
 	public Reservation save(Reservation reservation) {
 		return reservationRepository.save(reservation);
@@ -158,6 +161,7 @@ public class ReservationService {
 		}
 		assetService.addRegularReservation(reservation);	
 		clientService.addRegularReservation(reservation);
+		renterService.addRegularReservationPoints(reservation);
 		return save(reservation);
 	}
 

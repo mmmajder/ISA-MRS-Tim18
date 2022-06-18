@@ -1,20 +1,24 @@
 package mrsa.tim018.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.FinancesAdminDTO;
+import mrsa.tim018.dto.LoyaltyCategoryInfoDTO;
 import mrsa.tim018.dto.LoyaltyElementDTO;
 import mrsa.tim018.model.LoyaltyProgram;
 import mrsa.tim018.model.ReservationFinances;
+import mrsa.tim018.model.UserDiscountType;
 import mrsa.tim018.service.LoyaltyProgramService;
 import mrsa.tim018.service.ReservationFinancesService;
 
@@ -26,7 +30,8 @@ public class LoyaltyProgramController {
 	@Autowired
 	private LoyaltyProgramService loyaltyProgramService;
 	
-	@Autowired ReservationFinancesService reservationFinancesService;
+	@Autowired 
+	private ReservationFinancesService reservationFinancesService;
 	
 	@GetMapping(value = "/all")
 	public List<LoyaltyElementDTO> getLoyaltyClientData() {
@@ -78,5 +83,38 @@ public class LoyaltyProgramController {
 			return null;
 		}
 		return data;
+	}
+	
+
+	@GetMapping(value = "/getCategory/{loyaltyPoints}/{userType}")
+	public LoyaltyCategoryInfoDTO getCategory(@PathVariable int loyaltyPoints, @PathVariable UserDiscountType userType) {
+		List<LoyaltyProgram> loyaltyPrograms = loyaltyProgramService.findByUserDiscountType(userType);
+		loyaltyPrograms.sort(Comparator.comparing(LoyaltyProgram::getPoints));
+		
+		LoyaltyCategoryInfoDTO dto = new LoyaltyCategoryInfoDTO();
+		// od 0 do 10 => regular
+		if(loyaltyPoints < loyaltyPrograms.get(0).getPoints()) {
+			dto.setCategory("Regular");
+			dto.setPointsToUpgrade(loyaltyPrograms.get(0).getPoints() - loyaltyPoints);
+			return dto;
+		}
+		// od 10 do 20 => bronze
+		else if(loyaltyPoints < loyaltyPrograms.get(1).getPoints()) {
+			dto.setCategory(loyaltyPrograms.get(0).getLevel());
+			dto.setPointsToUpgrade(loyaltyPrograms.get(1).getPoints() - loyaltyPoints);
+			return dto;
+		}
+		// od 20 do 40 => silver
+		else if(loyaltyPoints < loyaltyPrograms.get(2).getPoints()) {
+			dto.setCategory(loyaltyPrograms.get(1).getLevel());
+			dto.setPointsToUpgrade(loyaltyPrograms.get(2).getPoints() - loyaltyPoints);
+			return dto;
+		}
+		// >40 => gold
+		else {
+			dto.setCategory(loyaltyPrograms.get(2).getLevel());
+			dto.setPointsToUpgrade(0);
+			return dto;
+		}
 	}
 }

@@ -11,4 +11,5 @@ public interface LoyaltyProgramRepository extends JpaRepository<LoyaltyProgram, 
 	public LoyaltyProgram findById(long id);
 	public List<LoyaltyProgram> findAll();
 	public List<LoyaltyProgram> findByLevelAndUserDiscountType(String level, UserDiscountType userDiscountType);
+	public List<LoyaltyProgram> findByUserDiscountType(UserDiscountType userDiscountType);
 }

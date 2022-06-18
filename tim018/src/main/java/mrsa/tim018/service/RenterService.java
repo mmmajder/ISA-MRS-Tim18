@@ -8,13 +8,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.ReservationFinances;
 import mrsa.tim018.model.User;
 import mrsa.tim018.repository.RenterRepository;
 
 @Service
 public class RenterService {
 	@Autowired
-	private RenterRepository renterRepo;	
+	private RenterRepository renterRepo;
+	
+	@Autowired
+	private ReservationFinancesService reservationFinancesService;	
 
 	public Renter findOne(Long id) {
 		return renterRepo.findById(id).get();  // .orElseGet(null)
@@ -38,5 +43,11 @@ public class RenterService {
 
 	public void remove(Integer id) {
 		renterRepo.deleteById(id);
+	}
+
+	public void addRegularReservationPoints(Reservation reservation) {
+		Renter renter = reservation.getAsset().getRenter();
+		ReservationFinances finances = reservationFinancesService.getLast();
+		renter.setLoyaltyPoints(renter.getLoyaltyPoints() + finances.getPointsPerReservation());
 	}
 }
