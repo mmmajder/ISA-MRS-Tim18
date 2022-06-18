@@ -15,7 +15,7 @@ export default function CurrentReservations({client}){
 
   const [canceledReservation, setCanceledReservation] = useState();
   const message=`Renter is allowed to keep ${canceledReservation?.asset.cancelationConditions}% of the price + You won't be able to reserve these dates again.`;
-
+  const title = 'Warning!'
   useEffect(() => {
       async function fetchReservations(){
           await getCurrentReservationsByType(setReservations, client.id, assetType);
@@ -48,7 +48,7 @@ export default function CurrentReservations({client}){
     <>
       <AssetTypeOption setAssetType={setAssetType}/>
       {listedReservations}
-      {<ConfirmModal message={message} show={show} handleClose={handleConfirm}/>}
+      {<ConfirmModal title={title} message={message} show={show} handleClose={handleConfirm}/>}
     </>
   );
 }

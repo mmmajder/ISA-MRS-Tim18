@@ -141,7 +141,10 @@ const CreateReservationForm = ({setInputs, assetId, setValidations}) => {
                     <Col>
                         { user.userType === 'Client' && <Form.Label className="mb-1">{user.firstName} {user.lastName}</Form.Label> }
                         { user.userType !== 'Client' && clients !==undefined &&
-                            <Select options={clients} onChange={(selected) => setClientId(selected.value)}/>
+                            <Select options={clients} onChange={(selected) => { 
+                            setInputs(values => ({...values, ["clientId"]: selected.value}))
+                            setValidations(values => ({...values, ["clientId"]: true}));
+                            setClientId(selected.value);}}/>
                         }
                     </Col>
                 </Row>

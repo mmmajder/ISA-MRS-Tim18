@@ -20,6 +20,5 @@ export const calculateTotalPrice = (props, setPrice, setHours) => {
     else{
         setHours(hours)
         setPrice(hours * assetPrice )
-    }
-    
+    }   
 }

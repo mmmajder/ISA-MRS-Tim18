@@ -168,8 +168,8 @@ const CalendarAsset = ({assetId}) => {
                 <Col sm={4}/>
                   <Col sm={4} align='center'>
                       {(userType==="Client" || userType === "Guest" ) && 
-                        <RegularButton text='Rent' disabled={userType === "Guest" || client?.penaltyPoints>3} 
-                          disabledReason={userType === "Guest" ? guestTxt: client?.penaltyPoints>3 ? penaltyTxt : ""} 
+                        <RegularButton text='Rent' disabled={userType === "Guest" || client?.penaltyPoints>=3} 
+                          disabledReason={userType === "Guest" ? guestTxt: client?.penaltyPoints>=3 ? penaltyTxt : ""} 
                           onClickFunction={() => setClientShow(true)}/>
                       }
                   </Col>
