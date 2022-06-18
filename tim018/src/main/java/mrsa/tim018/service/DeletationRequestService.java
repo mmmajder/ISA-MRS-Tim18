@@ -94,7 +94,7 @@ public class DeletationRequestService {
 				emailService.sendDeleteProfileResponseAsync(RequestStatus.Declined, comment);
 			}
 		} 
-		catch (ObjectOptimisticLockingFailureException e) {
+		catch (Exception e) { 
 			throw e;
 		}
 	}
@@ -109,7 +109,7 @@ public class DeletationRequestService {
 
 	private DeletationRequest setDeletionRequestStatus(long id, boolean isAccept) {
 		logger.info("> update id:{}", id);
-		DeletationRequest deletionRequest = findOne(id);
+		DeletationRequest deletionRequest = findOne(id); 
 		if (isAccept) {
 			deletionRequest.setStatus(RequestStatus.Accepted);
 		} else {

@@ -195,57 +195,73 @@ public class ReviewController {
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/pendingNonComplaint")
+	public ResponseEntity<List<Review>> getPendingReviews() {
+		List<Review> pendingReviews = reviewService.getPendingReviewsNotComplaints();
+		if (pendingReviews.size() == 0)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(pendingReviews, HttpStatus.OK);
+	}
+	
+	 
+	//conflict solve
+	@PutMapping(value = "/acceptdeclineReview/{id}")
+	public ResponseEntity<Review> acceptdeclineReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
+		try {
+			Review review = reviewService.acceptDeclineReview(id, isAccepted);
+			if (review==null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} catch (Exception e) { 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+		}   
+	}
+	
 	@PutMapping(value = "/cancelClientsComplaint/{id}")
 	public ResponseEntity<Review> cancelClientsComplaint(@PathVariable Long id) {
-		Review review = reviewService.findOne(id);
-		if (review == null) {
+		try {
+			Review review = reviewService.cancelClientsComplaint(id);
+			if (review==null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		review.setStatus(RequestStatus.Declined);
-		reviewService.save(review);
-		return new ResponseEntity<>(review, HttpStatus.OK);
+		}  
 	}
 
 	@PutMapping(value = "/sendCommentOnComplaint/{id}")
-	public ResponseEntity<Review> sendCommentOnComplaint(@PathVariable Long id, @RequestBody MailsDTO reqData) {
-		Review review = reviewService.findOne(id);
-		if (review == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		review.setStatus(RequestStatus.Accepted);
-		reviewService.save(review);
+	public ResponseEntity<Review> sendCommentOnComplaint(@PathVariable Long id, @RequestBody MailsDTO mailData) {
 		try {
-			emailService.sendMailsClientsComplaint(reqData.getMailClient(), reqData.getMailRenter(),
-					review.getClientID());
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new ResponseEntity<>(review, HttpStatus.OK);
+			Review review = reviewService.sendCommentOnComplaint(id, mailData);
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}  
 	}
-
+	
 	@PutMapping(value = "/addPoint/{id}")
 	public ResponseEntity<Review> addPoint(@PathVariable Long id) {
-		Review review = reviewService.findOne(id);
-		if (review == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		review.setStatus(RequestStatus.Accepted);
-		reviewService.save(review);
-		Client client = userService.findClient(review.getClientID());
-		client.setPenaltyPoints(client.getPenaltyPoints() + 1);
-		userService.saveClient(client);
-		Renter renter = (Renter) userService.findOne(review.getRenterID());
 		try {
-			emailService.sendPointMail(review, client, renter, true);
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new ResponseEntity<>(review, HttpStatus.OK);
+			Review review = reviewService.addPoint(id); 
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}  
 	}
 
 	@PutMapping(value = "/declineAddPoint/{id}")
+	public ResponseEntity<Review> declineAddPoint(@PathVariable Long id) {
+		try {
+			Review review = reviewService.declineAddPoint(id);
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}  
+	}
+	
+	/*@PutMapping(value = "/declineAddPoint/{id}")
 	public ResponseEntity<Review> declineAddPoint(@PathVariable Long id) {
 		Review review = reviewService.findOne(id);
 		if (review == null) {
@@ -262,51 +278,5 @@ public class ReviewController {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/pendingNonComplaint")
-	public ResponseEntity<List<Review>> getPendingReviews() {
-		List<Review> pendingReviews = reviewService.getPendingReviewsNotComplaints();
-		if (pendingReviews.size() == 0)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		return new ResponseEntity<>(pendingReviews, HttpStatus.OK);
-	}
-	
-	
-	//conflict solve
-	@PutMapping(value = "/acceptdeclineReview/{id}")
-	public ResponseEntity<Review> acceptdeclineReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
-		try {
-			Review review = reviewService.acceptDeclineReview(id, isAccepted);
-			return new ResponseEntity<>(review, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}  
-		
-		
-//		Review review = reviewService.findOne(id);
-//		if (review == null) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-//		}
-//		if (isAccepted) {
-//			review.setStatus(RequestStatus.Accepted); 
-//		} else { 
-//			review.setStatus(RequestStatus.Declined);
-//		}
-//		reviewService.save(review);
-//		Client client = userService.findClient(review.getClientID());
-//		Renter renter;
-//		if (review.getRenterID()==null) {
-//			Asset asset = assetService.findById(review.getAssetId());
-//			renter = asset.getRenter();
-//		} else {
-//			renter = (Renter) userService.findOne(review.getRenterID());
-//		}
-//		try {
-//			emailService.sendReviewMail(review, client, renter, isAccepted);
-//		} catch (MessagingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	}
+	}*/
 }

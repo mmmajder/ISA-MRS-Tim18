@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
+import mrsa.tim018.dto.MailsDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Renter;
@@ -180,14 +182,17 @@ public class ReviewService {
 		return (List<Review>) reviewRepository.getPendingReviewsNotComplaints();
 	}
 
+	
+	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
 	public Review acceptDeclineReview(Long id, Boolean isAccepted) {
-		Review review = updateReviewStatus(id, isAccepted);
-		
+		Review review;
+		review = updateReviewStatus(id, isAccepted);
 		Client client = userService.findClient(review.getClientID());
 		
 		sendMailChangeReviewStatus(isAccepted, review, client);
-		return review;
+		return review; 
+		
 	}
 
 	private void sendMailChangeReviewStatus(Boolean isAccepted, Review review, Client client) {
@@ -201,22 +206,70 @@ public class ReviewService {
 			}
 			emailService.sendReviewMail(review, client, renter, isAccepted);
 		} catch (Exception e) {
-			throw new ObjectOptimisticLockingFailureException("No review found", null);
+			throw new MailAuthenticationException("Error during mail sending");
 		}
 	}
 
 	private Review updateReviewStatus(Long id, Boolean isAccepted) {
 		Review review = findOnePending(id);
-		if (review != null) {
+//		if (review != null) {
 			if (isAccepted) {
 				review.setStatus(RequestStatus.Accepted); 
 			} else { 
 				review.setStatus(RequestStatus.Declined); 
 			}
 			save(review);
-		} else {
-			throw new ObjectOptimisticLockingFailureException("No review found", null);
-		}
+//		} else {
+//			throw new NullPointerException("No review found");
+//		}
+		return review;
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review cancelClientsComplaint(Long id) {
+		Review review = findOnePending(id);
+//		if (review == null) {
+//			return null;
+//		}
+		review.setStatus(RequestStatus.Declined);
+		save(review);
+		return review;
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review sendCommentOnComplaint(Long id, MailsDTO mailData) throws Exception {
+		Review review = findOnePending(id);
+//		if (review == null) {
+//			return null;
+//		}
+		review.setStatus(RequestStatus.Accepted);
+		save(review);
+		emailService.sendMailsClientsComplaint(mailData.getMailClient(), mailData.getMailRenter(),
+					review.getClientID());
+		return review;
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review addPoint(Long id) throws MessagingException {
+		Review review = findOne(id);
+		review.setStatus(RequestStatus.Accepted);
+		save(review);
+		Client client = userService.findClient(review.getClientID());
+		client.setPenaltyPoints(client.getPenaltyPoints() + 1);
+		userService.saveClient(client);
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		emailService.sendPointMail(review, client, renter, true);
+		return review;
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review declineAddPoint(Long id) throws MessagingException {
+		Review review = findOne(id);
+		review.setStatus(RequestStatus.Declined);
+		save(review);
+		Client client = (Client) userService.findOne(review.getClientID());
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		emailService.sendPointMail(review, client, renter, false);
 		return review;
 	}
 }

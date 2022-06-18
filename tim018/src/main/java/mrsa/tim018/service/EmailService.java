@@ -122,7 +122,7 @@ public class EmailService {
 			javaMailSender.send(message);
 			System.out.println("Email poslat!");
 		} catch (Exception e) {
-			throw new ObjectOptimisticLockingFailureException("Error", null);
+			throw new MailAuthenticationException("Error during mail sending");
 		}
 
 	}
@@ -183,7 +183,7 @@ public class EmailService {
 		}
 	}
 
-	@Async
+//	@Async
 	public void sendMailsClientsComplaint(String mailClient, String mailRenter, Long clientId)
 			throws MessagingException {
 
@@ -218,13 +218,16 @@ public class EmailService {
 
 	}
 
-	public void sendPointMail(Review review, Client client, Renter renter, boolean isAccepted)
-			throws MessagingException {
-		sendPointMail(review, client, renter, "client", isAccepted);
-		sendPointMail(review, client, renter, "renter", isAccepted);
+	public void sendPointMail(Review review, Client client, Renter renter, boolean isAccepted) throws MessagingException{
+		try {
+			sendPointMail(review, client, renter, "client", isAccepted);
+			sendPointMail(review, client, renter, "renter", isAccepted);
+		} catch (MessagingException e) {
+			throw e;
+		}
 	}
 
-	@Async
+//	@Async
 	private void sendPointMail(Review review, Client client, Renter renter, String receiver, boolean isAccepted)
 			throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();

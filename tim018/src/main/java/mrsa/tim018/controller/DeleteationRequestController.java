@@ -52,7 +52,7 @@ public class DeleteationRequestController {
 		}
 		return new ResponseEntity<DeletationRequestDTO>(new DeletationRequestDTO(request), HttpStatus.OK);
 	}
-	
+	 
 	@GetMapping(value = "/all") 
 	public ResponseEntity<List<DeletationRequestDTO>> getAllDeletationRequests() {
 
@@ -97,7 +97,7 @@ public class DeleteationRequestController {
 	
 	
 	
-	//conflict solve
+	//conflict solve 
 		@PutMapping(value = "/accept/{id}")  
 		public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 			try {
