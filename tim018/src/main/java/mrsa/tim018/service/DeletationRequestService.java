@@ -72,18 +72,18 @@ public class DeletationRequestService {
 		return deleteRequest;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
+	@Transactional(readOnly = false, rollbackFor = ObjectOptimisticLockingFailureException.class)
 	public DeletationRequest acceptDeclineRegistrationRequest(long id, String comment, boolean isAccept) {
 		
 		DeletationRequest deletionRequest = setDeletionRequestStatus(id, isAccept);
-        
+         
         if (isAccept) {
 			setUserIsDelete(id, deletionRequest);
-        }
+        } 
         
         sendRequestAcceptDeclineMail(comment, isAccept);
-		
-		return deletionRequest; 
+		 
+		return deletionRequest;  
 	}
 
 	private void sendRequestAcceptDeclineMail(String comment, boolean isAccept) {

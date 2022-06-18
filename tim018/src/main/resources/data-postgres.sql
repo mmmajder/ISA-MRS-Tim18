@@ -100,21 +100,21 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-06-11 11:15', false, '2022-06-20 12:38');
 					  
 			
-insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id) values
+insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id, version) values
 						/*asset*/
-						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 1, false, 4),
+						(false, 'Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.Everything was fine.', 4, false, true, 2, null, 1000005, 1, false, 4,1),
 						/*renter*/
-						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4),
+						(false, 'Milan is a really cool guy!', 5, false, true, 2, 3, 1000005, 1, false, 4,1),
 						
 						/*asset*/  
-						(false, 'Old boat', 2, true, true, 2, null, 1000005, 0, false, 4),
+						(false, 'Old boat', 2, true, true, 2, null, 1000005, 0, false, 4,1),
 						/*renter*/
-						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4),
+						(false, 'Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter! Rude renter!', 1, true, true, 2, 3, 1000005, 0, false, 4,1),
 						
 						/*client*/
-						(false, 'Meh.', 3, false, true, 2, 3, 1000005, 0, false, 4),
-						(false, 'Very bad.', 2, true, false, 2, 3, 1000005, 0, false, 4),
-						(false, 'Awful.', 1, true, false, 2, 3, 1000005, 0, false, 4);
+						(false, 'Meh.', 3, false, true, 2, 3, 1000005, 0, false, 4,1),
+						(false, 'Very bad.', 2, true, false, 2, 3, 1000005, 0, false, 4,1),
+						(false, 'Awful.', 1, true, false, 2, 3, 1000005, 0, false, 4,1);
 			
 insert into loyalty_state (client_discount_percent, renter_discount_percent, tax_percent) values
 	(5, 5, 50),
@@ -138,9 +138,9 @@ insert into registration (id, is_deleted, status, user_id, registration_date_tim
 	(1000001, false, 0, 3, now()::timestamp),
 	(1000002, false, 0, 4, now()::timestamp);
 
-insert into deletation_request (is_deleted, reason, status, user_id) values
-	(false, 'No reason', 0, 2),
-	(false, 'Good reason', 0, 6);
+insert into deletation_request (is_deleted, reason, status, user_id, version) values
+	(false, 'No reason', 0, 2,1),
+	(false, 'Good reason', 0, 6,1);
 	
 /* prices */
 insert into asset_price (id, asset_id, price, start_date, end_date) values

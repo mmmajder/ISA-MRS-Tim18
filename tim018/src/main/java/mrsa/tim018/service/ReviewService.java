@@ -50,7 +50,7 @@ public class ReviewService {
 	
 	public Review findOnePending(Long id) {
 		return reviewRepository.findPeningById(id).orElse(null);
-	}
+	} 
 	
 	public ReviewType determineReviewType(Review review) {
 		if (!review.isClientWriting())
@@ -186,7 +186,7 @@ public class ReviewService {
 		
 		Client client = userService.findClient(review.getClientID());
 		
-		//sendMailChangeReviewStatus(isAccepted, review, client);
+		sendMailChangeReviewStatus(isAccepted, review, client);
 		return review;
 	}
 
