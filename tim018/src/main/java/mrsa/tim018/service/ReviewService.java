@@ -3,13 +3,19 @@ package mrsa.tim018.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
+import javax.mail.MessagingException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
@@ -17,7 +23,6 @@ import mrsa.tim018.model.ReviewType;
 import mrsa.tim018.repository.ReviewRepository;
 
 @Service
-@Transactional
 public class ReviewService {
 
 	@Autowired
@@ -26,12 +31,25 @@ public class ReviewService {
 	@Autowired
 	private ReservationService reservationService;
 
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private AssetService assetService;
+	
+	@Autowired
+	private EmailService emailService;
+	
 	public Review save(Review review) {
 		return reviewRepository.save(review);
 	}
 	
 	public Review findOne(Long id) {
 		return reviewRepository.findById(id).orElse(null);
+	}
+	
+	public Review findOnePending(Long id) {
+		return reviewRepository.findPeningById(id).orElse(null);
 	}
 	
 	public ReviewType determineReviewType(Review review) {
@@ -160,5 +178,45 @@ public class ReviewService {
 
 	public List<Review> getPendingReviewsNotComplaints() {
 		return (List<Review>) reviewRepository.getPendingReviewsNotComplaints();
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
+	public Review acceptDeclineReview(Long id, Boolean isAccepted) {
+		Review review = updateReviewStatus(id, isAccepted);
+		
+		Client client = userService.findClient(review.getClientID());
+		
+		//sendMailChangeReviewStatus(isAccepted, review, client);
+		return review;
+	}
+
+	private void sendMailChangeReviewStatus(Boolean isAccepted, Review review, Client client) {
+		try {
+			Renter renter;
+			if (review.getRenterID()==null) {
+				Asset asset = assetService.findById(review.getAssetId());
+				renter = asset.getRenter();
+			} else {
+				renter = (Renter) userService.findOne(review.getRenterID());
+			}
+			emailService.sendReviewMail(review, client, renter, isAccepted);
+		} catch (Exception e) {
+			throw new ObjectOptimisticLockingFailureException("No review found", null);
+		}
+	}
+
+	private Review updateReviewStatus(Long id, Boolean isAccepted) {
+		Review review = findOnePending(id);
+		if (review != null) {
+			if (isAccepted) {
+				review.setStatus(RequestStatus.Accepted); 
+			} else { 
+				review.setStatus(RequestStatus.Declined); 
+			}
+			save(review);
+		} else {
+			throw new ObjectOptimisticLockingFailureException("No review found", null);
+		}
+		return review;
 	}
 }

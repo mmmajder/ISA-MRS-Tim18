@@ -2,8 +2,10 @@ package mrsa.tim018.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
 
 
@@ -91,9 +94,10 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	} 
 	
-	@Async
-	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) throws MessagingException, UnsupportedEncodingException  {
-		MimeMessage message = javaMailSender.createMimeMessage();
+//	@Async
+	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl)  {
+		try {
+			MimeMessage message = javaMailSender.createMimeMessage();
 		if (status == RequestStatus.Accepted)
 			message.setSubject("Hakuna Matata profile delete accepted");
 		else 
@@ -117,9 +121,15 @@ public class EmailService {
 		
 		helper.setText(content, true);
 		
-		javaMailSender.send(message);
+		
+			javaMailSender.send(message);
+			System.out.println("Email poslat!");
+		} catch (Exception e) {
+			throw new ObjectOptimisticLockingFailureException("Error", null);
+		}
+		
 
-		System.out.println("Email poslat!");
+		
 	}
 
 	@Async
@@ -244,15 +254,15 @@ public class EmailService {
 			else {
 				sendReviewMail(review, client, renter, isAccepted, "renter");
 			}
-		}
+		} 
 		
 	}
 	
-	@Async
-	private void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted, String receiver) throws MessagingException {
+//	@Async
+	private void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted, String receiver) throws MessagingException, MailAuthenticationException {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		message.setSubject("[Hakuna Matata] Renters review");
-		
+		 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setTo("isamrs018@gmail.com");
 		helper.setFrom(env.getProperty("spring.mail.username"));

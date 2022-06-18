@@ -43,14 +43,17 @@ public class DeleteationRequestController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
 		DeletationRequest request = deletationRequestService.findOne(id);
-		System.out.println(request);
+		System.out.println(request); 
 		if (request == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		if (request.isDeleted()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<DeletationRequestDTO>(new DeletationRequestDTO(request), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/all")
+	@GetMapping(value = "/all") 
 	public ResponseEntity<List<DeletationRequestDTO>> getAllDeletationRequests() {
 
 		List<DeletationRequest> deletionRequests = deletationRequestService.findAll();
@@ -77,23 +80,7 @@ public class DeleteationRequestController {
  
 		return new ResponseEntity<>(deletionRequestsDTO, HttpStatus.OK);
 	}  
-	 
-	@PutMapping(value = "/accept/{id}")
-	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
- 
-		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
-		deletionRequest.setStatus(RequestStatus.Accepted);
-		deletationRequestService.save(deletionRequest);
-		User user = userService.findOne(deletionRequest.getUser().getID());
-		user.setDeleted(true);
-		userService.saveChanges(user);
-		try {
-			emailService.sendDeleteProfileResponseAsync(RequestStatus.Accepted, comment);
-		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
-		}
-		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
-	}
+	
 	
 	@PutMapping(value = "/deleteUser/{id}")
 	public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
@@ -108,17 +95,26 @@ public class DeleteationRequestController {
 		return new ResponseEntity<>(id, HttpStatus.OK);
 	}
 	
+	
+	
+	//conflict solve
+		@PutMapping(value = "/accept/{id}")  
+		public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
+			try {
+				DeletationRequest deletationRequest = deletationRequestService.acceptDeclineRegistrationRequest(id, comment, true);
+				return new ResponseEntity<>(new DeletationRequestDTO(deletationRequest), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} 
+		}
+	
 	@PutMapping(value = "/decline/{id}")
 	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
-
-		DeletationRequest deletionRequest = deletationRequestService.findOne(id);
-		deletionRequest.setStatus(RequestStatus.Declined);
-		deletationRequestService.save(deletionRequest);
 		try {
-			emailService.sendDeleteProfileResponseAsync(RequestStatus.Declined, comment);
-		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			DeletationRequest deletationRequest = deletationRequestService.acceptDeclineRegistrationRequest(id, comment, false);
+			return new ResponseEntity<>(new DeletationRequestDTO(deletationRequest), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(new DeletationRequestDTO(deletionRequest), HttpStatus.OK);
 	}
 }
