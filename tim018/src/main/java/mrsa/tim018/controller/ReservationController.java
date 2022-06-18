@@ -134,7 +134,7 @@ public class ReservationController {
 		reservationService.save(reservation); 
 		  
 		asset.getCalendar().getReserved().add(reservation);     
-		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
+		ArrayList<SpecialOffer> ranges = (ArrayList<SpecialOffer>) assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
 		if (ranges == null) {
 			asset.getCalendar().setSpecialPrice(new ArrayList<>());
 		} else { 

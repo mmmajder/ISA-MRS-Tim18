@@ -122,13 +122,9 @@ public class AssetController {
 	}
 	
 	private void createPrice(Long assetId, double price) {
-    	try {
-    		LocalDate startDate = LocalDate.now();
-    		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
-			assetPriceService.save(assetPrice);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		LocalDate startDate = LocalDate.now();
+		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
+		assetPriceService.save(assetPrice);
 	}
 	
 	private void setCalendarAndRenter(Asset asset, Long renterId) {

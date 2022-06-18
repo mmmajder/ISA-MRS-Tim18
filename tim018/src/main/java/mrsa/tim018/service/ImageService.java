@@ -52,7 +52,7 @@ public class ImageService {
 				.collect(Collectors.toList());
 	}
 	
-	public byte[] readImageFromAddress(String address) {
+	public byte[] readImageFromAddress(String address) throws IOException{
 		try {
 			File fi = new File(address);
 			return Files.readAllBytes(fi.toPath());
