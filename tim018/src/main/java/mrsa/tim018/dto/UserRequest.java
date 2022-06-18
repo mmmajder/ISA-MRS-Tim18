@@ -62,22 +62,6 @@ public class UserRequest {
 		this.email = email;
 	}
 
-	public String getFirstname() {
-		return firstName;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstName = firstname;
-	}
-
-	public String getLastname() {
-		return lastName;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastName = lastname;
-	}
-
 	public String getAddress() {
 		return address;
 	}

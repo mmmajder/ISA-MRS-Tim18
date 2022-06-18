@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import mrsa.tim018.dto.LoyaltyElementDTO;
 import mrsa.tim018.dto.ReservationFinancesDTO;
-import mrsa.tim018.model.LoyaltyProgram;
 import mrsa.tim018.model.ReservationFinances;
 import mrsa.tim018.service.ReservationFinancesService;
 
@@ -25,7 +23,7 @@ public class ReservationFinancesController {
 	
 	@GetMapping(value = "/all")
 	public List<ReservationFinancesDTO> getLoyaltyClientData() {
-		List<ReservationFinancesDTO> list = new ArrayList<ReservationFinancesDTO>();
+		List<ReservationFinancesDTO> list = new ArrayList<>();
 		for (ReservationFinances reservationFinances : reservationFinancesService.findAll()) {
 			list.add(new ReservationFinancesDTO(reservationFinances));
 		}

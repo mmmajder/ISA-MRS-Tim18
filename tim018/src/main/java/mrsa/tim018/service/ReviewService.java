@@ -22,18 +22,18 @@ public class ReviewService {
 
 	@Autowired
 	private ReviewRepository reviewRepository;
-	
+
 	@Autowired
 	private ReservationService reservationService;
 
 	public Review save(Review review) {
 		return reviewRepository.save(review);
 	}
-	
+
 	public Review findOne(Long id) {
 		return reviewRepository.findById(id).orElse(null);
 	}
-	
+
 	public ReviewType determineReviewType(Review review) {
 		if (!review.isClientWriting())
 			return ReviewType.FOR_CLIENT;
@@ -41,113 +41,115 @@ public class ReviewService {
 			return ReviewType.FOR_ASSET;
 		return ReviewType.FOR_RENTER;
 	}
-	
-	public List<Review> getReviewsAboutRenter(Long renterId){
+
+	public List<Review> getReviewsAboutRenter(Long renterId) {
 		return (List<Review>) reviewRepository.getReviewsAboutRenter(renterId);
 	}
-	
-	public List<Review> getReviewsAboutClient(Long clientId){
+
+	public List<Review> getReviewsAboutClient(Long clientId) {
 		return (List<Review>) reviewRepository.getReviewsAboutClient(clientId);
-	}	
-	
-	public List<Review> getReviewsAboutAsset(Long assetId){
+	}
+
+	public List<Review> getReviewsAboutAsset(Long assetId) {
 		return (List<Review>) reviewRepository.getReviewsAboutAsset(assetId);
 	}
-	
-	public List<Review> getAcceptedReviewsAboutRenter(Long renterId){
+
+	public List<Review> getAcceptedReviewsAboutRenter(Long renterId) {
 		return (List<Review>) reviewRepository.getAcceptedReviewsAboutRenter(renterId);
 	}
-	
-	public List<Review> getAcceptedReviewsAboutClient(Long clientId){
+
+	public List<Review> getAcceptedReviewsAboutClient(Long clientId) {
 		return (List<Review>) reviewRepository.getAcceptedReviewsAboutClient(clientId);
-	}	
-	
-	public List<Review> getAcceptedReviewsAboutAsset(Long assetId){
+	}
+
+	public List<Review> getAcceptedReviewsAboutAsset(Long assetId) {
 		return (List<Review>) reviewRepository.getAcceptedReviewsAboutAsset(assetId);
 	}
-	
-	public double getAssetRating(Long assetId){
-		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutAsset(assetId)
-				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
-		
+
+	public double getAssetRating(Long assetId) {
+		List<Review> reviews = reviewRepository.getReviewsAboutAsset(assetId).stream()
+				.filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+
 		return calculateRating(reviews);
 	}
-	
-	public double getRenterRating(Long renterId){
-		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutRenter(renterId)
-				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
-		
+
+	public double getRenterRating(Long renterId) {
+		List<Review> reviews = reviewRepository.getReviewsAboutRenter(renterId).stream()
+				.filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+
 		return calculateRating(reviews);
 	}
-	
-	public double getClientRating(Long clientId){
-		List<Review> reviews = (List<Review>) reviewRepository.getReviewsAboutClient(clientId)
-				.stream().filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
-		
+
+	public double getClientRating(Long clientId) {
+		List<Review> reviews = reviewRepository.getReviewsAboutClient(clientId).stream()
+				.filter(r -> r.getStatus() == RequestStatus.Accepted).collect(Collectors.toList());
+
 		return calculateRating(reviews);
 	}
-	
+
 	private double calculateRating(List<Review> reviews) {
 		double rating = 0;
 		int size = reviews.size();
-		
+
 		if (size != 0) {
 			rating = reviews.stream().map(r -> r.getRating()).reduce(0, Integer::sum);
 			rating = rating / size;
 		}
-		
+
 		return rating;
 	}
-	
+
 	public Review acceptReview(Review review) {
 		review.setStatus(RequestStatus.Accepted);
 		reviewRepository.save(review);
-		//TODO send email to Users
-		//TODO if (!review.clientWriting && review.isComplaint) give 1 penalty to user
-		
+		// TODO send email to Users
+		// TODO if (!review.clientWriting && review.isComplaint) give 1 penalty to user
+
 		return review;
 	}
-	
-	// If Admin declines Review, the reference in Reservation should be also set to Null, so User could add new Review
+
+	// If Admin declines Review, the reference in Reservation should be also set to
+	// Null, so User could add new Review
 	public Review declineReview(Review review) {
 		review.setStatus(RequestStatus.Declined);
 		reviewRepository.save(review);
-		//TODO send email to Users
-		
+		// TODO send email to Users
+
 		Reservation reservation = reservationService.findOne(review.getReservationId());
 		ReviewType type = determineReviewType(review);
-		
-		switch(type) {
-		case FOR_ASSET : 
+
+		switch (type) {
+		case FOR_ASSET:
 			reservation.setAssetReviewId(null);
 			break;
-		case FOR_RENTER :
+		case FOR_RENTER:
 			reservation.setRenterReviewId(null);
 			break;
-		case FOR_CLIENT : 
+		case FOR_CLIENT:
 			reservation.setClientReviewId(null);
 			break;
-		default: break;
+		default:
+			break;
 		}
-		
+
 		reservationService.save(reservation);
 		return review;
-	} 
-	
+	}
+
 	// if Client didn't show up, Review is automatically Accepted (if valid)
 	public ResponseEntity<Review> acceptDidntShowUpReview(Review review, Reservation reservation) {
 		if (reservation.getClientReviewId() != null)
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-		
+
 		review.setStatus(RequestStatus.Accepted);
 		Long id = save(review).getID();
 		reservation.setClientReviewId(id);
 		reservationService.save(reservation);
-		//TODO give 1 penalty to Client
-		
+		// TODO give 1 penalty to Client
+
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
-	
+
 	public List<Review> getPendingReviewsFromClients() {
 		List<Review> retData = (List<Review>) reviewRepository.getPendingComplaintsAboutAsset();
 		retData.addAll(reviewRepository.getPendingComplaintsAboutRenter());
@@ -155,7 +157,7 @@ public class ReviewService {
 	}
 
 	public List<Review> getPendingPointReviewsFromRenters() {
-		return  (List<Review>) reviewRepository.getPendingComplaintsCollectionAboutClient();
+		return (List<Review>) reviewRepository.getPendingComplaintsCollectionAboutClient();
 	}
 
 	public List<Review> getPendingReviewsNotComplaints() {

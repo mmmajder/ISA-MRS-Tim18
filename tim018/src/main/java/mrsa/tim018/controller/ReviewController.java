@@ -216,8 +216,7 @@ public class ReviewController {
 			emailService.sendMailsClientsComplaint(reqData.getMailClient(), reqData.getMailRenter(),
 					review.getClientID());
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
@@ -237,8 +236,7 @@ public class ReviewController {
 		try {
 			emailService.sendPointMail(review, client, renter, true);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
@@ -256,8 +254,7 @@ public class ReviewController {
 		try {
 			emailService.sendPointMail(review, client, renter, false);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
@@ -285,8 +282,7 @@ public class ReviewController {
 		try {
 			emailService.sendReviewMail(review, client, renter, isAccepted);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null; 
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
 	}
@@ -294,7 +290,7 @@ public class ReviewController {
 	@GetMapping(value = "/pendingNonComplaint")
 	public ResponseEntity<List<Review>> getPendingReviews() {
 		List<Review> pendingReviews = reviewService.getPendingReviewsNotComplaints();
-		if (pendingReviews.size() == 0)
+		if (pendingReviews.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(pendingReviews, HttpStatus.OK);
 	}

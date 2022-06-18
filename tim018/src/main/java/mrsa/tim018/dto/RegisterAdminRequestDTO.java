@@ -16,7 +16,6 @@ public class RegisterAdminRequestDTO {
 
 	public RegisterAdminRequestDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getEmail() {

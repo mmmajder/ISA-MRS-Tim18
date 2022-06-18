@@ -14,7 +14,6 @@ public class SpecialOfferReservationDTO {
 
 	public SpecialOfferReservationDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public long getSpecialOfferId() {

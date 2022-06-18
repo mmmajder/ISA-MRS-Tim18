@@ -20,11 +20,6 @@ public class ClientDTO {
 	public ClientDTO() {
 	}
 
-	/*public ClientDTO(Client client) {
-		this(client.getID(), client.isDeleted(), client.getFirstName(), client.getLastName(), 
-		     client.getAddress(), client.getCity(), client.getState(), client.getPhoneNum(), client.getLoyaltyPoints(),
-		     client.getUserAccount(), client.getPenaltyPoints());
-	}*/
 	public ClientDTO(Client client) {
 		this(client.getID(), client.isDeleted(), client.getFirstName(), client.getLastName(), 
 		     client.getAddress(), client.getCity(), client.getState(), client.getPhoneNum(), client.getLoyaltyPoints(),
@@ -47,21 +42,6 @@ public class ClientDTO {
 		this.password = password;
 		this.penaltyPoints = penaltyPoints;
 	}
-	/*public ClientDTO(Long id, boolean deleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, int loyaltyPoints, UserAccount userAccount, int penaltyPoints) {
-		
-		this.id = id;
-		this.isDeleted = deleted;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.phoneNum = phoneNum;
-		this.loyaltyPoints = loyaltyPoints;
-		this.userAccount = userAccount;
-		this.penaltyPoints = penaltyPoints;
-	}*/
 
 	public Long getId() {
 		return id;
@@ -98,10 +78,6 @@ public class ClientDTO {
 	public int getLoyaltyPoints() {
 		return loyaltyPoints;
 	}
-
-	/*public UserAccount getUserAccount() {
-		return userAccount;
-	}*/
 
 	public String getEmail() {
 		return email;

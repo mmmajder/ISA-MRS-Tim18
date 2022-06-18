@@ -31,9 +31,6 @@ public class SubscriptionService {
 		if(subscription == null) {
 			subscription = new Subscription(asset, client);
 		}
-		if(subscription.isDeleted()){
-			System.out.println("VEC OBRISAN?");
-		}
 		subscription.setDeleted(false);
 		save(subscription);
 		return subscription;
@@ -44,7 +41,6 @@ public class SubscriptionService {
 		if(subscription == null) {
 			return null;
 		}
-		// subscription.setDeleted(true);
 		return save(subscription);
 	}
 

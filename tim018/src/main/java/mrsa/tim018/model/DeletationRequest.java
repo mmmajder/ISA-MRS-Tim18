@@ -4,14 +4,10 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class DeletationRequest {
@@ -33,7 +29,6 @@ public class DeletationRequest {
 	private User user;
 
 	public DeletationRequest() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user, String reason) {

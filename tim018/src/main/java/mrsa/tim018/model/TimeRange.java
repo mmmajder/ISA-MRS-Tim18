@@ -32,7 +32,6 @@ public class TimeRange {
 
 	public TimeRange() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getId() {

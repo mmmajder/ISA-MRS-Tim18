@@ -12,7 +12,6 @@ public class MailsDTO {
 
 	public MailsDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getMailClient() {

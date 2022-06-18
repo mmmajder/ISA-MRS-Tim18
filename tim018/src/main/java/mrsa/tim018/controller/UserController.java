@@ -5,7 +5,6 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,9 +58,9 @@ public class UserController {
 	public ResponseEntity<User> verifyUser(@PathVariable String code) {
 		User user = userService.verify(code);
 	    if (user == null) {
-	    	return new ResponseEntity<User>(user, HttpStatus.EXPECTATION_FAILED);
+	    	return new ResponseEntity<>(user, HttpStatus.EXPECTATION_FAILED);
 	    } 
 	    
-    	return new ResponseEntity<User>(user, HttpStatus.OK);
+    	return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 }

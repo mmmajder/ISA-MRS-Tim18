@@ -3,6 +3,8 @@ package mrsa.tim018.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RegisterAdminRequestDTO;
 import mrsa.tim018.dto.RegistrationDTO;
-import mrsa.tim018.dto.UserRequest;
 import mrsa.tim018.model.Admin;
 import mrsa.tim018.model.Registration;
 import mrsa.tim018.model.RequestStatus;
@@ -26,7 +27,6 @@ import mrsa.tim018.service.AdminService;
 import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.RegistrationRequestService;
 import mrsa.tim018.service.UserService;
-import net.bytebuddy.utility.RandomString;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -46,11 +46,13 @@ public class RegistrationRequestController {
 	
 	@Autowired
 	private UserService userService;
+
+	private Logger logger = LoggerFactory.logger(RegistrationRequestController.class);
 	
 	@GetMapping(value = "/active")
 	public ResponseEntity<List<RegistrationDTO>> getActiveRegistrationRequests() {
 		List<Registration> registrations = registrationRequestService.findAll();
-		List<RegistrationDTO> retData = new ArrayList<RegistrationDTO>();
+		List<RegistrationDTO> retData = new ArrayList<>();
 		for (Registration registration : registrations) {
 			if (registration.getStatus().equals(RequestStatus.Pending))
 				retData.add(new RegistrationDTO(registration));
@@ -69,9 +71,8 @@ public class RegistrationRequestController {
 		
 		try {
 			emailService.sendRegistrationResponseAsync(RequestStatus.Accepted, "");
-			System.out.println("Poslao mejl");
 		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
@@ -87,14 +88,13 @@ public class RegistrationRequestController {
 		try {
 			emailService.sendRegistrationResponseAsync(RequestStatus.Declined, comment);
 		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping(value="/registerAdmin/")
 	public ResponseEntity<RegistrationDTO> registerAdmin(@RequestBody RegisterAdminRequestDTO registerAdminRequestDTO) {
-		String randomCode = RandomString.make(64);
 		Admin admin = new Admin();
 		admin.setAlreadyLogged(false);
 		admin.setAddress("");
@@ -109,13 +109,12 @@ public class RegistrationRequestController {
 		admin.setFirstName(registerAdminRequestDTO.getName());
 		admin.setLastName(registerAdminRequestDTO.getSurname());
 		admin.setPassword(passwordEncoder.encode(registerAdminRequestDTO.getPassword()));
-		//admin.setPassword(registerAdminRequestDTO.getPassword());
 		adminService.save(admin);
 		try {
 			emailService.sendReservationSuccessfullAdmin(registerAdminRequestDTO);
-			System.out.println("Poslao mejl");
+			logger.info("Poslao mejl");
 		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}

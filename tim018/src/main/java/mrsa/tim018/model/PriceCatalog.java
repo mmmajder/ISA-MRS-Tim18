@@ -27,7 +27,6 @@ public class PriceCatalog {
 	private Date endDate = null;
 	
 	public PriceCatalog() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public PriceCatalog(Long iD, boolean isDeleted, double price, Date startDate, Date endDate) {

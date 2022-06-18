@@ -84,8 +84,6 @@ public class User implements UserDetails{
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 	
-	/*@OneToOne
-	private UserAccount userAccount;*/
     @Column(name = "email", unique = true, nullable = false)
 	private String email;
 	
@@ -106,39 +104,6 @@ public class User implements UserDetails{
 		
 	}
 
-	/*public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
-			String state, String phoneNum, UserType userType, int loyaltyPoints, UserAccount userAccount) {
-		super();
-		this.id = iD;
-		this.isDeleted = isDeleted;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.phoneNum = phoneNum;
-		this.userType = userType;
-		this.loyaltyPoints = loyaltyPoints;
-	}
-	
-
-	public User(Long id, String firstName, String lastName, String address, String city, String state, String phoneNum,
-			UserType userType, UserAccount userAccount) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.phoneNum = phoneNum;
-		this.userType = userType;
-		//this.userAccount = userAccount;
-		
-		this.loyaltyPoints = 0;
-		this.isDeleted = false;
-		this.enabled = true;
-	}*/
 	public User(Long iD, boolean isDeleted, String firstName, String lastName, String address, String city,
 			String state, String phoneNum, UserType userType, int loyaltyPoints, String email, String password, boolean enabled, String verificationCode, String profilePhotoId) {
 		super();
@@ -246,11 +211,6 @@ public class User implements UserDetails{
 		return loyaltyPoints;
 	}
 
-	/*public UserAccount getUserAccount() {
-		return userAccount;
-	}*/
-
-	
 	public boolean isDeleted() {
 		return isDeleted;
 	}
@@ -366,19 +326,6 @@ public class User implements UserDetails{
 		return Objects.equals(id, other.id);
 	}
 
-/*	@Override
-	public String getPassword() {
-		return userAccount.getPassword();
-	}
-
-	@Override
-	public String getUsername() {
-		return userAccount.getEmail();
-	}
-
-	public void setUserAccount(UserAccount userAccount) {
-		this.userAccount = userAccount;
-	}*/
 	@Override
 	public String getPassword() {
 		return password;

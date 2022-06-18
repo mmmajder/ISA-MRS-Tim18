@@ -21,7 +21,7 @@ public class AssetPriceService {
 	private AssetPriceRepository priceRepository;
 	
 
-	public AssetPrice save(AssetPrice assetPrice) throws IOException{
+	public AssetPrice save(AssetPrice assetPrice){
 		return priceRepository.save(assetPrice);
 	}
 	 

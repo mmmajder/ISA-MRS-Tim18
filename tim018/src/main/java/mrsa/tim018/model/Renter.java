@@ -19,7 +19,7 @@ public class Renter extends User {
 	
 	@OneToMany(mappedBy = "renter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<Asset> assets = new ArrayList<Asset>();
+	private List<Asset> assets = new ArrayList<>();
 	
 	public Renter() {
 	}

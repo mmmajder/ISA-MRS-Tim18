@@ -46,12 +46,12 @@ public class TimeUtils {
 		return false;
 	}
 	
-	public static String FormatToString(LocalDateTime date) {
+	public static String formatToString(LocalDateTime date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 		return date.format(formatter);
 	}
 	
-	public static String FormatToString(LocalDate date) {
+	public static String formatToString(LocalDate date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 		return date.format(formatter);
 	}

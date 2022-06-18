@@ -121,7 +121,7 @@ public class ClientController {
 		Client client = clientService.findOne(id);
 		DeletationRequest deletRequest = deleteRequestService.create(client, reason);
 		if (deletRequest != null) {
-			return new ResponseEntity<DeletationRequest>(deletRequest, HttpStatus.OK);
+			return new ResponseEntity<>(deletRequest, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

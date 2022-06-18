@@ -10,7 +10,7 @@ public class ReportFilters {
 	private LocalDate fromDate;
 	private LocalDate toDate;
 	
-	public ReportFilters() {};
+	public ReportFilters() {}
 	
 	public ReportFilters(boolean completed, boolean canceled, boolean potential, LocalDate fromDate, LocalDate toDate) {
 		this.completed = completed;
@@ -58,5 +58,5 @@ public class ReportFilters {
 
 	public void setToDate(LocalDate toDate) {
 		this.toDate = toDate;
-	};
+	}
 }

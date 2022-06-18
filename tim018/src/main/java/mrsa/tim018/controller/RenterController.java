@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RenterDTO;
 import mrsa.tim018.model.Asset;
-import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.User;
@@ -78,13 +74,10 @@ public class RenterController {
 		
 		user.setAddress(renterDTO.getAddress());
 		user.setCity(renterDTO.getCity());
-		//fishingInstructor.setDeleted(fishingInstructorDTO.isDeleted());
 		user.setFirstName(renterDTO.getFirstName());
 		user.setLastName(renterDTO.getLastName());
-		//fishingInstructor.setLoyaltyPoints(fishingInstructorDTO.getLoyaltyPoints());
 		user.setPhoneNum(renterDTO.getPhoneNum());
 		user.setState(renterDTO.getState());
-	//	fishingInstructor.setUserType(fishingInstructorDTO.getUserType());
 		if (renterDTO.getUserType().equals(UserType.Admin)) {
 			user = adminService.save(user);
 		}else {
@@ -114,9 +107,8 @@ public class RenterController {
 	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
 		Renter renter = renterService.findOne(id);
 		DeletationRequest deletRequest = deleteRequestService.create(renter, reason);
-		System.out.println(deletRequest);
 		if (deletRequest != null) {
-			return new ResponseEntity<DeletationRequest>(deletRequest, HttpStatus.OK);
+			return new ResponseEntity<>(deletRequest, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

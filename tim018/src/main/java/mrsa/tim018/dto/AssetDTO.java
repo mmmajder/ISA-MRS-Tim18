@@ -1,6 +1,5 @@
 package mrsa.tim018.dto;
 
-import lombok.extern.java.Log;
 import mrsa.tim018.model.Adventure;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;

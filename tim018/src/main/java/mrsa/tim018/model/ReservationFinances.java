@@ -27,7 +27,6 @@ public class ReservationFinances {
 
 	public ReservationFinances() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getID() {

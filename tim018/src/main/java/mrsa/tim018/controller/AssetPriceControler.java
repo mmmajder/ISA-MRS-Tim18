@@ -1,7 +1,6 @@
 package mrsa.tim018.controller;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetPrice;
-import mrsa.tim018.model.Image;
-import mrsa.tim018.model.User;
 import mrsa.tim018.service.AssetPriceService;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.utils.StringUtils;

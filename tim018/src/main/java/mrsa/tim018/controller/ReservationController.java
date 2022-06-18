@@ -27,14 +27,12 @@ import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
-import mrsa.tim018.model.LoyaltyProgram;
 import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
-import mrsa.tim018.model.UserDiscountType;
 import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
@@ -117,10 +115,10 @@ public class ReservationController {
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
 		Reservation reservation = reservationService.findOne(reservationId);
 		Client client = reservation.getClient();	// TODO: penalty points?
-			//TODO: tri dana do pocetka
+		//TODO: tri dana do pocetka
 		reservation = reservationService.cancelReservation(reservation);
 		
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK); 
+		return new ResponseEntity<>(reservation, HttpStatus.OK); 
 	}
 	
 	@PostMapping(value = "/reserveSpecialOffer")
@@ -138,14 +136,14 @@ public class ReservationController {
 		asset.getCalendar().getReserved().add(reservation);     
 		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
 		if (ranges == null) {
-			asset.getCalendar().setSpecialPrice(new ArrayList<SpecialOffer>());
+			asset.getCalendar().setSpecialPrice(new ArrayList<>());
 		} else { 
 			asset.getCalendar().setSpecialPrice(ranges);  
 		}
 		
 		       
 		assetService.save(asset);
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+		return new ResponseEntity<>(reservation, HttpStatus.OK);
 	}
 	 
 	@PostMapping(value = "/makeReservation")
@@ -159,9 +157,9 @@ public class ReservationController {
 		reservation = reservationService.makeRegularReservation(reservation);
 		if(reservation!=null) {
 			emailService.sendReservationSuccessfull(reservation);
-			return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+			return new ResponseEntity<>(reservation, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@GetMapping(value = "/current/renter/{renterId}")

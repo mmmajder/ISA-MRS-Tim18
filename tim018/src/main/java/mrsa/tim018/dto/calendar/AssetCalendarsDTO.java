@@ -9,7 +9,6 @@ public class AssetCalendarsDTO {
 
 	public AssetCalendarsDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AssetCalendarsDTO(long id, String name, AssetCalendar calendar) {

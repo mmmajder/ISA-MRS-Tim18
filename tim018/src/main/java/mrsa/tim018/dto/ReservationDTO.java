@@ -15,7 +15,6 @@ public class ReservationDTO {
 	private Asset asset;
 	
 	private Long clientId;
-	//private Client client;
 	
 	private TimeRange timeRange;
 	
@@ -36,8 +35,7 @@ public class ReservationDTO {
 	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration, double totalPrice) {
 		this.id = reservation.getID();
 		this.asset = reservation.getAsset();
-		
-		//this.client = reservation.getClient();
+
 		this.clientId = reservation.getClient().getID();
 		
 		this.timeRange = reservation.getTimeRange();
@@ -50,8 +48,7 @@ public class ReservationDTO {
 	public ReservationDTO(Reservation reservation) {
 		this.id = reservation.getID();
 		this.asset = reservation.getAsset();
-		
-		//this.client = reservation.getClient();
+
 		this.clientId = reservation.getClient().getID();
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();
@@ -79,14 +76,6 @@ public class ReservationDTO {
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
-//
-//	public Client getClient() {
-//		return client;
-//	}
-//
-//	public void setClient(Client client) {
-//		this.client = client;
-//	}
 
 	public TimeRange getTimeRange() {
 		return timeRange;

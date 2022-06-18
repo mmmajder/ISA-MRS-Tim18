@@ -117,7 +117,7 @@ public class ReservationService {
 	private boolean hasBeenCanceled(Reservation reservation, Client client){
 		for (Reservation clientRes : client.getReservations()) {
 			if(TimeUtils.isExactSameTimeRange(clientRes.getTimeRange(), reservation.getTimeRange())) {
-				if(clientRes.getAsset().getID() == reservation.getAsset().getID() && 
+				if(clientRes.getAsset().getID().equals(reservation.getAsset().getID()) && 
 				   clientRes.getStatus() == ReservationStatus.Canceled ) {
 					return false;	
 				}

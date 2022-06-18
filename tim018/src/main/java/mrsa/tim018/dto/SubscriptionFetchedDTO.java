@@ -9,7 +9,6 @@ public class SubscriptionFetchedDTO {
 	private Client client;
 	public SubscriptionFetchedDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public SubscriptionFetchedDTO(Asset asset, Client client) {
 		super();

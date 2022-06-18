@@ -1,7 +1,6 @@
 package mrsa.tim018.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Report;
-import mrsa.tim018.model.ReportReservationStatus;
 import mrsa.tim018.repository.ReportAdminRepository;
-import mrsa.tim018.repository.ReportRepository;
 import mrsa.tim018.utils.TimeUtils;
 
 @Service
@@ -23,7 +20,7 @@ public class AdminReportsService {
 	private ReportAdminRepository adminReportRepository;
 
 	public List<Report> getReports(String period, String assetType, String fromDate, String toDate) {
-		List<Report> reports = (List<Report>) adminReportRepository.getReports(period, assetType, fromDate, toDate);
+		List<Report> reports = adminReportRepository.getReports(period, assetType, fromDate, toDate);
 		setGroups(reports, period);
 		sortReports(reports);
 		return reports;

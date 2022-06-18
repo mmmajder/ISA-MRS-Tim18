@@ -17,7 +17,6 @@ public class FinancesAdminDTO {
 
 	public FinancesAdminDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<LoyaltyElementDTO> getDeletedRows() {
