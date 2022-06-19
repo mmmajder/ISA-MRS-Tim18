@@ -189,3 +189,10 @@ export async function getReport(renterId, reportFilters) {
        return err.message
    }
 }
+
+
+export async function getAssetsByType(callback, assetType){
+    await api.get(`/assets/findByType/${assetType}`)
+            .then((responseData) => {console.log(responseData.data); callback(responseData.data)})
+            .catch(()=> {callback(false)});
+}

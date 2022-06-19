@@ -41,7 +41,7 @@ export function LoginForm({handleLogin}) {
 
   const loginCallback = (returnData) => {
     if(!returnData){
-      alert('Oops email/password incorrect, or your account has not been enabled ')
+      alert('Oops, incorrect email/password, or your account has not been enabled yet')
       // error message popup
     }
     else

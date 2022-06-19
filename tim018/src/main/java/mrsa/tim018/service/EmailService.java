@@ -39,7 +39,7 @@ public class EmailService {
 	private ClientService clientService;
 	
 	private String siteURL = "http://localhost:3000";
-	private String ourEmail = "isamrs018@gmail.com";
+	private String ourEmail = "isamrs018@outlook.com";
 	
 	@Async
 	public void sendNotificaitionAsync(User user) throws MessagingException  {

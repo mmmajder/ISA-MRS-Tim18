@@ -63,7 +63,7 @@ function App() {
   const assetUpdate = <Container><UpdateForm /></Container>
   const calendar = <Container><Calendar /></Container>
   const assetCalendar = <Container><CalendarAsset/></Container>
-  const home = <Container><Home/></Container>
+  // const home = <Container><Home/></Container>
   const confirmation = <Container><Confirmation/></Container>
   const allReservations = <Container><AllReservations/></Container>
   const adminRegistrationReq = <Container><AdminRegistrationReq/></Container>
@@ -85,7 +85,6 @@ function App() {
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
               <Routes>
                 <Route path='' element={<ProtectedRoute isAllowedUser={user}>{chooseNavbar(user)} </ProtectedRoute>}>
-                  <Route path="/home" element={home} /> 
                   {/* For other's Profile page */}
                   <Route exact path="/profile" element={<Container><MyProfile /></Container>} /> 
                   <Route path="/profile/:id" element={<Container><OtherProfile /></Container>} /> 
@@ -97,7 +96,7 @@ function App() {
                   <Route path="/calendar" element={calendar}/>
                   <Route path="/logout" element={<Container><Logout handleLogout={handleLogout}/></Container>} />
                   <Route exact path="/resorts" element={assetList} /> 
-                  <Route path="/resorts/all" element={assetListAll} /> 
+                  <Route path="/home" element={assetListAll} /> 
                   <Route path="/resorts/:id" element={resortView} /> 
                   <Route path="/resorts/update/:id" element={assetUpdate} />
                   <Route path="/calendar" element={calendar}/>
@@ -148,7 +147,6 @@ function ChooseSettings(userType){
 }
 
 function chooseNavbar(userType){
-  console.log("choosenavbar"+userType);
   let navBar = <></>
   if(userType === "Client"){
     navBar =  <ClientNavbar />

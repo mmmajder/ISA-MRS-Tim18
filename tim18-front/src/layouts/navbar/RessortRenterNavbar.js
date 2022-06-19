@@ -16,7 +16,7 @@ export default function ResortRenterNavbar({userType, userId}){
         <Navbar.Toggle />
         <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
-                <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
+                <Nav.Link href="/home"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <UsersOffersDropdown userType={userType}/>
                 <ProfileDropdown userId={userId}/>
             </Nav>

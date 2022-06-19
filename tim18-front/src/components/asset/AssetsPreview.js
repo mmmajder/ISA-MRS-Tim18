@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../assets/styles/asset.css';
 import ListedAsset from './ListedAsset';
-import { getAssetsByUserId, getAssets, getFilteredAssets, getFilteredAssetsForRenter, deleteAsset} from '../../services/api/AssetApi';
+import { getAssetsByUserId, getAssets, getFilteredAssets, getFilteredAssetsForRenter, deleteAsset, getAssetsByType} from '../../services/api/AssetApi';
 import {useEffect, useState, useCallback} from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { getRole } from '../../services/AuthService/AuthService';
@@ -44,13 +44,23 @@ export default function AssetsPreview({isSearch}){
     }
 
     useEffect(() => {
+        async function fetchReservations(){
+            await getAssetsByType(setAssets, assetType);
+        }
+        if(!!assetType){
+            fetchReservations();
+        }
+        
+    }, [assetType])
+
+
+    useEffect(() => {
         async function fetchAssets(){
             let requestData;
             if (isSearch || userType==='Client' || userType==='Guest' || userType==='Admin')
                 requestData = await getAssets();
             else
                 requestData = await getAssetsByUserId(user.id);
-            console.log(requestData.data);
             setAssets(!!requestData ? requestData.data : []);
             return requestData;
         }
@@ -61,7 +71,7 @@ export default function AssetsPreview({isSearch}){
 
     let assetTypeOptions;
     if(isSearch){
-        assetTypeOptions = < AssetTypeOption setAssetType={setAssetType}/>
+        assetTypeOptions = <AssetTypeOption setAssetType={setAssetType}/>
     }
 
     const assetDeletion = useCallback(
@@ -88,8 +98,6 @@ export default function AssetsPreview({isSearch}){
 
     useEffect(() => {
         if (assets != undefined){
-            console.log("AAAAAAAAAAAAAAAAAAAAAAA")
-            console.log(assetDeletion)
             let mappedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} key={asset.id} deleteFunc={assetDeletion}/>)
             setListedAssets(mappedAssets);
         }

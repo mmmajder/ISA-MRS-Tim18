@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
+import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
@@ -75,5 +76,9 @@ public class AssetService {
 		Asset asset = subscription.getAsset();
 		asset.getSubscriptions().remove(subscription);
 		save(asset);
+	}
+	
+	public List<Asset> findByAssetTypeAndIsNotDeleted(AssetType assetType) {
+		return assetRepository.findByAssetTypeAndIsDeleted(assetType, false);
 	}
 }
