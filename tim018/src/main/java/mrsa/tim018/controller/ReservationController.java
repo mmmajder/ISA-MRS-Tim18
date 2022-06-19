@@ -27,14 +27,11 @@ import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
-import mrsa.tim018.model.LoyaltyProgram;
 import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
-import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
-import mrsa.tim018.model.UserDiscountType;
 import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.ClientService;
@@ -123,47 +120,6 @@ public class ReservationController {
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK); 
 	}
 	
-	@PostMapping(value = "/reserveSpecialOffer")
-	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
-		Asset asset = assetService.findOne(specialOfferReservationDTO.getAssetId());
-		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
-		SpecialOffer specialOffer = specialOfferService.findById(specialOfferReservationDTO.getSpecialOfferId());
-		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
-		
-		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
-		reservation.setCancelationFee(asset.getCancelationConditions());
-		reservationService.save(reservation); 
-		  
-		asset.getCalendar().getReserved().add(reservation);     
-		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
-		if (ranges == null) {
-			asset.getCalendar().setSpecialPrice(new ArrayList<SpecialOffer>());
-		} else { 
-			asset.getCalendar().setSpecialPrice(ranges);  
-		}
-		
-		       
-		assetService.save(asset);
-		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
-	}
-	 
-	@PostMapping(value = "/makeReservation")
-	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
-		Asset asset = assetService.findOne(reservationDto.getAssetId());
-		Client client = clientService.findOne(reservationDto.getClientId());
-		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
-		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
-		reservation.setCancelationFee(asset.getCancelationConditions());
-		reservation = reservationService.makeRegularReservation(reservation);
-		if(reservation!=null) {
-			emailService.sendReservationSuccessfull(reservation);
-			return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-	}
-	
 	@GetMapping(value = "/current/renter/{renterId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
 		Renter renter = renterService.findOne(renterId);
@@ -188,6 +144,32 @@ public class ReservationController {
 		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
 		
 		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	@PostMapping(value = "/makeReservation")
+	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
+		Reservation reservation = null;
+		try{
+			reservation = reservationService.makeReservation(reservationDto);
+		} catch(Exception e) {
+			return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST); 
+		}
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/reserveSpecialOffer")
+	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
+		Reservation reservation = null;
+		try{
+			reservation = reservationService.reserveSpecialOffer(specialOfferReservationDTO);
+		} catch(Exception e) {
+			return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST); 
+		}
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
 	
 }

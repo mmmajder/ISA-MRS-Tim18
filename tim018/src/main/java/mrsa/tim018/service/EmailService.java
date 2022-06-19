@@ -93,7 +93,7 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	}
 
-//	@Async
+	@Async
 	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) {
 		try {
 			MimeMessage message = javaMailSender.createMimeMessage();
@@ -122,7 +122,7 @@ public class EmailService {
 			javaMailSender.send(message);
 			System.out.println("Email poslat!");
 		} catch (Exception e) {
-			throw new MailAuthenticationException("Error during mail sending");
+			//throw new MailAuthenticationException("Error during mail sending");
 		}
 
 	}
