@@ -26,8 +26,8 @@ public class TokenUtils {
 	@Value("somesecret")
 	public String SECRET;
 
-	// Period vazenja tokena - 30 minuta
-	@Value("1800000")
+	// Period vazenja tokena - 60 minuta
+	@Value("3600000")
 	private int EXPIRES_IN;
 	
 	// Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent
@@ -37,10 +37,6 @@ public class TokenUtils {
 	// Moguce je generisati JWT za razlicite klijente (npr. web i mobilni klijenti nece imati isto trajanje JWT, 
 	// JWT za mobilne klijente ce trajati duze jer se mozda aplikacija redje koristi na taj nacin)
 	// Radi jednostavnosti primera, necemo voditi racuna o uređaju sa kojeg zahtev stiže.
-	//	private static final String AUDIENCE_UNKNOWN = "unknown";
-	//	private static final String AUDIENCE_MOBILE = "mobile";
-	//	private static final String AUDIENCE_TABLET = "tablet";
-	
 	private static final String AUDIENCE_WEB = "web";
 
 	// Algoritam za potpisivanje JWT

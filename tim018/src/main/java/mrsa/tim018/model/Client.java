@@ -18,13 +18,13 @@ public class Client extends User {
 	private int penaltyPoints;
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<SpecialOffer> specialOffers = new ArrayList<SpecialOffer>();
+	private List<SpecialOffer> specialOffers = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Reservation> reservations = new ArrayList<Reservation>();
+	private List<Reservation> reservations = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Subscription> subscriptions = new ArrayList<Subscription>();
+	private List<Subscription> subscriptions = new ArrayList<>();
 	
 	public Client() {
 	}

@@ -1,6 +1,5 @@
 package mrsa.tim018.dto;
 
-import mrsa.tim018.model.Role;
 import mrsa.tim018.model.UserType;
 
 public class LoginDTO {
@@ -17,3 +16,4 @@ public class LoginDTO {
 		this.userType = userType;
 	}
 }
+	

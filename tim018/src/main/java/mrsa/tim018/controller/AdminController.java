@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RegistrationDTO;
 import mrsa.tim018.model.Admin;
-import mrsa.tim018.model.Registration;
 import mrsa.tim018.model.Report;
-import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.service.AdminReportsService;
 import mrsa.tim018.service.AdminService;
 

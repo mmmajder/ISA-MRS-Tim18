@@ -31,3 +31,12 @@ export async function saveLoyaltyProgram(ClientProgram, RenterProgram, reservati
         return err.message
     }
 }
+
+export async function getCategory(pointCount, userType, callback){
+  
+    await api.get(`/loyaltyProgram/getCategory/${pointCount}/${userType}`)
+              .then((responseData) => { callback(responseData.data)})
+              .catch(()=> {});
+}
+
+

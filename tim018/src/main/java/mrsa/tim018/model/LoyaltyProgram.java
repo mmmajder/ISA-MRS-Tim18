@@ -24,7 +24,6 @@ public class LoyaltyProgram {
 	private UserDiscountType userDiscountType;
 
 	public LoyaltyProgram() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public LoyaltyProgram(Long id, String level, boolean isDeleted, int points, double discount,

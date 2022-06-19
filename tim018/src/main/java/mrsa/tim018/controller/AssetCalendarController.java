@@ -1,7 +1,6 @@
 package mrsa.tim018.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
-import mrsa.tim018.dto.calendar.AssetPeriodsDTO;
 import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
@@ -25,7 +22,6 @@ import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.Subscription;
-import mrsa.tim018.repository.SpecialOfferRepository;
 import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.service.EmailService;
@@ -36,7 +32,7 @@ import mrsa.tim018.service.SubscriptionService;
 @RestController
 @CrossOrigin("*")
 @RequestMapping(value = "/calendar")
-public class AssetCalendarController<T> {
+public class AssetCalendarController {
 	@Autowired
 	private AssetCalendarSevice calendarService;
 	
@@ -59,11 +55,12 @@ public class AssetCalendarController<T> {
 	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
 		Renter renter = renterService.findOne(id);
 		List<Asset> assets = renter.getAssets();
-		List<AssetCalendarsDTO> data = new ArrayList<AssetCalendarsDTO>();
+		List<AssetCalendarsDTO> data = new ArrayList<>();
 		for (Asset asset : assets) {
 			try {
 				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
 			} catch (Exception e) { 
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 		}
 		return new ResponseEntity<>(data, HttpStatus.OK);
@@ -76,7 +73,7 @@ public class AssetCalendarController<T> {
 			AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar());
 			return new ResponseEntity<>(data, HttpStatus.OK);
 		} catch (Exception e) {
-			return null;
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -84,7 +81,6 @@ public class AssetCalendarController<T> {
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
 		Renter renter = renterService.findOne(appointment.getUserId());
-		System.out.println(renter.getFirstName());
 		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -98,7 +94,7 @@ public class AssetCalendarController<T> {
 				emailService.notifySubscribers(subscriptions, appointment);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 
@@ -108,7 +104,6 @@ public class AssetCalendarController<T> {
 	public ResponseEntity<AppointmentCreationDTO> removeAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
 		Renter renter = renterService.findOne(appointment.getUserId());
-		System.out.println(renter.getFirstName());
 		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -118,7 +113,7 @@ public class AssetCalendarController<T> {
 			AssetCalendar newCalendar = calendarService.removeAppointment(calendar, appointment);
 			calendarService.save(newCalendar);
 		} catch (Exception e) {
-			System.out.println(e);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 

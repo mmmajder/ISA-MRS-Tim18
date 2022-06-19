@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class Asset {
 	private String description;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Photo> photos; // TODO: how are we going to save photos
+	private List<Photo> photos;
 
 	@Column(name = "rules", nullable = false)
 	private String rules;
@@ -73,7 +71,7 @@ public class Asset {
 	private List<PriceCatalog> prices;
 	
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Subscription> subscriptions = new ArrayList<Subscription>();
+	private List<Subscription> subscriptions = new ArrayList<>();
 	
 	public Asset() {
 

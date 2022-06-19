@@ -11,7 +11,6 @@ public class LoyaltyElementDTO {
 
 	public LoyaltyElementDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public LoyaltyElementDTO(LoyaltyProgram loyaltyProgram) {

@@ -41,14 +41,15 @@ public class EmailService {
 	private ClientService clientService;
 
 	private String siteURL = "http://localhost:3000";
-
+	private String ourEmail = "isamrs018@gmail.com";//isamrs018@outlook.com
+	
 	@Async
-	public void sendNotificaitionAsync(User user) throws MessagingException, UnsupportedEncodingException {
+	public void sendNotificaitionAsync(User user) throws MessagingException, UnsupportedEncodingException  {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		message.setSubject("Please verify your registration");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getVerificationContent();
@@ -58,8 +59,6 @@ public class EmailService {
 		helper.setText(content, true);
 
 		javaMailSender.send(message);
-
-		System.out.println("Email poslat!");
 	}
 
 	@Async
@@ -72,12 +71,11 @@ public class EmailService {
 			message.setSubject("Hakuna Matata profile registration denied");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String verifyURL;
 		String content = EmailContentUtils.getRegistrationResponseContent(status, adminExpl);
-		;
 		if (status == RequestStatus.Accepted) {
 			verifyURL = siteURL + "/login";
 		} else {
@@ -87,54 +85,47 @@ public class EmailService {
 		content = content.replace("[[URL]]", verifyURL);
 
 		helper.setText(content, true);
+		
+		javaMailSender.send(message);
+	} 
+	
+	@Async
+	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) throws MessagingException  {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		if (status == RequestStatus.Accepted)
+			message.setSubject("Hakuna Matata profile delete accepted");
+		else 
+			message.setSubject("Hakuna Matata profile delete denied");
+		
+		
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		helper.setTo(ourEmail);
+		helper.setFrom(env.getProperty("spring.mail.username"));
 
+		String verifyURL;
+		String content = EmailContentUtils.getDeleteProfileResponseContent(status, adminExpl);
+		if (status == RequestStatus.Accepted) {
+			verifyURL = siteURL + "/login";
+		} else {
+			verifyURL = siteURL + "/login#";
+		}
+
+		content = content.replace("[[URL]]", verifyURL);
+		
+		
+		helper.setText(content, true);
+		
 		javaMailSender.send(message);
 
 		System.out.println("Email poslat!");
 	}
 
-	@Async
-	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) {
-		try {
-			MimeMessage message = javaMailSender.createMimeMessage();
-			if (status == RequestStatus.Accepted)
-				message.setSubject("Hakuna Matata profile delete accepted");
-			else
-				message.setSubject("Hakuna Matata profile delete denied");
-
-			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			helper.setTo("isamrs018@outlook.com");
-			helper.setFrom(env.getProperty("spring.mail.username"));
-
-			String verifyURL;
-			String content = EmailContentUtils.getDeleteProfileResponseContent(status, adminExpl);
-			;
-			if (status == RequestStatus.Accepted) {
-				verifyURL = siteURL + "/login";
-			} else {
-				verifyURL = siteURL + "/login#";
-			}
-
-			content = content.replace("[[URL]]", verifyURL);
-
-			helper.setText(content, true);
-
-			javaMailSender.send(message);
-			System.out.println("Email poslat!");
-		} catch (Exception e) {
-			//throw new MailAuthenticationException("Error during mail sending");
-		}
-
-	}
-
-	@Async
-	public void sendReservationSuccessfull(Reservation reservation)
-			throws MessagingException, UnsupportedEncodingException {
+	public void sendReservationSuccessfull(Reservation reservation) throws MessagingException, UnsupportedEncodingException  {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		message.setSubject("Hakuna Matata new reservation");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getNewReservationContent(reservation);
@@ -147,13 +138,12 @@ public class EmailService {
 	}
 
 	@Async
-	public void sendReservationSuccessfullAdmin(RegisterAdminRequestDTO registerAdminRequestDTO)
-			throws MessagingException, UnsupportedEncodingException {
+	public void sendReservationSuccessfullAdmin(RegisterAdminRequestDTO registerAdminRequestDTO) throws MessagingException, UnsupportedEncodingException  {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		message.setSubject("Hakuna Matata Admin account created");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getNewAdminContent(registerAdminRequestDTO);
@@ -171,7 +161,7 @@ public class EmailService {
 		message.setSubject("Hakuna Matata new special offer");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 		String URL = siteURL + "/resorts/" + offer.getAssetId();
 
@@ -193,7 +183,7 @@ public class EmailService {
 		message.setSubject("[Hakuna Matata] Clients complaint");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getClientsComplaintResponseToClient(mailClient, client);
@@ -208,7 +198,7 @@ public class EmailService {
 		messageRenter.setSubject("[Hakuna Matata] Clients complaint");
 
 		MimeMessageHelper helperRenter = new MimeMessageHelper(messageRenter, true);
-		helperRenter.setTo("isamrs018@outlook.com");
+		helperRenter.setTo(ourEmail);
 		helperRenter.setFrom(env.getProperty("spring.mail.username"));
 		String contentRenter = EmailContentUtils.getClientsComplaintResponseToRenter(mailRenter, client);
 
@@ -217,6 +207,29 @@ public class EmailService {
 		javaMailSender.send(messageRenter);
 
 	}
+	
+//	public void sendPointMail(Review review, Client client, Renter renter, boolean isAccepted) throws MessagingException {
+//		sendPointMail(review, client, renter, "client", isAccepted);
+//		sendPointMail(review, client, renter, "renter", isAccepted);
+//	}
+//	
+//	@Async
+//	private void sendPointMail(Review review, Client client, Renter renter, String receiver, boolean isAccepted) throws MessagingException {
+//		MimeMessage message = javaMailSender.createMimeMessage();
+//		message.setSubject("[Hakuna Matata] Renters complaint");
+//		
+//		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//		helper.setTo(ourEmail);
+//		helper.setFrom(env.getProperty("spring.mail.username"));
+//		
+//		String content = EmailContentUtils.getAddPointMail(review, client, renter, receiver, isAccepted); 
+//		String URL = siteURL + "/login";
+//		content = content.replace("[[URL]]", URL);
+//		
+//		helper.setText(content, true);
+//		
+//		javaMailSender.send(message);
+//	}
 
 	public void sendPointMail(Review review, Client client, Renter renter, boolean isAccepted) throws MessagingException{
 		try {
@@ -270,7 +283,7 @@ public class EmailService {
 		message.setSubject("[Hakuna Matata] Renters review");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getReviewMail(review, client, renter, isAccepted, receiver);
@@ -288,7 +301,7 @@ public class EmailService {
 		message.setSubject("Hakuna Matata new reservation");
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getDeleteProfileAdmin();
@@ -301,10 +314,10 @@ public class EmailService {
 	@Async
 	public void sendDeleteAsset(Asset asset) throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
-		message.setSubject("Hakuna Matata new reservation");
-
+		message.setSubject("Hakuna Matata delete asset");
+		
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		helper.setTo("isamrs018@outlook.com");
+		helper.setTo(ourEmail);
 		helper.setFrom(env.getProperty("spring.mail.username"));
 
 		String content = EmailContentUtils.getDeleteAssetAdmin(asset);

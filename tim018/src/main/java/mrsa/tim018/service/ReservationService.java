@@ -52,6 +52,8 @@ public class ReservationService {
 	
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private RenterService renterService;
 
 	public Reservation save(Reservation reservation) {
 		return reservationRepository.save(reservation);
@@ -139,7 +141,7 @@ public class ReservationService {
 	private boolean hasBeenCanceled(Reservation reservation, Client client){
 		for (Reservation clientRes : client.getReservations()) {
 			if(TimeUtils.isExactSameTimeRange(clientRes.getTimeRange(), reservation.getTimeRange())) {
-				if(clientRes.getAsset().getID() == reservation.getAsset().getID() && 
+				if(clientRes.getAsset().getID().equals(reservation.getAsset().getID()) && 
 				   clientRes.getStatus() == ReservationStatus.Canceled ) {
 					return false;	
 				}
@@ -180,6 +182,7 @@ public class ReservationService {
 		}
 		assetService.addRegularReservation(reservation);	
 		clientService.addRegularReservation(reservation);
+		renterService.addRegularReservationPoints(reservation);
 		return save(reservation);
 	}
 

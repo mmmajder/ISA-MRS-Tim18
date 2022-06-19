@@ -9,11 +9,11 @@ public class Report {
 	private Long numberOfReservations;
 	private String group;
 	
-	public Report() {};
+	public Report() {}
 	
 	public Report(String group) {
 		this.group = group;
-	};
+	}
 	
 	public Report(Date timestamp, Double income, Long numberOfReservations) {
 		this.timestamp = timestamp;

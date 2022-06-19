@@ -77,10 +77,6 @@ public class Registration {
 		this.status = status;
 	}
 
-	public Long getID() {
-		return id;
-	}
-
 	public User getUser() {
 		return user;
 	}

@@ -14,16 +14,16 @@ public class Admin extends User {
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Reservation> pendigReservations = new ArrayList<Reservation>();
+	private List<Reservation> pendigReservations = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Registration> pendingRegistrations = new ArrayList<Registration>();
+	private List<Registration> pendingRegistrations = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> pendingReviews = new ArrayList<Review>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DeletationRequest> deletationRequests = new ArrayList<DeletationRequest>();
+	private List<DeletationRequest> deletationRequests = new ArrayList<>();
 
 	@Column(name = "alreadyLogged")
 	private boolean alreadyLogged;

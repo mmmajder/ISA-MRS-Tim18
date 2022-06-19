@@ -15,7 +15,7 @@ public class StringUtils {
 	}
 	
 	public static String uniformString(String string) {
-	    return string.charAt(0) + string.substring(1).toString().toLowerCase();
+	    return string.charAt(0) + string.substring(1).toLowerCase();
 	}
 	
 	public static String capitalizeAllWords(String string) {

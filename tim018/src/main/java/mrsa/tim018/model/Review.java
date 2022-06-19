@@ -1,7 +1,5 @@
 package mrsa.tim018.model;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +23,7 @@ public class Review {
 	private int rating;
 	
 	@Column(name = "isComplaint")
-	private boolean isComplaint;	// TODO: add option in review when client doesn't show up
+	private boolean isComplaint;
 	
 	@Column(name = "didntShowUp")
 	private boolean didntShowUp;

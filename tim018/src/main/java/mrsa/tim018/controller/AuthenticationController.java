@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 import mrsa.tim018.dto.JwtAuthenticationRequest;
 import mrsa.tim018.dto.LoginDTO;
 import mrsa.tim018.dto.UserRequest;
@@ -66,12 +64,10 @@ public class AuthenticationController {
 
 		// Kreiraj token za tog korisnika
 		User user = (User) authentication.getPrincipal();
-		if(!user.isEnabled()) {
-			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED); 
-		} else if(user.isDeleted()) {
-			return new ResponseEntity<LoginDTO>(HttpStatus.UNAUTHORIZED);  
+		if(!user.isEnabled() || user.isDeleted()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
 		}
-		
+
 		String jwt = tokenUtils.generateToken(user);
 		int expiresIn = tokenUtils.getExpiredIn();
 	
@@ -83,7 +79,7 @@ public class AuthenticationController {
 
 		User existUser = this.userService.findByEmail(userRequest.getEmail());
 		if (existUser != null) {
-			return new ResponseEntity<>(null, HttpStatus.FOUND);
+			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		User user = UserMapper.mapRequestToUser(userRequest);
 		
@@ -98,7 +94,7 @@ public class AuthenticationController {
 			try {
 				emailService.sendNotificaitionAsync(user);
 			}catch( Exception e ){
-				System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+				return null;
 			}	
 		}
 		

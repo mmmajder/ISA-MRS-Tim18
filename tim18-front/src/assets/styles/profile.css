@@ -31,3 +31,16 @@
 .coloredStar {
     color: var(--dark-blue);
 }
+
+
+.Gold {
+    color: #fee101;
+}
+
+.Silver {
+    color: #a7a7ad;
+}
+
+.Bronze {
+    color: #824a02;
+}

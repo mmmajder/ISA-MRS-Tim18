@@ -27,7 +27,6 @@ public class RegistrationDTO {
 
 	public RegistrationDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public long getId() {

@@ -1,8 +1,6 @@
 package mrsa.tim018.mapper;
 
 import mrsa.tim018.dto.AssetDTO;
-import mrsa.tim018.dto.BoatDTO;
-import mrsa.tim018.dto.ResortDTO;
 import mrsa.tim018.model.Adventure;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.Boat;

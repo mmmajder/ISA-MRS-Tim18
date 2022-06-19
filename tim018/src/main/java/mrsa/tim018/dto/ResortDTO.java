@@ -1,10 +1,5 @@
 package mrsa.tim018.dto;
 
-import javax.persistence.Column;
-
-import mrsa.tim018.model.Asset;
-import mrsa.tim018.model.AssetType;
-import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Resort;
 
 public class ResortDTO extends AssetDTO {

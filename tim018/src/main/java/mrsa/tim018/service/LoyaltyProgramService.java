@@ -32,12 +32,16 @@ public class LoyaltyProgramService {
 		return loyaltyProgramRepository.findByLevelAndUserDiscountType(level, userDiscountType);
 	}
 	
+	public List<LoyaltyProgram> findByUserDiscountType( UserDiscountType userDiscountType) {
+		return loyaltyProgramRepository.findByUserDiscountType(userDiscountType);
+	}
+	
 	public List<LoyaltyProgram> saveAll(List<LoyaltyProgram> loyaltyProgram) {
 		return loyaltyProgramRepository.saveAll(loyaltyProgram);
 	}
 	
 	public List<LoyaltyProgram> getDeleted(List<LoyaltyElementDTO> newLoyaltyPrograms) {
-		List<LoyaltyProgram> deleted = new ArrayList<LoyaltyProgram>();
+		List<LoyaltyProgram> deleted = new ArrayList<>();
 		for (LoyaltyProgram prog1 : getAll()) {
 			boolean found = false;
 			for (LoyaltyElementDTO prog2 : newLoyaltyPrograms) {
@@ -65,10 +69,8 @@ public class LoyaltyProgramService {
 	}
 
 	private double setPoints(LoyaltyProgram loyaltyProgram, User user, Double discount) {
-		if (user.getLoyaltyPoints()>loyaltyProgram.getPoints()) {
-			if (loyaltyProgram.getDiscount()>discount) {
-				discount = loyaltyProgram.getDiscount();
-			}
+		if (user.getLoyaltyPoints()>loyaltyProgram.getPoints() && loyaltyProgram.getDiscount()>discount) {
+			discount = loyaltyProgram.getDiscount();
 		}
 		return discount;
 	}

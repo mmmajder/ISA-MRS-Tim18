@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mrsa.tim018.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,20 +31,13 @@ public class UserService<T> implements UserDetailsService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private User userExist(Long id, JpaRepository<T, Long> repo) {
-		return (User) repo.findById(id).get();
-			
-	}
-	
 	@SuppressWarnings("unchecked")
 	public User findOne(Long id) {
-		User user = userRepository.findById(id).get();
-		return user;
+		return userRepository.findById(id).get();
 	}
 	
 	public Client findClient(Long id) {
-		Client client = clientRepository.findById(id).get();
-		return client;
+		return clientRepository.findById(id).get();
 	}
 	
 	public Client saveClient(Client client) {
@@ -103,11 +95,6 @@ public class UserService<T> implements UserDetailsService{
 		user.setEnabled(true);
 		user = userRepository.save(user);
 		return user;
-//		if(user.getUserType()== UserType.FishingInstructor) {
-//			User bClass = new FishingInstructor(user);
-//			FishingInstructor childClass = (FishingInstructor) bClass;
-//			return fishingInstructorRepository.save(childClass);
-//		}
 	}
 	
 

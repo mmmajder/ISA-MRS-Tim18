@@ -1,11 +1,11 @@
 import { Button, Modal } from 'react-bootstrap';
 
-export function ConfirmModal({show, handleClose, message}){
+export function ConfirmModal({title, show, handleClose, message}){
     return (
         <>  
           <Modal show={show} onHide={() => handleClose("Cancel")}>
           <Modal.Header closeButton>
-            <Modal.Title>Warning!</Modal.Title>
+            <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {message}

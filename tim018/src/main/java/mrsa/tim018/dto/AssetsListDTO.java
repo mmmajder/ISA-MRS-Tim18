@@ -12,12 +12,12 @@ public class AssetsListDTO {
 		this.assets = (ArrayList<AssetDTO>) assets;
 	}
 
-	public ArrayList<AssetDTO> getAssets() {
+	public List<AssetDTO> getAssets() {
 		return assets;
 	}
 
-	public void setAssets(ArrayList<AssetDTO> assets) {
-		this.assets = assets;
+	public void setAssets(List<AssetDTO> assets) {
+		this.assets = (ArrayList<AssetDTO>) assets;
 	}
 	
 	

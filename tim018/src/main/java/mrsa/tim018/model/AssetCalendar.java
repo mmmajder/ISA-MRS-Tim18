@@ -12,9 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
  
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) 
@@ -24,13 +21,13 @@ public class AssetCalendar {
 	private Long id;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<TimeRange> available = new ArrayList<TimeRange>();
+	private List<TimeRange> available = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<SpecialOffer> specialPrice = new ArrayList<SpecialOffer>();
+	private List<SpecialOffer> specialPrice = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<Reservation> reserved = new ArrayList<Reservation>();
+	private List<Reservation> reserved = new ArrayList<>();
 
 	public Long getId() {
 		return id;

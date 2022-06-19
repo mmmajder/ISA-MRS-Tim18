@@ -1,7 +1,6 @@
 package mrsa.tim018.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,31 +10,16 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import mrsa.tim018.model.Report;
-import mrsa.tim018.model.ReportFilters;
-import mrsa.tim018.model.ReportPeriod;
 import mrsa.tim018.model.ReportReservationStatus;
-import mrsa.tim018.model.Reservation;
 import mrsa.tim018.repository.ReportRepository;
-import mrsa.tim018.repository.ReservationRepository;
 import mrsa.tim018.utils.TimeUtils;
 
 @Service
 @Transactional
 public class ReportService {
 
-	@Autowired
-	private ReviewService reviewService;
-	
-	@Autowired
-	private ReservationService reservationService;
-	
-	@Autowired
-	private ReservationRepository reservationRepository;
-	
 	@Autowired
 	private ReportRepository reportRepository;
 	
@@ -56,7 +40,7 @@ public class ReportService {
 	}
 	
 	private List<Report> getCombinedReports(Long renterId, String period, Long assetId, String fromDate, String toDate){
-		List<Report> reports = (List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.ALL, period, assetId, fromDate, toDate);
+		List<Report> reports = reportRepository.getReports(renterId, ReportReservationStatus.ALL, period, assetId, fromDate, toDate);
 		setGroups(reports, period);
 		sortReports(reports);
 		return reports;
@@ -64,16 +48,16 @@ public class ReportService {
 	
 	private List<Report> getReportsFromRepo(Long renterId, boolean completed, boolean canceled, boolean potential,
 			String period, Long assetId, String fromDate, String toDate){
-		List<Report> reports = new ArrayList<Report>(); 
+		List<Report> reports = new ArrayList<>(); 
 		
 		if (completed)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.COMPLETED, period, assetId, fromDate, toDate));
+			reports.addAll(reportRepository.getReports(renterId, ReportReservationStatus.COMPLETED, period, assetId, fromDate, toDate));
 			
 		if (canceled)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.CANCELED, period, assetId, fromDate, toDate));
+			reports.addAll(reportRepository.getReports(renterId, ReportReservationStatus.CANCELED, period, assetId, fromDate, toDate));
 		
 		if (potential)
-			reports.addAll((List<Report>) reportRepository.getReports(renterId, ReportReservationStatus.POTENTIAL, period, assetId, fromDate, toDate));
+			reports.addAll(reportRepository.getReports(renterId, ReportReservationStatus.POTENTIAL, period, assetId, fromDate, toDate));
 		
 		return reports;
 	}

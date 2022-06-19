@@ -13,7 +13,6 @@ public class SubscriptionDTO {
 
 	public SubscriptionDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getAssetId() {

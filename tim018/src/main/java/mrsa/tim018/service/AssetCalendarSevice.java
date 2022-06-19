@@ -2,26 +2,22 @@ package mrsa.tim018.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.calendar.TimeRangeMergeElement;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
-import mrsa.tim018.model.Client;
 import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetCalendarRepository;
 import mrsa.tim018.repository.AssetRepository;
-import mrsa.tim018.repository.ClientRepository;
 import mrsa.tim018.utils.StringUtils;
 
 @Service
@@ -32,9 +28,6 @@ public class AssetCalendarSevice {
 	
 	@Autowired
 	private AssetRepository assetRepository;
-	
-	@Autowired
-	private ClientRepository clientRepository;
 	
 	public AssetCalendar save(AssetCalendar calendar) {
 		return assetCalendarRepository.save(calendar);
@@ -74,10 +67,10 @@ public class AssetCalendarSevice {
 		if (startDate==null && endDate==null) {
 			return assets;
 		}
-		List<Asset> availableAssets = new ArrayList<Asset>();
+		List<Asset> availableAssets = new ArrayList<>();
 		for (Asset asset : assets) { 
 			for (TimeRange timeRange : asset.getCalendar().getAvailable()) {
-				if ((timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0)) || startDate==null)&& (timeRange.getToDateTime().isAfter(endDate.atTime(0, 0))|| endDate==null) ) {
+				if (timeRange.getFromDateTime().isBefore(startDate.atTime(0, 0))&& timeRange.getToDateTime().isAfter(endDate.atTime(0, 0)) ) {
 					availableAssets.add(asset);
 					break;
 				}
@@ -95,7 +88,7 @@ public class AssetCalendarSevice {
 	
 	public List<TimeRange> removeAvailable(List<TimeRange> ranges, LocalDateTime fromDateTime,
 			LocalDateTime toDateTime) {
-		List<TimeRange> retData = new ArrayList<TimeRange>();
+		List<TimeRange> retData = new ArrayList<>();
 		for (TimeRange timeRange : ranges) {
 			if (fromDateTime.isBefore(timeRange.getFromDateTime())) {
 				if (toDateTime.isBefore(timeRange.getFromDateTime())) {
@@ -127,7 +120,7 @@ public class AssetCalendarSevice {
 	
 
 	public List<TimeRange> addAvailable(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
+		List<TimeRangeMergeElement> elems = new ArrayList<>();
 		for (TimeRange timeRange : ranges) {
 			elems.add(new TimeRangeMergeElement(timeRange, false));
 		}
@@ -164,7 +157,7 @@ public class AssetCalendarSevice {
 				}
 			}
 		}
-		List<TimeRange> retData = new ArrayList<TimeRange>();
+		List<TimeRange> retData = new ArrayList<>();
 		for (TimeRangeMergeElement timeRangeMergeElement : elems) {
 			if (!timeRangeMergeElement.isReduced()) {
 				retData.add(timeRangeMergeElement.getTimeRange());
@@ -174,7 +167,7 @@ public class AssetCalendarSevice {
 	}
 	
 	private List<TimeRange> addAvailablePattern(List<TimeRange> ranges, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-		List<TimeRangeMergeElement> elems = new ArrayList<TimeRangeMergeElement>();
+		List<TimeRangeMergeElement> elems = new ArrayList<>();
 		for (TimeRange timeRange : ranges) {
 			elems.add(new TimeRangeMergeElement(timeRange, false));
 		}
@@ -188,7 +181,7 @@ public class AssetCalendarSevice {
 		return getNewListAvailable(elems);
 	}
 
-	public ArrayList<SpecialOffer> removeSpecialOffer(List<SpecialOffer> specialPrice, long specialOfferId) {
+	public List<SpecialOffer> removeSpecialOffer(List<SpecialOffer> specialPrice, long specialOfferId) {
 		return (ArrayList<SpecialOffer>) specialPrice
 				  .stream()
 				  .filter(c -> c.getID() != specialOfferId)

@@ -274,9 +274,45 @@ public class ReviewController {
 		try {
 			emailService.sendPointMail(review, client, renter, false);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 		return new ResponseEntity<>(review, HttpStatus.OK);
+<<<<<<< HEAD
 	}*/
+
+//	@PutMapping(value = "/acceptdeclineReview/{id}")
+//	public ResponseEntity<Review> acceptdeclineReview(@PathVariable Long id, @RequestBody Boolean isAccepted) {
+//		Review review = reviewService.findOne(id);
+//		if (review == null) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		if (isAccepted) {
+//			review.setStatus(RequestStatus.Accepted); 
+//		} else { 
+//			review.setStatus(RequestStatus.Declined);
+//		}
+//		reviewService.save(review);
+//		Client client = userService.findClient(review.getClientID());
+//		Renter renter;
+//		if (review.getRenterID()==null) {
+//			Asset asset = assetService.findById(review.getAssetId());
+//			renter = asset.getRenter();
+//		} else {
+//			renter = (Renter) userService.findOne(review.getRenterID());
+//		}
+//		try {
+//			emailService.sendReviewMail(review, client, renter, isAccepted);
+//		} catch (MessagingException e) {
+//			return null; 
+//		}
+//		return new ResponseEntity<>(review, HttpStatus.OK);
+//	}
+//
+//	@GetMapping(value = "/pendingNonComplaint")
+//	public ResponseEntity<List<Review>> getPendingReviews() {
+//		List<Review> pendingReviews = reviewService.getPendingReviewsNotComplaints();
+//		if (pendingReviews.isEmpty())
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		return new ResponseEntity<>(pendingReviews, HttpStatus.OK);
+//	}
 }

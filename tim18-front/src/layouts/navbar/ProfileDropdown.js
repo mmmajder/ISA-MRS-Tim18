@@ -9,6 +9,14 @@ export default function ProfileDropdown({userId}){
 
     const profileTitle = <span><FontAwesomeIcon icon={faUser} /> Profile</span>;
 
+    if(userId === "client"){
+        return <NavDropdown title={profileTitle}> 
+                <NavDropdown.Item href="/profile"><FontAwesomeIcon icon={faUser} /> My profile</NavDropdown.Item> 
+                <NavDropdown.Item href="/settings"><FontAwesomeIcon icon={faCogs} /> Settings</NavDropdown.Item>
+                <NavDropdown.Item href="/logout"><FontAwesomeIcon icon={faChevronCircleRight} /> Logout</NavDropdown.Item>
+            </NavDropdown>
+    }
+
     return <NavDropdown title={profileTitle}> 
                 <NavDropdown.Item href="/profile"><FontAwesomeIcon icon={faUser} /> My profile</NavDropdown.Item> 
                 <NavDropdown.Item href="/settings"><FontAwesomeIcon icon={faCogs} /> Settings</NavDropdown.Item>

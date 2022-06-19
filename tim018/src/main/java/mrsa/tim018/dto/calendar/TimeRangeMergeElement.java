@@ -8,7 +8,6 @@ public class TimeRangeMergeElement {
 
 	public TimeRangeMergeElement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public TimeRangeMergeElement(TimeRange timeRange, boolean isReduced) {

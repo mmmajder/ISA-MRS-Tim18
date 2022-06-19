@@ -17,12 +17,11 @@ export default function ClientNavbar({userId}){
         <Navbar.Toggle />
         <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
-                <Nav.Link href="#"><FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
                 <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <Nav.Link href="/allReservations"><FontAwesomeIcon icon={faSuitcase} /> My Reservations</Nav.Link>
                 <Nav.Link href="/subscriptions"><FontAwesomeIcon icon={faBell} /> Subscriptions </Nav.Link>
 
-                <ProfileDropdown userId={userId}/>
+                <ProfileDropdown userId={"client"}/>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

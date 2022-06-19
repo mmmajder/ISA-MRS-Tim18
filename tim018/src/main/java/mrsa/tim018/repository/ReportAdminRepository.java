@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,7 +148,7 @@ public class ReportAdminRepository {
 				yearsReservations.add(reservation);
 				retData.put(date, yearsReservations);
 			} else {
-				List<Reservation> yearsReservations = new ArrayList<Reservation>();
+				List<Reservation> yearsReservations = new ArrayList<>();
 				yearsReservations.add(reservation);
 				retData.put(date, yearsReservations);
 			}
@@ -169,7 +167,7 @@ public class ReportAdminRepository {
 				yearsReservations.add(reservation);
 				retData.put(date, yearsReservations);
 			} else {
-				List<Reservation> yearsReservations = new ArrayList<Reservation>();
+				List<Reservation> yearsReservations = new ArrayList<>();
 				yearsReservations.add(reservation);
 				retData.put(date, yearsReservations);
 			}
@@ -186,7 +184,7 @@ public class ReportAdminRepository {
 				yearsReservations.add(reservation);
 				retData.put(String.valueOf(year), yearsReservations);
 			} else {
-				List<Reservation> yearsReservations = new ArrayList<Reservation>();
+				List<Reservation> yearsReservations = new ArrayList<>();
 				yearsReservations.add(reservation);
 				retData.put(String.valueOf(year), yearsReservations);
 			}

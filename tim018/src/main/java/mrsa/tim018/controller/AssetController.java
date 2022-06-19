@@ -1,19 +1,10 @@
 package mrsa.tim018.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.io.IOException;
-import java.security.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,11 +28,8 @@ import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.AssetPrice;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Boat;
-import mrsa.tim018.model.Image;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Report;
-import mrsa.tim018.model.ReportFilters;
-import mrsa.tim018.model.ReportPeriod;
 import mrsa.tim018.model.Resort;
 import mrsa.tim018.service.AdventureService;
 import mrsa.tim018.service.AssetCalendarSevice;
@@ -52,7 +40,6 @@ import mrsa.tim018.service.EmailService;
 import mrsa.tim018.service.ImageService;
 import mrsa.tim018.service.RenterService;
 import mrsa.tim018.service.ReportService;
-import mrsa.tim018.service.ReservationService;
 import mrsa.tim018.service.ResortService;
 import mrsa.tim018.utils.TimeUtils;
 
@@ -89,12 +76,9 @@ public class AssetController {
 	private ImageService imageService;
 	
 	@Autowired
-	private ReservationService reservationService;
-	
-	@Autowired
 	private ReportService reportService;
 	
-	private final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
+	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
 	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
@@ -138,13 +122,9 @@ public class AssetController {
 	}
 	
 	private void createPrice(Long assetId, double price) {
-    	try {
-    		LocalDate startDate = LocalDate.now();
-    		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
-			assetPriceService.save(assetPrice);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		LocalDate startDate = LocalDate.now();
+		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
+		assetPriceService.save(assetPrice);
 	}
 	
 	private void setCalendarAndRenter(Asset asset, Long renterId) {
@@ -192,7 +172,7 @@ public class AssetController {
 		try {
 			emailService.sendDeleteAsset(asset);
 		}catch( Exception e ){
-			System.out.println("Greska prilikom slanja emaila: " + e.getMessage());
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}

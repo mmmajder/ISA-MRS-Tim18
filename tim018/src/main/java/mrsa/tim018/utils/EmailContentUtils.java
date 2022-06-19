@@ -12,8 +12,6 @@ import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
 import mrsa.tim018.model.Subscription;
-import mrsa.tim018.model.User;
-import net.bytebuddy.asm.Advice.Local;
 
 public class EmailContentUtils {
 
@@ -25,8 +23,8 @@ public class EmailContentUtils {
 	}
 	
 	public static String getNewReservationContent(Reservation reservation) {
-		String startDate = TimeUtils.FormatToString(reservation.getTimeRange().getFromDateTime());
-		String endDate = TimeUtils.FormatToString(reservation.getTimeRange().getToDateTime());
+		String startDate = TimeUtils.formatToString(reservation.getTimeRange().getFromDateTime());
+		String endDate = TimeUtils.formatToString(reservation.getTimeRange().getToDateTime());
 		String title = "                            Yeyy, you have successfully created new reservation\r\n";
 		String body1 = "                            What have I reserved: " + reservation.getAsset().getName() + "\r\n"
 					 + "When have I reserved: " + startDate + " - " + endDate +"\r\n";
@@ -39,9 +37,9 @@ public class EmailContentUtils {
 	public static String notifySubscribers(Subscription subscription, AppointmentCreationDTO offer) {
 		Asset asset = subscription.getAsset();
 		Client client = subscription.getClient();
-		String startDate = TimeUtils.FormatToString(LocalDateTime.parse(offer.getFromDateTime()));
-		String endDate = TimeUtils.FormatToString(LocalDateTime.parse(offer.getToDateTime()));
-		String untilDate = TimeUtils.FormatToString(LocalDate.parse(offer.getOfferUntil().split("T")[0]));
+		String startDate = TimeUtils.formatToString(LocalDateTime.parse(offer.getFromDateTime()));
+		String endDate = TimeUtils.formatToString(LocalDateTime.parse(offer.getToDateTime()));
+		String untilDate = TimeUtils.formatToString(LocalDate.parse(offer.getOfferUntil().split("T")[0]));
 		String title = "                            Heyy "+ client.getFirstName() +", we have new special offer for you!\r\n";
 		String body1 = "                            " + asset.getName() + "has created great deal from " + startDate  + " to " + endDate +".\r\n";
 		String body2 = "                              Hurry up, this offer is available only until " +  untilDate +"\r\n";

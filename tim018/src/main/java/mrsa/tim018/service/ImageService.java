@@ -3,10 +3,8 @@ package mrsa.tim018.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -35,7 +33,7 @@ public class ImageService {
 		return imageRepository.save(image);
 	}
 	
-	public Image store(Long assetId, byte[] file) throws IOException{
+	public Image store(Long assetId, byte[] file){
 		Image image = new Image(file, assetId);
 		return imageRepository.save(image);
 	}
@@ -54,11 +52,10 @@ public class ImageService {
 				.collect(Collectors.toList());
 	}
 	
-	public byte[] readImageFromAddress(String address) {
+	public byte[] readImageFromAddress(String address) throws IOException{
 		try {
 			File fi = new File(address);
-			byte[] fileContent = Files.readAllBytes(fi.toPath());
-			return fileContent;
+			return Files.readAllBytes(fi.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

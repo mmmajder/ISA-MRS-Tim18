@@ -21,7 +21,6 @@ public class LoyaltyState {
 
 	public LoyaltyState() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public LoyaltyState(Long id, double taxPercent, double clientDiscountPercent, double renterDiscountPercent) {
