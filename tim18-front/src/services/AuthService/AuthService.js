@@ -1,30 +1,13 @@
-export const getHeaders = () => {
-  const token = getToken();
-  if(!!token){
-    return {
-      "Authorization" : `Bearer ${token}`,
-      "Content-Type": "application/json"
-    };
-  }
-  return {
-    "Content-Type": "application/json"
-  };
-}
-
-
-
 export const setToken = (token) => {
-   localStorage.setItem("jwt", JSON.stringify(token));
+  if(token === null){
+    localStorage.setItem("jwt", null);
+  }
+  else{
+    localStorage.setItem("jwt", JSON.stringify(token.accessToken));
+  }
 }
 export const getToken = () => {
-    let text = localStorage.getItem("jwt");
-    if(!!text){
-      let obj = JSON.parse(text);
-      if(!!obj){
-        return obj.accessToken;
-      }
-    }
-    return '';
+   return JSON.parse(localStorage.getItem("jwt"));
 }
 
 

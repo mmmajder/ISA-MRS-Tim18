@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { getLogged } from '../../services/api/LoginApi';
 import { getRole } from '../../services/AuthService/AuthService';
 import AdminSetPasswordModal from '../admin/AdminSetPasswordModal';
+import {Container} from 'react-bootstrap'
+import AssetsPreview from '../asset/AssetsPreview';
+import { getApiCall } from '../../services/Configs';
 
 const Home = () => {
     const [user, setUser] = useState()
@@ -23,13 +26,19 @@ const Home = () => {
         return "Bravo";
     }
 
-    if (user) {
-        FirstTimeAdmin()
-        return (
-            <>
-                {activeForm}
-            </>
-        )
+    if (!!user) {
+        if(getRole() === "Admin"){
+            FirstTimeAdmin()
+            return (
+                <>
+                    {activeForm}
+                </>
+            )
+        }
+        return <Container><AssetsPreview isSearch={true}/></Container>
+    }
+    else if(getRole() === 'Guest'){
+        return <Container><AssetsPreview isSearch={true}/></Container>
     }
     
 }

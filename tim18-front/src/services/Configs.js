@@ -1,10 +1,18 @@
 import axios from 'axios'
 import { getToken } from './AuthService/AuthService';
 
-export const api = axios.create({
-    baseURL: "http://localhost:8000",
-    headers:  {"Authorization" : `Bearer ${getToken()}`,
-    "Content-Type": "application/json"}
-});
+
+export var getApiCall = () =>{
+    const token = getToken();
+    return axios.create({
+        baseURL: "http://localhost:8000",
+        headers:  {"Authorization" : `Bearer ${token}`,
+        "Content-Type": "application/json"}
+    });
+} 
+
+//export var api = getApiCall();
+
+
 
 

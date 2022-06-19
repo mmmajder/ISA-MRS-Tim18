@@ -1,8 +1,8 @@
-import {api} from "../Configs.js"
+import {getApiCall} from "../Configs.js"
 
 export async function saveNewPassword(user, password){
   
-    await api.put(`/admin/savePassword/${user.id}`, JSON.stringify(password))
+    await getApiCall().put(`/admin/savePassword/${user.id}`, JSON.stringify(password))
               .then((responseData) => { console.log(responseData.data)})
               .catch(()=> {});
 }
@@ -10,7 +10,7 @@ export async function saveNewPassword(user, password){
 
 export async function getReportAdmin(renterId, reportFilters) {
     try {
-       const responseData = await api.get(`/admin/report`, {
+       const responseData = await getApiCall().get(`/admin/report`, {
         params: {
             "completed" : reportFilters.completed,
             "canceled":  reportFilters.canceled, 

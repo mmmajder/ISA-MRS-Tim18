@@ -64,10 +64,10 @@ export default function AssetsPreview({isSearch}){
             setAssets(!!requestData ? requestData.data : []);
             return requestData;
         }
-        if (user != undefined){
+        //if (user != undefined){
             fetchAssets();
-        }
-    }, [user])
+        //}
+    }, [])
 
     let assetTypeOptions;
     if(isSearch){
@@ -173,6 +173,5 @@ export default function AssetsPreview({isSearch}){
             {/* just gives nice space in the bottom */}
             <p className='mt-3'></p> 
         </>
-
 }
 

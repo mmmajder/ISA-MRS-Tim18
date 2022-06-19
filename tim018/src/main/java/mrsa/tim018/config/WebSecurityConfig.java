@@ -88,6 +88,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 								.antMatchers("/photos/assetPhotoIds/{id}").permitAll()
 								.antMatchers("/photos/{id}").permitAll()
 								.antMatchers("/prices/today/{assetId}").permitAll()
+								.antMatchers("/assets/findByType/{assetType}").permitAll()
+								.antMatchers("/review/assetRating/{assetId}").permitAll()
+								.antMatchers("/review/userRating/{userId}").permitAll()
+								.antMatchers("/calendar/assetCalendar/{idAsset}").permitAll()
+								.antMatchers("/review/asset/{assetId}").permitAll()
+								.antMatchers("/review/{id}").permitAll()
+								.antMatchers("/users/{id}").permitAll()
 								
 								
 								

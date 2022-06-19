@@ -3,13 +3,14 @@ import { BoldLink, BoxContainer, FormContainer, Input, MutedLink, SubmitButton }
 import { Marginer } from "./marginer";
 import { AccountContext } from "./AccountContext";
 import { loginRequest, getLogged } from "../../../services/api/LoginApi"
-import {setToken,setRole} from "../../../services/AuthService/AuthService"
+import {setToken,setRole, setUsername, getToken} from "../../../services/AuthService/AuthService"
 import { useNavigate } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { checkLettersInput, onlyLetters } from '../../../services/utils/InputValidation';
 import { LabeledInputWithErrMessage } from '../LabeledInput';
 import '../../../assets/styles/login.css';
 import { Form, Row, Col} from 'react-bootstrap';
+import { getApiCall } from '../../../services/Configs';
 
 export function LoginForm({handleLogin}) {
   const { switchToSignup } = useContext(AccountContext);
@@ -47,9 +48,13 @@ export function LoginForm({handleLogin}) {
     else
     {
       setToken(returnData.token);
+      while(returnData.token.accessToken !== getToken()){
+        console.log(returnData.token.accessToken);
+        console.log(getToken());
+      }
       setRole(returnData.userType);
       handleLogin(returnData.userType);
-      navigate('/home')
+      navigate('/home', {replace: true} )
     }
   }
   /*
@@ -67,7 +72,7 @@ export function LoginForm({handleLogin}) {
 
         </FormContainer>
         <Marginer direction="vertical" margin={10} />
-        <MutedLink href="#">Forgot your password?</MutedLink>
+        {/*<MutedLink href="#">Forgot your password?</MutedLink>*/}
         <Marginer direction="vertical" margin="7.5em" />
 
         <Button variant="custom" type="submit" className="formButton" onClick={() => {loginRequest(inputs, loginCallback);}} > Sign in  </Button>
