@@ -90,7 +90,8 @@ public class EmailService {
 	} 
 	
 	@Async
-	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) throws MessagingException  {
+	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl)  {
+		try {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		if (status == RequestStatus.Accepted)
 			message.setSubject("Hakuna Matata profile delete accepted");
@@ -118,6 +119,9 @@ public class EmailService {
 		javaMailSender.send(message);
 
 		System.out.println("Email poslat!");
+		} catch (Exception e) {
+			//throw new MailAuthenticationException("Error during mail sending");
+		}
 	}
 
 	public void sendReservationSuccessfull(Reservation reservation) throws MessagingException, UnsupportedEncodingException  {

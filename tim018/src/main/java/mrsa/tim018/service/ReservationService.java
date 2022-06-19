@@ -239,7 +239,7 @@ public class ReservationService {
 	private void updateAssetsCalendarSpecialOffer(SpecialOfferReservationDTO specialOfferReservationDTO, Asset asset,
 			Reservation reservation) {
 		asset.getCalendar().getReserved().add(reservation);     
-		ArrayList<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
+		List<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
 		if (ranges == null) {
 			asset.getCalendar().setSpecialPrice(new ArrayList<SpecialOffer>());
 		} else { 
