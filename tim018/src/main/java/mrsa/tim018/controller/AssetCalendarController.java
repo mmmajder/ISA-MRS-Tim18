@@ -42,12 +42,6 @@ public class AssetCalendarController {
 	@Autowired
 	private RenterService renterService;
 	
-	@Autowired
-	private EmailService emailService;
-	
-	@Autowired
-	private SubscriptionService subscriptionService;
-	
 	@Autowired 
 	private SpecialOfferService specialOfferService;
 	
@@ -80,23 +74,11 @@ public class AssetCalendarController {
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
-		Renter renter = renterService.findOne(appointment.getUserId());
-		if (renter == null) {
+		AppointmentCreationDTO appointmentCreationDTO = calendarService.addAppointment(appointment);
+		if (appointmentCreationDTO==null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		try {
-			Asset asset = assetService.findById(appointment.getAssetId());
-			AssetCalendar calendar = asset.getCalendar();
-			AssetCalendar newCalendar = calendarService.addAppointment(calendar, appointment);
-			calendarService.save(newCalendar);
-			if(appointment.getType() == AppointmentType.SpecialOffer) {
-				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(asset.getID());
-				emailService.notifySubscribers(subscriptions, appointment);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
+		return new ResponseEntity<>(appointmentCreationDTO, HttpStatus.OK); // what to return
 
 	}
 	

@@ -17,4 +17,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 	
 	@Query(value = "SELECT nextval('userSeqGen')", nativeQuery = true)
 	Long getNextSeriesId();
+	
 }

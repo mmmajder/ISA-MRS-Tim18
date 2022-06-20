@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,36 +41,29 @@ public class DeleteationRequestControllerTest {
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
-//	false, 'No reason', 0, 2
+	
 	@Test
 	public void testGetDeletationRequest() throws Exception {
 		mockMvc.perform(get(URL_PREFIX + "/" + DeletationRequestConstants.DB_ID)).andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(DeletationRequestConstants.DB_ID.longValue()))
-//		.andExpect(jsonPath("$.isDeleted").value(new Boolean(false)))
 		.andExpect(jsonPath("$.reason").value(DeletationRequestConstants.DB_REASON));
-//		.andExpect(jsonPath("$.user.id").value(DeletationRequestConstants.DB_USER_ID.longValue()));
 	}
 	
 	@Test
 	public void testGetAllDeletationRequests() throws Exception {
 		mockMvc.perform(get(URL_PREFIX + "/all")).andExpect(status().isOk())
-//		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
-		//.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.longValue())))
-		.andExpect(jsonPath("$.[0].id").value(DeletationRequestConstants.DB_ID.longValue()))
-//		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));
-		.andExpect(jsonPath("$.[0].reason").value(DeletationRequestConstants.DB_REASON));
-//		.andExpect(jsonPath("$.user.id").value(DeletationRequestConstants.DB_USER_ID.longValue()));
+		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
+		.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.intValue())))
+		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));
 	}
 	
 	@Test
 	public void testGetPendingDeletationRequests() throws Exception {
 		mockMvc.perform(get(URL_PREFIX + "/pending")).andExpect(status().isOk())
-//		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
-		//.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.longValue())))
-		.andExpect(jsonPath("$.[0].id").value(DeletationRequestConstants.DB_ID.longValue()))
-//		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));
-		.andExpect(jsonPath("$.[0].reason").value(DeletationRequestConstants.DB_REASON));
-//		.andExpect(jsonPath("$.user.id").value(DeletationRequestConstants.DB_USER_ID.longValue()));
+		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
+		.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.intValue())))
+		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));
 	}
+	
 	
 }

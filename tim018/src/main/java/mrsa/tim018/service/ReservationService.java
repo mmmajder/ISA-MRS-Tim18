@@ -265,7 +265,7 @@ public class ReservationService {
 		return reservation;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = false)
 	public Reservation makeReservation(ReservationRequestDTO reservationDto) throws Exception {
 		
 		Reservation reservation = saveRegularReservation(reservationDto);
@@ -276,7 +276,7 @@ public class ReservationService {
 	}
 
 	private Reservation saveRegularReservation(ReservationRequestDTO reservationDto) {
-		Asset asset = assetService.findOne(reservationDto.getAssetId());
+		Asset asset = assetService.findOneLock(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
 		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);

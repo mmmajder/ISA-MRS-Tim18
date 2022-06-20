@@ -90,16 +90,11 @@ public class ClientController {
 
 	@PutMapping(consumes = "application/json")
 	public ResponseEntity<ClientDTO> updateclient(@RequestBody ClientDTO clientDTO) {
-
-		// a client must exist
-		Client client = clientService.findOne(clientDTO.getId());
-
-		if (client == null) {
+		clientDTO = clientService.updateclient(clientDTO);
+		if (clientDTO==null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		client = ClientMapper.mapToClient(client, clientDTO);
-		client = clientService.save(client);
-		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
+		return new ResponseEntity<>(clientDTO, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/{id}")

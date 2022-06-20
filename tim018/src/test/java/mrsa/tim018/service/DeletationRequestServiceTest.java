@@ -44,6 +44,56 @@ public class DeletationRequestServiceTest {
 	@InjectMocks
 	private DeletationRequestService deletationRequestService;
 	
+	
+	@Test
+    @Transactional
+    @Rollback(true) // uključeno po default-u, ne mora se navesti
+	public void testCreate() throws Exception{
+		Client client = new Client();
+		client.setAddress("address");
+		client.setBiography("biography");
+		client.setCity("city");
+		client.setDeleted(false);
+		client.setEmail("email");
+		client.setEnabled(true);
+		client.setFirstName("firstName");
+		client.setId(100L);
+		client.setLastName("lastName");
+		client.setUserType(UserType.Client);
+		client.setState("state");
+		client.setProfilePhotoId("profilePhotoId");
+		client.setPhoneNum("phoneNum");
+		client.setPenaltyPoints(0);
+		client.setLoyaltyPoints(0);
+		
+		String reason = "reason";
+		
+
+		DeletationRequest deletationRequest = new DeletationRequest(client, reason);
+		
+		when(deletationRequestRepositoryMock.findAll()).thenReturn(Arrays.asList(new DeletationRequest(1L, false, RequestStatus.Pending, new User(), "reason")));
+		when(deletationRequestRepositoryMock.save(deletationRequest)).thenReturn(deletationRequest);
+		
+		int dbSizeBeforeAdd = deletationRequestService.findAll().size();
+		
+		DeletationRequest dbDeletationRequest = deletationRequestService.create(client, reason);
+		
+		when(deletationRequestRepositoryMock.findAll()).thenReturn(Arrays.asList(new DeletationRequest(1L, false, RequestStatus.Pending, new User(), "reason"), deletationRequest));
+		
+		
+		assertThat(dbDeletationRequest).isNotNull();
+		
+        List<DeletationRequest> deletationRequests = deletationRequestService.findAll();
+        assertThat(deletationRequests).hasSize(dbSizeBeforeAdd + 1); //verifikacija da je novi student upisan u bazu
+        
+        dbDeletationRequest = deletationRequests.get(deletationRequests.size() - 1); // preuzimanje poslednjeg studenta
+        
+        assertThat(dbDeletationRequest.getReason()).isEqualTo("reason");
+        
+        verify(deletationRequestRepositoryMock, times(2)).findAll();
+        verify(deletationRequestRepositoryMock, times(1)).save(deletationRequest);
+        verifyNoMoreInteractions(deletationRequestRepositoryMock);
+	}
 	 
 	@Test 
 	public void testFindOne() {
@@ -84,55 +134,7 @@ public class DeletationRequestServiceTest {
         verifyNoMoreInteractions(deletationRequestRepositoryMock);
 	}
 	
-	@Test
-    @Transactional
-    @Rollback(true) // uključeno po default-u, ne mora se navesti
-	public void testCreate() throws Exception{
-		Client client = new Client();
-		client.setAddress("address");
-		client.setBiography("biography");
-		client.setCity("city");
-		client.setDeleted(false);
-		client.setEmail("email");
-		client.setEnabled(true);
-		client.setFirstName("firstName");
-		client.setId(100L);
-		client.setLastName("lastName");
-		client.setUserType(UserType.Client);
-		client.setState("state");
-		client.setProfilePhotoId("profilePhotoId");
-		client.setPhoneNum("phoneNum");
-		client.setPenaltyPoints(0);
-		client.setLoyaltyPoints(0);
-		
-		String reason = "reason";
-		
-
-		DeletationRequest deletationRequest = new DeletationRequest(client, reason);
-		
-		when(deletationRequestRepositoryMock.findAll()).thenReturn(Arrays.asList(new DeletationRequest(1L, false, RequestStatus.Pending, new User(), "reason")));
-		when(deletationRequestRepositoryMock.save(deletationRequest)).thenReturn(deletationRequest);
-		
-		int dbSizeBeforeAdd = deletationRequestService.findAll().size();
-		
-		DeletationRequest dbDeletationRequest = deletationRequestService.save(deletationRequest);
-		
-		when(deletationRequestRepositoryMock.findAll()).thenReturn(Arrays.asList(new DeletationRequest(1L, false, RequestStatus.Pending, new User(), "reason"), deletationRequest));
-		
-		
-		assertThat(dbDeletationRequest).isNotNull();
-		
-        List<DeletationRequest> deletationRequests = deletationRequestService.findAll();
-        assertThat(deletationRequests).hasSize(dbSizeBeforeAdd + 1); //verifikacija da je novi student upisan u bazu
-        
-        dbDeletationRequest = deletationRequests.get(deletationRequests.size() - 1); // preuzimanje poslednjeg studenta
-        
-        assertThat(dbDeletationRequest.getReason()).isEqualTo("reason");
-        
-        verify(deletationRequestRepositoryMock, times(2)).findAll();
-        verify(deletationRequestRepositoryMock, times(1)).save(deletationRequest);
-        verifyNoMoreInteractions(deletationRequestRepositoryMock);
-	}
+	
 	
 	
 	

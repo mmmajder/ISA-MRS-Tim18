@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class Client extends User {
@@ -41,6 +42,15 @@ public class Client extends User {
 		super(id, firstName, lastName, address, city, state, phoneNum, userType, email, password, profilePhotoId);
 		this.penaltyPoints = penaltyPoints;
 	}
+	
+	public Client(String firstName, String lastName, String address, String city, String state,
+			String phoneNum, UserType userType, String email, String password, int penaltyPoints, String profilePhotoId) {
+	
+		super(firstName, lastName, address, city, state, phoneNum, userType, email, password, profilePhotoId);
+		this.penaltyPoints = penaltyPoints;
+	}
+	
+	
 	public Client(User user, int penaltyPoints) {
 	
 		super(user);

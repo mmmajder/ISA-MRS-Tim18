@@ -7,14 +7,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.calendar.TimeRangeMergeElement;
+import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.SpecialOffer;
+import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetCalendarRepository;
 import mrsa.tim018.repository.AssetRepository;
@@ -28,6 +33,15 @@ public class AssetCalendarSevice {
 	
 	@Autowired
 	private AssetRepository assetRepository;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private RenterService renterService;
+	
+	@Autowired
+	private SubscriptionService subscriptionService;
 	
 	public AssetCalendar save(AssetCalendar calendar) {
 		return assetCalendarRepository.save(calendar);
@@ -186,6 +200,27 @@ public class AssetCalendarSevice {
 				  .stream()
 				  .filter(c -> c.getID() != specialOfferId)
 				  .collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = false)
+	public AppointmentCreationDTO addAppointment(AppointmentCreationDTO appointment) {
+		Renter renter = renterService.findOne(appointment.getUserId());
+		if (renter == null) {
+			return null;
+		}
+		try {
+			Asset asset = assetRepository.findByIdLock(appointment.getAssetId()).get();
+			AssetCalendar calendar = asset.getCalendar();
+			AssetCalendar newCalendar = addAppointment(calendar, appointment);
+			save(newCalendar);
+			if(appointment.getType() == AppointmentType.SpecialOffer) {
+				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(asset.getID());
+				emailService.notifySubscribers(subscriptions, appointment);
+			}
+			return appointment;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	

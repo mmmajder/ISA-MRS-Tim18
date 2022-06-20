@@ -78,76 +78,24 @@ public class AssetController {
 	@Autowired
 	private ReportService reportService;
 	
-	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
 	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
-		AssetType type = assetDto.getAssetType();
-		Long renterId = assetDto.getRenterId();
-		
-		switch (type) {
-		case RESORT: 
-			Resort resort = AssetMapper.mapToResort(assetDto);
-			setCalendarAndRenter(resort, renterId);
-			resort = resortService.save(resort);
-			createPrice(resort.getID(), assetDto.getPrice());
-			setDefaultPicture(resort.getID());
-			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
-		case BOAT:  
-			Boat boat = AssetMapper.mapToBoat(assetDto);
-			setCalendarAndRenter(boat, renterId);
-			boat = boatService.save(boat);
-			createPrice(boat.getID(), assetDto.getPrice());
-			setDefaultPicture(boat.getID());
-			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
-		case FISHING_ADVENTURE:  
-			Adventure adventure = AssetMapper.mapToAdventure(assetDto);
-			setCalendarAndRenter(adventure, renterId);
-			adventure = adventureService.save(adventure);
-			createPrice(adventure.getID(), assetDto.getPrice());
-			setDefaultPicture(adventure.getID());
-			return new ResponseEntity<>(new AssetDTO(adventure), HttpStatus.CREATED);
-		default: 
+		AssetDTO returnData = assetService.createAsset(assetDto);
+		if (returnData==null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
+		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
 	}
 	
-	private void setDefaultPicture(Long assetId) {
-		try {
-			byte[] imageFyle = imageService.readImageFromAddress(defaultAssetPicturePath);
-			imageService.store(assetId, imageFyle);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void createPrice(Long assetId, double price) {
-		LocalDate startDate = LocalDate.now();
-		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
-		assetPriceService.save(assetPrice);
-	}
-	
-	private void setCalendarAndRenter(Asset asset, Long renterId) {
-		AssetCalendar assetCalendar = assetCalendarSevice.createNewCalendar();
-		asset.setCalendar(assetCalendar);
-		Renter renter = renterService.findOne(renterId);
-		asset.setRenter(renter);
-	}
 	
 	@PutMapping(value="/{id}", consumes = "application/json" )
 	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
-		AssetType type = assetDto.getAssetType();
-		
-		switch (type) {
-		case RESORT: 
-			return updateResort(id, assetDto);
-		case BOAT: 
-			return updateBoat(id, assetDto);
-		case FISHING_ADVENTURE: 
-			return updateAdventure(id, assetDto);
-		default:  
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		AssetDTO returnData = assetService.updateAsset(id, assetDto);
+		if (returnData==null) {
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}
+		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(value="/{id}" )
@@ -178,69 +126,6 @@ public class AssetController {
 	}
 	
 	
-	private ResponseEntity<AssetDTO> updateResort(Long id,AssetDTO assetDto) {
-		Resort updatedData = AssetMapper.mapToResort(assetDto);
-		Resort resortToUpdate = resortService.findOne(id);
-		
-		if (resortToUpdate != null)
-		{
-			// changes only user-changable attributes
-			updateAsset(resortToUpdate, updatedData);
-			resortToUpdate.setNumberOfRooms(updatedData.getNumberOfRooms());
-			resortToUpdate.setNumberOfBeds(updatedData.getNumberOfBeds());
-			resortService.save(resortToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private ResponseEntity<AssetDTO> updateBoat(Long id, AssetDTO assetDto) {
-		Boat updatedData = AssetMapper.mapToBoat(assetDto);
-		Boat boatToUpdate = boatService.findOne(id);
-		
-		if (boatToUpdate != null)
-		{
-			// changes only user-changable attributes
-			updateAsset(boatToUpdate, updatedData);
-			updateBoatSpecificAttributes(boatToUpdate, updatedData);
-			boatService.save(boatToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private ResponseEntity<AssetDTO> updateAdventure(Long id, AssetDTO assetDto) {
-		Adventure updatedData = AssetMapper.mapToAdventure(assetDto);
-		Adventure adventureToUpdate = adventureService.findOne(id);
-		
-		if (adventureToUpdate != null)
-		{
-			updateAsset(adventureToUpdate, updatedData);
-			adventureToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
-			adventureService.save(adventureToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private void updateBoatSpecificAttributes(Boat boatToUpdate, Boat updatedData) {
-		boatToUpdate.setBoatType(updatedData.getBoatType());
-		boatToUpdate.setLength(updatedData.getLength());
-		boatToUpdate.setNumOfMotor(updatedData.getNumOfMotor());
-		boatToUpdate.setMotorPower(updatedData.getMotorPower());
-		boatToUpdate.setMaxSpeed(updatedData.getMaxSpeed());
-		boatToUpdate.setNavigationEquipment(updatedData.getNavigationEquipment());
-		boatToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
-	}
-	
-	private void updateAsset(Asset assetToUpdate, Asset updatedData) {
-		assetToUpdate.setAddress(updatedData.getAddress());
-		assetToUpdate.setCancelationConditions(updatedData.getCancelationConditions());
-		assetToUpdate.setDescription(updatedData.getDescription());
-		assetToUpdate.setName(updatedData.getName());
-		assetToUpdate.setNumOfPeople(updatedData.getNumOfPeople());
-		assetToUpdate.setRules(updatedData.getRules());
-	}
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {

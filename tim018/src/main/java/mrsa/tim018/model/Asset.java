@@ -13,15 +13,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Asset {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
@@ -69,10 +72,13 @@ public class Asset {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PriceCatalog> prices;
-	
+
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Subscription> subscriptions = new ArrayList<>();
 	
+	@Version
+	private Integer version;
+
 	public Asset() {
 
 	}
@@ -113,6 +119,26 @@ public class Asset {
 		this.averageRating = averageRating;
 		this.price = price;
 		this.calendar = calendar;
+		this.prices = prices;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Photo> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+
+	public List<PriceCatalog> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PriceCatalog> prices) {
 		this.prices = prices;
 	}
 
@@ -211,7 +237,7 @@ public class Asset {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public List<Subscription> getSubscriptions() {
 		return subscriptions;
 	}
