@@ -31,11 +31,11 @@ const Home = () => {
             FirstTimeAdmin()
             return (
                 <>
+                    <Container><AssetsPreview isSearch={true}/></Container>
                     {activeForm}
                 </>
             )
         }
-        return <Container><AssetsPreview isSearch={true}/></Container>
     }
     else if(getRole() === 'Guest'){
         return <Container><AssetsPreview isSearch={true}/></Container>
