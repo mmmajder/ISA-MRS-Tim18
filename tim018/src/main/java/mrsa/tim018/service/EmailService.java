@@ -177,7 +177,7 @@ public class EmailService {
 		}
 	}
 
-//	@Async
+	@Async
 	public void sendMailsClientsComplaint(String mailClient, String mailRenter, Long clientId)
 			throws MessagingException {
 
@@ -240,11 +240,11 @@ public class EmailService {
 			sendPointMail(review, client, renter, "client", isAccepted);
 			sendPointMail(review, client, renter, "renter", isAccepted);
 		} catch (MessagingException e) {
-			throw e;
+//			throw e;
 		}
 	}
 
-//	@Async
+	@Async
 	private void sendPointMail(Review review, Client client, Renter renter, String receiver, boolean isAccepted)
 			throws MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -280,7 +280,7 @@ public class EmailService {
 	}
 
 	// isaisa123
-//	@Async
+	@Async
 	private void sendReviewMail(Review review, Client client, Renter renter, Boolean isAccepted, String receiver)
 			throws MessagingException, MailAuthenticationException {
 		MimeMessage message = javaMailSender.createMimeMessage();

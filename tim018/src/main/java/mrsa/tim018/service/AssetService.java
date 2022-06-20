@@ -71,7 +71,7 @@ public class AssetService {
 	}
 	
 	public Asset findById(long id) {
-		return assetRepository.findById(id);
+		return assetRepository.findOneById(id);
 	}
 	
 	public List<Asset> findAllByRenterId(long id) {
@@ -245,6 +245,6 @@ public class AssetService {
 	}
 
 	public Asset findOneLock(Long assetId) {
-		return assetRepository.findByIdLock(assetId).orElse(null);
+		return assetRepository.findOneById(assetId);
 	}
 }

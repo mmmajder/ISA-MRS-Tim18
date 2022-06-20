@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.repository.query.Param;
 
 public interface AssetRepository extends JpaRepository<Asset, Long> {
 	
@@ -21,10 +22,11 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 	
 	public List<Asset> findAllByRenterId(long id);
 	
-	public Asset findById(long id);
+	//public Asset findById(long id);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("select p from Asset p where p.id = :id")
 	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
-	public Optional<Asset> findByIdLock(Long id);
+	public Asset findOneById(@Param("id")Long id);
+	
 }

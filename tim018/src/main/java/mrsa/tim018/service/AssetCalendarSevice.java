@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
@@ -209,7 +210,7 @@ public class AssetCalendarSevice {
 			return null;
 		}
 		try {
-			Asset asset = assetRepository.findByIdLock(appointment.getAssetId()).get();
+			Asset asset = assetRepository.findById(appointment.getAssetId()).get();
 			AssetCalendar calendar = asset.getCalendar();
 			AssetCalendar newCalendar = addAppointment(calendar, appointment);
 			save(newCalendar);

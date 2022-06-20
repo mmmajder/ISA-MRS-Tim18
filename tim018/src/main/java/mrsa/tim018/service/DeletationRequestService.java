@@ -78,10 +78,10 @@ public class DeletationRequestService {
 		DeletationRequest deletionRequest = setDeletionRequestStatus(id, isAccept);
          
         if (isAccept) {
-			setUserIsDelete(id, deletionRequest);
+			setUserIsDelete(deletionRequest);
         } 
         
-        sendRequestAcceptDeclineMail(comment, isAccept);
+       // sendRequestAcceptDeclineMail(comment, isAccept);
 		 
 		return deletionRequest;  
 	}
@@ -99,12 +99,12 @@ public class DeletationRequestService {
 		}
 	}
 
-	private void setUserIsDelete(long id, DeletationRequest deletionRequest) {
+	private void setUserIsDelete(DeletationRequest deletionRequest) {
 		User user = userService.findOne(deletionRequest.getUser().getID());
 		logger.info("> update user status: id:{}", user.getID());
 		user.setDeleted(true);  
 		userService.saveChanges(user); 
-		logger.info("< update user status: id:{}", id);
+		logger.info("< update user status: id:{}", user.getID());
 	}
 
 	private DeletationRequest setDeletionRequestStatus(long id, boolean isAccept) {
