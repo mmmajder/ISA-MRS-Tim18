@@ -49,7 +49,7 @@ export default function ProfileInfoBlock({user, reviewNum, mark}){
                     
                 });
             }
-            if(user !== undefined){
+            if(user !== undefined && user.userType !== 'Client' && user.userType !== 'Guest' && user.userType !== 'Admin'){
               fetchReservations();
             }
         }

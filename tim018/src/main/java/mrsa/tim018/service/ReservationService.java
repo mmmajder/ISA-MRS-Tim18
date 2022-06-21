@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.Asset;
@@ -48,29 +49,7 @@ public class ReservationService {
 		return reservation;
 	}
 	
-	public List<ReservationDTO> map(List<Reservation> reservations){
-		List<ReservationDTO> reservationsDTO = new ArrayList<>();
-		for (Reservation res : reservations) {
-			ReservationDTO dto = map(res);
-			reservationsDTO.add(dto);
-		}
-		return reservationsDTO;
-	}
 	
-	public ReservationDTO map(Reservation res){
-		ReservationDTO dto = new ReservationDTO(res);
-		dto.setCancelable(isCancelable(res));
-		dto.setDuration(calcDuration(res));
-		boolean reviewable = isReviewable(res);
-		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
-			res.setStatus(ReservationStatus.Finished);
-			save(res);
-		}
-		dto.setReviewable(reviewable);
-		
-		return dto;
-	} 
-
 	private boolean isCancelable(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime startDate = reservation.getTimeRange().getFromDateTime();
@@ -174,6 +153,7 @@ public class ReservationService {
 		return save(reservation);
 	}
 	
+	@Transactional
 	public List<Reservation> getCurrentRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> !isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
@@ -181,6 +161,7 @@ public class ReservationService {
 		return reservations;
 	}
 	
+	@Transactional
 	public List<Reservation> getPastRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
@@ -199,4 +180,33 @@ public class ReservationService {
 	public List<Report> getMonthlyReports(Long assetId) {
 		return (List<Report>) reservationRepository.getMonthlyReports(assetId);
 	}
+
+	public ReservationDTO setDtoFields(ReservationDTO dto, Reservation res) {
+		dto.setCancelable(isCancelable(res));
+		dto.setDuration(calcDuration(res));
+		boolean reviewable = isReviewable(res);
+		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
+			res.setStatus(ReservationStatus.Finished);
+			save(res);
+		}
+		dto.setReviewable(reviewable);
+		return dto;
+	}
+
+	public List<ReservationDTO> map(List<Reservation> reservations){
+		List<ReservationDTO> reservationsDTO = new ArrayList<>();
+		for (Reservation res : reservations) {
+			ReservationDTO dto = map(res);
+			reservationsDTO.add(dto);
+		}
+		return reservationsDTO;
+	}
+	@Transactional
+	public ReservationDTO map(Reservation res){
+		Long assetId = res.getAsset().getID();
+		Long clientId = res.getClient().getID();
+		ReservationDTO dto = new ReservationDTO(res, assetId, clientId);
+		return setDtoFields(dto, res);
+	} 
+	
 }

@@ -4,7 +4,8 @@ import AssetMainInfo from '../asset/AssetMainInfo';
 import { Row, Col, Button } from 'react-bootstrap'; 
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetPhotoIdsFromServer, getPhotoFromServer} from '../../services/api/ImageApi';
-
+import { getCallbackAssetById}  from '../../services/api/AssetApi';
+ 
 export const ListedReservation = ({reservation, handleChange}) => {
     return(
       <>
@@ -39,19 +40,21 @@ export const ListedReservation = ({reservation, handleChange}) => {
   }
   
   const ReservationDetails = ({reservation, handleChange}) => {
-    const asset = reservation.asset;
+
+    const assetId = reservation.asset;
     const isCancelable = reservation.cancelable;
     const isReviewable = reservation.reviewable;
     const status = reservation.reservationStatus; // Da li treba prikazati i cancled reservations
 
-    const detViewUrl = "/resorts/" + reservation.asset.id;
+    const detViewUrl = "/resorts/" + assetId;
     const reviewsUrl = "/reviews/" + reservation.id;
 
     const [assetProfilePhoto, setAssetProfilePhoto] = useState();
+    const [asset, setAsset] = useState();
     
     const getAssetProfilePhoto = useCallback(
         (e) => {
-            getAssetPhotoIdsFromServer(asset.id).then((response) =>{
+            getAssetPhotoIdsFromServer(assetId).then((response) =>{
                 let photoIds = response.data;
                 let profilePhotoId = photoIds[0];
                 getPhotoFromServer(profilePhotoId).then((response) =>{
@@ -63,11 +66,18 @@ export const ListedReservation = ({reservation, handleChange}) => {
     )
 
     useEffect(() => {
+      getCallbackAssetById(setAsset, assetId)
+  }, []);
+
+    
+    useEffect(() => {
       if (asset != undefined){
           getAssetProfilePhoto();
       }
   }, [asset]);
 
+
+  if(!!asset){
     let assetImage; 
     if (asset.assetType === "FISHING_ADVENTURE") {
         assetImage = require('../../assets/images/FishingAdventure3.png')
@@ -111,4 +121,6 @@ export const ListedReservation = ({reservation, handleChange}) => {
           </Row>
       </>
     );
+  }
+    
   }

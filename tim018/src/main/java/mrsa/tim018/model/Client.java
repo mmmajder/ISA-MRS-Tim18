@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Client extends User {
 
@@ -17,13 +21,14 @@ public class Client extends User {
 	@Column(name = "penaltyPoints", nullable = false)
 	private int penaltyPoints;
 	
-	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<SpecialOffer> specialOffers = new ArrayList<>();
+//	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	private List<SpecialOffer> specialOffers = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Subscription> subscriptions = new ArrayList<>();
 	
 	public Client() {
@@ -61,13 +66,13 @@ public class Client extends User {
 		this.penaltyPoints = penaltyPoints;
 	}
 
-	public List<SpecialOffer> getSpecialOffers() {
-		return specialOffers;
-	}
-
-	public void setSpecialOffers(List<SpecialOffer> specialOffers) {
-		this.specialOffers = specialOffers;
-	}
+//	public List<SpecialOffer> getSpecialOffers() {
+//		return specialOffers;
+//	}
+//
+//	public void setSpecialOffers(List<SpecialOffer> specialOffers) {
+//		this.specialOffers = specialOffers;
+//	}
 
 	public List<Reservation> getReservations() {
 		return reservations;

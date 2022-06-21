@@ -1,11 +1,13 @@
 package mrsa.tim018.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import mrsa.tim018.dto.AssetDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.AssetType;
@@ -15,7 +17,6 @@ import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetRepository;
 
 @Service
-@Transactional
 public class AssetService {
 	
 	@Autowired
@@ -80,5 +81,16 @@ public class AssetService {
 	
 	public List<Asset> findByAssetTypeAndIsNotDeleted(AssetType assetType) {
 		return assetRepository.findByAssetTypeAndIsDeleted(assetType, false);
+	}
+
+	@Transactional
+	public List<AssetDTO> map(List<Asset> assets) {
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		for (Asset asset: assets) {
+			if (!asset.isDeleted()) {
+				assetsDTO.add(new AssetDTO(asset));
+			}
+		}
+		return assetsDTO;
 	}
 }

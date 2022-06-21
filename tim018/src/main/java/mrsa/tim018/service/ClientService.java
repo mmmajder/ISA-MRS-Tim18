@@ -1,16 +1,22 @@
 package mrsa.tim018.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import mrsa.tim018.dto.ReservationDTO;
+import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationFinances;
+import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.repository.ClientRepository;
 
@@ -67,5 +73,28 @@ public class ClientService {
 		for (Client client : clients) {
 			client.setPenaltyPoints(0);
 		}
+	}
+
+	@Transactional
+	public List<Reservation> getCurrentReservations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = getMyReservationsByType(clientId, assetType);
+		reservations = reservations.stream().filter(r -> r.getTimeRange().getFromDateTime().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+		reservations = reservations.stream().filter(r -> r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
+		return reservations;
+	}
+
+	@Transactional
+	public List<Reservation> getPastReservations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = getMyReservationsByType(clientId, assetType);
+		reservations = reservations.stream().filter(r -> r.getTimeRange().getFromDateTime().isBefore(LocalDateTime.now())).collect(Collectors.toList());
+		return reservations;
+	}
+	
+	private List<Reservation> getMyReservationsByType(Long clientId, AssetType assetType) {
+		Client client = findOne(clientId);
+		List<Reservation> reservations = client.getReservations();
+		if(assetType!=AssetType.ALL)
+			reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
+		return reservations;
 	}
 }

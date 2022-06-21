@@ -24,13 +24,13 @@ export async function getAllMappedClients(callback){
      .catch((err)=> callback(err));
 }
 
-export function addClient(clientData){
+/*export function addClient(clientData){
   getApiCall().post("/clients", clientData)
      .then((responseData) => alert(responseData))
      .catch((err)=> alert(err));
 }
 
-/*export async function deleteClient(id){
+export async function deleteClient(id){
   try {
       const responseData = await getApiCall().delete(`/clients/${id}`);
       return responseData;

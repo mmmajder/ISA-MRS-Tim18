@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ public class AdminController {
 	@Autowired 
 	private AdminReportsService reportService;
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value="/savePassword/{id}")
 	public ResponseEntity<RegistrationDTO> acceptRequest(@PathVariable Long id, @RequestBody String password) {
 		Admin admin = adminService.findOne(id);
@@ -44,6 +46,7 @@ public class AdminController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/report") //LocalDateTime
 	public ResponseEntity<List<Report>> getReports(@RequestParam boolean completed, @RequestParam boolean canceled,	@RequestParam boolean potential, 
 			@RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam String assetType) {

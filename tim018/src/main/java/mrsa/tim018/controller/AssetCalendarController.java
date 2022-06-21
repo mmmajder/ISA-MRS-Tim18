@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,7 @@ public class AssetCalendarController {
 	@Autowired 
 	private SpecialOfferService specialOfferService;
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/allCalendarsForUser/{id}") 
 	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
 		Renter renter = renterService.findOne(id);
@@ -66,6 +68,7 @@ public class AssetCalendarController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}	
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/assetCalendar/{idAsset}") 
 	public ResponseEntity<AssetCalendarsDTO> getAssetsCalendar(@PathVariable Long idAsset) {
 		Asset asset = assetService.findById(idAsset);
@@ -77,6 +80,7 @@ public class AssetCalendarController {
 		}
 	}
 
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
@@ -100,6 +104,7 @@ public class AssetCalendarController {
 
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(value="/remove", consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> removeAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
@@ -119,6 +124,7 @@ public class AssetCalendarController {
 
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/specialOffer/{id}") 
 	public ResponseEntity<SpecialOffer> getSpecOffer(@PathVariable Long id) {
 		SpecialOffer specialOffer = specialOfferService.findById(id);

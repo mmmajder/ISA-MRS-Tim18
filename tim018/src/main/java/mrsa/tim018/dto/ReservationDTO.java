@@ -1,5 +1,7 @@
 package mrsa.tim018.dto;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import mrsa.tim018.model.Asset;
@@ -11,8 +13,8 @@ public class ReservationDTO {
 	
 	private Long id;
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Asset asset;
+	// @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Long asset;
 	
 	private Long clientId;
 	
@@ -34,7 +36,7 @@ public class ReservationDTO {
 	
 	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration, double totalPrice) {
 		this.id = reservation.getID();
-		this.asset = reservation.getAsset();
+		this.asset = reservation.getAsset().getID();
 
 		this.clientId = reservation.getClient().getID();
 		
@@ -45,11 +47,11 @@ public class ReservationDTO {
 		this.totalPrice = totalPrice;
 	}
 
-	public ReservationDTO(Reservation reservation) {
+	public ReservationDTO(Reservation reservation, Long assetId, Long clientId) {
 		this.id = reservation.getID();
-		this.asset = reservation.getAsset();
+		this.asset = assetId;
 
-		this.clientId = reservation.getClient().getID();
+		this.clientId = clientId;
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();
 		this.totalPrice = reservation.getTotalPrice();
@@ -61,11 +63,11 @@ public class ReservationDTO {
 		this.isReviewable = false;
 	}
 	
-	public Asset getAsset() {
+	public Long getAsset() {
 		return asset;
 	}
 
-	public void setAsset(Asset asset) {
+	public void setAsset(Long asset) {
 		this.asset = asset;
 	}
 

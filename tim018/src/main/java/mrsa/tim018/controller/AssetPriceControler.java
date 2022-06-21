@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class AssetPriceControler {
 	@Autowired
 	private AssetService assetService;
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER') || hasRole('ADMIN')")
 	@PostMapping("/{assetId}")
 	  public ResponseEntity<AssetPrice> createNewAssetPrice(@PathVariable Long assetId, @RequestParam("newPrice") double newPrice) {
 	    try {
