@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,25 +73,19 @@ public class AssetController {
 	private RenterService renterService;
 	
 	@Autowired
-	private AssetPriceService assetPriceService;
-	
-	@Autowired
-	private ImageService imageService;
-	
-	@Autowired
 	private ReportService reportService;
-	
-	
+
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
-		AssetDTO returnData = assetService.createAsset(assetDto);
-		if (returnData==null) {
+		AssetDTO created = assetService.createAsset(assetDto);
+		if(created == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
+		return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
-	
-	
+
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PutMapping(value="/{id}", consumes = "application/json" )
 	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
 		AssetDTO returnData = assetService.updateAsset(id, assetDto);
@@ -98,6 +95,7 @@ public class AssetController {
 		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@DeleteMapping(value="/{id}" )
 	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id) {
 		Asset asset = assetService.findById(id);
@@ -109,6 +107,7 @@ public class AssetController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value="/deleteAssetAdmin/{id}" )
 	public ResponseEntity<AssetDTO> deleteAssetAdmin(@PathVariable long id) {
 		Asset asset = assetService.findById(id);
@@ -129,14 +128,7 @@ public class AssetController {
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {
-		List<Asset> assets = assetService.findAll();
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		
-		for (Asset a : assets) {
-			if (!a.isDeleted())
-				assetsDTO.add(new AssetDTO(a));
-		}
-		
+		List<AssetDTO> assetsDTO = assetService.getAllAssets();
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	
@@ -150,6 +142,7 @@ public class AssetController {
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/search/{renterId}")
 	public ResponseEntity<List<AssetDTO>> searchRenterAssets(@PathVariable Long renterId, @RequestParam String address,
 			@RequestParam int numOfPeople, @RequestParam double price, @RequestParam double mark, @RequestParam String startDate, @RequestParam String endDate) {
@@ -184,7 +177,7 @@ public class AssetController {
 		
 		return assetsDTO;
 	}
-	
+
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<AssetDTO> getAsset(@PathVariable Long id) {
 		Asset asset = assetService.findOne(id);
@@ -210,36 +203,26 @@ public class AssetController {
 		return new ResponseEntity<>(assetDTO, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/all/{id}")
 	public ResponseEntity<List<AssetDTO>> getAllAssetsByUser(@PathVariable Long id) {
-		Renter renter = renterService.findOne(id);
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		for (Asset asset: renter.getAssets()) {
-			if (!asset.isDeleted()) {
-				assetsDTO.add(new AssetDTO(asset));
-			}
-		}
+		List<AssetDTO> assetsDTO = assetService.getAllAssetsByUser(id);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/renter/{id}")
 	public ResponseEntity<List<AssetDTO>> getAssetsByRenter(@PathVariable Long id) {
-		
-		Renter renter = renterService.findOne(id);
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		for (Asset asset: renter.getAssets()) {
-			if (!asset.isDeleted()) {
-				assetsDTO.add(new AssetDTO(asset));
-			}
-		}
+		List<Asset> assets = renterService.getMyAssets(id);
+		List<AssetDTO> assetsDTO = assetService.map(assets);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/report/{renterId}") //LocalDateTime
 	public ResponseEntity<List<Report>> getReports(@PathVariable Long renterId, @RequestParam boolean completed, @RequestParam boolean canceled,
 			@RequestParam boolean potential, @RequestParam String fromDate, @RequestParam String toDate, @RequestParam String period, @RequestParam Long assetId) {
 		List<Report> reports = reportService.getReports(renterId, completed, canceled, potential, period, assetId, fromDate, toDate);
-
 		return new ResponseEntity<>(reports, HttpStatus.OK);
 	}
 	
@@ -249,12 +232,7 @@ public class AssetController {
 			return getAssets();
 		}
 		List<Asset> assets =  assetService.findByAssetTypeAndIsNotDeleted(assetType);	
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		for (Asset asset: assets) {
-			if (!asset.isDeleted()) {
-				assetsDTO.add(new AssetDTO(asset));
-			}
-		}
+		List<AssetDTO> assetsDTO = assetService.map(assets);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 }

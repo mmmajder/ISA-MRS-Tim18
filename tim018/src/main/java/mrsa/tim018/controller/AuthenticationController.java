@@ -1,5 +1,8 @@
 package mrsa.tim018.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import mrsa.tim018.dto.LoginDTO;
 import mrsa.tim018.dto.UserRequest;
 import mrsa.tim018.dto.UserTokenState;
 import mrsa.tim018.mapper.UserMapper;
+import mrsa.tim018.model.Role;
 import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.service.EmailService;
@@ -82,6 +86,7 @@ public class AuthenticationController {
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		User user = UserMapper.mapRequestToUser(userRequest);
+		addRoles(user);
 		
 		String randomCode = RandomString.make(64);
 		
@@ -99,5 +104,27 @@ public class AuthenticationController {
 		}
 		
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
+	}
+
+	private void addRoles(User user) {
+		List<Role> roles = new ArrayList<Role>();
+		UserType userType = user.getUserType();
+		roles.add((Role)userService.findRolesByUserType("ROLE_USER"));
+		
+		if(userType == UserType.BoatRenter) {
+			roles.add((Role)userService.findRolesByUserType("ROLE_BOAT_RENTER"));
+		}
+		else if(userType == UserType.Client) {
+			roles.add((Role)userService.findRolesByUserType("ROLE_CLIENT"));
+		}
+		else if(userType == UserType.FishingInstructor) {
+			roles.add((Role)userService.findRolesByUserType("ROLE_FISHING_INSTRUCTOR"));
+		}
+		else if(userType == UserType.ResortRenter) {
+			roles.add((Role)userService.findRolesByUserType("ROLE_RESORT_RENTER"));
+		}
+	
+		user.setRoles(roles);
+		
 	}
 }

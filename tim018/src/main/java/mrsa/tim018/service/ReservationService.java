@@ -17,6 +17,7 @@ import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.dto.ReservationRequestDTO;
 import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Report;
@@ -70,29 +71,7 @@ public class ReservationService {
 		return reservation;
 	}
 	
-	public List<ReservationDTO> map(List<Reservation> reservations){
-		List<ReservationDTO> reservationsDTO = new ArrayList<>();
-		for (Reservation res : reservations) {
-			ReservationDTO dto = map(res);
-			reservationsDTO.add(dto);
-		}
-		return reservationsDTO;
-	}
 	
-	public ReservationDTO map(Reservation res){
-		ReservationDTO dto = new ReservationDTO(res);
-		dto.setCancelable(isCancelable(res));
-		dto.setDuration(calcDuration(res));
-		boolean reviewable = isReviewable(res);
-		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
-			res.setStatus(ReservationStatus.Finished);
-			save(res);
-		}
-		dto.setReviewable(reviewable);
-		
-		return dto;
-	} 
-
 	private boolean isCancelable(Reservation reservation) {
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime startDate = reservation.getTimeRange().getFromDateTime();
@@ -176,7 +155,7 @@ public class ReservationService {
 		return false;
 	}
 
-	public Reservation makeRegularReservation(Reservation reservation) {
+	private Reservation makeRegularReservation(Reservation reservation) {
 		boolean isValid = isValidReservation(reservation);
 		if(!isValid) {
 			return null;
@@ -187,7 +166,9 @@ public class ReservationService {
 		return save(reservation);
 	}
 
-	public Reservation cancelReservation(Reservation reservation) {
+	@Transactional
+	public Reservation cancelReservation(Long reservationId) {
+		Reservation reservation = findOne(reservationId);
 		assetService.cancelReservation(reservation);
 		int cancelationFee = reservation.getCancelationFee();
 		double moneyThatRenterKeeps = reservation.getTotalPrice() * cancelationFee;
@@ -196,18 +177,20 @@ public class ReservationService {
 		return save(reservation);
 	}
 	
-	public List<Reservation> getCurrentRenterReservations(Long renterId){
+	@Transactional
+	public List<ReservationDTO> getCurrentRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> !isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
 		
-		return reservations;
+		return map(reservations);
 	}
 	
-	public List<Reservation> getPastRenterReservations(Long renterId){
+	@Transactional
+	public List<ReservationDTO> getPastRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
 		
-		return reservations;
+		return map(reservations);
 	}
 	
 	public List<Reservation> getAssetReservations(Long assetId){
@@ -222,7 +205,6 @@ public class ReservationService {
 		return (List<Report>) reservationRepository.getMonthlyReports(assetId);
 	}
 
-	
 	//Transaction functions
 	
 	
@@ -254,7 +236,7 @@ public class ReservationService {
 		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
 		SpecialOffer specialOffer = specialOfferService.findByIdAndLock(specialOfferReservationDTO.getSpecialOfferId());
 		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
 		
 		if (specialOffer.getClient()!=null) {
 			throw new Exception("Special offer has already been reserved");
@@ -276,14 +258,57 @@ public class ReservationService {
 		return reservation;
 	}
 
+	@Transactional
 	private Reservation saveRegularReservation(ReservationRequestDTO reservationDto) {
 		Asset asset = assetService.findOneLock(reservationDto.getAssetId());
 		Client client = clientService.findOne(reservationDto.getClientId());
 		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
 		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
 		reservation = makeRegularReservation(reservation);
 		return reservation;
 	}
+
+	public List<ReservationDTO> map(List<Reservation> reservations){
+		List<ReservationDTO> reservationsDTO = new ArrayList<>();
+		for (Reservation res : reservations) {
+			ReservationDTO dto = map(res);
+			reservationsDTO.add(dto);
+		}
+		return reservationsDTO;
+	}
+
+	public ReservationDTO map(Reservation res){
+		Long assetId = res.getAsset().getID();
+		Long clientId = res.getClient().getID();
+		ReservationDTO dto = new ReservationDTO(res, assetId, clientId);
+		return setDtoFields(dto, res);
+	} 
+	
+
+	public ReservationDTO setDtoFields(ReservationDTO dto, Reservation res) {
+		dto.setCancelable(isCancelable(res));
+		dto.setDuration(calcDuration(res));
+		boolean reviewable = isReviewable(res);
+		if(reviewable && res.getStatus()!=ReservationStatus.Finished) {
+			res.setStatus(ReservationStatus.Finished);
+			save(res);
+		}
+		dto.setReviewable(reviewable);
+		return dto;
+	}
+
+	@Transactional
+	public List<ReservationDTO> getCurrentClientResrvations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = clientService.getCurrentReservations(clientId, assetType);
+		return map(reservations);
+	}
+
+	@Transactional
+	public List<ReservationDTO> getPastClientResrvations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = clientService.getPastReservations(clientId, assetType);
+		return map(reservations);
+	}
+
 }

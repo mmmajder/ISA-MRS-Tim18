@@ -36,6 +36,9 @@ const Home = () => {
                 </>
             )
         }
+        else{
+            return  <Container><AssetsPreview isSearch={true}/></Container>
+        }
     }
     else if(getRole() === 'Guest'){
         return <Container><AssetsPreview isSearch={true}/></Container>

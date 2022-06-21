@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +34,6 @@ import mrsa.tim018.service.SubscriptionService;
 @CrossOrigin("*")
 @RequestMapping(value = "/calendar")
 public class AssetCalendarController {
-	@Autowired
-	private AssetCalendarSevice calendarService;
 	
 	@Autowired
 	private AssetService assetService;
@@ -42,9 +41,19 @@ public class AssetCalendarController {
 	@Autowired
 	private RenterService renterService;
 	
+	@Autowired
+	private AssetCalendarSevice calendarSevice;
+	
 	@Autowired 
 	private SpecialOfferService specialOfferService;
 	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private SubscriptionService subscriptionService;
+	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/allCalendarsForUser/{id}") 
 	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
 		Renter renter = renterService.findOne(id);
@@ -60,28 +69,49 @@ public class AssetCalendarController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}	
 	
+
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/assetCalendar/{idAsset}") 
-	public ResponseEntity<AssetCalendarsDTO> getAssetsCalendar(@PathVariable Long idAsset) {
-		Asset asset = assetService.findById(idAsset);
+	public ResponseEntity<AssetCalendar> getAssetsCalendar(@PathVariable Long idAsset) {
+		AssetCalendar data = assetService.getAssetCalendar(idAsset);
 		try {
-			AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar());
 			return new ResponseEntity<>(data, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
-		AppointmentCreationDTO appointmentCreationDTO = calendarService.addAppointment(appointment);
-		if (appointmentCreationDTO==null) {
+//		AppointmentCreationDTO appointmentCreationDTO = calendarSevice.addAppointment(appointment);
+//		if (appointmentCreationDTO==null) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		return new ResponseEntity<>(appointmentCreationDTO, HttpStatus.OK); // what to return
+		
+		// a course must exist
+		Renter renter = renterService.findOne(appointment.getUserId());
+		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(appointmentCreationDTO, HttpStatus.OK); // what to return
-
+		try {
+			Long assetId = assetService.addAppointment(appointment);
+			if(appointment.getType() == AppointmentType.SpecialOffer) {
+				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(assetId);
+				emailService.notifySubscribers(subscriptions, appointment);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 	}
 	
+	
+	
+	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(value="/remove", consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> removeAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
@@ -90,17 +120,15 @@ public class AssetCalendarController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		try {
-			Asset asset = assetService.findById(appointment.getAssetId());
-			AssetCalendar calendar = asset.getCalendar();
-			AssetCalendar newCalendar = calendarService.removeAppointment(calendar, appointment);
-			calendarService.save(newCalendar);
+			assetService.removeAppointment(appointment);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 
 	}
-	
+
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/specialOffer/{id}") 
 	public ResponseEntity<SpecialOffer> getSpecOffer(@PathVariable Long id) {
 		SpecialOffer specialOffer = specialOfferService.findById(id);

@@ -1,5 +1,7 @@
 package mrsa.tim018.dto;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import mrsa.tim018.model.Asset;
@@ -45,11 +47,10 @@ public class ReservationDTO {
 		this.totalPrice = totalPrice;
 	}
 
-	public ReservationDTO(Reservation reservation) {
+	public ReservationDTO(Reservation reservation, Long assetId, Long clientId) {
 		this.id = reservation.getID();
-		this.asset = reservation.getAsset().getID();
-
-		this.clientId = reservation.getClient().getID();
+		this.asset = assetId;
+		this.clientId = clientId;
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();
 		this.totalPrice = reservation.getTotalPrice();

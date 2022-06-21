@@ -15,6 +15,10 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Client extends User {
 
@@ -30,8 +34,10 @@ public class Client extends User {
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<>();
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Subscription> subscriptions = new ArrayList<>();
 	
 	public Client() {
@@ -77,6 +83,14 @@ public class Client extends User {
 	public void setPenaltyPoints(int penaltyPoints) {
 		this.penaltyPoints = penaltyPoints;
 	}
+
+//	public List<SpecialOffer> getSpecialOffers() {
+//		return specialOffers;
+//	}
+//
+//	public void setSpecialOffers(List<SpecialOffer> specialOffers) {
+//		this.specialOffers = specialOffers;
+//	}
 
 	public List<Reservation> getReservations() {
 		return reservations;

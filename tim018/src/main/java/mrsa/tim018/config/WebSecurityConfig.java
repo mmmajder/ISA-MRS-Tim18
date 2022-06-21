@@ -81,22 +81,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests().antMatchers("/auth/**").permitAll()		// /auth/**
 								.antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
 								.antMatchers("/api/foo").permitAll()		// /api/foo
+								
 								.antMatchers("/assets/search").permitAll()
 								.antMatchers("/assets").permitAll()
 								.antMatchers("/assets/{id}").permitAll()
+								.antMatchers("/assets/findByType/{assetType}").permitAll()
+								
 								.antMatchers("/users/verify/{code}").permitAll()
+								.antMatchers("/users/{id}").permitAll()
+								
 								.antMatchers("/photos/assetPhotoIds/{id}").permitAll()
 								.antMatchers("/photos/{id}").permitAll()
 								.antMatchers("/prices/today/{assetId}").permitAll()
-								.antMatchers("/assets/findByType/{assetType}").permitAll()
+								.antMatchers("/calendar/assetCalendar/{idAsset}").permitAll()
+								
 								.antMatchers("/review/assetRating/{assetId}").permitAll()
 								.antMatchers("/review/userRating/{userId}").permitAll()
-								.antMatchers("/calendar/assetCalendar/{idAsset}").permitAll()
 								.antMatchers("/review/asset/{assetId}").permitAll()
 								.antMatchers("/review/{id}").permitAll()
-								.antMatchers("/users/{id}").permitAll()
-								
-								
+
 								
 			// ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
 			// koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi

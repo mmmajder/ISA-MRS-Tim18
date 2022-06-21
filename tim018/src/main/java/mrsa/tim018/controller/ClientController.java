@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.ClientDTO;
+import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.mapper.ClientMapper;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
+import mrsa.tim018.model.Reservation;
+import mrsa.tim018.model.ReservationStatus;
 import mrsa.tim018.service.ClientService;
 import mrsa.tim018.service.DeletationRequestService;
 
@@ -37,7 +41,8 @@ public class ClientController {
 	@Autowired
 	private DeletationRequestService deleteRequestService;	
 
-	@GetMapping(value = "/all")
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<ClientDTO>> getAllClients() {
 
 		List<Client> clients = clientService.findAll();
@@ -50,24 +55,9 @@ public class ClientController {
 
 		return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
 	}
-
-	// GET /api/clients?page=0&size=5&sort=firstName,DESC
-	@GetMapping
-	public ResponseEntity<List<ClientDTO>> getclientsPage(Pageable page) {
-
-		// page object holds data about pagination and sorting
-		// the object is created based on the url parameters "page", "size" and "sort"
-		Page<Client> clients = clientService.findAll(page);
-
-		// convert clients to DTOs
-		List<ClientDTO> clientsDTO = new ArrayList<>();
-		for (Client s : clients) {
-			clientsDTO.add(new ClientDTO(s));
-		}
-
-		return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
-	}
-
+	
+	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ClientDTO> getclient(@PathVariable Long id) {
 		Client client = clientService.findOne(id);
@@ -88,6 +78,7 @@ public class ClientController {
 		return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('CLIENT')")
 	@PutMapping(consumes = "application/json")
 	public ResponseEntity<ClientDTO> updateclient(@RequestBody ClientDTO clientDTO) {
 		clientDTO = clientService.updateclient(clientDTO);
@@ -97,19 +88,6 @@ public class ClientController {
 		return new ResponseEntity<>(clientDTO, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-
-		Client client = clientService.findOne(id);
-
-		if (client != null) {
-			clientService.remove(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
 	@PostMapping(value = "/{id}")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<DeletationRequest> createDeletionRequest(@PathVariable Long id, @RequestBody String reason) {
@@ -121,6 +99,4 @@ public class ClientController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-
 }

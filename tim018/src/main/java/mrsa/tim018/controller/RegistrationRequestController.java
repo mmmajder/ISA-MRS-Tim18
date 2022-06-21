@@ -22,6 +22,7 @@ import mrsa.tim018.dto.RegistrationDTO;
 import mrsa.tim018.model.Admin;
 import mrsa.tim018.model.Registration;
 import mrsa.tim018.model.RequestStatus;
+import mrsa.tim018.model.Role;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.service.AdminService;
 import mrsa.tim018.service.EmailService;
@@ -109,7 +110,13 @@ public class RegistrationRequestController {
 		admin.setFirstName(registerAdminRequestDTO.getName());
 		admin.setLastName(registerAdminRequestDTO.getSurname());
 		admin.setPassword(passwordEncoder.encode(registerAdminRequestDTO.getPassword()));
+		List<Role> roles = new ArrayList<Role>();
+		List<Role> allRoles = userService.findAllRoles();
+		roles.add((Role)allRoles.get(0));						// Admin
+		roles.add((Role)allRoles.get(allRoles.size()-1));		// User
+		admin.setRoles(roles);
 		adminService.save(admin);
+		
 		try {
 			emailService.sendReservationSuccessfullAdmin(registerAdminRequestDTO);
 			logger.info("Poslao mejl");

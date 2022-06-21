@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,8 +70,6 @@ public class ReservationController {
 	@Autowired
 	private LoyaltyProgramService loyaltyProgramService;
 	
-	@Autowired
-	private ReservationFinancesService reservationFinancesService;
 	
 	@Autowired
 	private AssetCalendarSevice assetCalendarSevice;
@@ -86,67 +86,23 @@ public class ReservationController {
 	
 	@GetMapping(value = "/current/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long clientId, @RequestParam AssetType assetType) {
-		Client client = clientService.findOne(clientId);
-		List<Reservation> reservations = client.getReservations();
-		
-		reservations = reservations.stream().filter(r -> r.getTimeRange().getFromDateTime().isAfter(LocalDateTime.now())).collect(Collectors.toList());
-		reservations = reservations.stream().filter(r -> r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
-		if(assetType!=AssetType.ALL)
-			reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
-		
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
-		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
+		List<ReservationDTO> reservations = reservationService.getCurrentClientResrvations(clientId, assetType);
+		return new ResponseEntity<List<ReservationDTO>>( reservations, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/history/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getPastReservationsByType(@PathVariable Long clientId, @RequestParam AssetType assetType) {
-		Client client = clientService.findOne(clientId);
-		List<Reservation> reservations = client.getReservations();
-		reservations = reservations.stream().filter(r -> r.getTimeRange().getFromDateTime().isBefore(LocalDateTime.now())).collect(Collectors.toList());
-		if(assetType!=AssetType.ALL)
-			reservations = reservations.stream().filter(r -> r.getAsset().getAssetType() == assetType).collect(Collectors.toList());
-		
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
-		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
+		List<ReservationDTO> reservations = reservationService.getPastClientResrvations(clientId, assetType);
+		return new ResponseEntity<List<ReservationDTO>>( reservations, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/cancel/{reservationId}")
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
-		Reservation reservation = reservationService.findOne(reservationId);
-		Client client = reservation.getClient();	// TODO: penalty points?
-		//TODO: tri dana do pocetka
-		reservation = reservationService.cancelReservation(reservation);
-		
+		 Reservation reservation = reservationService.cancelReservation(reservationId);
 		return new ResponseEntity<>(reservation, HttpStatus.OK); 
 	}
 	
-	@GetMapping(value = "/current/renter/{renterId}")
-	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
-		Renter renter = renterService.findOne(renterId);
-		
-		if (renter == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
-		List<Reservation> reservations = reservationService.getCurrentRenterReservations(renterId);
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
-		
-		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
-	}
-	
-	@GetMapping(value = "/history/renter/{renterId}")
-	public ResponseEntity<List<ReservationDTO>> getPastReservations(@PathVariable Long renterId) {
-		Renter renter = renterService.findOne(renterId);
-		
-		if (renter == null)
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
-		List<Reservation> reservations = reservationService.getPastRenterReservations(renterId);
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
-		
-		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
-	}
-	
-	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Reservation reservation = null;
@@ -158,6 +114,31 @@ public class ReservationController {
 		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
 	
+	
+	@GetMapping(value = "/current/renter/{renterId}")
+	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
+		Renter renter = renterService.findOne(renterId);
+		
+		if (renter == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+		List<ReservationDTO> reservationsDTO = reservationService.getCurrentRenterReservations(renterId);
+		
+		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/history/renter/{renterId}")
+	public ResponseEntity<List<ReservationDTO>> getPastReservations(@PathVariable Long renterId) {
+		Renter renter = renterService.findOne(renterId);
+		
+		if (renter == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		List<ReservationDTO> reservationsDTO = reservationService.getPastRenterReservations(renterId);
+		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
+	}
+	
+
 	@PostMapping(value = "/reserveSpecialOffer")
 	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
 		Reservation reservation = null;
