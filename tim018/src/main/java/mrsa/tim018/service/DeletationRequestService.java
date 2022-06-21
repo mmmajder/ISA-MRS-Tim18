@@ -95,8 +95,7 @@ public class DeletationRequestService {
 			}
 		} 
 		catch (Exception e) { 
-//			throw e;
-		}
+		}  
 	}
 
 	private void setUserIsDelete(DeletationRequest deletionRequest) {
@@ -120,5 +119,4 @@ public class DeletationRequestService {
         logger.info("< update id:{}", id);
 		return deletionRequest;
 	}
-
 }
