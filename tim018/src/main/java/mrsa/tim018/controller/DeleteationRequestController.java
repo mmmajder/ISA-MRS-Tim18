@@ -66,15 +66,9 @@ public class DeleteationRequestController {
 	@GetMapping(value = "/pending")
 	public ResponseEntity<List<DeletationRequestDTO>> getPendingDeletationRequests() {
 
-		List<DeletationRequest> deletionRequests = deletationRequestService.findPending();
-
-		// convert clients to DTOs
-		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
-		for (DeletationRequest s : deletionRequests) {
-			deletionRequestsDTO.add(new DeletationRequestDTO(s));
-		}  
+		List<DeletationRequestDTO> deletationRequestDTOs = deletationRequestService.getPendingDeletationRequests();
  
-		return new ResponseEntity<>(deletionRequestsDTO, HttpStatus.OK);
+		return new ResponseEntity<>(deletationRequestDTOs, HttpStatus.OK);
 	}  
 	
 	

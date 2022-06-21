@@ -1,5 +1,6 @@
 package mrsa.tim018.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -15,6 +16,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
+import mrsa.tim018.dto.DeletationRequestDTO;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.DeletationRequest;
 import mrsa.tim018.model.Renter;
@@ -118,5 +120,16 @@ public class DeletationRequestService {
 		logger.info(deletionRequest.toString());
         logger.info("< update id:{}", id);
 		return deletionRequest;
+	}
+
+	@Transactional
+	public List<DeletationRequestDTO> getPendingDeletationRequests() {
+		List<DeletationRequest> deletionRequests = findPending();
+		// convert clients to DTOs
+		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
+		for (DeletationRequest s : deletionRequests) {
+			deletionRequestsDTO.add(new DeletationRequestDTO(s));
+		}  
+		return deletionRequestsDTO;
 	}
 }
