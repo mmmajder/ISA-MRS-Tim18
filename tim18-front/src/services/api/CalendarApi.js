@@ -1,8 +1,7 @@
-import {api} from "../Configs.js"
+import {getApiCall} from "../Configs.js"
 
 export async function createAppointment(data) {
-    console.log(data)
-    api.post("/calendar", data, {
+    getApiCall().post("/calendar", data, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -12,8 +11,7 @@ export async function createAppointment(data) {
 }
 
 export async function removePeriodOfAvailability(data){
-    console.log(data)
-    api.post("/calendar/remove", data, {
+    getApiCall().post("/calendar/remove", data, {
         headers: {
             'Content-Type': 'application/json',
         }
@@ -25,30 +23,27 @@ export async function removePeriodOfAvailability(data){
 
 export async function getCalendarData(id){
     try {
-        const responseData = await api.get(`/calendar/allCalendarsForUser/${id}`);
+        const responseData = await getApiCall().get(`/calendar/allCalendarsForUser/${id}`);
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
   }
 
 export async function getAssetCalendarData(idAsset){
 try {
-    const responseData = await api.get(`/calendar/assetCalendar/${idAsset}`);
+    const responseData = await getApiCall().get(`/calendar/assetCalendar/${idAsset}`);
     return responseData;
 } catch (err) {
-    console.log(err.message);
     return err.message
 }
 }
 
 export async function getSpecialOffer(id) {
     try {
-        const responseData = await api.get(`/calendar/specialOffer/${id}`);
+        const responseData = await getApiCall().get(`/calendar/specialOffer/${id}`);
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
 }

@@ -4,11 +4,23 @@ import { acceptdeclineReview } from '../../services/api/ReviewApi';
 import AdminReviewMainData from './AdminReviewMainData';
 import RegistrationRequestButton from './RegistrationRequestButton';
 
+
+
 const ListedAdminReviews = ({request, key, onDelete}) => {
+
+    const deleteCallback = (returnData) => {
+        if(!returnData){
+            alert('Oops, something went wrong')
+        }
+        else
+        {
+            alert('Successfully accepted/denied review')
+            onDelete(request)
+        }
+        }
+
   const acceptRequest = () => {
-      // add pop up
-      acceptdeclineReview(request, true)
-      onDelete(request)
+        acceptdeclineReview(request, true, deleteCallback)
   }
 
   const handleCallback = (childData) =>{
@@ -16,8 +28,7 @@ const ListedAdminReviews = ({request, key, onDelete}) => {
   }
 
   const cancelRequest = () => {
-      acceptdeclineReview(request, false)
-      onDelete(request)
+      acceptdeclineReview(request, false, deleteCallback)
   }
 
 

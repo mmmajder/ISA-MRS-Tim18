@@ -242,5 +242,20 @@ public class AssetController {
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/findByType/{assetType}")
+	public ResponseEntity<List<AssetDTO>> getAssetsByType(@PathVariable AssetType assetType) {
+		if(assetType == AssetType.ALL) {
+			return getAssets();
+		}
+		List<Asset> assets =  assetService.findByAssetTypeAndIsNotDeleted(assetType);	
+		List<AssetDTO> assetsDTO = new ArrayList<>();
+		for (Asset asset: assets) {
+			if (!asset.isDeleted()) {
+				assetsDTO.add(new AssetDTO(asset));
+			}
+		}
+		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
+	}
 }
 

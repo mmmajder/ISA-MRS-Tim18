@@ -11,15 +11,25 @@ const ReasonProfileDeletionModal = ({request, onDelete, action}) => {
     const [reason, setReason] = useState("");
     const handleClose = () => setShow(false);
     const [show, setShow] = useState(true);
+    
+
+    const deletionCallback = (returnData) => {
+        if(!returnData){
+            alert('Oops, something went wrong')
+        }
+        else
+        {
+            alert('Successfull')
+            onDelete(request)
+        }
+        }
 
     const acceptRequest = () => {
-        acceptDeletionRequest(request.id, reason)
-        onDelete(request)
+        acceptDeletionRequest(request.id, reason, deletionCallback)
     }
 
     const declineRequest = () => {
-        declineDeletionRequest(request.id, reason)
-        onDelete(request)
+        declineDeletionRequest(request.id, reason, deletionCallback)
     }
 
     if (action=="accept") {

@@ -5,6 +5,8 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,15 +46,18 @@ public class UserController {
 	} 
 
 	@GetMapping("/whoami")
-//	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<User> user(Principal user) {
-		User uuser = userService.findByEmail(user.getName());
+	public ResponseEntity<User> loggedUser(Authentication authentication) {
+		if(authentication == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		User uuser = userService.findByEmail(authentication.getName());
 		if (uuser == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 		return new ResponseEntity<>(uuser, HttpStatus.OK);
 	}
+	
+	
 	
 	@GetMapping("/verify/{code}")
 	public ResponseEntity<User> verifyUser(@PathVariable String code) {

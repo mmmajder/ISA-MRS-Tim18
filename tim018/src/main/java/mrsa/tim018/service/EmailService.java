@@ -41,7 +41,12 @@ public class EmailService {
 	private ClientService clientService;
 
 	private String siteURL = "http://localhost:3000";
-	private String ourEmail = "isamrs018@gmail.com";//isamrs018@outlook.com
+
+	//private String ourEmail = "isamrs018@outlook.com";
+	private String ourEmail = "isaaatim18@hotmail.com";
+	
+//	private String ourEmail = "isamrs018@gmail.com";
+	
 	
 	@Async
 	public void sendNotificaitionAsync(User user) throws MessagingException, UnsupportedEncodingException  {
@@ -90,7 +95,7 @@ public class EmailService {
 	} 
 	
 	@Async
-	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl)  {
+	public void sendDeleteProfileResponseAsync(RequestStatus status, String adminExpl) throws Exception  {
 		try {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		if (status == RequestStatus.Accepted)
@@ -120,7 +125,7 @@ public class EmailService {
 
 		System.out.println("Email poslat!");
 		} catch (Exception e) {
-			//throw new MailAuthenticationException("Error during mail sending");
+			throw e;
 		}
 	}
 

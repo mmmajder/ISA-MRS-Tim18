@@ -53,9 +53,11 @@ const CreatePeriodOfAvailabilityModal = (props) => {
     useEffect(() => {
       setAssetId(localStorage.getItem("assetId"))
       async function fetchAssets(){
+        if (userId!=undefined) {
           const requestData = await getAllAssetsByUser(userId);
           setAssets(!!requestData ? requestData.data : {});
           return requestData;
+        }
       }
       fetchAssets();
     }, [user])

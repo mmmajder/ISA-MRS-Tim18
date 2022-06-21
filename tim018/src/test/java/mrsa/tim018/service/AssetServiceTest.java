@@ -127,7 +127,7 @@ public class AssetServiceTest {
 		currentAsset.setRules("rules");
 		currentAsset.setSubscriptions(new ArrayList<>());
 		
-		when(assetRepositoryMock.findById(1000001L)).thenReturn(currentAsset);
+		when(assetRepositoryMock.findById(1000001L)).thenReturn(Optional.of(currentAsset));
 		Asset assetForUpdate = assetService.findById(AssetConstants.DB_ID);
 		assetForUpdate.setAddress(AssetConstants.NEW_ADDRESS);
 		assetForUpdate.setDescription(AssetConstants.NEW_DESCRIPTION);
@@ -140,7 +140,7 @@ public class AssetServiceTest {
 		
 		Asset newAsset = assetService.save(assetForUpdate);
 		
-		when(assetRepositoryMock.findById(1000001L)).thenReturn(newAsset);
+		when(assetRepositoryMock.findById(1000001L)).thenReturn(Optional.of(newAsset));
 		
 		assertThat(assetForUpdate).isNotNull();
 		
@@ -176,7 +176,7 @@ public class AssetServiceTest {
 		asset.setRules("rules");
 		asset.setSubscriptions(new ArrayList<>());
 		
-		when(assetRepositoryMock.findById(1000001L)).thenReturn(asset);
+		when(assetRepositoryMock.findById(1000001L)).thenReturn(Optional.of(asset));
 		
 		Asset assetForDelete = assetService.findById(1000001L);
 		assetForDelete.setDeleted(true);
@@ -186,7 +186,7 @@ public class AssetServiceTest {
 		
 		assertThat(assetForDelete).isNotNull();
 		
-		when(assetRepositoryMock.findById(1000001L)).thenReturn(assetForDelete);
+		when(assetRepositoryMock.findById(1000001L)).thenReturn(Optional.of(assetForDelete));
 		
 		assetForDelete = assetService.findById(AssetConstants.DB_ID); // verifikacija da se u bazi nalaze izmenjeni podaci
         assertThat(assetForDelete.isDeleted()).isEqualTo(true);

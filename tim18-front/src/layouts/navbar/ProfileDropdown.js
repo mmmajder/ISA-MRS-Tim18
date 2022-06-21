@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getLogged } from '../../services/api/LoginApi.js';
 import {useState, useEffect} from 'react';
 
-export default function ProfileDropdown({userId}){
+export default function ProfileDropdown({userId, userType}){
 
     const profileTitle = <span><FontAwesomeIcon icon={faUser} /> Profile</span>;
 
-    if(userId === "client"){
+    if(userId === "client" || userType === "Admin"){
         return <NavDropdown title={profileTitle}> 
                 <NavDropdown.Item href="/profile"><FontAwesomeIcon icon={faUser} /> My profile</NavDropdown.Item> 
                 <NavDropdown.Item href="/settings"><FontAwesomeIcon icon={faCogs} /> Settings</NavDropdown.Item>

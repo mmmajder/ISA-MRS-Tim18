@@ -1,7 +1,7 @@
-import {api} from "../Configs.js"
+import {getApiCall} from "../Configs.js"
 
 export async function createDeleteRequest(id, reason, callback){
-    await api.post(`/renters/deleteionRequest/${id}`, reason)
+    await getApiCall().post(`/renters/deleteionRequest/${id}`, reason)
              .then((responseData) => {callback(responseData.data)})
              .catch(()=> {callback(false)});
   }
@@ -9,47 +9,40 @@ export async function createDeleteRequest(id, reason, callback){
 
 export async function getRenterByID(id){
     try {
-        console.log("stigao")
-        console.log(id)
-        const responseData = await api.get(`/users/${id}`, {
+        const responseData = await getApiCall().get(`/users/${id}`, {
           headers: {
               'Content-Type': 'application/json',
           }
       });
-        console.log(responseData)
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
   }
   
   export async function getRenter(id){
     try {
-        const responseData = await api.get(`/users/${id}`);
+        const responseData = await getApiCall().get(`/users/${id}`);
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
   }
 
   export async function updateRenter(data){
     try {
-        const responseData = await api.put(`/renters`, data);
+        const responseData = await getApiCall().put(`/renters`, data);
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
   }
 
   export async function getRenterByAssetId(assetId){
     try {
-        const responseData = await api.get(`/renters/assetId/${assetId}`);
+        const responseData = await getApiCall().get(`/renters/assetId/${assetId}`);
         return responseData;
     } catch (err) {
-        console.log(err.message);
         return err.message
     }
   }

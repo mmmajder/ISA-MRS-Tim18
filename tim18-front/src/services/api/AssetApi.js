@@ -1,28 +1,28 @@
-import {api} from "../Configs.js"
+import {getApiCall} from "../Configs.js"
 
 export async function createAsset(data) {
-    api.post("/assets", data)
+    getApiCall().post("/assets", data)
      .then((responseData) => {})
      .catch((err)=> alert(err));
 }
 
 export async function deleteAsset(id) {
     console.log(id)
-    api.delete(`/assets/${id}`)
+    getApiCall().delete(`/assets/${id}`)
      .then((responseData) => {})
      .catch((err)=> alert(err));
 }
 
 export async function deleteAssetAdmin(id) {
     console.log(id)
-    api.delete(`/assets/deleteAssetAdmin/${id}`)
+    getApiCall().delete(`/assets/deleteAssetAdmin/${id}`)
      .then((responseData) => {})
      .catch((err)=> alert(err));
 }
 
 export async function getAssetById(id){
   try {
-      const responseData = await api.get(`/assets/${id}`);
+      const responseData = await getApiCall().get(`/assets/${id}`);
       return responseData;
   } catch (err) {
       console.log(err.message);
@@ -31,14 +31,14 @@ export async function getAssetById(id){
 }
 
 export async function getCallbackAssetById(callback, id){
-    api.get(`/assets/${id}`)
+    getApiCall().get(`/assets/${id}`)
        .then((responseData) => callback(responseData.data))
        .catch((err)=> callback(err));
   }
 
 export async function getAssetsByUserId(userId){
     try {
-        const responseData = await api.get(`/assets/all/${userId}`);
+        const responseData = await getApiCall().get(`/assets/all/${userId}`);
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -49,7 +49,7 @@ export async function getAssetsByUserId(userId){
 
 export async function getAssets(){
   try {
-      const responseData = await api.get(`/assets`);
+      const responseData = await getApiCall().get(`/assets`);
       return responseData;
   } catch (err) {
       console.log(err.message);
@@ -60,7 +60,7 @@ export async function getAssets(){
 export async function getFilteredAssets(assetType, address, numOfPeople, price, mark, startDate, endDate){
     try {
         console.log(assetType, address, numOfPeople, price, mark);
-        const responseData = await api.get(`/assets/search`,  {
+        const responseData = await getApiCall().get(`/assets/search`,  {
             params: {
                 "assetType": assetType,
                 "address" : address,
@@ -82,7 +82,7 @@ export async function getFilteredAssets(assetType, address, numOfPeople, price, 
     try {
         console.log(address, numOfPeople, price, mark);
         console.log( startDate, endDate)
-        const responseData = await api.get(`/assets/search/${renterId}`,  {
+        const responseData = await getApiCall().get(`/assets/search/${renterId}`,  {
             params: {
                 "address" : address,
                 "numOfPeople":  numOfPeople, 
@@ -101,7 +101,7 @@ export async function getFilteredAssets(assetType, address, numOfPeople, price, 
 
 export async function getAssetsByRenter(renterId){
     try {
-        const responseData = await api.get(`/assets/renter/${renterId}`);
+        const responseData = await getApiCall().get(`/assets/renter/${renterId}`);
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -111,7 +111,7 @@ export async function getAssetsByRenter(renterId){
 
 export async function createNewAsset(asset){
     try {
-        const responseData = await api.post(`/assets`, asset);
+        const responseData = await getApiCall().post(`/assets`, asset);
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -122,7 +122,7 @@ export async function createNewAsset(asset){
 export async function updateAsset(id, asset){
     try {
         console.log("updateAsset id " + id);
-        const responseData = await api.put(`/assets/${id}`, asset);
+        const responseData = await getApiCall().put(`/assets/${id}`, asset);
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -132,7 +132,7 @@ export async function updateAsset(id, asset){
 
 export async function getAllAssetsByUser(userId){
     try {
-        const responseData = await api.get(`/assets/all/${userId}`, {
+        const responseData = await getApiCall().get(`/assets/all/${userId}`, {
           headers: {
               'Content-Type': 'application/json',
           }
@@ -151,7 +151,7 @@ export async function createNewPriceForAsset(assetId, newPrice) {
      try {
         let formData = new FormData();
         formData.append("newPrice", newPrice);
-        const responseData = await api.post(`/prices/${assetId}`, formData)
+        const responseData = await getApiCall().post(`/prices/${assetId}`, formData)
         return responseData;
     } catch (err) {
         console.log(err.message);
@@ -161,7 +161,7 @@ export async function createNewPriceForAsset(assetId, newPrice) {
 
 export async function getAssetTodayPrice(assetId) {
     try {
-       const responseData = await api.get(`/prices/today/${assetId}`)
+       const responseData = await getApiCall().get(`/prices/today/${assetId}`)
        return responseData;
    } catch (err) {
        console.log(err.message);
@@ -172,7 +172,7 @@ export async function getAssetTodayPrice(assetId) {
 //reports
 export async function getReport(renterId, reportFilters) {
     try {
-       const responseData = await api.get(`/assets/report/${renterId}`, {
+       const responseData = await getApiCall().get(`/assets/report/${renterId}`, {
         params: {
             "completed" : reportFilters.completed,
             "canceled":  reportFilters.canceled, 
@@ -188,4 +188,11 @@ export async function getReport(renterId, reportFilters) {
        console.log(err.message);
        return err.message
    }
+}
+
+
+export async function getAssetsByType(callback, assetType){
+    await getApiCall().get(`/assets/findByType/${assetType}`)
+            .then((responseData) => {console.log(responseData.data); callback(responseData.data)})
+            .catch(()=> {callback(false)});
 }

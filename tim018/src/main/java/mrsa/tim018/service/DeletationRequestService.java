@@ -81,7 +81,7 @@ public class DeletationRequestService {
 			setUserIsDelete(deletionRequest);
         } 
         
-       // sendRequestAcceptDeclineMail(comment, isAccept);
+        sendRequestAcceptDeclineMail(comment, isAccept);
 		 
 		return deletionRequest;  
 	}
@@ -95,7 +95,7 @@ public class DeletationRequestService {
 			}
 		} 
 		catch (Exception e) { 
-			throw e;
+//			throw e;
 		}
 	}
 

@@ -4,7 +4,8 @@ import UpdateForm from './components/forms/UpdateForm.js';
 import AssetsPreview from './components/asset/AssetsPreview.js';
 import CalendarAsset from './components/forms/calendar/CalendarAsset.js';
 import UpdateRenter from './components/forms/UpdateInstructorProfileForm.js';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { AccountBox } from "./components/forms/Login";
 import styled from "styled-components";
 import '../src/assets/styles/login.css'
@@ -85,7 +86,8 @@ function App() {
             {/* <ResortRenterNavbar userType={localStorage.getItem('userType')}/> */}
               <Routes>
                 <Route path='' element={<ProtectedRoute isAllowedUser={user}>{chooseNavbar(user)} </ProtectedRoute>}>
-                  <Route path="/home" element={home} /> 
+                  <Route path='/home' element={home} /> 
+
                   {/* For other's Profile page */}
                   <Route exact path="/profile" element={<Container><MyProfile /></Container>} /> 
                   <Route path="/profile/:id" element={<Container><OtherProfile /></Container>} /> 
@@ -148,7 +150,6 @@ function ChooseSettings(userType){
 }
 
 function chooseNavbar(userType){
-  console.log("choosenavbar"+userType);
   let navBar = <></>
   if(userType === "Client"){
     navBar =  <ClientNavbar />

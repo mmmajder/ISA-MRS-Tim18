@@ -12,9 +12,19 @@ const CommentClientsReviewModal = ({request, onDelete}) => {
     const handleClose = () => setShow(false);
     const [show, setShow] = useState(true);
 
+    const commentCallback = (returnData) => {
+      if(!returnData){
+          alert('Oops, something went wrong')
+      }
+      else
+      {
+          alert('Successfull')
+          onDelete(request)
+      }
+      }
+
     const acceptRequest = () => {
-        sendCommentOnComplaint(request.id, emailClient, emailRenter)
-        onDelete(request)
+        sendCommentOnComplaint(request.id, emailClient, emailRenter, commentCallback)
     }
 
     return (<>

@@ -11,8 +11,8 @@ public class ReservationDTO {
 	
 	private Long id;
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Asset asset;
+	// @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Long asset;
 	
 	private Long clientId;
 	
@@ -34,7 +34,7 @@ public class ReservationDTO {
 	
 	public ReservationDTO(Reservation reservation, boolean cancelable, Long duration, double totalPrice) {
 		this.id = reservation.getID();
-		this.asset = reservation.getAsset();
+		this.asset = reservation.getAsset().getID();
 
 		this.clientId = reservation.getClient().getID();
 		
@@ -47,7 +47,7 @@ public class ReservationDTO {
 
 	public ReservationDTO(Reservation reservation) {
 		this.id = reservation.getID();
-		this.asset = reservation.getAsset();
+		this.asset = reservation.getAsset().getID();
 
 		this.clientId = reservation.getClient().getID();
 		this.timeRange = reservation.getTimeRange();
@@ -61,11 +61,11 @@ public class ReservationDTO {
 		this.isReviewable = false;
 	}
 	
-	public Asset getAsset() {
+	public Long getAsset() {
 		return asset;
 	}
 
-	public void setAsset(Asset asset) {
+	public void setAsset(Long asset) {
 		this.asset = asset;
 	}
 

@@ -192,7 +192,7 @@ public class ReviewService {
 		review = updateReviewStatus(id, isAccepted);
 		Client client = userService.findClient(review.getClientID());
 		
-//		sendMailChangeReviewStatus(isAccepted, review, client);
+		sendMailChangeReviewStatus(isAccepted, review, client);
 		return review; 
 		
 	}
@@ -206,7 +206,7 @@ public class ReviewService {
 			} else {
 				renter = (Renter) userService.findOne(review.getRenterID());
 			}
-//			emailService.sendReviewMail(review, client, renter, isAccepted);
+			emailService.sendReviewMail(review, client, renter, isAccepted);
 		} catch (Exception e) {
 			throw new MailAuthenticationException("Error during mail sending");
 		}
@@ -239,8 +239,8 @@ public class ReviewService {
 		Review review = findOnePending(id);
 		review.setStatus(RequestStatus.Accepted);
 		save(review);
-//		emailService.sendMailsClientsComplaint(mailData.getMailClient(), mailData.getMailRenter(),
-//					review.getClientID());
+		emailService.sendMailsClientsComplaint(mailData.getMailClient(), mailData.getMailRenter(),
+					review.getClientID());
 		return review;
 	}
 	
@@ -253,7 +253,7 @@ public class ReviewService {
 		client.setPenaltyPoints(client.getPenaltyPoints() + 1);
 		userService.saveClient(client);
 		Renter renter = (Renter) userService.findOne(review.getRenterID());
-	//	emailService.sendPointMail(review, client, renter, true);
+		emailService.sendPointMail(review, client, renter, true);
 		return review;
 	}
 
@@ -264,7 +264,7 @@ public class ReviewService {
 		save(review);
 		Client client = (Client) userService.findOne(review.getClientID());
 		Renter renter = (Renter) userService.findOne(review.getRenterID());
-//		emailService.sendPointMail(review, client, renter, false);
+		emailService.sendPointMail(review, client, renter, false);
 		return review;
 	}
 }

@@ -29,26 +29,26 @@ import mrsa.tim018.service.RegistrationRequestService;
 import mrsa.tim018.service.UserService;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/regRequests")
 public class RegistrationRequestController {
 	@Autowired
 	private RegistrationRequestService registrationRequestService;
-	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private UserService userService;
 
 	private Logger logger = LoggerFactory.logger(RegistrationRequestController.class);
-	
+
 	@GetMapping(value = "/active")
 	public ResponseEntity<List<RegistrationDTO>> getActiveRegistrationRequests() {
 		List<Registration> registrations = registrationRequestService.findAll();
@@ -59,41 +59,41 @@ public class RegistrationRequestController {
 		}
 		return new ResponseEntity<>(retData, HttpStatus.OK);
 	}
-	
-	@PutMapping(value="/accept/{id}")
+
+	@PutMapping(value = "/accept/{id}")
 	public ResponseEntity<RegistrationDTO> acceptRequest(@PathVariable Integer id) {
 		Registration registration = registrationRequestService.findById(id);
-		if (registration==null) {
+		if (registration == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		registration.setStatus(RequestStatus.Accepted);
 		registrationRequestService.save(registration);
-		
+
 		try {
 			emailService.sendRegistrationResponseAsync(RequestStatus.Accepted, "");
-		}catch( Exception e ){
+		} catch (Exception e) {
 			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
-	
-	@PutMapping(value="/decline/{id}")
+
+	@PutMapping(value = "/decline/{id}")
 	public ResponseEntity<RegistrationDTO> declineRequest(@PathVariable Integer id, @RequestBody String comment) {
 		Registration registration = registrationRequestService.findById(id);
-		if (registration==null) {
+		if (registration == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		registration.setStatus(RequestStatus.Declined);
 		registrationRequestService.save(registration);
 		try {
 			emailService.sendRegistrationResponseAsync(RequestStatus.Declined, comment);
-		}catch( Exception e ){
+		} catch (Exception e) {
 			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
-	
-	@PutMapping(value="/registerAdmin/")
+
+	@PutMapping(value = "/registerAdmin/")
 	public ResponseEntity<RegistrationDTO> registerAdmin(@RequestBody RegisterAdminRequestDTO registerAdminRequestDTO) {
 		Admin admin = new Admin();
 		admin.setAlreadyLogged(false);
@@ -104,8 +104,8 @@ public class RegistrationRequestController {
 		admin.setUserType(UserType.Admin);
 		admin.setState("");
 		admin.setEmail(registerAdminRequestDTO.getEmail());
-		admin.setDeleted(false); 
-		admin.setEnabled(true); 
+		admin.setDeleted(false);
+		admin.setEnabled(true);
 		admin.setFirstName(registerAdminRequestDTO.getName());
 		admin.setLastName(registerAdminRequestDTO.getSurname());
 		admin.setPassword(passwordEncoder.encode(registerAdminRequestDTO.getPassword()));
@@ -113,12 +113,10 @@ public class RegistrationRequestController {
 		try {
 			emailService.sendReservationSuccessfullAdmin(registerAdminRequestDTO);
 			logger.info("Poslao mejl");
-		}catch( Exception e ){
+		} catch (Exception e) {
 			logger.info("Greska prilikom slanja emaila: " + e.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
-	
-	
 
 }

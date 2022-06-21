@@ -15,10 +15,8 @@ export default function GuestNavbar(){
         <GuestNote/>
         <Navbar.Collapse className="ps-2">
             <Nav className="ms-auto">
-                <Nav.Link href="/resorts/all"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
+                <Nav.Link href="/home"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <Nav.Link href="/logout"><FontAwesomeIcon icon={faChevronCircleRight} /> Login/Register</Nav.Link>
-                
-                <Nav.Link href="#"><FontAwesomeIcon icon={faCircleQuestion} /> Help </Nav.Link>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

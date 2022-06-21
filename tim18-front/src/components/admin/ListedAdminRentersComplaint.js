@@ -9,17 +9,26 @@ import RegistrationRequestButton from './RegistrationRequestButton';
 const ListedAdminRentersComplaint = ({request, key, onDelete}) => {
     const acceptRequest = () => {
         // add pop up
-        addPoint(request);
-        onDelete(request)
+        addPoint(request, pointCallback);
     }
 
     const handleCallback = (childData) =>{
         onDelete(childData)
     }
 
+    const pointCallback = (returnData) => {
+        if(!returnData){
+            alert('Oops, something went wrong')
+        }
+        else
+        {
+            alert('Successfull')
+            onDelete(request)
+        }
+        }
+
     const cancelRequest = () => {
-        declineAddPoint(request)
-        onDelete(request)
+        declineAddPoint(request, pointCallback)
     }
 
 

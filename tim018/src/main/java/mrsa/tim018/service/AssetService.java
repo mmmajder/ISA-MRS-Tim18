@@ -3,6 +3,7 @@ package mrsa.tim018.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,16 @@ import mrsa.tim018.model.AssetPrice;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Boat;
 import mrsa.tim018.model.Renter;
+import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Resort;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
+import mrsa.tim018.repository.AdventureRepository;
 import mrsa.tim018.repository.AssetRepository;
+import mrsa.tim018.repository.BoatRepository;
+import mrsa.tim018.repository.RenterRepository;
+import mrsa.tim018.repository.ResortRepository;
 
 @Service
 @Transactional
@@ -56,6 +62,15 @@ public class AssetService {
 	@Autowired
 	private ImageService imageService;
 	
+	@Autowired
+	private BoatRepository boatRepository;
+	
+	@Autowired
+	private AdventureRepository adventureRepository;
+	
+	@Autowired
+	private ResortRepository resortRepository;
+	
 	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
 
 	public Asset save(Asset asset) {
@@ -71,7 +86,7 @@ public class AssetService {
 	}
 	
 	public Asset findById(long id) {
-		return assetRepository.findOneById(id);
+		return assetRepository.findById(id);
 	}
 	
 	public List<Asset> findAllByRenterId(long id) {
@@ -245,6 +260,27 @@ public class AssetService {
 	}
 
 	public Asset findOneLock(Long assetId) {
-		return assetRepository.findOneById(assetId);
+		Asset asset = assetRepository.findById(assetId).orElse(null);
+		if (asset==null) {
+			return asset;
+		}
+		switch (asset.getAssetType()) {
+		case BOAT:
+			asset = boatRepository.findOneByIdLock(assetId);
+			break;
+		case FISHING_ADVENTURE:
+			asset = adventureRepository.findOneByIdLock(assetId);
+			break;
+		case RESORT:
+			asset = resortRepository.findOneByIdLock(assetId);
+			break;
+		default:
+			break;
+		}
+		return asset;
+	}
+	
+	public List<Asset> findByAssetTypeAndIsNotDeleted(AssetType assetType) {
+		return assetRepository.findByAssetTypeAndIsDeleted(assetType, false);
 	}
 }
