@@ -73,71 +73,19 @@ public class AssetController {
 	private RenterService renterService;
 	
 	@Autowired
-	private AssetPriceService assetPriceService;
-	
-	@Autowired
-	private ImageService imageService;
-	
-	@Autowired
 	private ReportService reportService;
 	
-	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
-	
+
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
-		AssetType type = assetDto.getAssetType();
-		Long renterId = assetDto.getRenterId();
-		
-		switch (type) {
-		case RESORT: 
-			Resort resort = AssetMapper.mapToResort(assetDto);
-			setCalendarAndRenter(resort, renterId);
-			resort = resortService.save(resort);
-			createPrice(resort.getID(), assetDto.getPrice());
-			setDefaultPicture(resort.getID());
-			return new ResponseEntity<>(new AssetDTO(resort), HttpStatus.CREATED);
-		case BOAT:  
-			Boat boat = AssetMapper.mapToBoat(assetDto);
-			setCalendarAndRenter(boat, renterId);
-			boat = boatService.save(boat);
-			createPrice(boat.getID(), assetDto.getPrice());
-			setDefaultPicture(boat.getID());
-			return new ResponseEntity<>(new AssetDTO(boat), HttpStatus.CREATED);
-		case FISHING_ADVENTURE:  
-			Adventure adventure = AssetMapper.mapToAdventure(assetDto);
-			setCalendarAndRenter(adventure, renterId);
-			adventure = adventureService.save(adventure);
-			createPrice(adventure.getID(), assetDto.getPrice());
-			setDefaultPicture(adventure.getID());
-			return new ResponseEntity<>(new AssetDTO(adventure), HttpStatus.CREATED);
-		default: 
+		AssetDTO created = assetService.createAsset(assetDto);
+		if(created == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
+		return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
-	
-	private void setDefaultPicture(Long assetId) {
-		try {
-			byte[] imageFyle = imageService.readImageFromAddress(defaultAssetPicturePath);
-			imageService.store(assetId, imageFyle);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void createPrice(Long assetId, double price) {
-		LocalDate startDate = LocalDate.now();
-		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
-		assetPriceService.save(assetPrice);
-	}
-	
-	private void setCalendarAndRenter(Asset asset, Long renterId) {
-		AssetCalendar assetCalendar = assetCalendarSevice.createNewCalendar();
-		asset.setCalendar(assetCalendar);
-		Renter renter = renterService.findOne(renterId);
-		asset.setRenter(renter);
-	}
-	
+
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PutMapping(value="/{id}", consumes = "application/json" )
 	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {

@@ -41,7 +41,8 @@ public class ClientController {
 	@Autowired
 	private DeletationRequestService deleteRequestService;	
 
-	@GetMapping(value = "/all")
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<ClientDTO>> getAllClients() {
 
 		List<Client> clients = clientService.findAll();
@@ -54,7 +55,9 @@ public class ClientController {
 
 		return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
 	}
-
+	
+	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ClientDTO> getclient(@PathVariable Long id) {
 		Client client = clientService.findOne(id);

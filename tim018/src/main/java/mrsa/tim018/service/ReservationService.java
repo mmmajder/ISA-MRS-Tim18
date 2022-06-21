@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.ReservationDTO;
+import mrsa.tim018.dto.ReservationRequestDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
+import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
@@ -35,6 +37,9 @@ public class ReservationService {
 	
 	@Autowired
 	private RenterService renterService;
+
+	@Autowired
+	private LoyaltyProgramService loyaltyProgramService;
 
 	public Reservation save(Reservation reservation) {
 		return reservationRepository.save(reservation);
@@ -134,7 +139,7 @@ public class ReservationService {
 		return false;
 	}
 
-	public Reservation makeRegularReservation(Reservation reservation) {
+	private Reservation makeRegularReservation(Reservation reservation) {
 		boolean isValid = isValidReservation(reservation);
 		if(!isValid) {
 			return null;
@@ -145,7 +150,9 @@ public class ReservationService {
 		return save(reservation);
 	}
 
-	public Reservation cancelReservation(Reservation reservation) {
+	@Transactional
+	public Reservation cancelReservation(Long reservationId) {
+		Reservation reservation = findOne(reservationId);
 		assetService.cancelReservation(reservation);
 		int cancelationFee = reservation.getCancelationFee();
 		double moneyThatRenterKeeps = reservation.getTotalPrice() * cancelationFee;
@@ -221,6 +228,17 @@ public class ReservationService {
 	public List<ReservationDTO> getPastClientResrvations(Long clientId, AssetType assetType) {
 		List<Reservation> reservations = clientService.getPastReservations(clientId, assetType);
 		return map(reservations);
+	}
+
+	@Transactional
+	public Reservation makeReservation(ReservationRequestDTO reservationDto) {
+		Asset asset = assetService.findOne(reservationDto.getAssetId());
+		Client client = clientService.findOne(reservationDto.getClientId());
+		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
+		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
+		reservation.setCancelationFee(asset.getCancelationConditions());
+		return makeRegularReservation(reservation);
 	}
 	
 }

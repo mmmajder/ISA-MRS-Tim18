@@ -37,8 +37,6 @@ import mrsa.tim018.service.SubscriptionService;
 @CrossOrigin("*")
 @RequestMapping(value = "/calendar")
 public class AssetCalendarController {
-	@Autowired
-	private AssetCalendarSevice calendarService;
 	
 	@Autowired
 	private AssetService assetService;
@@ -55,21 +53,21 @@ public class AssetCalendarController {
 	@Autowired 
 	private SpecialOfferService specialOfferService;
 	
-//	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
-//	@GetMapping(value = "/allCalendarsForUser/{id}") 
-//	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
-//		Renter renter = renterService.findOne(id);
-//		List<Asset> assets = renter.getAssets();
-//		List<AssetCalendarsDTO> data = new ArrayList<>();
-//		for (Asset asset : assets) {
-//			try {
-//				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
-//			} catch (Exception e) { 
-//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//			}
-//		}
-//		return new ResponseEntity<>(data, HttpStatus.OK);
-//	}	
+	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
+	@GetMapping(value = "/allCalendarsForUser/{id}") 
+	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
+		Renter renter = renterService.findOne(id);
+		List<Asset> assets = renter.getAssets();
+		List<AssetCalendarsDTO> data = new ArrayList<>();
+		for (Asset asset : assets) {
+			try {
+				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
+			} catch (Exception e) { 
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}	
 	
 
 	@PreAuthorize("hasRole('USER')")
@@ -113,17 +111,14 @@ public class AssetCalendarController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		try {
-			Asset asset = assetService.findById(appointment.getAssetId());
-			AssetCalendar calendar = asset.getCalendar();
-			AssetCalendar newCalendar = calendarService.removeAppointment(calendar, appointment);
-			calendarService.save(newCalendar);
+			assetService.removeAppointment(appointment);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
 
 	}
-	
+
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/specialOffer/{id}") 
 	public ResponseEntity<SpecialOffer> getSpecOffer(@PathVariable Long id) {

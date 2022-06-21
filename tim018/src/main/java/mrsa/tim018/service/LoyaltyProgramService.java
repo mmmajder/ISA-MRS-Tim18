@@ -20,6 +20,9 @@ public class LoyaltyProgramService {
 	@Autowired
 	private LoyaltyProgramRepository loyaltyProgramRepository;
 	
+	@Autowired
+	private ReservationFinancesService reservationFinancesService;
+	
 	public LoyaltyProgram findById(long id) {
 		return loyaltyProgramRepository.findById(id);
 	}
@@ -80,9 +83,9 @@ public class LoyaltyProgramService {
 		
 	}
 	
-	public LoyaltyState getLoyaltyState(ReservationFinancesService reservationFinancesService, LoyaltyProgramService loyaltyProgramService, Client client) {
+	public LoyaltyState getLoyaltyState(Client client) {
 		return new LoyaltyState(reservationFinancesService.getLast().getReservationTax(), 
-				loyaltyProgramService.getLoyaltyPercent(client, UserDiscountType.Client), 
-				loyaltyProgramService.getLoyaltyPercent(client, UserDiscountType.Renter));
+				getLoyaltyPercent(client, UserDiscountType.Client), 
+				getLoyaltyPercent(client, UserDiscountType.Renter));
 	}
 }

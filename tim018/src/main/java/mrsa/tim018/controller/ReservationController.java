@@ -71,8 +71,6 @@ public class ReservationController {
 	@Autowired
 	private LoyaltyProgramService loyaltyProgramService;
 	
-	@Autowired
-	private ReservationFinancesService reservationFinancesService;
 	
 	@Autowired
 	private AssetCalendarSevice assetCalendarSevice;
@@ -101,9 +99,7 @@ public class ReservationController {
 	
 	@PutMapping(value = "/cancel/{reservationId}")
 	public ResponseEntity<Reservation> cancelReservation(@PathVariable Long reservationId) {
-		Reservation reservation = reservationService.findOne(reservationId);
-		reservation = reservationService.cancelReservation(reservation);
-		
+		 Reservation reservation = reservationService.cancelReservation(reservationId);
 		return new ResponseEntity<>(reservation, HttpStatus.OK); 
 	}
 	
@@ -113,7 +109,7 @@ public class ReservationController {
 		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
 		SpecialOffer specialOffer = specialOfferService.findById(specialOfferReservationDTO.getSpecialOfferId());
 		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
 		
 		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
@@ -135,13 +131,7 @@ public class ReservationController {
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
-		Asset asset = assetService.findOne(reservationDto.getAssetId());
-		Client client = clientService.findOne(reservationDto.getClientId());
-		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(reservationFinancesService, loyaltyProgramService, client);
-		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
-		reservation.setCancelationFee(asset.getCancelationConditions());
-		reservation = reservationService.makeRegularReservation(reservation);
+		Reservation reservation = reservationService.makeReservation(reservationDto);
 		if(reservation!=null) {
 			emailService.sendReservationSuccessfull(reservation);
 			return new ResponseEntity<>(reservation, HttpStatus.OK);
