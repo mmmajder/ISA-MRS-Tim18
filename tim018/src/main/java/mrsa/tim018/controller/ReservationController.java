@@ -145,9 +145,8 @@ public class ReservationController {
 		
 		if (renter == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
-		List<Reservation> reservations = reservationService.getCurrentRenterReservations(renterId);
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
+
+		List<ReservationDTO> reservationsDTO = reservationService.getCurrentRenterReservations(renterId);
 		
 		return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
 	}
@@ -159,9 +158,7 @@ public class ReservationController {
 		if (renter == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		List<Reservation> reservations = reservationService.getPastRenterReservations(renterId);
-		List<ReservationDTO> reservationsDTO = reservationService.map(reservations);
-		
+		List<ReservationDTO> reservationsDTO = reservationService.getPastRenterReservations(renterId);
 		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
 	}
 

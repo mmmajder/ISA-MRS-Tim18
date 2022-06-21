@@ -162,19 +162,19 @@ public class ReservationService {
 	}
 	
 	@Transactional
-	public List<Reservation> getCurrentRenterReservations(Long renterId){
+	public List<ReservationDTO> getCurrentRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> !isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
 		
-		return reservations;
+		return map(reservations);
 	}
 	
 	@Transactional
-	public List<Reservation> getPastRenterReservations(Long renterId){
+	public List<ReservationDTO> getPastRenterReservations(Long renterId){
 		List<Reservation> reservations = (List<Reservation>) reservationRepository.getRenterReservations(renterId);
 		reservations = reservations.stream().filter(r -> isCompleted(r) && r.getStatus() != ReservationStatus.Canceled).collect(Collectors.toList());
 		
-		return reservations;
+		return map(reservations);
 	}
 	
 	public List<Reservation> getAssetReservations(Long assetId){

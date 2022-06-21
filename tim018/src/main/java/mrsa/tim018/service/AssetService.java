@@ -145,12 +145,12 @@ public class AssetService {
 	public AssetCalendar getAssetCalendar(Long idAsset) {
 		Asset asset = findsAssetsWithCalendar(idAsset);
 		AssetCalendar calendar = asset.getCalendar();
-		List<TimeRange> available = calendar.getAvailable();
-		List<SpecialOffer> specialPrice = calendar.getSpecialPrice();
-		List<Reservation> reserved = calendar.getReserved();
+//		List<TimeRange> available = calendar.getAvailable();
+//		List<SpecialOffer> specialPrice = calendar.getSpecialPrice();
+//		List<Reservation> reserved = calendar.getReserved();
 		
-		AssetCalendarDTO calendarDTO = new AssetCalendarDTO(available, specialPrice, reserved);
-		AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), calendar);
+//		AssetCalendarDTO calendarDTO = new AssetCalendarDTO(available, specialPrice, reserved);
+//		AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), calendar);
 		return calendar;
 	}
 
