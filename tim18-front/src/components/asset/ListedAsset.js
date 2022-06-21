@@ -11,7 +11,7 @@ import {deleteAssetAdmin} from '../../services/api/AssetApi';
 import {getAssetRating} from '../../services/api/ReviewApi'
 import { Button } from 'react-bootstrap';
 
-export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFunc}){
+export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFunc, removeAsset}){
     // let assetType = "RESORT";
     let assetType = asset.assetType;
     const userType = getRole();
@@ -35,9 +35,7 @@ export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFu
         }, []
     )
 
-    const adminDeleteAsset = () => {
-        deleteAssetAdmin(asset.id)
-    }
+    
 
     const getAssetPrice = useCallback(
         () => {
@@ -69,6 +67,11 @@ export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFu
         }, [deleteFunc, asset]
     )
 
+    const adminDeleteAsset = () => {
+        deleteAssetAdmin(asset.id)
+        removeAsset(asset.id)
+    }
+
     return <div className="borderedBlock mt-3" align="">
                 <Row>
                     <Col sm="3">
@@ -88,7 +91,6 @@ export default function ListedAsset({asset, isSearch, subscriptionProp, deleteFu
                                     { !isSearch && <><Button variant="custom" className='fixedWidthButton formButton pe-5 ps-5 mt-2' onClick={deleteAss}>
                                                         Delete
                                                     </Button></>}
-                                    { !isSearch && userType!=="Admin" && <FixedWidthRegButton text='Delete' onClickFunction={''}/>}
                                     { subscriptionProp!==undefined &&  <FixedWidthRegButton text={subscriptionProp.text} onClickFunction={()=>subscriptionProp.subscribe(asset.id)}/>}
                                     { userType==="Admin" && <FixedWidthRegButton text='Delete' onClickFunction={adminDeleteAsset}/>}
                                 </div>
