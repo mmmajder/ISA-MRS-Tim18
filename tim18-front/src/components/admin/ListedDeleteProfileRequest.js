@@ -16,12 +16,10 @@ const ListedDeleteProfileRequest = ({request, key, onDelete}) => {
 
     const accpetRequest = () => {
         setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="accept"/>)
-        
     }
 
     const declineRequest = () => {
         setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="decline"/>)
-        
     }
 
     const handleCallback = (childData) =>{

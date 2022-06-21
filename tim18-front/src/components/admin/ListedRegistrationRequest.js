@@ -22,7 +22,7 @@ const ListedRegistrationRequest = ({request, key, onDelete}) => {
             alert('Successfull')
             onDelete(request)
         }
-        }
+    }
 
     const accpetRequest = () => {
         acceptRegistrationRequest(request.id, showMessage)
