@@ -3,17 +3,17 @@ import {useEffect, useState} from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { declineRegistrationRequest } from '../../services/api/RegistrationRequestApi';
 
-const DeclineRegistrationModal = ({onDelete, request}) => {
+const DeclineRegistrationModal = ({onDelete, request, showMessage}) => {
     const [reason, setReason] = useState("");
     const handleClose = () => setShow(false);
     const [show, setShow] = useState(true);
     const [isDeleted, setDeleted] = useState(false)
 
     const declineRequet = () => {
-        declineRegistrationRequest(request.id, reason)
+        declineRegistrationRequest(request.id, reason, showMessage)
         setDeleted(true)
         handleClose()
-        onDelete(request)
+     //   onDelete(request)
     }
 
     return (<>

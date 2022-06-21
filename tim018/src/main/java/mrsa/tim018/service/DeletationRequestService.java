@@ -114,7 +114,7 @@ public class DeletationRequestService {
 		} else {
 			deletionRequest.setStatus(RequestStatus.Declined);
 		}
-		save(deletionRequest);
+		save(deletionRequest); 
 		logger.info(deletionRequest.toString());
         logger.info("< update id:{}", id);
 		return deletionRequest;

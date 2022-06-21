@@ -9,24 +9,18 @@ export async function getRegRequests(){
     }
   }
 
-export async function acceptRegistrationRequest(id){
-try {
-    const responseData = await getApiCall().put(`/regRequests/accept/${id}`);
-    return responseData;
-} catch (err) {
-    return err.message
-}
+export async function acceptRegistrationRequest(id, callback){
+    getApiCall().put(`/regRequests/accept/${id}`)
+       .then((responseData) => callback(responseData.data))
+       .catch((err)=> callback(false));
 }
 
-export async function declineRegistrationRequest(id, request){
-    try {
-        const requestJSON = JSON.stringify(request);
-        const responseData = await getApiCall().put(`/regRequests/decline/${id}`, requestJSON);
-        console.log(responseData)
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+export async function declineRegistrationRequest(id, request, callback){
+    const requestJSON = JSON.stringify(request);
+    getApiCall().put(`/regRequests/decline/${id}`, requestJSON)
+       .then((responseData) => callback(responseData.data))
+       .catch((err)=> callback(false));
+
     }
 
 export async function registerAdminRequest(requestBody) {
