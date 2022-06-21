@@ -8,4 +8,6 @@ import mrsa.tim018.model.AssetCalendar;
 
 public interface AssetCalendarRepository extends JpaRepository<AssetCalendar, Long> {
 	public Page<AssetCalendar> findAll(Pageable pageable);
+	
+	public AssetCalendar findById(long id);
 }

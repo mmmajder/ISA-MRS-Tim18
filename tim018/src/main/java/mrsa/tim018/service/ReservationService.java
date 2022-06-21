@@ -271,7 +271,7 @@ public class ReservationService {
 		
 		Reservation reservation = saveRegularReservation(reservationDto);
 		if(reservation!=null) {
-	//		emailService.sendReservationSuccessfull(reservation);
+			emailService.sendReservationSuccessfull(reservation);
 		}
 		return reservation;
 	}

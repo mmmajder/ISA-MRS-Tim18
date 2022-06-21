@@ -48,6 +48,10 @@ public class AssetCalendarSevice {
 		return assetCalendarRepository.save(calendar);
 	}
 	
+	public AssetCalendar findById(long id) {
+		return assetCalendarRepository.findById(id);
+	}
+	
 	public AssetCalendar createNewCalendar() {
 		AssetCalendar assetCalendar = new AssetCalendar();
 		return assetCalendarRepository.save(assetCalendar);
