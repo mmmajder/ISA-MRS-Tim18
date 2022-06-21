@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -249,14 +251,7 @@ public class AssetController {
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {
-		List<Asset> assets = assetService.findAll();
-		List<AssetDTO> assetsDTO = new ArrayList<>();
-		
-		for (Asset a : assets) {
-			if (!a.isDeleted())
-				assetsDTO.add(new AssetDTO(a));
-		}
-		
+		List<AssetDTO> assetsDTO = assetService.getAllAssets();
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	
@@ -334,8 +329,7 @@ public class AssetController {
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/all/{id}")
 	public ResponseEntity<List<AssetDTO>> getAllAssetsByUser(@PathVariable Long id) {
-		List<Asset> assets = renterService.getMyAssets(id);
-		List<AssetDTO> assetsDTO = assetService.map(assets);
+		List<AssetDTO> assetsDTO = assetService.getAllAssetsByUser(id);
 		return new ResponseEntity<>(assetsDTO, HttpStatus.OK);
 	}
 	

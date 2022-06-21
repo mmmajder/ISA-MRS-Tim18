@@ -90,6 +90,7 @@ public class ClientService {
 		return reservations;
 	}
 	
+	@Transactional
 	private List<Reservation> getMyReservationsByType(Long clientId, AssetType assetType) {
 		Client client = findOne(clientId);
 		List<Reservation> reservations = client.getReservations();

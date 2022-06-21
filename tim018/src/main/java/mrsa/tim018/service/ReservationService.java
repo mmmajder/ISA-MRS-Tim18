@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.Reservation;
@@ -181,6 +182,23 @@ public class ReservationService {
 		return (List<Report>) reservationRepository.getMonthlyReports(assetId);
 	}
 
+	public List<ReservationDTO> map(List<Reservation> reservations){
+		List<ReservationDTO> reservationsDTO = new ArrayList<>();
+		for (Reservation res : reservations) {
+			ReservationDTO dto = map(res);
+			reservationsDTO.add(dto);
+		}
+		return reservationsDTO;
+	}
+
+	public ReservationDTO map(Reservation res){
+		Long assetId = res.getAsset().getID();
+		Long clientId = res.getClient().getID();
+		ReservationDTO dto = new ReservationDTO(res, assetId, clientId);
+		return setDtoFields(dto, res);
+	} 
+	
+
 	public ReservationDTO setDtoFields(ReservationDTO dto, Reservation res) {
 		dto.setCancelable(isCancelable(res));
 		dto.setDuration(calcDuration(res));
@@ -193,20 +211,16 @@ public class ReservationService {
 		return dto;
 	}
 
-	public List<ReservationDTO> map(List<Reservation> reservations){
-		List<ReservationDTO> reservationsDTO = new ArrayList<>();
-		for (Reservation res : reservations) {
-			ReservationDTO dto = map(res);
-			reservationsDTO.add(dto);
-		}
-		return reservationsDTO;
-	}
 	@Transactional
-	public ReservationDTO map(Reservation res){
-		Long assetId = res.getAsset().getID();
-		Long clientId = res.getClient().getID();
-		ReservationDTO dto = new ReservationDTO(res, assetId, clientId);
-		return setDtoFields(dto, res);
-	} 
+	public List<ReservationDTO> getCurrentClientResrvations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = clientService.getCurrentReservations(clientId, assetType);
+		return map(reservations);
+	}
+
+	@Transactional
+	public List<ReservationDTO> getPastClientResrvations(Long clientId, AssetType assetType) {
+		List<Reservation> reservations = clientService.getPastReservations(clientId, assetType);
+		return map(reservations);
+	}
 	
 }

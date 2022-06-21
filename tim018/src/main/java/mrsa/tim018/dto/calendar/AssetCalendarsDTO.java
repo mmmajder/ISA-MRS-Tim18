@@ -6,7 +6,7 @@ public class AssetCalendarsDTO {
 	private long id;
 	private String name;
 	private AssetCalendar calendar;
-
+	
 	public AssetCalendarsDTO() {
 		super();
 	}

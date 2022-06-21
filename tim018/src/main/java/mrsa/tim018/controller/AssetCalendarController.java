@@ -3,6 +3,8 @@ package mrsa.tim018.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
+import mrsa.tim018.dto.calendar.AssetCalendarDTO;
 import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
@@ -52,28 +55,28 @@ public class AssetCalendarController {
 	@Autowired 
 	private SpecialOfferService specialOfferService;
 	
-	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
-	@GetMapping(value = "/allCalendarsForUser/{id}") 
-	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
-		Renter renter = renterService.findOne(id);
-		List<Asset> assets = renter.getAssets();
-		List<AssetCalendarsDTO> data = new ArrayList<>();
-		for (Asset asset : assets) {
-			try {
-				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
-			} catch (Exception e) { 
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-		}
-		return new ResponseEntity<>(data, HttpStatus.OK);
-	}	
+//	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
+//	@GetMapping(value = "/allCalendarsForUser/{id}") 
+//	public ResponseEntity<List<AssetCalendarsDTO>> getUsersCalendars(@PathVariable Long id) {
+//		Renter renter = renterService.findOne(id);
+//		List<Asset> assets = renter.getAssets();
+//		List<AssetCalendarsDTO> data = new ArrayList<>();
+//		for (Asset asset : assets) {
+//			try {
+//				data.add(new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar()));
+//			} catch (Exception e) { 
+//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//			}
+//		}
+//		return new ResponseEntity<>(data, HttpStatus.OK);
+//	}	
 	
+
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/assetCalendar/{idAsset}") 
-	public ResponseEntity<AssetCalendarsDTO> getAssetsCalendar(@PathVariable Long idAsset) {
-		Asset asset = assetService.findById(idAsset);
+	public ResponseEntity<AssetCalendar> getAssetsCalendar(@PathVariable Long idAsset) {
+		AssetCalendar data = assetService.getAssetCalendar(idAsset);
 		try {
-			AssetCalendarsDTO data = new AssetCalendarsDTO(asset.getID(), asset.getName(), asset.getCalendar());
 			return new ResponseEntity<>(data, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -89,12 +92,9 @@ public class AssetCalendarController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		try {
-			Asset asset = assetService.findById(appointment.getAssetId());
-			AssetCalendar calendar = asset.getCalendar();
-			AssetCalendar newCalendar = calendarService.addAppointment(calendar, appointment);
-			calendarService.save(newCalendar);
+			Long assetId = assetService.addAppointment(appointment);
 			if(appointment.getType() == AppointmentType.SpecialOffer) {
-				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(asset.getID());
+				List<Subscription> subscriptions = subscriptionService.findAssetsActiveSubscriptions(assetId);
 				emailService.notifySubscribers(subscriptions, appointment);
 			}
 		} catch (Exception e) {

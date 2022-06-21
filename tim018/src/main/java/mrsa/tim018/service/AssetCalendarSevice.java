@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
+import mrsa.tim018.dto.calendar.AssetCalendarDTO;
+import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.dto.calendar.TimeRangeMergeElement;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
@@ -21,13 +23,14 @@ import mrsa.tim018.repository.AssetRepository;
 import mrsa.tim018.utils.StringUtils;
 
 @Service
-@Transactional
 public class AssetCalendarSevice {
 	@Autowired
 	private AssetCalendarRepository assetCalendarRepository;
 	
 	@Autowired
 	private AssetRepository assetRepository;
+	
+	
 	
 	public AssetCalendar save(AssetCalendar calendar) {
 		return assetCalendarRepository.save(calendar);
@@ -188,5 +191,4 @@ public class AssetCalendarSevice {
 				  .collect(Collectors.toList());
 	}
 
-	
 }

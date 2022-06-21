@@ -89,14 +89,14 @@ public class ReservationController {
 	
 	@GetMapping(value = "/current/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long clientId, @RequestParam AssetType assetType) {
-		List<Reservation> reservations = clientService.getCurrentReservations(clientId, assetType);
-		return new ResponseEntity<List<ReservationDTO>>( reservationService.map(reservations), HttpStatus.OK);
+		List<ReservationDTO> reservations = reservationService.getCurrentClientResrvations(clientId, assetType);
+		return new ResponseEntity<List<ReservationDTO>>( reservations, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/history/{clientId}")
 	public ResponseEntity<List<ReservationDTO>> getPastReservationsByType(@PathVariable Long clientId, @RequestParam AssetType assetType) {
-		List<Reservation> reservations = clientService.getPastReservations(clientId, assetType);
-		return new ResponseEntity<List<ReservationDTO>>( reservationService.map(reservations), HttpStatus.OK);
+		List<ReservationDTO> reservations = reservationService.getPastClientResrvations(clientId, assetType);
+		return new ResponseEntity<List<ReservationDTO>>( reservations, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/cancel/{reservationId}")

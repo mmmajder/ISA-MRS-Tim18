@@ -25,7 +25,7 @@ public class Reservation {
 	@Column(name = "isDeleted", nullable = false)
 	private boolean isDeleted;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "asset_id")
 	@JsonBackReference
 	private Asset asset;

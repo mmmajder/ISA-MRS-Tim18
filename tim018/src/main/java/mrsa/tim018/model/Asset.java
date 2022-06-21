@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,14 +68,13 @@ public class Asset {
 	private double price;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	@JsonIgnore
-//	@JsonIgnoreProperties(  {"handler","hibernateLazyInitializer"} )
 	private AssetCalendar calendar;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PriceCatalog> prices;
 	
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<Subscription> subscriptions = new ArrayList<>();
 	
 	public Asset() {

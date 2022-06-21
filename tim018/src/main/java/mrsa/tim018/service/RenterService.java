@@ -17,6 +17,7 @@ import mrsa.tim018.model.User;
 import mrsa.tim018.repository.RenterRepository;
 
 @Service
+@Transactional
 public class RenterService {
 	@Autowired
 	private RenterRepository renterRepo;

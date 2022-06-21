@@ -34,21 +34,9 @@ public class SubscriptionController {
 	@Autowired 
 	private SubscriptionService subscriptionService;
 	
-	@Autowired 
-	private AssetService assetService;
-	
-	@Autowired 
-	private ClientService clientService;
-	
 	@PostMapping(value = "/subscribe")
 	public ResponseEntity<SubscriptionDTO> subscribe(@RequestBody SubscriptionDTO subscriptionDto) {
-		Asset asset = assetService.findOne(subscriptionDto.getAssetId());
-		Client client = clientService.findOne(subscriptionDto.getClientId());
-		Subscription subscription = subscriptionService.subscribe(asset, client);
-		
-		assetService.addSubscription(subscription);
-		clientService.addSubscription(subscription);
-		
+		Subscription subscription = subscriptionService.subscribe(subscriptionDto);
 		if(subscription!=null) {
 			return new ResponseEntity<>(subscriptionDto, HttpStatus.OK);
 		}
@@ -57,14 +45,7 @@ public class SubscriptionController {
 	
 	@PutMapping(value = "/unsubscribe")
 	public ResponseEntity<SubscriptionDTO> unsubscribe(@RequestBody SubscriptionDTO subscriptionDto) {
-		Asset asset = assetService.findOne(subscriptionDto.getAssetId());
-		Client client = clientService.findOne(subscriptionDto.getClientId());
-		Subscription subscription = subscriptionService.unsubscribe(asset, client);
-		
-		assetService.removeSubscription(subscription);
-		clientService.removeSubscription(subscription);
-		subscription.setDeleted(true);
-		subscription = subscriptionService.save(subscription);
+		Subscription subscription = subscriptionService.unsubscribe(subscriptionDto);
 		if(subscription!=null) {
 			return new ResponseEntity<>(subscriptionDto, HttpStatus.OK);
 		}
@@ -85,17 +66,7 @@ public class SubscriptionController {
 	
 	@PutMapping(value = "/mySubscriptions/{clientId}")
 	public ResponseEntity<List<SubscriptionFetchedDTO>> getMySubscriptions(@PathVariable Long clientId, @RequestBody AssetType assetType){
-		List<Subscription> subscriptions = subscriptionService.findClientsActiveSubscriptions(clientId);
-		if(assetType!=AssetType.ALL)
-			subscriptions = subscriptions.stream().filter(a -> a.getAsset().getAssetType() == assetType).collect(Collectors.toList());
-		
-		List<SubscriptionFetchedDTO> subscriptionsDto = new ArrayList<>();
-		for (Subscription subscription : subscriptions) {
-			SubscriptionFetchedDTO  dto = new SubscriptionFetchedDTO(subscription.getAsset(), subscription.getClient());
-			subscriptionsDto.add(dto);
-		}
-		
-		
+		List<SubscriptionFetchedDTO> subscriptionsDto = subscriptionService.findClientsubscriptions(clientId, assetType);
 		return new ResponseEntity<List<SubscriptionFetchedDTO>>(subscriptionsDto, HttpStatus.OK); 
 		
 	}
