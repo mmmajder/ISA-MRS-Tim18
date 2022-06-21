@@ -73,7 +73,7 @@ public class DeletationRequestService {
 	}
 	
 	@Transactional(readOnly = false, rollbackFor = ObjectOptimisticLockingFailureException.class)
-	public DeletationRequest acceptDeclineRegistrationRequest(long id, String comment, boolean isAccept) {
+	public DeletationRequest acceptDeclineDeletionRequest(long id, String comment, boolean isAccept) {
 		
 		DeletationRequest deletionRequest = setDeletionRequestStatus(id, isAccept);
          

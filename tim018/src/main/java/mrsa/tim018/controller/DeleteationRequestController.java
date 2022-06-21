@@ -97,7 +97,7 @@ public class DeleteationRequestController {
 	@PutMapping(value = "/accept/{id}")  
 	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 		try {
-			DeletationRequest deletationRequest = deletationRequestService.acceptDeclineRegistrationRequest(id, comment, true);
+			DeletationRequest deletationRequest = deletationRequestService.acceptDeclineDeletionRequest(id, comment, true);
 			return new ResponseEntity<>(new DeletationRequestDTO(deletationRequest), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -107,7 +107,7 @@ public class DeleteationRequestController {
 	@PutMapping(value = "/decline/{id}")
 	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 		try {
-			DeletationRequest deletationRequest = deletationRequestService.acceptDeclineRegistrationRequest(id, comment, false);
+			DeletationRequest deletationRequest = deletationRequestService.acceptDeclineDeletionRequest(id, comment, false);
 			return new ResponseEntity<>(new DeletationRequestDTO(deletationRequest), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
