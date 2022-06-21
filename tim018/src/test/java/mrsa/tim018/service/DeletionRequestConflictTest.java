@@ -32,26 +32,23 @@ import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.User;
 import mrsa.tim018.model.UserType;
 import mrsa.tim018.repository.DeletationRequestRepository;
+import mrsa.tim018.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DeletionRequestConflictTest {
 	
 	@Autowired
+	private UserRepository userRepositoryMock;
+	
+	@Autowired
 	private DeletationRequestService deletationRequestService; 
 	
 	@Before
 	public void setUp() throws Exception {
-		User user1 = new User((long) 1, "Pera1", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
-		User user2 = new User((long) 2, "Pera2", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
-		User user3 = new User((long) 3, "Pera3", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
-		User user4 = new User((long) 4, "Pera4", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
-		User user5 = new User((long) 5, "Pera5", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
+		User user1 = new User((long) 132321, "Pera1", "Peric", "blbabl", "ns", "srb", "313213", UserType.Client, "dasdasd", "password", "profilePhotoId"); 
+		userRepositoryMock.save(user1);
 		deletationRequestService.save(new DeletationRequest((long) 1, false, RequestStatus.Pending, user1, "reason"));
-		deletationRequestService.save(new DeletationRequest((long) 1, false, RequestStatus.Pending, user2, "reason"));
-		deletationRequestService.save(new DeletationRequest((long) 1, false, RequestStatus.Pending, user3, "reason"));
-		deletationRequestService.save(new DeletationRequest((long) 1, false, RequestStatus.Pending, user4, "reason"));
-		deletationRequestService.save(new DeletationRequest((long) 1, false, RequestStatus.Pending, user5, "reason"));
 	}
 	
 	
