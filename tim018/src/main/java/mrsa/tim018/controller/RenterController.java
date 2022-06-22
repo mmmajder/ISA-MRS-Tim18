@@ -124,5 +124,21 @@ public class RenterController {
 		
 		return new ResponseEntity<>(a.getRenter().getID(), HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "owns/{renterId}/{assetId}")
+	public ResponseEntity<Boolean> doesRenterOwn(@PathVariable Long renterId, @PathVariable Long assetId) {
+
+		Renter r = renterService.findOne(renterId);
+		Asset a = assetService.findOne(assetId);
+		
+		if (a == null || r == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		for (Asset asset : r.getAssets())
+			if (asset.getID().equals(assetId))
+				return new ResponseEntity<>(true, HttpStatus.OK);
+			
+		return new ResponseEntity<>(false, HttpStatus.OK);
+	}
 
 }

@@ -8,7 +8,7 @@ INSERT INTO Role (name) VALUES ('ROLE_USER');/*6*/
 ALTER SEQUENCE userSeqGen RESTART;
 
 /*images*/
-/*insert into image(id, data, is_deleted, type, asset_id) values*/
+insert into image(id, data, is_deleted, type, asset_id) values
 	/*user images*/
 	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\renter_stanivuk.jpg'), false, null, null),
 	('2', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Katarina_Komad.jpg'), false, null, null),

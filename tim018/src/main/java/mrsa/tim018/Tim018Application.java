@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class Tim018Application {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		SpringApplication.run(Tim018Application.class, args);
 	}
 
