@@ -16,12 +16,14 @@ export default function AssetList(){
     }, [])
 
     useEffect(() => {
-        getAssetsByUserId(user.id).then(
-            (response) => {
-                setAssets(!!response ? response.data : []);
-            }
-        )
-    }, [])
+        if (!!user){
+            getAssetsByUserId(user.id).then(
+                (response) => {
+                    setAssets(!!response ? response.data : []);
+                }
+            )
+        }
+    }, [user])
 
     const assetDeletion = useCallback(
         (assetId) => {

@@ -55,19 +55,13 @@ export default function AssetsPreview({isSearch}){
 
 
     useEffect(() => {
-        async function fetchAssets(){
-            let requestData;
+        if (user != undefined){
             if (isSearch || userType==='Client' || userType==='Guest' || userType==='Admin')
-                requestData = await getAssets();
+                getAssets().then((response) => {setAssets(response.data)});
             else
-                requestData = await getAssetsByUserId(user.id);
-            setAssets(!!requestData ? requestData.data : []);
-            return requestData;
+                getAssetsByUserId(user.id).then((response) => {setAssets(response.data)});
         }
-        //if (user != undefined){
-            fetchAssets();
-        //}
-    }, [])
+    }, [user, userType])
 
     let assetTypeOptions;
     if(isSearch){

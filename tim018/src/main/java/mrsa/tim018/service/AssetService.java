@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.AssetDTO;
-import mrsa.tim018.dto.calendar.AssetCalendarDTO;
 import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.mapper.AssetMapper;
 import mrsa.tim018.model.Adventure;

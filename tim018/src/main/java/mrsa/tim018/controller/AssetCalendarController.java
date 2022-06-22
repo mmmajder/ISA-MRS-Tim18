@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
-import mrsa.tim018.dto.calendar.AssetCalendarDTO;
 import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
