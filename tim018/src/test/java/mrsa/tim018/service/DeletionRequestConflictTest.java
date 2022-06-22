@@ -62,7 +62,7 @@ public class DeletionRequestConflictTest {
 			public void run() {
 		        System.out.println("Startovan Thread 1");
 		        DeletationRequest deletationRequest = deletationRequestService.findOne(1L);
-		        deletationRequestService.acceptDeclineRegistrationRequest(deletationRequest.getId(), "comment1", true);
+		        deletationRequestService.acceptDeclineDeletionRequest(deletationRequest.getId(), "comment1", true);
 			}
 		});
 		executor.submit(new Runnable() {
@@ -71,7 +71,7 @@ public class DeletionRequestConflictTest {
 			public void run() {
 		        System.out.println("Startovan Thread 2");
 		        DeletationRequest deletationRequest = deletationRequestService.findOne(1L);// ocitan isti objekat sa id 1 kao i iz prvog threada
-		        deletationRequestService.acceptDeclineRegistrationRequest(deletationRequest.getId(), "comment2", true);// izmenjen ucitan objekat
+		        deletationRequestService.acceptDeclineDeletionRequest(deletationRequest.getId(), "comment2", true);// izmenjen ucitan objekat
 			}
 		});
 		try {

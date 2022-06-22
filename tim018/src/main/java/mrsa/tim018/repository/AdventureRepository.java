@@ -23,9 +23,14 @@ public interface AdventureRepository extends JpaRepository<Adventure, Long> {
 	
 	public Adventure findById(long id);
 	
+//	@Lock(LockModeType.PESSIMISTIC_WRITE)
+//	@Query("select p from Adventure p where p.id = :id")
+//	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+//	public Adventure findOneByIdLock(@Param("id")Long id);
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@Query("select p from Adventure p where p.id = :id")
+	@Query("select p from Adventure p where p.id = ?1")
 	@QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
-	public Adventure findOneByIdLock(@Param("id")Long id);
+	public Adventure findOneByIdLock(Long id);
+
 }
 

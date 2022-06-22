@@ -38,26 +38,6 @@ public class AdminServiceTest {
 	
 	
 	@Test(expected = DataIntegrityViolationException.class)
-    @Transactional
-    @Rollback(true)
-	public void testAddNonUniqueIndex() {
-		Admin admin = new Admin();
-		admin.setFirstName("Pera");
-		admin.setLastName("Peric");
-		admin.setId(132312321L);// index već postoji -> Unique constraint violation
-		
-		// 1. Definisanje ponašanja mock objekata     
-		when(adminRepositoryMock.save(admin)).thenThrow(DataIntegrityViolationException.class);
-		
-		// 2. Akcija 
-		adminService.save(admin);
-		
-		// 3. Verifikacija: asertacije i/ili verifikacija interakcije sa mock objektima  
-		verify(adminRepositoryMock, times(1)).save(admin);
-        verifyNoMoreInteractions(adminRepositoryMock);
-	}
-	
-	@Test(expected = DataIntegrityViolationException.class)
 	@Transactional
 	@Rollback(true)
 	public void testAddNullId() {
