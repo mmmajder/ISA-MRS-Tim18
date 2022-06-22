@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class DeleteationRequestController {
 	@Autowired
 	private UserService userService;
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
 		DeletationRequest request = deletationRequestService.findOne(id);
@@ -49,20 +51,15 @@ public class DeleteationRequestController {
 		return new ResponseEntity<DeletationRequestDTO>(new DeletationRequestDTO(request), HttpStatus.OK);
 	}
 	 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/all") 
 	public ResponseEntity<List<DeletationRequestDTO>> getAllDeletationRequests() {
-
-		List<DeletationRequest> deletionRequests = deletationRequestService.findAll();
-
-		// convert clients to DTOs
-		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
-		for (DeletationRequest s : deletionRequests) {
-			deletionRequestsDTO.add(new DeletationRequestDTO(s));
-		}
-
-		return new ResponseEntity<>(deletionRequestsDTO, HttpStatus.OK);
+		List<DeletationRequestDTO> deletationRequestDTOs = deletationRequestService.getAllDeletationRequests();
+		 
+		return new ResponseEntity<>(deletationRequestDTOs, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/pending")
 	public ResponseEntity<List<DeletationRequestDTO>> getPendingDeletationRequests() {
 
@@ -88,6 +85,7 @@ public class DeleteationRequestController {
 	
 	
 	//conflict solve 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/accept/{id}")  
 	public ResponseEntity<DeletationRequestDTO> acceptProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 		try {
@@ -98,6 +96,7 @@ public class DeleteationRequestController {
 		} 
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/decline/{id}")
 	public ResponseEntity<DeletationRequestDTO> declineProfileDeletationRequests(@PathVariable Long id, @RequestBody String comment) {
 		try {

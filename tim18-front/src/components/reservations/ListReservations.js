@@ -66,6 +66,7 @@ export const ListedReservation = ({reservation, handleChange}) => {
     )
 
     useEffect(() => {
+      // console.log(assetId)
       getCallbackAssetById(setAsset, assetId)
   }, []);
 

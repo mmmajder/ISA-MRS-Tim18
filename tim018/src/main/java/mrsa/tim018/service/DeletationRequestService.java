@@ -132,4 +132,16 @@ public class DeletationRequestService {
 		}  
 		return deletionRequestsDTO;
 	}
+
+	@Transactional
+	public List<DeletationRequestDTO> getAllDeletationRequests() {
+		List<DeletationRequest> deletionRequests = findAll();
+
+		// convert clients to DTOs
+		List<DeletationRequestDTO> deletionRequestsDTO = new ArrayList<>();
+		for (DeletationRequest s : deletionRequests) {
+			deletionRequestsDTO.add(new DeletationRequestDTO(s));
+		}
+		return deletionRequestsDTO;
+	}
 }
