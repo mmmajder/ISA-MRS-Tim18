@@ -74,7 +74,6 @@ public class AssetController {
 	
 	@Autowired
 	private ReportService reportService;
-	
 
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
@@ -89,18 +88,11 @@ public class AssetController {
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PutMapping(value="/{id}", consumes = "application/json" )
 	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
-		AssetType type = assetDto.getAssetType();
-		
-		switch (type) {
-		case RESORT: 
-			return updateResort(id, assetDto);
-		case BOAT: 
-			return updateBoat(id, assetDto);
-		case FISHING_ADVENTURE: 
-			return updateAdventure(id, assetDto);
-		default:  
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		AssetDTO returnData = assetService.updateAsset(id, assetDto);
+		if (returnData==null) {
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}
+		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
@@ -133,69 +125,6 @@ public class AssetController {
 	}
 	
 	
-	private ResponseEntity<AssetDTO> updateResort(Long id,AssetDTO assetDto) {
-		Resort updatedData = AssetMapper.mapToResort(assetDto);
-		Resort resortToUpdate = resortService.findOne(id);
-		
-		if (resortToUpdate != null)
-		{
-			// changes only user-changable attributes
-			updateAsset(resortToUpdate, updatedData);
-			resortToUpdate.setNumberOfRooms(updatedData.getNumberOfRooms());
-			resortToUpdate.setNumberOfBeds(updatedData.getNumberOfBeds());
-			resortService.save(resortToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private ResponseEntity<AssetDTO> updateBoat(Long id, AssetDTO assetDto) {
-		Boat updatedData = AssetMapper.mapToBoat(assetDto);
-		Boat boatToUpdate = boatService.findOne(id);
-		
-		if (boatToUpdate != null)
-		{
-			// changes only user-changable attributes
-			updateAsset(boatToUpdate, updatedData);
-			updateBoatSpecificAttributes(boatToUpdate, updatedData);
-			boatService.save(boatToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private ResponseEntity<AssetDTO> updateAdventure(Long id, AssetDTO assetDto) {
-		Adventure updatedData = AssetMapper.mapToAdventure(assetDto);
-		Adventure adventureToUpdate = adventureService.findOne(id);
-		
-		if (adventureToUpdate != null)
-		{
-			updateAsset(adventureToUpdate, updatedData);
-			adventureToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
-			adventureService.save(adventureToUpdate);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-	private void updateBoatSpecificAttributes(Boat boatToUpdate, Boat updatedData) {
-		boatToUpdate.setBoatType(updatedData.getBoatType());
-		boatToUpdate.setLength(updatedData.getLength());
-		boatToUpdate.setNumOfMotor(updatedData.getNumOfMotor());
-		boatToUpdate.setMotorPower(updatedData.getMotorPower());
-		boatToUpdate.setMaxSpeed(updatedData.getMaxSpeed());
-		boatToUpdate.setNavigationEquipment(updatedData.getNavigationEquipment());
-		boatToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
-	}
-	
-	private void updateAsset(Asset assetToUpdate, Asset updatedData) {
-		assetToUpdate.setAddress(updatedData.getAddress());
-		assetToUpdate.setCancelationConditions(updatedData.getCancelationConditions());
-		assetToUpdate.setDescription(updatedData.getDescription());
-		assetToUpdate.setName(updatedData.getName());
-		assetToUpdate.setNumOfPeople(updatedData.getNumOfPeople());
-		assetToUpdate.setRules(updatedData.getRules());
-	}
 	
 	@GetMapping
 	public ResponseEntity<List<AssetDTO>> getAssets() {

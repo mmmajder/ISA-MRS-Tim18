@@ -18,6 +18,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -100,6 +101,9 @@ public class User implements UserDetails{
 	@Column(name = "verification_code", length = 64)
     private String verificationCode;
 	
+	@Version
+	private Integer version;
+	
 	public User() {
 		
 	}
@@ -164,11 +168,25 @@ public class User implements UserDetails{
 		this.isDeleted = false;
 		this.enabled = false;
 	}
-	
 
 
 	public String getProfilePhotoId() {
 		return profilePhotoId;
+	}
+
+	public User(String firstName, String lastName, String address, String city, String state, String phoneNum,
+			UserType userType, String profilePhotoId, String email, String password) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.phoneNum = phoneNum;
+		this.userType = userType;
+		this.profilePhotoId = profilePhotoId;
+		this.email = email;
+		this.password = password;
 	}
 
 	public void setProfilePhotoId(String profilePhotoId) {

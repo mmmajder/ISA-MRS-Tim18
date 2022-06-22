@@ -80,42 +80,54 @@ export async function createReview(reservationId, review){
     }
   }
 
-  export async function cancelClientsComplaint(id){
-    try {
-        const responseData = await getApiCall().put(`/review/cancelClientsComplaint/${id}`);
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+  export async function cancelClientsComplaint(id, callback){
+    await getApiCall().put(`/review/cancelClientsComplaint/${id}`)
+    .then((responseData) => {callback(responseData.data)})    
+    .catch(()=> {callback(false)});
+    // try {
+    //     const responseData = await getApiCall().put(`/review/cancelClientsComplaint/${id}`);
+    //     return responseData;
+    // } catch (err) {
+    //     return err.message
+    // }
   }
 
-  export async function sendCommentOnComplaint(id, mailClient, mailRenter){
+  export async function sendCommentOnComplaint(id, mailClient, mailRenter, callback){
       const reqData = {mailClient, mailRenter}
-    try {
-        const responseData = await getApiCall().put(`/review/sendCommentOnComplaint/${id}`, reqData);
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+      await getApiCall().put(`/review/sendCommentOnComplaint/${id}`, reqData)
+    .then((responseData) => {callback(responseData.data)})    
+    .catch(()=> {callback(false)});
+    // try {
+    //     const responseData = await getApiCall().put(`/review/sendCommentOnComplaint/${id}`, reqData);
+    //     return responseData;
+    // } catch (err) {
+    //     return err.message
+    // }
   } 
   
-  export async function addPoint(request){
-    try {
-        console.log(request)
-        const responseData = await getApiCall().put(`/review/addPoint/${request.id}`);
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+  export async function addPoint(request, callback){
+    await getApiCall().put(`/review/addPoint/${request.id}`)
+    .then((responseData) => {callback(responseData.data)})    
+    .catch(()=> {callback(false)});
+    // try {
+    //     console.log(request)
+    //     const responseData = await getApiCall().put(`/review/addPoint/${request.id}`);
+    //     return responseData;
+    // } catch (err) {
+    //     return err.message
+    // }
 }
 
-export async function declineAddPoint(request){
-    try {
-        const responseData = await getApiCall().put(`/review/declineAddPoint/${request.id}`);
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+export async function declineAddPoint(request, callback){
+    await getApiCall().put(`/review/declineAddPoint/${request.id}`)
+    .then((responseData) => {callback(responseData.data)})    
+    .catch(()=> {callback(false)});
+    // try {
+    //     const responseData = await getApiCall().put(`/review/declineAddPoint/${request.id}`);
+    //     return responseData;
+    // } catch (err) {
+    //     return err.message
+    // }
 }
 
 
@@ -128,11 +140,9 @@ export async function getPendingNonComplaintReviews() {
     }
 }
 
-export async function acceptdeclineReview(request, isAccepted){
-    try {
-        const responseData = await getApiCall().put(`/review/acceptdeclineReview/${request.id}`, isAccepted);
-        return responseData;
-    } catch (err) {
-        return err.message
-    }
+export async function acceptdeclineReview(request, isAccepted, callback){
+    await getApiCall().put(`/review/acceptdeclineReview/${request.id}`, isAccepted)
+    .then((responseData) => {callback(responseData.data)})  
+    .catch(()=> {callback(false)});   
 }
+

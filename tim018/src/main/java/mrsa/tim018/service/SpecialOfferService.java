@@ -15,5 +15,9 @@ public class SpecialOfferService {
 	public SpecialOffer findById(Long id) {
 		return specialOfferRepository.findById(id).orElse(null);
 	}
+	
+	public SpecialOffer findByIdAndLock(Long id) {
+		return specialOfferRepository.findByIdAndLock(id).orElse(null);
+	}
 
 }

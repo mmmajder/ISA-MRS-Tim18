@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class LoyaltyProgramController {
 	@Autowired 
 	private ReservationFinancesService reservationFinancesService;
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/all")
 	public List<LoyaltyElementDTO> getLoyaltyClientData() {
 		List<LoyaltyElementDTO> list = new ArrayList<>();
@@ -43,6 +45,7 @@ public class LoyaltyProgramController {
 		return list;
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/update")
 	public FinancesAdminDTO updateFinancesData(@RequestBody FinancesAdminDTO data) {
 		List<LoyaltyElementDTO> requestLoyaltyProgram = data.getLoyaltyProgram();

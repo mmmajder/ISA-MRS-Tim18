@@ -3,13 +3,21 @@ package mrsa.tim018.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
+import javax.mail.MessagingException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import mrsa.tim018.dto.MailsDTO;
+import mrsa.tim018.model.Asset;
+import mrsa.tim018.model.Client;
+import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.RequestStatus;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Review;
@@ -17,7 +25,6 @@ import mrsa.tim018.model.ReviewType;
 import mrsa.tim018.repository.ReviewRepository;
 
 @Service
-@Transactional
 public class ReviewService {
 
 	@Autowired
@@ -26,6 +33,15 @@ public class ReviewService {
 	@Autowired
 	private ReservationService reservationService;
 
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private AssetService assetService;
+	
+	@Autowired
+	private EmailService emailService;
+	
 	public Review save(Review review) {
 		return reviewRepository.save(review);
 	}
@@ -33,7 +49,11 @@ public class ReviewService {
 	public Review findOne(Long id) {
 		return reviewRepository.findById(id).orElse(null);
 	}
-
+	
+	public Review findOnePending(Long id) {
+		return reviewRepository.findPeningById(id).orElse(null);
+	} 
+	
 	public ReviewType determineReviewType(Review review) {
 		if (!review.isClientWriting())
 			return ReviewType.FOR_CLIENT;
@@ -162,5 +182,89 @@ public class ReviewService {
 
 	public List<Review> getPendingReviewsNotComplaints() {
 		return (List<Review>) reviewRepository.getPendingReviewsNotComplaints();
+	}
+
+	
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
+	public Review acceptDeclineReview(Long id, Boolean isAccepted) {
+		Review review;
+		review = updateReviewStatus(id, isAccepted);
+		Client client = userService.findClient(review.getClientID());
+		
+		sendMailChangeReviewStatus(isAccepted, review, client);
+		return review; 
+		
+	}
+
+	private void sendMailChangeReviewStatus(Boolean isAccepted, Review review, Client client) {
+		try {
+			Renter renter;
+			if (review.getRenterID()==null) {
+				Asset asset = assetService.findById(review.getAssetId());
+				renter = asset.getRenter();
+			} else {
+				renter = (Renter) userService.findOne(review.getRenterID());
+			}
+			emailService.sendReviewMail(review, client, renter, isAccepted);
+		} catch (Exception e) {
+			throw new MailAuthenticationException("Error during mail sending");
+		}
+	}
+
+	private Review updateReviewStatus(Long id, Boolean isAccepted) {
+		Review review = findOnePending(id);
+		if (isAccepted) {
+			review.setStatus(RequestStatus.Accepted); 
+		} else { 
+			review.setStatus(RequestStatus.Declined); 
+		}
+		save(review);
+		return review;
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review cancelClientsComplaint(Long id) {
+		Review review = findOnePending(id);
+//		if (review == null) {
+//			return null;
+//		}
+		review.setStatus(RequestStatus.Declined);
+		save(review);
+		return review;
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review sendCommentOnComplaint(Long id, MailsDTO mailData) throws Exception {
+		Review review = findOnePending(id);
+		review.setStatus(RequestStatus.Accepted);
+		save(review);
+		emailService.sendMailsClientsComplaint(mailData.getMailClient(), mailData.getMailRenter(),
+					review.getClientID());
+		return review;
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review addPoint(Long id) throws MessagingException {
+		Review review = findOne(id);
+		review.setStatus(RequestStatus.Accepted);
+		save(review);
+		Client client = userService.findClient(review.getClientID());
+		client.setPenaltyPoints(client.getPenaltyPoints() + 1);
+		userService.saveClient(client);
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		emailService.sendPointMail(review, client, renter, true);
+		return review;
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Review declineAddPoint(Long id) throws MessagingException {
+		Review review = findOne(id);
+		review.setStatus(RequestStatus.Declined);
+		save(review);
+		Client client = (Client) userService.findOne(review.getClientID());
+		Renter renter = (Renter) userService.findOne(review.getRenterID());
+		emailService.sendPointMail(review, client, renter, false);
+		return review;
 	}
 }

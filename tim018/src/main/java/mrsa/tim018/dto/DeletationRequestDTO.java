@@ -9,7 +9,7 @@ import mrsa.tim018.model.User;
 public class DeletationRequestDTO {
 
 	private Long id;
-	private boolean isDeleted;
+	private Boolean isDeleted;
 	private RequestStatus status;
 	private String reason;
 	private User user;

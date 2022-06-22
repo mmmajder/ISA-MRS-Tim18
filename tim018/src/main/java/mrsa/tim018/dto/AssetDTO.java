@@ -179,4 +179,93 @@ public class AssetDTO {
 		return fishingEquipment;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public void setRenter(Renter renter) {
+		this.renter = renter;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setRules(String rules) {
+		this.rules = rules;
+	}
+
+	public void setNumOfPeople(int numOfPeople) {
+		this.numOfPeople = numOfPeople;
+	}
+
+	public void setCancelationConditions(int cancelationConditions) {
+		this.cancelationConditions = cancelationConditions;
+	}
+
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
+	}
+
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setRenterId(long renterId) {
+		this.renterId = renterId;
+	}
+
+	public void setNumberOfBeds(int numberOfBeds) {
+		this.numberOfBeds = numberOfBeds;
+	}
+
+	public void setNumberOfRooms(int numberOfRooms) {
+		this.numberOfRooms = numberOfRooms;
+	}
+
+	public void setBoatType(String boatType) {
+		this.boatType = boatType;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public void setNumOfMotor(int numOfMotor) {
+		this.numOfMotor = numOfMotor;
+	}
+
+	public void setMotorPower(int motorPower) {
+		this.motorPower = motorPower;
+	}
+
+	public void setMaxSpeed(int maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public void setNavigationEquipment(String navigationEquipment) {
+		this.navigationEquipment = navigationEquipment;
+	}
+
+	public void setFishingEquipment(String fishingEquipment) {
+		this.fishingEquipment = fishingEquipment;
+	}
+	
+
 }

@@ -18,24 +18,31 @@ export async function getPendingDeleteProfileRequests() {
     }
 }
 
-export async function acceptDeletionRequest(id, reason) {
+export async function acceptDeletionRequest(id, reason, callback) {
     const requestJSON = JSON.stringify(reason);
-    try {
-        const responseData = await getApiCall().put(`/deletationRequest/accept/${id}`, requestJSON);
-        return responseData;
-    } catch (err) {
-        return false;
-    }
+    await getApiCall().put(`/deletationRequest/accept/${id}`, requestJSON)
+              .then((responseData) => {callback(responseData.data)})    // userToken
+              .catch(()=> {callback(false)});  
+    // try {
+    //     const responseData = await getApiCall().put(`/deletationRequest/accept/${id}`, requestJSON);
+    //     return responseData;
+    // } catch (err) {
+    //     return false;
+    // }
 }
 
-export async function declineDeletionRequest(id, reason) {
+export async function declineDeletionRequest(id, reason, callback) {
     const requestJSON = JSON.stringify(reason);
-    try {
-        const responseData = await getApiCall().put(`/deletationRequest/decline/${id}`, requestJSON);
-        return responseData;
-    } catch (err) {
-        return false;
-    }
+    await getApiCall().put(`/deletationRequest/decline/${id}`, requestJSON)
+              .then((responseData) => {callback(responseData.data)})    // userToken
+              .catch(()=> {callback(false)});  
+    
+    // try {
+    //     const responseData = await getApiCall().put(`/deletationRequest/decline/${id}`, requestJSON);
+    //     return responseData;
+    // } catch (err) {
+    //     return false;
+    // }
 }
 
 export async function deleteUser(id) {

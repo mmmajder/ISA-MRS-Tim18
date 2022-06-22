@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.dto.ReservationRequestDTO;
+import mrsa.tim018.dto.SpecialOfferReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
@@ -19,6 +23,7 @@ import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Report;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
+import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.ReservationRepository;
 import mrsa.tim018.utils.TimeUtils;
@@ -36,10 +41,21 @@ public class ReservationService {
 	private ClientService clientService;	
 	
 	@Autowired
-	private RenterService renterService;
-
+	private SpecialOfferService specialOfferService;
+	
 	@Autowired
 	private LoyaltyProgramService loyaltyProgramService;
+	
+	@Autowired
+	private ReservationFinancesService reservationFinancesService;
+	
+	@Autowired
+	private AssetCalendarSevice assetCalendarSevice;
+	
+	@Autowired
+	private EmailService emailService;
+	@Autowired
+	private RenterService renterService;
 
 	public Reservation save(Reservation reservation) {
 		return reservationRepository.save(reservation);
@@ -189,6 +205,71 @@ public class ReservationService {
 		return (List<Report>) reservationRepository.getMonthlyReports(assetId);
 	}
 
+	//Transaction functions
+	
+	
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Reservation reserveSpecialOffer(SpecialOfferReservationDTO specialOfferReservationDTO) throws Exception {
+		Asset asset = assetService.findOne(specialOfferReservationDTO.getAssetId());
+		Reservation reservation = saveSpecialOfferReservation(specialOfferReservationDTO, asset); 
+		  
+		updateAssetsCalendarSpecialOffer(specialOfferReservationDTO, asset, reservation);
+		
+		return reservation;
+	}
+
+	private void updateAssetsCalendarSpecialOffer(SpecialOfferReservationDTO specialOfferReservationDTO, Asset asset,
+			Reservation reservation) {
+		asset.getCalendar().getReserved().add(reservation);     
+		List<SpecialOffer> ranges = assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
+		if (ranges == null) {
+			asset.getCalendar().setSpecialPrice(new ArrayList<SpecialOffer>());
+		} else { 
+			asset.getCalendar().setSpecialPrice(ranges);  
+		}
+		       
+		assetService.save(asset);
+	}
+
+	private Reservation saveSpecialOfferReservation(SpecialOfferReservationDTO specialOfferReservationDTO, Asset asset) throws Exception {
+		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
+		SpecialOffer specialOffer = specialOfferService.findByIdAndLock(specialOfferReservationDTO.getSpecialOfferId());
+		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
+		
+		if (specialOffer.getClient()!=null) {
+			throw new Exception("Special offer has already been reserved");
+		}
+		
+		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
+		reservation.setCancelationFee(asset.getCancelationConditions());
+		save(reservation);
+		return reservation;
+	}
+
+	@Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ)
+	public Reservation makeReservation(ReservationRequestDTO reservationDto) throws Exception {
+		
+		Reservation reservation = saveRegularReservation(reservationDto);
+		if(reservation!=null) {
+			emailService.sendReservationSuccessfull(reservation);
+		}
+		return reservation;
+	}
+
+	@Transactional
+	private Reservation saveRegularReservation(ReservationRequestDTO reservationDto) {
+		Asset asset = assetService.findOneLock(reservationDto.getAssetId());
+		Client client = clientService.findOne(reservationDto.getClientId());
+		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
+		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
+		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
+		reservation.setCancelationFee(asset.getCancelationConditions());
+		reservation = makeRegularReservation(reservation);
+		return reservation;
+	}
+
 	public List<ReservationDTO> map(List<Reservation> reservations){
 		List<ReservationDTO> reservationsDTO = new ArrayList<>();
 		for (Reservation res : reservations) {
@@ -230,15 +311,4 @@ public class ReservationService {
 		return map(reservations);
 	}
 
-	@Transactional
-	public Reservation makeReservation(ReservationRequestDTO reservationDto) {
-		Asset asset = assetService.findOne(reservationDto.getAssetId());
-		Client client = clientService.findOne(reservationDto.getClientId());
-		TimeRange timeRange = new TimeRange(false, reservationDto.getFromDateTime(), reservationDto.getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
-		Reservation reservation = new Reservation(asset, client, timeRange, reservationDto.getTotalPrice(), loyaltyState);
-		reservation.setCancelationFee(asset.getCancelationConditions());
-		return makeRegularReservation(reservation);
-	}
-	
 }

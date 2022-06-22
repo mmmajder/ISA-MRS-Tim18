@@ -24,8 +24,9 @@ const AdminDeletionRequestsPreview = () => {
   let listedRequests;
   if (requests != undefined){
       listedRequests = requests.map((request) => <ListedDeleteProfileRequest request={request} key={request.id} onDelete={handleCallback}/>)
-  }
+  } 
 
+ 
   return (
     <>
     {listedRequests}

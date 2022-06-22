@@ -6,22 +6,32 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Admin extends User {
 
 	private static final long serialVersionUID = 1L;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Reservation> pendigReservations = new ArrayList<>();
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Registration> pendingRegistrations = new ArrayList<>();
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> pendingReviews = new ArrayList<Review>();
-
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DeletationRequest> deletationRequests = new ArrayList<>();
 

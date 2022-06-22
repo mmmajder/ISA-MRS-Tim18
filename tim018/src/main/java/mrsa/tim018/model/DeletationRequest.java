@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 @Entity
 public class DeletationRequest {
@@ -27,6 +28,9 @@ public class DeletationRequest {
   
 	@OneToOne()
 	private User user;
+	
+	@Version
+	private Integer version;
 
 	public DeletationRequest() {
 	}
@@ -34,7 +38,7 @@ public class DeletationRequest {
 	public DeletationRequest(Long iD, boolean isDeleted, RequestStatus status, User user, String reason) {
 		super();
 		id = iD;
-		this.isDeleted = isDeleted;
+		this.isDeleted = isDeleted; 
 		this.status = status;
 		this.user = user;
 		this.reason = reason;

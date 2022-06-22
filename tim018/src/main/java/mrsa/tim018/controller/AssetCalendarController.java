@@ -3,8 +3,6 @@ package mrsa.tim018.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,13 +42,16 @@ public class AssetCalendarController {
 	private RenterService renterService;
 	
 	@Autowired
+	private AssetCalendarSevice calendarSevice;
+	
+	@Autowired 
+	private SpecialOfferService specialOfferService;
+	
+	@Autowired
 	private EmailService emailService;
 	
 	@Autowired
 	private SubscriptionService subscriptionService;
-	
-	@Autowired 
-	private SpecialOfferService specialOfferService;
 	
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@GetMapping(value = "/allCalendarsForUser/{id}") 
@@ -84,6 +85,13 @@ public class AssetCalendarController {
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AppointmentCreationDTO> addAppointment(@RequestBody AppointmentCreationDTO appointment) {
 		// a course must exist
+//		AppointmentCreationDTO appointmentCreationDTO = calendarSevice.addAppointment(appointment);
+//		if (appointmentCreationDTO==null) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		return new ResponseEntity<>(appointmentCreationDTO, HttpStatus.OK); // what to return
+		
+		// a course must exist
 		Renter renter = renterService.findOne(appointment.getUserId());
 		if (renter == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -98,8 +106,10 @@ public class AssetCalendarController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(appointment, HttpStatus.OK); // what to return
-
 	}
+	
+	
+	
 	
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(value="/remove", consumes = "application/json")

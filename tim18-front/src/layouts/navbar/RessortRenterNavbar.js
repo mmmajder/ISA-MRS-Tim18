@@ -18,7 +18,7 @@ export default function ResortRenterNavbar({userType, userId}){
             <Nav className="ms-auto">
                 <Nav.Link href="/home"><FontAwesomeIcon icon={faSearch} /> Search</Nav.Link>
                 <UsersOffersDropdown userType={userType}/>
-                <ProfileDropdown userId={userId}/>
+                <ProfileDropdown userId={userId} userType={userType}/>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

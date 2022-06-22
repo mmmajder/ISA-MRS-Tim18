@@ -10,9 +10,8 @@ import { getClientByID } from '../../services/api/ClientApi'
 const ClientsComplaintMainInfo = ({request}) => {
     const [renter, setRenter] = useState(null)
     const [asset, setAsset] = useState(null)
-    const [client, setClient] = useState(null)
+    const [client, setClient] = useState(null) 
     let prefix = ""
-    
 
     useEffect(() => {
         async function fetchAsset(){

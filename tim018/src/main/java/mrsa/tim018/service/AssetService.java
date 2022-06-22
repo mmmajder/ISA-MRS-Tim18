@@ -8,17 +8,13 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.AssetDTO;
-import mrsa.tim018.dto.calendar.AssetCalendarsDTO;
 import mrsa.tim018.mapper.AssetMapper;
 import mrsa.tim018.model.Adventure;
-import mrsa.tim018.model.AppointmentType;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.AssetPrice;
@@ -27,10 +23,12 @@ import mrsa.tim018.model.Boat;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Resort;
-import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
+import mrsa.tim018.repository.AdventureRepository;
 import mrsa.tim018.repository.AssetRepository;
+import mrsa.tim018.repository.BoatRepository;
+import mrsa.tim018.repository.ResortRepository;
 
 @Service
 public class AssetService {
@@ -40,9 +38,6 @@ public class AssetService {
 	
 	@Autowired
 	private AssetCalendarSevice assetCalendarService;
-
-	@Autowired
-	private RenterService renterService;
 	
 	@Autowired
 	private ResortService resortService;
@@ -52,14 +47,27 @@ public class AssetService {
 	
 	@Autowired
 	private AdventureService adventureService;
-		
+	
+	@Autowired 
+	private RenterService renterService;
+	
+	@Autowired
+	private AssetPriceService assetPriceService;
+	
 	@Autowired
 	private ImageService imageService;
 	
 	@Autowired
-	private AssetPriceService assetPriceService;
-
+	private BoatRepository boatRepository;
+	
+	@Autowired
+	private AdventureRepository adventureRepository;
+	
+	@Autowired
+	private ResortRepository resortRepository;
+	
 	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
+
 	
 
 	public Asset save(Asset asset) {
@@ -118,6 +126,112 @@ public class AssetService {
 		Asset asset = subscription.getAsset();
 		asset.getSubscriptions().remove(subscription);
 		save(asset);
+	}
+		
+	private void createPrice(Long assetId, double price) {
+		LocalDate startDate = LocalDate.now();
+		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
+		assetPriceService.save(assetPrice);
+	}
+
+	@Transactional(readOnly=false)
+	public AssetDTO updateAsset(Long id, AssetDTO assetDto) {
+		AssetType type = assetDto.getAssetType();
+		
+		switch (type) {
+		case RESORT: 
+			return updateResort(id, assetDto);
+		case BOAT: 
+			return updateBoat(id, assetDto);
+		case FISHING_ADVENTURE: 
+			return updateAdventure(id, assetDto);
+		default:  
+			return null;
+		}
+	}
+	private AssetDTO updateResort(Long id,AssetDTO assetDto) {
+		Resort updatedData = AssetMapper.mapToResort(assetDto);
+		Resort resortToUpdate = resortService.findOne(id);
+		
+		if (resortToUpdate != null)
+		{
+			// changes only user-changable attributes
+			updateAsset(resortToUpdate, updatedData);
+			resortToUpdate.setNumberOfRooms(updatedData.getNumberOfRooms());
+			resortToUpdate.setNumberOfBeds(updatedData.getNumberOfBeds());
+			resortService.save(resortToUpdate);
+			return new AssetDTO(resortToUpdate);
+		} else
+			return null;
+	}
+	
+	private AssetDTO updateBoat(Long id, AssetDTO assetDto) {
+		Boat updatedData = AssetMapper.mapToBoat(assetDto);
+		Boat boatToUpdate = boatService.findOne(id);
+		
+		if (boatToUpdate != null)
+		{
+			// changes only user-changable attributes
+			updateAsset(boatToUpdate, updatedData);
+			updateBoatSpecificAttributes(boatToUpdate, updatedData);
+			boatService.save(boatToUpdate);
+			return new AssetDTO(boatToUpdate);
+		} else
+			return null;
+	}
+	
+	private AssetDTO updateAdventure(Long id, AssetDTO assetDto) {
+		Adventure updatedData = AssetMapper.mapToAdventure(assetDto);
+		Adventure adventureToUpdate = adventureService.findOne(id);
+		
+		if (adventureToUpdate != null)
+		{
+			updateAsset(adventureToUpdate, updatedData);
+			adventureToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
+			adventureService.save(adventureToUpdate);
+			return new AssetDTO(adventureToUpdate);
+		} else
+			return null;
+	}
+	
+	private void updateBoatSpecificAttributes(Boat boatToUpdate, Boat updatedData) {
+		boatToUpdate.setBoatType(updatedData.getBoatType());
+		boatToUpdate.setLength(updatedData.getLength());
+		boatToUpdate.setNumOfMotor(updatedData.getNumOfMotor());
+		boatToUpdate.setMotorPower(updatedData.getMotorPower());
+		boatToUpdate.setMaxSpeed(updatedData.getMaxSpeed());
+		boatToUpdate.setNavigationEquipment(updatedData.getNavigationEquipment());
+		boatToUpdate.setFishingEquipment(updatedData.getFishingEquipment());
+	}
+	
+	private void updateAsset(Asset assetToUpdate, Asset updatedData) {
+		assetToUpdate.setAddress(updatedData.getAddress());
+		assetToUpdate.setCancelationConditions(updatedData.getCancelationConditions());
+		assetToUpdate.setDescription(updatedData.getDescription());
+		assetToUpdate.setName(updatedData.getName());
+		assetToUpdate.setNumOfPeople(updatedData.getNumOfPeople());
+		assetToUpdate.setRules(updatedData.getRules());
+	}
+
+	public Asset findOneLock(Long assetId) {
+		Asset asset = assetRepository.findById(assetId).orElse(null);
+		if (asset==null) {
+			return asset;
+		}
+		switch (asset.getAssetType()) {
+		case BOAT:
+			asset = boatRepository.findOneByIdLock(assetId);
+			break;
+		case FISHING_ADVENTURE:
+			asset = adventureRepository.findOneByIdLock(assetId);
+			break;
+		case RESORT:
+			asset = resortRepository.findOneByIdLock(assetId);
+			break;
+		default:
+			break;
+		}
+		return asset;
 	}
 	
 	public List<Asset> findByAssetTypeAndIsNotDeleted(AssetType assetType) {
@@ -218,11 +332,6 @@ public class AssetService {
 		}
 	}
 	
-	private void createPrice(Long assetId, double price) {
-		LocalDate startDate = LocalDate.now();
-		AssetPrice assetPrice = new AssetPrice(price, startDate, assetId);
-		assetPriceService.save(assetPrice);
-	}
 	
 	private void setCalendarAndRenter(Asset asset, Long renterId) {
 		AssetCalendar assetCalendar = assetCalendarService.createNewCalendar();

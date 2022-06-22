@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -17,7 +20,8 @@ public class Renter extends User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@OneToMany(mappedBy = "renter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "renter", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Asset> assets = new ArrayList<>();
 	

@@ -84,9 +84,15 @@ export default function AssetsPreview({isSearch}){
         }, [assets]
     )
 
+    const removeAsset = (childData) => {
+        setAssets(assets.filter(function( obj ) {
+            return obj.id !== childData;
+          }))
+    }
+
     useEffect(() => {
         if (assets != undefined){
-            let mappedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} key={asset.id} deleteFunc={assetDeletion}/>)
+            let mappedAssets = assets.map((asset) => <ListedAsset asset={asset} isSearch={isSearch} key={asset.id} deleteFunc={assetDeletion} removeAsset={removeAsset}/>)
             setListedAssets(mappedAssets);
         }
     }, [assets])

@@ -13,18 +13,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Asset {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
@@ -49,6 +55,7 @@ public class Asset {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Photo> photos;
 
@@ -67,16 +74,19 @@ public class Asset {
 	@Column(name = "price")
 	private double price;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private AssetCalendar calendar;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<PriceCatalog> prices;
-	
+
 	@OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Subscription> subscriptions = new ArrayList<>();
 	
+	@Version
+	private Integer version;
+
 	public Asset() {
 
 	}
@@ -117,6 +127,26 @@ public class Asset {
 		this.averageRating = averageRating;
 		this.price = price;
 		this.calendar = calendar;
+		this.prices = prices;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Photo> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+
+	public List<PriceCatalog> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PriceCatalog> prices) {
 		this.prices = prices;
 	}
 
@@ -215,7 +245,7 @@ public class Asset {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public List<Subscription> getSubscriptions() {
 		return subscriptions;
 	}

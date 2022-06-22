@@ -8,6 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,9 +30,12 @@ public class Client extends User {
 //	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //	private List<SpecialOffer> specialOffers = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<>();
 	
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Subscription> subscriptions = new ArrayList<>();
@@ -46,6 +55,15 @@ public class Client extends User {
 		super(id, firstName, lastName, address, city, state, phoneNum, userType, email, password, profilePhotoId);
 		this.penaltyPoints = penaltyPoints;
 	}
+	
+	public Client(String firstName, String lastName, String address, String city, String state,
+			String phoneNum, UserType userType, String email, String password, int penaltyPoints, String profilePhotoId) {
+	
+		super(firstName, lastName, address, city, state, phoneNum, userType, email, password, profilePhotoId);
+		this.penaltyPoints = penaltyPoints;
+	}
+	
+	
 	public Client(User user, int penaltyPoints) {
 	
 		super(user);

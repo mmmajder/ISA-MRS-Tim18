@@ -16,21 +16,15 @@ const ListedDeleteProfileRequest = ({request, key, onDelete}) => {
 
     const accpetRequest = () => {
         setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="accept"/>)
-        
     }
 
     const declineRequest = () => {
         setActiveForm(<ReasonProfileDeletionModal request={request} onDelete={handleCallback} action="decline"/>)
-        
     }
 
     const handleCallback = (childData) =>{
         onDelete(childData)
     }
-
-
-    console.log(request)
-    console.log("request")
     
     return <div className="borderedBlock mt-3 pt-0 ms-4 me-4" align="">
     <Row className='ms-4'>

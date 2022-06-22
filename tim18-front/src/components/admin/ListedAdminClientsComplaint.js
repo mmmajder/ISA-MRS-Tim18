@@ -16,9 +16,19 @@ const ListedAdminClientsComplaint = ({request, key, onDelete}) => {
         onDelete(childData)
     }
 
+    const complaintCallback = (returnData) => {
+        if(!returnData){
+            alert('Oops, something went wrong')
+        }
+        else
+        {
+            alert('Successfull')
+            onDelete(request)
+        }
+        }
+
     const cancelRequest = () => {
-        cancelClientsComplaint(request.id)
-        onDelete(request)
+        cancelClientsComplaint(request.id, complaintCallback)
     }
     /*
     */

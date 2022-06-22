@@ -4,13 +4,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mrsa.tim018.dto.ClientDTO;
+import mrsa.tim018.mapper.ClientMapper;
 import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.AssetType;
 import mrsa.tim018.model.Client;
@@ -73,6 +78,18 @@ public class ClientService {
 		for (Client client : clients) {
 			client.setPenaltyPoints(0);
 		}
+	}
+
+	@Transactional(readOnly = false)
+	public ClientDTO updateclient(ClientDTO clientDTO) {
+		Client client = findOne(clientDTO.getId());
+
+		if (client == null) {
+			return null;
+		}
+		client = ClientMapper.mapToClient(client, clientDTO);
+		client = save(client);
+		return new ClientDTO(client);
 	}
 
 	@Transactional

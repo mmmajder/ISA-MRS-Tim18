@@ -12,9 +12,20 @@ const ListedRegistrationRequest = ({request, key, onDelete}) => {
     console.log(request)
     const [activeForm, setActiveForm] = useState(null);
 
+
+    const showMessage = (returnData) => {
+        if(returnData!=false){
+            alert('Oops, something went wrong')
+        }
+        else
+        {
+            alert('Successfull')
+            onDelete(request)
+        }
+    }
+
     const accpetRequest = () => {
-        acceptRegistrationRequest(request.id)
-        onDelete(request)
+        acceptRegistrationRequest(request.id, showMessage)
     }
 
     const handleCallback = (childData) =>{
@@ -22,7 +33,7 @@ const ListedRegistrationRequest = ({request, key, onDelete}) => {
     }
 
     const declineRequest = () => {
-        setActiveForm(<DeclineRegistrationModal request={request} onDelete={handleCallback}/>)
+        setActiveForm(<DeclineRegistrationModal request={request} onDelete={handleCallback} showMessage={showMessage}/>)
     }
 
     return <div className="borderedBlock mt-3 pt-0 ms-4 me-4" align="">

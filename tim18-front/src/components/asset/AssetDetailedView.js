@@ -154,11 +154,11 @@ export default function AssetDetailedView(){
                                 <AssetMainInfo name={asset.name} mark={mark} address={asset.address} price={assetPrice}/>
                             </Col> 
                             <Col sm="4">
-                                { userType !== "Client" && userType !== "Guest" ? 
+                                { userType !== "Client" && userType !== "Guest"  ? 
                                 <>
-                                <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link> 
-                                <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link> 
-                                <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> 
+                                {userType !== "Admin" && <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link> }
+                                {userType !== "Admin" && <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link>} 
+                                {userType !== "Admin" && <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> }
                                 <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>
                                 </> : 
                                 <RegularButton text={subscribeTxt} disabled={userType === "Guest"} onClickFunction={subscribe}/>

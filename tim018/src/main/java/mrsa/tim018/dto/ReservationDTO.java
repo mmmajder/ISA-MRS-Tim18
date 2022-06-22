@@ -50,7 +50,6 @@ public class ReservationDTO {
 	public ReservationDTO(Reservation reservation, Long assetId, Long clientId) {
 		this.id = reservation.getID();
 		this.asset = assetId;
-
 		this.clientId = clientId;
 		this.timeRange = reservation.getTimeRange();
 		this.reservationStatus = reservation.getStatus();

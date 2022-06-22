@@ -33,7 +33,6 @@ import mrsa.tim018.model.LoyaltyState;
 import mrsa.tim018.model.Renter;
 import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.ReservationStatus;
-import mrsa.tim018.model.SpecialOffer;
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.service.AssetCalendarSevice;
 import mrsa.tim018.service.AssetService;
@@ -103,41 +102,18 @@ public class ReservationController {
 		return new ResponseEntity<>(reservation, HttpStatus.OK); 
 	}
 	
-	@PostMapping(value = "/reserveSpecialOffer")
-	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
-		Asset asset = assetService.findOne(specialOfferReservationDTO.getAssetId());
-		Client client = clientService.findOne(specialOfferReservationDTO.getClientId());
-		SpecialOffer specialOffer = specialOfferService.findById(specialOfferReservationDTO.getSpecialOfferId());
-		TimeRange timeRange = new TimeRange(false, specialOffer.getTimeRange().getFromDateTime(), specialOffer.getTimeRange().getToDateTime());
-		LoyaltyState loyaltyState = loyaltyProgramService.getLoyaltyState(client);
-		
-		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
-		reservation.setCancelationFee(asset.getCancelationConditions());
-		reservationService.save(reservation); 
-		  
-		asset.getCalendar().getReserved().add(reservation);     
-		ArrayList<SpecialOffer> ranges = (ArrayList<SpecialOffer>) assetCalendarSevice.removeSpecialOffer(asset.getCalendar().getSpecialPrice(), specialOfferReservationDTO.getSpecialOfferId());
-		if (ranges == null) {
-			asset.getCalendar().setSpecialPrice(new ArrayList<>());
-		} else { 
-			asset.getCalendar().setSpecialPrice(ranges);  
-		}
-		
-		       
-		assetService.save(asset);
-		return new ResponseEntity<>(reservation, HttpStatus.OK);
-	}
-	 
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
-		Reservation reservation = reservationService.makeReservation(reservationDto);
-		if(reservation!=null) {
-			emailService.sendReservationSuccessfull(reservation);
-			return new ResponseEntity<>(reservation, HttpStatus.OK);
+		Reservation reservation = null;
+		try{
+			reservation = reservationService.makeReservation(reservationDto);
+		} catch(Exception e) {
+			return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST); 
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping(value = "/current/renter/{renterId}")
 	public ResponseEntity<List<ReservationDTO>> getCurrentReservations(@PathVariable Long renterId) {
@@ -161,5 +137,17 @@ public class ReservationController {
 		List<ReservationDTO> reservationsDTO = reservationService.getPastRenterReservations(renterId);
 		return new ResponseEntity<List<ReservationDTO>>(reservationsDTO, HttpStatus.OK);
 	}
+	
 
+	@PostMapping(value = "/reserveSpecialOffer")
+	public ResponseEntity<Reservation> reserveSpecialOffer(@RequestBody SpecialOfferReservationDTO specialOfferReservationDTO) {
+		Reservation reservation = null;
+		try{
+			reservation = reservationService.reserveSpecialOffer(specialOfferReservationDTO);
+		} catch(Exception e) {
+			return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST); 
+		}
+		return new ResponseEntity<Reservation>(reservation, HttpStatus.OK);
+	}
+	
 }
