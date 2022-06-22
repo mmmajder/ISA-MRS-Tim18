@@ -134,11 +134,7 @@ public class RenterController {
 		if (a == null || r == null)
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
-		for (Asset asset : r.getAssets())
-			if (asset.getID().equals(assetId))
-				return new ResponseEntity<>(true, HttpStatus.OK);
-			
-		return new ResponseEntity<>(false, HttpStatus.OK);
+		return new ResponseEntity<>(assetService.doesRenterOwnAsset(r, assetId), HttpStatus.OK);
 	}
 
 }

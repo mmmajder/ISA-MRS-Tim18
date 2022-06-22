@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetPrice;
+import mrsa.tim018.model.User;
 import mrsa.tim018.service.AssetPriceService;
 import mrsa.tim018.service.AssetService;
 import mrsa.tim018.utils.StringUtils;
@@ -32,13 +34,17 @@ public class AssetPriceControler {
 	
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER') || hasRole('ADMIN')")
 	@PostMapping("/{assetId}")
-	  public ResponseEntity<AssetPrice> createNewAssetPrice(@PathVariable Long assetId, @RequestParam("newPrice") double newPrice) {
+	  public ResponseEntity<AssetPrice> createNewAssetPrice(@PathVariable Long assetId, @RequestParam("newPrice") double newPrice,
+			  Authentication authentication) {
 	    try {
 	    	
 	    	Asset a = assetService.findOne(assetId);
 	    	if (a == null) 
 	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    	
+	    	if (!assetService.doesRenterOwnAsset(authentication, assetId))
+	    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	    		
 	    	LocalDate startDate = LocalDate.now().plusDays(1);
 	    	if (assetPriceService.doesPriceWithStartDateExist(assetId, startDate))
 	    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

@@ -8,6 +8,9 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ import mrsa.tim018.model.Reservation;
 import mrsa.tim018.model.Resort;
 import mrsa.tim018.model.Subscription;
 import mrsa.tim018.model.TimeRange;
+import mrsa.tim018.model.User;
 import mrsa.tim018.repository.AdventureRepository;
 import mrsa.tim018.repository.AssetRepository;
 import mrsa.tim018.repository.BoatRepository;
@@ -65,6 +69,9 @@ public class AssetService {
 	
 	@Autowired
 	private ResortRepository resortRepository;
+	
+	@Autowired
+	private UserService userService;
 	
 	private static final String defaultAssetPicturePath = "C:\\Faks\\VI\\ISA - Internet softverske arhitekture\\ISA-MRS-Tim18\\tim18-front\\src\\assets\\images\\island_logo.png";
 
@@ -338,5 +345,24 @@ public class AssetService {
 		asset.setCalendar(assetCalendar);
 		Renter renter = renterService.findOne(renterId);
 		asset.setRenter(renter);
+	}
+	
+	public boolean doesRenterOwnAsset(Renter renter, long assetId) {
+		for (Asset asset : renter.getAssets())
+			if (asset.getID().equals(assetId))
+				return true;
+		
+		return false;
+	}
+	
+	public boolean doesRenterOwnAsset(Authentication authentication, long assetId) {
+		User uuser = userService.findByEmail(authentication.getName());
+		Renter renter = renterService.findOne(uuser.getID());
+		
+		for (Asset asset : renter.getAssets())
+			if (asset.getID().equals(assetId))
+				return true;
+		
+		return false;
 	}
 }

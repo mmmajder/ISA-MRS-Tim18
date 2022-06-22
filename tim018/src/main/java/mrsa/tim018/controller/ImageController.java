@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +42,13 @@ public class ImageController {
 	private AssetService assetService;
 	
 	@PostMapping("profilePhoto/{id}")
-	  public ResponseEntity<String> uploadProfilePhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+	  public ResponseEntity<String> uploadProfilePhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file,
+			  Authentication authentication) {
 	    try {
+	    	User uuser = userService.findByEmail(authentication.getName());
+	    	if (uuser.getID() != id)
+	    		return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+	    	
 	    	Image image = imageService.store(file);
 	    	User user = userService.findOne(id);
 	    	user.setProfilePhotoId(image.getId());
@@ -54,9 +60,13 @@ public class ImageController {
 	  }
 	  
 	  @PostMapping("assetPhoto/{id}")
-	  public ResponseEntity<String> uploadAssetPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+	  public ResponseEntity<String> uploadAssetPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file,
+			  Authentication authentication) {
 	    try {
 	    	Asset a = assetService.findOne(id);
+	    	
+	    	if (!assetService.doesRenterOwnAsset(authentication, id))
+	    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	    	
 	    	if (a != null) {
 	    		Image image = imageService.store(id, file);

@@ -57,8 +57,6 @@ public class UserController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
-	
-	
 	@GetMapping("/verify/{code}")
 	public ResponseEntity<UserDTO> verifyUser(@PathVariable String code) {
 		User user = userService.verify(code);
