@@ -33,6 +33,8 @@ import mrsa.tim018.repository.AdventureRepository;
 import mrsa.tim018.repository.AssetRepository;
 import mrsa.tim018.repository.BoatRepository;
 import mrsa.tim018.repository.ResortRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 @Service
 public class AssetService {
@@ -81,9 +83,14 @@ public class AssetService {
 		return assetRepository.save(asset);
 	}
 	
+	@Cacheable("asset")
 	public Asset findOne(Long id) {
 		return assetRepository.findById(id).orElse(null);
 	}
+	
+	@CacheEvict(cacheNames = {"asset"}, allEntries = true)
+	void removeFromCache() {}
+	
 	public Asset findsAssetsWithCalendar(Long id) {
 		return assetRepository.findsAssetsWithCalendar(id);
 	}
