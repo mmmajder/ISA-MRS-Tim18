@@ -37,50 +37,51 @@ const CalendarAsset = ({assetId}) => {
     
 
     useEffect(() => {
-      async function fetchCalendarData() {
-        const requestData = await getAssetCalendarData(assetId);
-        let retData = requestData.data.calendar.available.map(function(range) {
-          var info = {
-            title : "Available",
-            start : makeDateString(range.fromDateTime),
-            end : makeDateString(range.toDateTime)
+        getAssetCalendarData(assetId).then(
+          (response) => {
+            let requestData = response;
+            let retData = requestData.data.available.map(function(range) {
+              var info = {
+                title : "Available",
+                start : makeDateString(range.fromDateTime),
+                end : makeDateString(range.toDateTime)
+              }
+              return info;
+            })
+            let specialOffers = requestData.data.specialPrice.map(function(range) {
+              var info = {
+                id : range.id,
+                title : "Special offer",
+                start : makeDateString(range.timeRange.fromDateTime),
+                end : makeDateString(range.timeRange.toDateTime),
+                backgroundColor : "orange",
+                borderColor : "orange"
+              }
+              return info;
+            })
+            let reserved = requestData.data.reserved.map(function(range) {
+              var info = {
+                title : "Reserved",
+                start : makeDateString(range.timeRange.fromDateTime),
+                end : makeDateString(range.timeRange.toDateTime),
+                backgroundColor : "grey",
+                borderColor : "grey"
+              }
+              return info;
+            })
+
+            if (specialOffers.length!=0){
+              retData = [...retData, ...specialOffers] 
+            }
+            if(reserved.length!=0){
+              retData = [...retData, ...reserved] 
+            }
+            if (requestData) {
+              setEvents(retData);
+            }
           }
-          return info;
-        })
-        let specialOffers = requestData.data.calendar.specialPrice.map(function(range) {
-          var info = {
-            id : range.id,
-            title : "Special offer",
-            start : makeDateString(range.timeRange.fromDateTime),
-            end : makeDateString(range.timeRange.toDateTime),
-            backgroundColor : "orange",
-            borderColor : "orange"
-          }
-          return info;
-        })
-        let reserved = requestData.data.calendar.reserved.map(function(range) {
-          var info = {
-            title : "Reserved",
-            start : makeDateString(range.timeRange.fromDateTime),
-            end : makeDateString(range.timeRange.toDateTime),
-            backgroundColor : "grey",
-            borderColor : "grey"
-          }
-          return info;
-        })
-        if (specialOffers.length!=0){
-          retData = [...retData, ...specialOffers] 
-        }
-        if(reserved.length!=0){
-          retData = [...retData, ...reserved] 
-        }
-        if (requestData) {
-          setEvents(retData);
-        }
-        return requestData;
-      }
-      fetchCalendarData()
-    }, [])
+        )
+    }, [assetId])
 
     const removeAvailableCallback = (fromDateTime, toDateTime) => {
       setEvents(removeAvailable(events, fromDateTime, toDateTime))
