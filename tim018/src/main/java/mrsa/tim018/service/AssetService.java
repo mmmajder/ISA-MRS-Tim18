@@ -297,6 +297,39 @@ public class AssetService {
 		AssetCalendar newCalendar = assetCalendarService.removeAppointment(calendar, appointment);
 		assetCalendarService.save(newCalendar);
 	}
+	
+	public boolean verifyAssetDto(AssetDTO assetDto) {
+		if (assetDto == null) return false;
+		if (assetDto.getName() == null || assetDto.getName().isEmpty()) return false;
+		if (assetDto.getAddress() == null || assetDto.getAddress().isEmpty()) return false;
+		if (assetDto.getDescription() == null || assetDto.getDescription().isEmpty()) return false;
+		if (assetDto.getRules() == null || assetDto.getRules().isEmpty()) return false;
+		if (assetDto.getNumOfPeople() <= 0) return false;
+		if (assetDto.getCancelationConditions() < 0 || assetDto.getCancelationConditions() > 100) return false;
+		
+		switch(assetDto.getAssetType()) {
+			case RESORT: 
+				if (assetDto.getNumberOfBeds() <= 0) return false;
+				if (assetDto.getNumberOfRooms() <= 0) return false;
+				break;
+			case BOAT:
+				if (assetDto.getBoatType() == null || assetDto.getBoatType().isEmpty()) return false;
+				if (assetDto.getNavigationEquipment() == null || assetDto.getNavigationEquipment().isEmpty()) return false;
+				if (assetDto.getLength() <= 0) return false;
+				if (assetDto.getMaxSpeed() <= 0) return false;
+				if (assetDto.getMotorPower() <= 0) return false;
+				if (assetDto.getNumOfMotor() <= 0) return false;
+				if (assetDto.getFishingEquipment() == null || assetDto.getFishingEquipment().isEmpty()) return false;
+				break;
+			case FISHING_ADVENTURE:
+				if (assetDto.getFishingEquipment() == null || assetDto.getFishingEquipment().isEmpty()) return false;
+				break;
+			default:
+				return false;
+		}
+		
+		return true;
+	}
 
 	@Transactional
 	public AssetDTO createAsset(AssetDTO assetDto) {

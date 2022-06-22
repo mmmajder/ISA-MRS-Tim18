@@ -79,6 +79,9 @@ public class AssetController {
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDto) {
+		if (!assetService.verifyAssetDto(assetDto))
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			
 		AssetDTO created = assetService.createAsset(assetDto);
 		if(created == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -92,6 +95,9 @@ public class AssetController {
 			Authentication authentication) {
 		if (!assetService.doesRenterOwnAsset(authentication, id))
     		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		
+		if (!assetService.verifyAssetDto(assetDto))
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		
 		AssetDTO returnData = assetService.updateAsset(id, assetDto);
 		
