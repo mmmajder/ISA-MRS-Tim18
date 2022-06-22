@@ -81,5 +81,5 @@ export function MapContainer({google, address}){
 };
 
 export default GoogleApiWrapper({
-    apiKey: "AIzaSyDlfiUh3y4siKOGBDGDD1404F-mTOiga3E"
+    apiKey: "AIzaSyCnaM0qOdXFJyvK4tG5zNbRkaGg6SEmzTo"
 })(MapContainer);
