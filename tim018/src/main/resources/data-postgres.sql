@@ -8,15 +8,15 @@ INSERT INTO Role (name) VALUES ('ROLE_USER');/*6*/
 ALTER SEQUENCE userSeqGen RESTART;
 
 /*images*/
-insert into image(id, data, is_deleted, type, asset_id) values
+/*insert into image(id, data, is_deleted, type, asset_id) values*/
 	/*user images*/
-	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\renter_stanivuk.jpg'), false, null, null),
+/*	('1', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\renter_stanivuk.jpg'), false, null, null),
 	('2', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\Katarina_Komad.jpg'), false, null, null),
 	('3', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_ajder.jpg'), false, null, null),
 	('4', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null),
 	('5', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_admin.jpg'), false, null, null),
-	/*asset images*/
-	('6', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
+*/	/*asset images*/
+/*	('6', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
 	('7', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_2.jpg'), false, null, 1000005),
 	('8', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_3.jpg'), false, null, 1000005),
 	('9', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\fishman_1.jpg'), false, null, 1000005),
@@ -27,7 +27,7 @@ insert into image(id, data, is_deleted, type, asset_id) values
 	('14', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\boat.jpg'), false, null, 1000004),
 	
 	('15', lo_import('C:\Faks\VI\ISA - Internet softverske arhitekture\ISA-MRS-Tim18\tim18-front\src\assets\images\default_user.jpg'), false, null, null);
-
+*/
 /*admin*/
 insert into admin (id, address, city, first_name, is_deleted, last_name, loyalty_points, phone_num, state, user_type, email, password,enabled, profile_photo_id, already_logged, version) values
 				   (NEXTVAL('userSeqGen'), 'AdminAdress', 'Admingrad', 'Admin', false, 'Admin', 0, '06321654', 'Adminvil', 'Admin', 'admin@gmail.com', '$2a$10$YFAN7RKvLMLfFotongSDdulPP9vgQGE312p.yUFbGfj.DGMUOKxd.', true, '5', true, 1);
@@ -97,11 +97,11 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 
 /*special offer*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-06-11 11:15', false, '2022-06-20 12:38');
+					  ('2022-06-26 11:15', false, '2022-06-27 12:38');
 					  
 /*available*/
 insert into time_range(from_date_time, is_deleted, to_date_time) values
-					  ('2022-06-22 11:15', false, '2022-06-24 12:38');
+					  ('2022-06-27 11:15', false, '2022-06-30 12:38');
 					  
 			
 insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id, version) values

@@ -44,7 +44,7 @@ public class DeleteationRequestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "username", roles={"ADMIN"})
+	@WithMockUser(username = "username", roles={"USER"})
 	public void testGetDeletationRequest() throws Exception {
 		mockMvc.perform(get(URL_PREFIX + "/" + DeletationRequestConstants.DB_ID))
 		.andExpect(status().isOk())

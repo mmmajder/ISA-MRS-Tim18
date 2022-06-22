@@ -7,11 +7,15 @@ import CreateSpecialOfferFormModal from '../../modal/CreateSpecialOfferFormModal
 import CreateReservationFormModal from '../../modal/CreateReservationFormModal';
 import RemovePeriodOfAvailabilityModal from '../../modal/RemovePeriodOfAvailabilityModal';
 import { getRole } from '../../../services/AuthService/AuthService'
+import { getLogged } from '../../../services/api/LoginApi';
+import { doesRenterOwn } from '../../../services/api/RenterApi';
 
 
 export default function CreateCalendarEventForm(props){
     const [activeForm, setActiveForm] = useState(null);
     const userType = getRole()
+    const [user, setUser] = useState()
+    const [isMyAsset, setIsMyAsset] = useState(false);
 
     const availableForm = () => {
         setActiveForm(<CreatePeriodOfAvailabilityModal props={props} scope = {props.scope}/>)
@@ -36,9 +40,28 @@ export default function CreateCalendarEventForm(props){
         props.setShow(true)
     }, [activeForm])
 
+    useEffect(() => {
+        async function fetchUser(){
+            await getLogged(setUser);
+        }
+        fetchUser();
+    }, [])
+
+    useEffect(() => {
+        if (!!localStorage.getItem("assetId")  && !!user && (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter')){
+            doesRenterOwn(user.id, localStorage.getItem("assetId")).then(
+                (response) => {
+                    setIsMyAsset(response.data);
+                }
+            )
+        }
+    }, [user, userType])
+
+
+    if (!!user)
     return (
         <div>
-            {userType!=="Client" && userType!=="Guest" && userType!=="Admin" ? <>
+            {userType!=="Client" && userType!=="Guest" && userType!=="Admin" && isMyAsset ? <>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={availableForm}>Add period of availablity</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={removePeriodOfAvailability}>Remove period of availablity</button>
             <button className='btnPeriodAdd' style={{borderRadius:"0rem"}} onClick={specialOfferForm}>Add special offer</button>

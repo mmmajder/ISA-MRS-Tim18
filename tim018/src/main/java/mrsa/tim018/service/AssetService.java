@@ -220,6 +220,7 @@ public class AssetService {
 		assetToUpdate.setRules(updatedData.getRules());
 	}
 
+	@Transactional(readOnly = false)
 	public Asset findOneLock(Long assetId) {
 		Asset asset = assetRepository.findById(assetId).orElse(null);
 		if (asset==null) {

@@ -37,7 +37,7 @@ public class DeleteationRequestController {
 	@Autowired
 	private UserService userService;
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DeletationRequestDTO> getDeletationRequest(@PathVariable Long id) {
 		DeletationRequest request = deletationRequestService.findOne(id);
@@ -68,7 +68,7 @@ public class DeleteationRequestController {
 		return new ResponseEntity<>(deletationRequestDTOs, HttpStatus.OK);
 	}  
 	
-	
+	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "/deleteUser/{id}")
 	public ResponseEntity<Long> deleteUser(@PathVariable Long id) {
 		User user = userService.findOne(id);

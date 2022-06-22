@@ -43,7 +43,8 @@ public class EmailService {
 	private String siteURL = "http://localhost:3000";
 
 	//private String ourEmail = "isamrs018@outlook.com";
-	private String ourEmail = "isaaatim18@hotmail.com";
+//	private String ourEmail = "isaaatim18@hotmail.com";
+	private String ourEmail = "mejlzaisamrstim18@outlook.com";
 	
 //	private String ourEmail = "isamrs018@gmail.com";
 	
