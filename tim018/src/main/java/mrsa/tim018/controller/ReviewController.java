@@ -210,7 +210,7 @@ public class ReviewController {
 		try {
 			Review review = reviewService.acceptDeclineReview(id, isAccepted);
 			if (review==null) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			return new ResponseEntity<>(review, HttpStatus.OK);
 		} catch (Exception e) { 

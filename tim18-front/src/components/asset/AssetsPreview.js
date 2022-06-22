@@ -44,30 +44,18 @@ export default function AssetsPreview({isSearch}){
     }
 
     useEffect(() => {
-        async function fetchReservations(){
-            await getAssetsByType(setAssets, assetType);
+        if (isSearch){
+            getAssetsByType(setAssets, assetType);
         }
-        if(!!assetType){
-            fetchReservations();
-        }
-        
     }, [assetType])
 
 
     useEffect(() => {
-        async function fetchAssets(){
-            let requestData;
-            if (isSearch || userType==='Client' || userType==='Guest' || userType==='Admin')
-                requestData = await getAssets();
-            else
-                requestData = await getAssetsByUserId(user.id);
-            setAssets(!!requestData ? requestData.data : []);
-            return requestData;
-        }
-        //if (user != undefined){
-            fetchAssets();
-        //}
-    }, [])
+        if (isSearch || userType==='Client' || userType==='Guest' || userType==='Admin')
+            getAssets().then((response) => {setAssets(response.data)});
+        else
+            getAssetsByUserId(user.id).then((response) => {setAssets(response.data)});
+    }, [user, userType])
 
     let assetTypeOptions;
     if(isSearch){

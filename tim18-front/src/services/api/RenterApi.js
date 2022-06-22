@@ -46,3 +46,12 @@ export async function getRenterByID(id){
         return err.message
     }
   }
+
+  export async function doesRenterOwn(renterId, assetId){
+    try {
+        const responseData = await getApiCall().get(`/renters/owns/${renterId}/${assetId}`);
+        return responseData;
+    } catch (err) {
+        return err.message
+    }
+  }

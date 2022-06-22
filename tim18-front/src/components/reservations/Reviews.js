@@ -39,7 +39,8 @@ export default function Reviews(){
 
     useEffect(() => {
         if (!!reservation){
-            getRenterByAssetId(reservation.asset.id).then((response) =>{
+            console.log(reservation);
+            getRenterByAssetId(reservation.asset).then((response) =>{
                 let data = response.data;
                 setRenterId(data);
             });
@@ -89,7 +90,7 @@ export default function Reviews(){
 
     const manageAboutClient = useCallback(
         () => {
-            if (!!reservation && !!user) {
+            if (!!reservation && !!user && !!renterId) {
                 let comment;
                 if (!!reservation.clientReviewId){
                     comment = <>

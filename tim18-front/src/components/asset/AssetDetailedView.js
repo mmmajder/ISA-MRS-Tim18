@@ -24,6 +24,7 @@ import { getLogged } from '../../services/api/LoginApi';
 import { hasSubscription, subscribeToAsset, unsubscribeFromAsset } from '../../services/api/SubscriptionApi';
 import {getAssetReviews, getAssetRating} from '../../services/api/ReviewApi'
 import ListedReview from '../reservations/ListedReview';
+import {doesRenterOwn} from '../../services/api/RenterApi'
 
 export default function AssetDetailedView(){
     const [asset, setAsset] = useState();
@@ -38,6 +39,8 @@ export default function AssetDetailedView(){
     const [reviews, setReviews] = useState();
     const [listedReviews, setListedReviews] = useState();
     const [mark, setMark] = useState(0);
+
+    const [isMyAsset, setIsMyAsset] = useState(false);
 
     useEffect(() => {
         async function fetchUser(){
@@ -62,13 +65,22 @@ export default function AssetDetailedView(){
       }, [asset, client]);
 
     useEffect(() => {
-        async function fetchAsset(){
-            const requestData = await getAssetById(id);
-            setAsset(!!requestData ? requestData.data : {});
-            return requestData;
-        }
-        fetchAsset();
+        getAssetById(id).then(
+            (response) => {
+                setAsset(response.data);
+            }
+        )
     }, [id])
+
+    useEffect(() => {
+        if (!!id && !!client && (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter')){
+            doesRenterOwn(client.id, id).then(
+                (response) => {
+                    setIsMyAsset(response.data);
+                }
+            )
+        }
+    }, [id, client, userType])
 
     let assetType = asset?.assetType;
 
@@ -156,10 +168,10 @@ export default function AssetDetailedView(){
                             <Col sm="4">
                                 { userType !== "Client" && userType !== "Guest"  ? 
                                 <>
-                                {userType !== "Admin" && <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link> }
-                                {userType !== "Admin" && <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link>} 
-                                {userType !== "Admin" && <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> }
-                                <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>
+                                {(userType !== "Admin" && isMyAsset) && <Link to={linkToUpdateAssetPrice}><FontAwesomeIcon icon={faCoins} className="faButtons" /></Link> }
+                                {(userType !== "Admin" && isMyAsset) && <Link to={linkToUpdateAssetPhotos}><FontAwesomeIcon icon={faImage} className="faButtons" /></Link>} 
+                                {(userType !== "Admin" && isMyAsset) && <Link to={linkToEditPage}><FontAwesomeIcon icon={faPenToSquare} className='faButtons'/></Link> }
+                                {(userType === "Admin" || isMyAsset) && <Link to={linkToMyAssetsPage} onClick={assetDeletion}><FontAwesomeIcon icon={faTrash} className='faButtons'/></Link>}
                                 </> : 
                                 <RegularButton text={subscribeTxt} disabled={userType === "Guest"} onClickFunction={subscribe}/>
                                 }

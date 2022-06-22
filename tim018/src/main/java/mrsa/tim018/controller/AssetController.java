@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,21 +88,30 @@ public class AssetController {
 
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@PutMapping(value="/{id}", consumes = "application/json" )
-	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto) {
+	public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @RequestBody AssetDTO assetDto,
+			Authentication authentication) {
+		if (!assetService.doesRenterOwnAsset(authentication, id))
+    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		
 		AssetDTO returnData = assetService.updateAsset(id, assetDto);
-		if (returnData==null) {
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		}
+		
+		if (returnData==null) 
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			
 		return new ResponseEntity<>(returnData, HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasRole('BOAT_RENTER') || hasRole('FISHING_INSTRUCTOR') || hasRole('RESORT_RENTER')")
 	@DeleteMapping(value="/{id}" )
-	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id) {
+	public ResponseEntity<AssetDTO> deleteAsset(@PathVariable long id, Authentication authentication) {
 		Asset asset = assetService.findById(id);
-		if (asset==null) {
-			return null;
-		}
+		
+		if (asset==null) 
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		if (!assetService.doesRenterOwnAsset(authentication, id))
+    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		
 		asset.setDeleted(true);
 		assetService.save(asset);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);

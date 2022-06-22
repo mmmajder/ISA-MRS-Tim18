@@ -13,7 +13,7 @@ import mrsa.tim018.dto.AppointmentCreationDTO;
 import mrsa.tim018.dto.calendar.TimeRangeMergeElement;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
-import mrsa.tim018.model.SpecialOffer;
+import mrsa.tim018.model.SpecialOffer; 
 import mrsa.tim018.model.TimeRange;
 import mrsa.tim018.repository.AssetCalendarRepository;
 import mrsa.tim018.repository.AssetRepository;

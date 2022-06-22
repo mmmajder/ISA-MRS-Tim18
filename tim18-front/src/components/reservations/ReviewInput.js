@@ -11,8 +11,6 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 
 
 export default function ReviewInput({reservation, reviewFor, renterId}){
-    //TODO COMPLAINT
-    //TODO SEND TO ADMIN TO ACCEPT
 
     const [text, setText] = useState();
     const [rating, setRating] = useState();
@@ -26,7 +24,7 @@ export default function ReviewInput({reservation, reviewFor, renterId}){
             e.preventDefault();
             let clientWriting = !(reviewFor == "client");
             let clientID = reservation.clientId;
-            let assetId = reservation.asset.id;
+            let assetId = reservation.asset;
             let renterID = reviewFor == "asset" ? null : renterId;
             const resortJson = {text, rating, clientWriting, clientID, assetId, renterID, complaint, didntShowUp}
             console.log(resortJson);

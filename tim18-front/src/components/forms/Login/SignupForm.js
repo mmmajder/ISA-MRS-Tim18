@@ -68,6 +68,7 @@ export function SignupForm({feedbackFunc}) {
     if(!!feedback){
         console.log(feedback);
         alert('Successfuly created request for profile, Please check your email!');
+        window.location.reload(); 
         //feedbackFunc(false, 'Successfuly created request for profile, Please check your email!'); 
     }
     else{ 

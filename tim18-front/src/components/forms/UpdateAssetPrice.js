@@ -5,6 +5,7 @@ import {useParams} from 'react-router-dom';
 import { getAssetById } from '../../services/api/AssetApi';
 import {useState, useEffect, useCallback} from 'react';
 import {getAssetTodayPrice, createNewPriceForAsset} from '../../services/api/AssetApi'; 
+import { useNavigate  } from "react-router-dom";
 
 export default function UpdateAssetPrice(){
 
@@ -13,6 +14,7 @@ export default function UpdateAssetPrice(){
     const [newPrice, setNewPrice] = useState();
     const [currentPrice, setCurrentPrice] = useState();
     const [hasChoseNewPrice, setHasChoseNewPrice] = useState(false);
+    const navigate = useNavigate ();
 
     useEffect(() => {
         getAssetById(id).then((requestData) =>{
@@ -28,16 +30,17 @@ export default function UpdateAssetPrice(){
 
     const createNewPrice = useCallback(
         () => {
-            if (!hasChoseNewPrice){
-                return
-            }
+            if (!hasChoseNewPrice) return;
+            if (!asset) return;
             createNewPriceForAsset(asset.id, newPrice).then(
                 (response) => {
-                    let price = response.data.price;
-                    console.log("new price:"+price);
+                    let price = response.data;
+                    console.log(response.data);
+                    console.log("new price:");
+                    navigate('/resorts/' + id);
                 }
             )
-        }, [hasChoseNewPrice, newPrice]
+        }, [asset, hasChoseNewPrice, newPrice]
     )
 
     const getAssetPrice = useCallback(

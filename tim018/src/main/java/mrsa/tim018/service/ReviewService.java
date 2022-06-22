@@ -186,7 +186,7 @@ public class ReviewService {
 
 	
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = false)
 	public Review acceptDeclineReview(Long id, Boolean isAccepted) {
 		Review review;
 		review = updateReviewStatus(id, isAccepted);

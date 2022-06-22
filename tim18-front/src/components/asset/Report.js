@@ -41,13 +41,12 @@ export default function Report(){
 
     useEffect(() => {
         if (!!renter){
-            async function fetchAssets(){
-                const requestData = await getAssetsByUserId(renter.id);
-                console.log(requestData.data);
-                setAssets(!!requestData ? requestData.data : []);
-                return requestData;
-            }
-            fetchAssets();
+            getAssetsByUserId(renter.id).then(
+                (response) => {
+                    console.log(response.data);
+                    setAssets(response.data);
+                }
+            )
         }
     }, [renter])
 
