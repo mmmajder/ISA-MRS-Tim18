@@ -162,7 +162,7 @@ insert into reservation_finances (points_per_reservation, reservation_tax) value
 	(3, 40);
 	
 insert into special_offer (discount, is_deleted, other_services, asset_id, client_id, time_range_id) values
-	(30, false, 'None', 1000005, 2, 6);
+	(30, false, 'None', 1000005, null, 6);
 
 insert into asset_calendar_special_price(asset_calendar_id, special_price_id) values
 	(10007, 1);

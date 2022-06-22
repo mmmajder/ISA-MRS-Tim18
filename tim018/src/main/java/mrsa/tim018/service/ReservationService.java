@@ -245,6 +245,10 @@ public class ReservationService {
 		Reservation reservation = new Reservation(false, asset, client, timeRange, ReservationStatus.Future, specialOffer.getDiscount(), asset.getCancelationConditions(), loyaltyState);
 		reservation.setCancelationFee(asset.getCancelationConditions());
 		save(reservation);
+		List<Reservation> clientsReservations = client.getReservations();
+		clientsReservations.add(reservation);
+		client.setReservations(clientsReservations);
+		clientService.save(client);
 		return reservation;
 	}
 

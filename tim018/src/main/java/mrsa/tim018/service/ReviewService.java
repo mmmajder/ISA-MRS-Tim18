@@ -186,7 +186,7 @@ public class ReviewService {
 
 	
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Review acceptDeclineReview(Long id, Boolean isAccepted) {
 		Review review;
 		review = updateReviewStatus(id, isAccepted);
