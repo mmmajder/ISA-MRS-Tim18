@@ -5,10 +5,12 @@ import AdminSetPasswordModal from '../admin/AdminSetPasswordModal';
 import {Container} from 'react-bootstrap'
 import AssetsPreview from '../asset/AssetsPreview';
 import { getApiCall } from '../../services/Configs';
+import { findById } from '../../services/api/AdminApi';
 
 const Home = () => {
     const [user, setUser] = useState()
     const [activeForm, setActiveForm] = useState(null);
+    const [admin, setAdmin] = useState();
 
     useEffect(() => {
         async function fetchUser(){
@@ -17,18 +19,25 @@ const Home = () => {
         fetchUser();
     }, [])
 
-    const FirstTimeAdmin = () => {
-        if (getRole()=="Admin") {
-            if (!user.alreadyLogged && activeForm==null) {
-                setActiveForm(<AdminSetPasswordModal user={user}/>)
+    useEffect(() => {
+        if (!!user && getRole()=="Admin") {
+            findById(user.id).then((response) => {
+                console.log(response)
+                setAdmin(response.data);
+            })
+        }
+    }, [user])
+
+    useEffect(() => {
+        if (!!admin) {
+            if (!admin.alreadyLogged && activeForm==null) {
+                setActiveForm(<AdminSetPasswordModal user={admin}/>)
             }
         }
-        return "Bravo";
-    }
+    }, [admin])
 
     if (!!user) {
         if(getRole() === "Admin"){
-            FirstTimeAdmin()
             return (
                 <>
                     <Container><AssetsPreview isSearch={true}/></Container>

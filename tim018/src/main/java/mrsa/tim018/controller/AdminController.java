@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mrsa.tim018.dto.RegistrationDTO;
+import mrsa.tim018.dto.UserDTO;
 import mrsa.tim018.model.Admin;
+import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.Report;
+import mrsa.tim018.model.User;
 import mrsa.tim018.service.AdminReportsService;
 import mrsa.tim018.service.AdminService;
 
@@ -53,5 +56,17 @@ public class AdminController {
 		List<Report> reports = reportService.getReports(period, assetType, fromDate, toDate);
 
 		return new ResponseEntity<>(reports, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/findById/{id}") //LocalDateTime
+	public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
+		Admin admin = adminService.findOne(id);
+		
+		// studen must exist
+		if (admin == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Admin>(admin, HttpStatus.OK);
 	}
 }

@@ -27,3 +27,12 @@ export async function getReportAdmin(renterId, reportFilters) {
        return err.message
    }
 }
+
+export async function findById(id){
+    const responseData = await getApiCall().get(`/admin/findById/${id}`)
+              .then((responseData) => { return responseData})
+              .catch(()=> {});
+    return responseData
+}
+
+
