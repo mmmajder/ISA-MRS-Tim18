@@ -76,8 +76,6 @@ export default function AssetDetailedView(){
         if (!!id && !!client && (userType==="BoatRenter" ||userType === 'FishingInstructor' || userType === 'ResortRenter')){
             doesRenterOwn(client.id, id).then(
                 (response) => {
-                    console.log("renter owns:")
-                    console.log(response.data);
                     setIsMyAsset(response.data);
                 }
             )
