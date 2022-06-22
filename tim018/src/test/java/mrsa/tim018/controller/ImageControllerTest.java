@@ -23,12 +23,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import mrsa.tim018.constants.AssetConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-public class AssetControllerTest {
-	private static final String URL_PREFIX = "/assets";
+public class ImageControllerTest {
+	private static final String URL_PREFIX = "/photos";
 	
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -44,29 +43,11 @@ public class AssetControllerTest {
 	}
 	
 	@Test
-	public void testGetAssets() throws Exception {
-		mockMvc.perform(get(URL_PREFIX))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", hasSize(4)))
-		.andExpect(jsonPath("$.[*].id").value(hasItem(1000004)))
-		.andExpect(jsonPath("$.[*].name").value(hasItem("Dubrovnik Pirate")))
-		.andExpect(jsonPath("$.[*].address").value(hasItem("Dubrovnik")))
-		.andExpect(jsonPath("$.[*].assetType").value(hasItem("BOAT")));
-		;
+	@WithMockUser(username = "username", roles={"BOAT_RENTER"})
+	@Transactional
+	@Rollback(true)
+	public void testDeleteAsset() throws Exception {
+		this.mockMvc.perform(delete(URL_PREFIX + "/" + 1))
+		.andExpect(status().isAccepted());
 	}
-	
-	@Test
-	public void testGetAsset() throws Exception {
-		mockMvc.perform(get(URL_PREFIX + "/" + AssetConstants.DB_ID))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.id").value(1000001))
-		.andExpect(jsonPath("$.name").value("Maldivian hut on water"))
-		.andExpect(jsonPath("$.address").value("Orchid Magu 7, Maadhad, 57887, Maldives"))
-		.andExpect(jsonPath("$.assetType").value("RESORT"));
-		;
-	}
-	
-	
-	
-	
 }
