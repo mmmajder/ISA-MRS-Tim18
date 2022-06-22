@@ -67,7 +67,7 @@ public class ReportRepository {
 		if (!"none".equals(fromDate) && !"".equals(fromDate))
 			sb.append(" AND r.timeRange.fromDateTime > '" + fromDate + "'");
 		
-		if (!"none".equals(toDate) && !"".equals(fromDate))
+		if (!"none".equals(toDate) && !"".equals(toDate))
 			sb.append(" AND r.timeRange.fromDateTime < '" + toDate + "'");
 	}
 }

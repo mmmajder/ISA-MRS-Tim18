@@ -141,6 +141,8 @@ export async function getPendingNonComplaintReviews() {
 }
 
 export async function acceptdeclineReview(request, isAccepted, callback){
+    console.log(request)
+    console.log(isAccepted)
     await getApiCall().put(`/review/acceptdeclineReview/${request.id}`, isAccepted)
     .then((responseData) => {callback(responseData.data)})  
     .catch(()=> {callback(false)});   
