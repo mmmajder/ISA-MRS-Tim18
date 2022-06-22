@@ -41,7 +41,7 @@ for (let i=0; i<events.length; i++) {
     retData = [...retData, events[i]]
     continue
   }
-  if (fromDateTime < events[i].start) {
+  if (fromDateTime <= events[i].start) {    // ovde <=
       if (toDateTime < events[i].start) {
           retData = [...retData, events[i]]
           continue;
@@ -52,7 +52,7 @@ for (let i=0; i<events.length; i++) {
       } //else whole range is deleted
   }
   else if (fromDateTime < events[i].end) {
-      if (toDateTime > events[i].end) {
+      if (toDateTime >= events[i].end) {    // >=
           events[i].end = fromDateTime;
           retData = [...retData, events[i]]
       }

@@ -92,7 +92,7 @@ public class AssetCalendarSevice {
 			LocalDateTime toDateTime) {
 		List<TimeRange> retData = new ArrayList<>();
 		for (TimeRange timeRange : ranges) {
-			if (fromDateTime.isBefore(timeRange.getFromDateTime())) {
+			if (fromDateTime.isBefore(timeRange.getFromDateTime()) || fromDateTime.equals(timeRange.getFromDateTime())) {
 				if (toDateTime.isBefore(timeRange.getFromDateTime())) {
 					retData.add(timeRange);
 					continue;
@@ -103,7 +103,7 @@ public class AssetCalendarSevice {
 				} //else whole range is deleted
 			}
 			else if (fromDateTime.isBefore(timeRange.getToDateTime())) {
-				if (toDateTime.isAfter(timeRange.getToDateTime())) {
+				if (toDateTime.isAfter(timeRange.getToDateTime()) || toDateTime.equals(timeRange.getToDateTime())) {
 					timeRange.setToDateTime(fromDateTime);
 					retData.add(timeRange);
 				}

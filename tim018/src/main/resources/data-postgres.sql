@@ -98,6 +98,10 @@ insert into time_range(from_date_time, is_deleted, to_date_time) values
 insert into time_range(from_date_time, is_deleted, to_date_time) values
 					  ('2022-06-11 11:15', false, '2022-06-20 12:38');
 					  
+/*available*/
+insert into time_range(from_date_time, is_deleted, to_date_time) values
+					  ('2022-06-22 11:15', false, '2022-06-24 12:38');
+					  
 			
 insert into review(is_deleted, text, rating, is_complaint, is_client_writing, clientid, renterid, asset_id, status, didnt_show_up, reservation_id, version) values
 						/*asset*/
@@ -138,7 +142,6 @@ insert into registration (id, is_deleted, status, user_id, registration_date_tim
 	(1000002, false, 0, 4, now()::timestamp);
 
 insert into deletation_request (is_deleted, reason, status, user_id, version) values
-	(false, 'No reason', 0, 2,1),
 	(false, 'Good reason', 0, 6,1);
 	
 /* prices */
@@ -166,4 +169,7 @@ insert into special_offer (discount, is_deleted, other_services, asset_id, clien
 
 insert into asset_calendar_special_price(asset_calendar_id, special_price_id) values
 	(10007, 1);
+	
+insert into asset_calendar_available(asset_calendar_id, available_id) values
+	(10007, 7);
 	
