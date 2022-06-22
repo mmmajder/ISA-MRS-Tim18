@@ -7,7 +7,7 @@ public class DeletationRequestConstants {
 	public static final Long DB_ID = 1L;
 	public static final boolean DB_IS_DELETED = false;
 	//public static final RequestStatus DB_REQUEST_STATUS = RequestStatus.Accepted;
-	public static final String DB_REASON= "No reason";
+	public static final String DB_REASON= "Good reason";
 	public static final Long DB_USER_ID = 1L;
-	public static final Integer DB_COUNT = 2;
+	public static final Integer DB_COUNT = 1;
 }

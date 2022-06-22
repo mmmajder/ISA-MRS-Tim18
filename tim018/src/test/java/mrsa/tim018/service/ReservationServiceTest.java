@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import mrsa.tim018.constants.AssetConstants;
+import mrsa.tim018.dto.ReservationDTO;
 import mrsa.tim018.model.Asset;
 import mrsa.tim018.model.AssetCalendar;
 import mrsa.tim018.model.AssetType;
@@ -144,7 +145,7 @@ public class ReservationServiceTest {
 		
 		when(reservationRepositoryMock.getRenterReservations(1L)).thenReturn(reservations);
 		
-		List<Reservation> pastReservations = reservationService.getPastRenterReservations(1L);
+		List<ReservationDTO> pastReservations = reservationService.getPastRenterReservations(1L);
 		
 
         assertThat(pastReservations.size()).isEqualTo(1); 

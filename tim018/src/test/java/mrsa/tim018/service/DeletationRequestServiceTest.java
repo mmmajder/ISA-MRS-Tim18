@@ -111,12 +111,6 @@ public class DeletationRequestServiceTest {
 	
 	@Test
 	public void testFindAll() {
-		/*
-		Kako za testove koristimo mokovane repository objekte moramo da definišemo šta će se desiti kada se
-		pozove određena metoda kombinacijom "when"-"then" Mockito metoda.
-		 */
-		
-		// 1. Definisanje ponašanja mock objekata
 		when(deletationRequestRepositoryMock.findAll()).thenReturn(Arrays.asList(new DeletationRequest(DB_ID, false, RequestStatus.Pending, new User(), "reason")));
 		
 		// 2. Akcija

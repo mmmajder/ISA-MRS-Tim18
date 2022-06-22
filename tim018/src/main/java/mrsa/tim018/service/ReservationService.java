@@ -47,9 +47,6 @@ public class ReservationService {
 	private LoyaltyProgramService loyaltyProgramService;
 	
 	@Autowired
-	private ReservationFinancesService reservationFinancesService;
-	
-	@Autowired
 	private AssetCalendarSevice assetCalendarSevice;
 	
 	@Autowired

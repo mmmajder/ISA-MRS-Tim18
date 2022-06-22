@@ -74,11 +74,14 @@ public class DeletationRequestService {
 		return deleteRequest;
 	}
 	
-	@Transactional(readOnly = false, rollbackFor = ObjectOptimisticLockingFailureException.class)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public DeletationRequest acceptDeclineDeletionRequest(long id, String comment, boolean isAccept) {
-		
-		DeletationRequest deletionRequest = setDeletionRequestStatus(id, isAccept);
-         
+		DeletationRequest deletionRequest = findOne(id); 
+		logger.info("> update id:{}", id);
+		deletionRequest = setDeletionRequestStatus(deletionRequest, isAccept);
+		logger.info(deletionRequest.toString());
+        logger.info("< update id:{}", id);
+        
         if (isAccept) {
 			setUserIsDelete(deletionRequest);
         } 
@@ -88,7 +91,7 @@ public class DeletationRequestService {
 		return deletionRequest;  
 	}
 
-	private void sendRequestAcceptDeclineMail(String comment, boolean isAccept) {
+	public void sendRequestAcceptDeclineMail(String comment, boolean isAccept) {
 		try {
 			if (isAccept) {
 	        	emailService.sendDeleteProfileResponseAsync(RequestStatus.Accepted, comment);
@@ -100,7 +103,7 @@ public class DeletationRequestService {
 		}  
 	}
 
-	private void setUserIsDelete(DeletationRequest deletionRequest) {
+	public void setUserIsDelete(DeletationRequest deletionRequest) {
 		User user = userService.findOne(deletionRequest.getUser().getID());
 		logger.info("> update user status: id:{}", user.getID());
 		user.setDeleted(true);  
@@ -108,17 +111,14 @@ public class DeletationRequestService {
 		logger.info("< update user status: id:{}", user.getID());
 	}
 
-	private DeletationRequest setDeletionRequestStatus(long id, boolean isAccept) {
-		logger.info("> update id:{}", id);
-		DeletationRequest deletionRequest = findOne(id); 
+	public DeletationRequest setDeletionRequestStatus(DeletationRequest deletionRequest, boolean isAccept) {
 		if (isAccept) {
 			deletionRequest.setStatus(RequestStatus.Accepted);
 		} else {
 			deletionRequest.setStatus(RequestStatus.Declined);
 		} 
 		save(deletionRequest); 
-		logger.info(deletionRequest.toString());
-        logger.info("< update id:{}", id);
+		
 		return deletionRequest;
 	}
 

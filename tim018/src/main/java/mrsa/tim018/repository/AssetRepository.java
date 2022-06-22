@@ -25,7 +25,6 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 	
 	public List<Asset> findAllByRenterId(long id);
 	
-
 	public Asset findById(long id);
 
 	public List<Asset> findByAssetTypeAndIsDeleted(AssetType assetType, boolean isDeleted);

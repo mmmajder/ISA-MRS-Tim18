@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,23 +44,29 @@ public class DeleteationRequestControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "username", roles={"ADMIN"})
 	public void testGetDeletationRequest() throws Exception {
-		mockMvc.perform(get(URL_PREFIX + "/" + DeletationRequestConstants.DB_ID)).andExpect(status().isOk())
+		mockMvc.perform(get(URL_PREFIX + "/" + DeletationRequestConstants.DB_ID))
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(DeletationRequestConstants.DB_ID.longValue()))
 		.andExpect(jsonPath("$.reason").value(DeletationRequestConstants.DB_REASON));
 	}
 	
 	@Test
+	@WithMockUser(username = "username", roles={"ADMIN"})
 	public void testGetAllDeletationRequests() throws Exception {
-		mockMvc.perform(get(URL_PREFIX + "/all")).andExpect(status().isOk())
+		mockMvc.perform(get(URL_PREFIX + "/all"))
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
 		.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.intValue())))
 		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));
 	}
 	
 	@Test
+	@WithMockUser(username = "username", roles={"ADMIN"})
 	public void testGetPendingDeletationRequests() throws Exception {
-		mockMvc.perform(get(URL_PREFIX + "/pending")).andExpect(status().isOk())
+		mockMvc.perform(get(URL_PREFIX + "/pending"))
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("$", hasSize(DeletationRequestConstants.DB_COUNT.intValue())))
 		.andExpect(jsonPath("$.[*].id").value(hasItem(DeletationRequestConstants.DB_ID.intValue())))
 		.andExpect(jsonPath("$.[*].reason").value(hasItem(DeletationRequestConstants.DB_REASON)));

@@ -102,7 +102,6 @@ public class ReservationController {
 		return new ResponseEntity<>(reservation, HttpStatus.OK); 
 	}
 	
-	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "/makeReservation")
 	public ResponseEntity<Reservation> makeReservation(@RequestBody ReservationRequestDTO reservationDto) throws UnsupportedEncodingException, MessagingException {
 		Reservation reservation = null;
