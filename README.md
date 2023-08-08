@@ -22,6 +22,6 @@ https://isamrstim18pokusajdva.herokuapp.com/?fbclid=IwAR1NlCUucTugUQ_KpekrGXUrNL
 https://regal-pegasus-b1762e.netlify.app/?fbclid=IwAR1nIY9OHOE6RnAEZ-IA_lDi4uc3yerx8CyvrmSlgkXxCWVUjKEVP8E-sBQ
 
 ## Contributors:
-Katarina Komad SW28/2019
-Aleksa Stanivuk SW29/2019
-Milan Ajder SW31/2019
+- Katarina Komad SW28/2019
+- Aleksa Stanivuk SW29/2019
+- Milan Ajder SW31/2019
